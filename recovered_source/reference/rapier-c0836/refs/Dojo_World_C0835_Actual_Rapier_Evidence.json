@@ -1,0 +1,2837 @@
+{
+  "cycle": "C0835",
+  "source_html_sha256": "1740c1163fd5a36a46cba83ce270039489af4b612e4160be783ac40fc6c0fcb6",
+  "rapier_package_sha256": "e036e2e958b8d314b5731cbae256d3c4e42198cda8a56bf3b25fce983ded05b4",
+  "runtime": "Real @dimforge/rapier3d-compat 0.21.0 WASM running in Chromium; no authored replay",
+  "captured_at_utc": "2026-11-02T18:09:03Z",
+  "input": "Click Start shoulder-load fall; pause realtime RAF, reset/start true Rapier WASM, then perform 2 physical steps per rendered 30 fps screenshot; all frames actual simulation states",
+  "source_style": "original Fuji / 2.5D render, C0834 real 3D Rapier pose",
+  "video_frame_count": 108,
+  "physics_steps": 214,
+  "first_ground_contact": {
+    "frame": 14,
+    "part": "shinR",
+    "time": 0.2333333333333333
+  },
+  "ground_hits": [
+    {
+      "frame": 14,
+      "part": "shinR",
+      "time": 0.2333333333333333
+    },
+    {
+      "frame": 17,
+      "part": "shinL",
+      "time": 0.2833333333333333
+    },
+    {
+      "frame": 18,
+      "part": "shinR",
+      "time": 0.3
+    },
+    {
+      "frame": 23,
+      "part": "thighR",
+      "time": 0.3833333333333333
+    },
+    {
+      "frame": 71,
+      "part": "armR",
+      "time": 1.183333333333334
+    },
+    {
+      "frame": 75,
+      "part": "thighR",
+      "time": 1.2500000000000004
+    },
+    {
+      "frame": 75,
+      "part": "shinR",
+      "time": 1.2500000000000004
+    },
+    {
+      "frame": 75,
+      "part": "pelvis",
+      "time": 1.2500000000000004
+    },
+    {
+      "frame": 77,
+      "part": "shinL",
+      "time": 1.2833333333333337
+    },
+    {
+      "frame": 78,
+      "part": "thighR",
+      "time": 1.3000000000000003
+    },
+    {
+      "frame": 78,
+      "part": "shinR",
+      "time": 1.3000000000000003
+    },
+    {
+      "frame": 89,
+      "part": "shinR",
+      "time": 1.483333333333333
+    },
+    {
+      "frame": 90,
+      "part": "thighR",
+      "time": 1.4999999999999996
+    },
+    {
+      "frame": 91,
+      "part": "shinL",
+      "time": 1.5166666666666662
+    },
+    {
+      "frame": 96,
+      "part": "thighR",
+      "time": 1.5999999999999992
+    },
+    {
+      "frame": 112,
+      "part": "shinL",
+      "time": 1.866666666666665
+    },
+    {
+      "frame": 114,
+      "part": "shinR",
+      "time": 1.8999999999999981
+    },
+    {
+      "frame": 115,
+      "part": "thighR",
+      "time": 1.9166666666666647
+    },
+    {
+      "frame": 115,
+      "part": "thighL",
+      "time": 1.9166666666666647
+    },
+    {
+      "frame": 116,
+      "part": "pelvis",
+      "time": 1.9333333333333313
+    },
+    {
+      "frame": 133,
+      "part": "head",
+      "time": 2.2166666666666637
+    },
+    {
+      "frame": 133,
+      "part": "upper_back",
+      "time": 2.2166666666666637
+    },
+    {
+      "frame": 133,
+      "part": "armR",
+      "time": 2.2166666666666637
+    },
+    {
+      "frame": 137,
+      "part": "head",
+      "time": 2.28333333333333
+    },
+    {
+      "frame": 137,
+      "part": "upper_back",
+      "time": 2.28333333333333
+    },
+    {
+      "frame": 160,
+      "part": "armR",
+      "time": 2.666666666666662
+    }
+  ],
+  "back_contact": true,
+  "landing_audit": {
+    "firstPart": "shinR",
+    "backFirst": false,
+    "headSafe": false,
+    "pass": false,
+    "reason": "WRONG_FIRST_CONTACT"
+  },
+  "min_head_clearance_ever": -0.004999989271163935,
+  "min_head_clearance_after_contact": -0.004999989271163935,
+  "max_joint_gap": 0.17725576563007622,
+  "max_center_step": 0.239103725883908,
+  "max_grip_gap_while_connected": 0.30021154092878605,
+  "grip_release_physics_frame": 139,
+  "browser_errors": [],
+  "browser_console_errors": [],
+  "physics_validated": true,
+  "full_match_input_validated": false,
+  "iPhone_device_validated": false,
+  "entry_motion": "Staged shoulder-load only; V2 entry not integrated",
+  "approved": false,
+  "samples": [
+    {
+      "video_frame": 0,
+      "physics_frame": 0,
+      "sim_time": 0,
+      "first_contact": null,
+      "head_clearance": null,
+      "minimum_post_contact_head_clearance": null,
+      "grip_gap": 0,
+      "grip_connected": false,
+      "max_joint_gap": null,
+      "max_center_step": null,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": null
+    },
+    {
+      "video_frame": 1,
+      "physics_frame": 2,
+      "sim_time": 0.03333333333333333,
+      "first_contact": null,
+      "head_clearance": 2.1159995555877686,
+      "minimum_post_contact_head_clearance": null,
+      "grip_gap": 0.026258542529197522,
+      "grip_connected": true,
+      "max_joint_gap": 0.044686605819696884,
+      "max_center_step": 0.05096380866498329,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": null,
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "NO_CONTACT"
+      }
+    },
+    {
+      "video_frame": 2,
+      "physics_frame": 4,
+      "sim_time": 0.06666666666666667,
+      "first_contact": null,
+      "head_clearance": 2.0990334510803224,
+      "minimum_post_contact_head_clearance": null,
+      "grip_gap": 0.05307292352329795,
+      "grip_connected": true,
+      "max_joint_gap": 0.13866041338142218,
+      "max_center_step": 0.058534087398303784,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": null,
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "NO_CONTACT"
+      }
+    },
+    {
+      "video_frame": 3,
+      "physics_frame": 6,
+      "sim_time": 0.09999999999999999,
+      "first_contact": null,
+      "head_clearance": 2.0637279510498048,
+      "minimum_post_contact_head_clearance": null,
+      "grip_gap": 0.013070560567900234,
+      "grip_connected": true,
+      "max_joint_gap": 0.17214771506461032,
+      "max_center_step": 0.07204037392182765,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": null,
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "NO_CONTACT"
+      }
+    },
+    {
+      "video_frame": 4,
+      "physics_frame": 8,
+      "sim_time": 0.13333333333333333,
+      "first_contact": null,
+      "head_clearance": 2.0128243923187257,
+      "minimum_post_contact_head_clearance": null,
+      "grip_gap": 0.0102636935824039,
+      "grip_connected": true,
+      "max_joint_gap": 0.06445250970716328,
+      "max_center_step": 0.11184923320211418,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": null,
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "NO_CONTACT"
+      }
+    },
+    {
+      "video_frame": 5,
+      "physics_frame": 10,
+      "sim_time": 0.16666666666666666,
+      "first_contact": null,
+      "head_clearance": 1.9873963356018067,
+      "minimum_post_contact_head_clearance": null,
+      "grip_gap": 0.030981361748927728,
+      "grip_connected": true,
+      "max_joint_gap": 0.08783934003573719,
+      "max_center_step": 0.09282309371048905,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": null,
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "NO_CONTACT"
+      }
+    },
+    {
+      "video_frame": 6,
+      "physics_frame": 12,
+      "sim_time": 0.19999999999999998,
+      "first_contact": null,
+      "head_clearance": 1.8927024364471436,
+      "minimum_post_contact_head_clearance": null,
+      "grip_gap": 0.03939805433399407,
+      "grip_connected": true,
+      "max_joint_gap": 0.08959304754436917,
+      "max_center_step": 0.08516163653589853,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": null,
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "NO_CONTACT"
+      }
+    },
+    {
+      "video_frame": 7,
+      "physics_frame": 14,
+      "sim_time": 0.2333333333333333,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.7881245374679566,
+      "minimum_post_contact_head_clearance": 1.7881245374679566,
+      "grip_gap": 0.08111627384507761,
+      "grip_connected": true,
+      "max_joint_gap": 0.1424525299150753,
+      "max_center_step": 0.14184336711773346,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 8,
+      "physics_frame": 16,
+      "sim_time": 0.26666666666666666,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.7110684871673585,
+      "minimum_post_contact_head_clearance": 1.7110684871673585,
+      "grip_gap": 0.06012380375568944,
+      "grip_connected": true,
+      "max_joint_gap": 0.1349024288229042,
+      "max_center_step": 0.19339541261175452,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 9,
+      "physics_frame": 18,
+      "sim_time": 0.3,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.6698211193084718,
+      "minimum_post_contact_head_clearance": 1.6596683025360108,
+      "grip_gap": 0.013297524593735064,
+      "grip_connected": true,
+      "max_joint_gap": 0.07628099199590571,
+      "max_center_step": 0.13657701335914635,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 10,
+      "physics_frame": 20,
+      "sim_time": 0.3333333333333333,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.6731309652328492,
+      "minimum_post_contact_head_clearance": 1.6596683025360108,
+      "grip_gap": 0.10250922102099447,
+      "grip_connected": true,
+      "max_joint_gap": 0.09150718058042692,
+      "max_center_step": 0.09664613164089904,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 11,
+      "physics_frame": 22,
+      "sim_time": 0.36666666666666664,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.5684965610504151,
+      "minimum_post_contact_head_clearance": 1.5684965610504151,
+      "grip_gap": 0.1918546103551436,
+      "grip_connected": true,
+      "max_joint_gap": 0.092659621555874,
+      "max_center_step": 0.10487034989613722,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 12,
+      "physics_frame": 24,
+      "sim_time": 0.39999999999999997,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.5658141136169434,
+      "minimum_post_contact_head_clearance": 1.553232526779175,
+      "grip_gap": 0.11555278448898644,
+      "grip_connected": true,
+      "max_joint_gap": 0.13086436999914475,
+      "max_center_step": 0.06358148247703632,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 13,
+      "physics_frame": 26,
+      "sim_time": 0.4333333333333333,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.636964535713196,
+      "minimum_post_contact_head_clearance": 1.553232526779175,
+      "grip_gap": 0.05173696753567477,
+      "grip_connected": true,
+      "max_joint_gap": 0.17725576563007622,
+      "max_center_step": 0.1302436451831957,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 14,
+      "physics_frame": 28,
+      "sim_time": 0.4666666666666666,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.7949279308319093,
+      "minimum_post_contact_head_clearance": 1.553232526779175,
+      "grip_gap": 0.02340196960301302,
+      "grip_connected": true,
+      "max_joint_gap": 0.06279325819040825,
+      "max_center_step": 0.14041703467490854,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 15,
+      "physics_frame": 30,
+      "sim_time": 0.49999999999999994,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.8728211879730225,
+      "minimum_post_contact_head_clearance": 1.553232526779175,
+      "grip_gap": 0.10022805222304279,
+      "grip_connected": true,
+      "max_joint_gap": 0.09007465465181476,
+      "max_center_step": 0.0627231235757568,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 16,
+      "physics_frame": 32,
+      "sim_time": 0.5333333333333333,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.8885947227478028,
+      "minimum_post_contact_head_clearance": 1.553232526779175,
+      "grip_gap": 0.14146725323227657,
+      "grip_connected": true,
+      "max_joint_gap": 0.12585681153303127,
+      "max_center_step": 0.08124726536758214,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 17,
+      "physics_frame": 34,
+      "sim_time": 0.5666666666666668,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.8307738065719605,
+      "minimum_post_contact_head_clearance": 1.553232526779175,
+      "grip_gap": 0.0025918737043125637,
+      "grip_connected": true,
+      "max_joint_gap": 0.11545950562694166,
+      "max_center_step": 0.2119487168092395,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 18,
+      "physics_frame": 36,
+      "sim_time": 0.6000000000000002,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.660789465904236,
+      "minimum_post_contact_head_clearance": 1.553232526779175,
+      "grip_gap": 0.03399303700519003,
+      "grip_connected": true,
+      "max_joint_gap": 0.07732436904696639,
+      "max_center_step": 0.239103725883908,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 19,
+      "physics_frame": 38,
+      "sim_time": 0.6333333333333336,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.372432565689087,
+      "minimum_post_contact_head_clearance": 1.372432565689087,
+      "grip_gap": 0.07131957335172354,
+      "grip_connected": true,
+      "max_joint_gap": 0.0683577361092027,
+      "max_center_step": 0.21716715100755649,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 20,
+      "physics_frame": 40,
+      "sim_time": 0.6666666666666671,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.0470545053482057,
+      "minimum_post_contact_head_clearance": 1.0470545053482057,
+      "grip_gap": 0.09664299197024832,
+      "grip_connected": true,
+      "max_joint_gap": 0.07570369561161172,
+      "max_center_step": 0.1650961915794813,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 21,
+      "physics_frame": 42,
+      "sim_time": 0.7000000000000005,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.0342572689056397,
+      "minimum_post_contact_head_clearance": 1.0178950786590577,
+      "grip_gap": 0.08285127279601365,
+      "grip_connected": true,
+      "max_joint_gap": 0.11648712020927088,
+      "max_center_step": 0.13939710316222473,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 22,
+      "physics_frame": 44,
+      "sim_time": 0.733333333333334,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.0545340538024903,
+      "minimum_post_contact_head_clearance": 1.0178950786590577,
+      "grip_gap": 0.02512622240987563,
+      "grip_connected": true,
+      "max_joint_gap": 0.09791682088020004,
+      "max_center_step": 0.1783355165342453,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 23,
+      "physics_frame": 46,
+      "sim_time": 0.7666666666666674,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.907106614112854,
+      "minimum_post_contact_head_clearance": 0.907106614112854,
+      "grip_gap": 0.021975413416238106,
+      "grip_connected": true,
+      "max_joint_gap": 0.03537903234146255,
+      "max_center_step": 0.16643462750842855,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 24,
+      "physics_frame": 48,
+      "sim_time": 0.8000000000000008,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.662075138092041,
+      "minimum_post_contact_head_clearance": 0.662075138092041,
+      "grip_gap": 0.06819873391334096,
+      "grip_connected": true,
+      "max_joint_gap": 0.057520656303372435,
+      "max_center_step": 0.14480773319472,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 25,
+      "physics_frame": 50,
+      "sim_time": 0.8333333333333343,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.5391088485717773,
+      "minimum_post_contact_head_clearance": 0.5391088485717773,
+      "grip_gap": 0.1390476248026928,
+      "grip_connected": true,
+      "max_joint_gap": 0.07340395343855101,
+      "max_center_step": 0.1172304534321514,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 26,
+      "physics_frame": 52,
+      "sim_time": 0.8666666666666677,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.47182134389877317,
+      "minimum_post_contact_head_clearance": 0.47182134389877317,
+      "grip_gap": 0.0550969868068795,
+      "grip_connected": true,
+      "max_joint_gap": 0.1135192948498824,
+      "max_center_step": 0.14864633110573286,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 27,
+      "physics_frame": 54,
+      "sim_time": 0.9000000000000011,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.41747806072235105,
+      "minimum_post_contact_head_clearance": 0.41747806072235105,
+      "grip_gap": 0.03437566194856254,
+      "grip_connected": true,
+      "max_joint_gap": 0.08233031988093185,
+      "max_center_step": 0.18499829690929268,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 28,
+      "physics_frame": 56,
+      "sim_time": 0.9333333333333346,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.29176766276359556,
+      "minimum_post_contact_head_clearance": 0.29176766276359556,
+      "grip_gap": 0.02629554527356591,
+      "grip_connected": true,
+      "max_joint_gap": 0.05608737836355483,
+      "max_center_step": 0.17949303467338937,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 29,
+      "physics_frame": 58,
+      "sim_time": 0.966666666666668,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.24999750256538392,
+      "minimum_post_contact_head_clearance": 0.24836621284484864,
+      "grip_gap": 0.1627738884720125,
+      "grip_connected": true,
+      "max_joint_gap": 0.07231834097755586,
+      "max_center_step": 0.1765409686603167,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 30,
+      "physics_frame": 60,
+      "sim_time": 1.0000000000000013,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.21487340927124024,
+      "minimum_post_contact_head_clearance": 0.21487340927124024,
+      "grip_gap": 0.2895565226418514,
+      "grip_connected": true,
+      "max_joint_gap": 0.0756039966691345,
+      "max_center_step": 0.19124282076478843,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": true,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 31,
+      "physics_frame": 62,
+      "sim_time": 1.0333333333333345,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.13983575105667115,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.11116096593543168,
+      "grip_connected": true,
+      "max_joint_gap": 0.09188059656761421,
+      "max_center_step": 0.226264022071236,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 32,
+      "physics_frame": 64,
+      "sim_time": 1.0666666666666678,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.15346867442131043,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.013884927280855367,
+      "grip_connected": true,
+      "max_joint_gap": 0.08477976933931744,
+      "max_center_step": 0.22567776744801274,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 33,
+      "physics_frame": 66,
+      "sim_time": 1.100000000000001,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.24812898635864258,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.07241244682679145,
+      "grip_connected": true,
+      "max_joint_gap": 0.07228681195961831,
+      "max_center_step": 0.22150380906381398,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 34,
+      "physics_frame": 68,
+      "sim_time": 1.1333333333333342,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.3910131812095642,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.19915608589033304,
+      "grip_connected": true,
+      "max_joint_gap": 0.07130157751065541,
+      "max_center_step": 0.18737092311275827,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 35,
+      "physics_frame": 70,
+      "sim_time": 1.1666666666666674,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.42770407199859617,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.22912396738083501,
+      "grip_connected": true,
+      "max_joint_gap": 0.09425284276732755,
+      "max_center_step": 0.16152806657662325,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 36,
+      "physics_frame": 72,
+      "sim_time": 1.2000000000000006,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.3525374889373779,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.06971991251928412,
+      "grip_connected": true,
+      "max_joint_gap": 0.10418959879137683,
+      "max_center_step": 0.21554380602669979,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 37,
+      "physics_frame": 74,
+      "sim_time": 1.2333333333333338,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.39473352432250974,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.030887698192032177,
+      "grip_connected": true,
+      "max_joint_gap": 0.12525915819120106,
+      "max_center_step": 0.22846133376067504,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 38,
+      "physics_frame": 76,
+      "sim_time": 1.266666666666667,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.5277664422988891,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.1681657807032925,
+      "grip_connected": true,
+      "max_joint_gap": 0.16871739403614922,
+      "max_center_step": 0.16885598872917978,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 39,
+      "physics_frame": 78,
+      "sim_time": 1.3000000000000003,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6881890654563904,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.28779572683609467,
+      "grip_connected": true,
+      "max_joint_gap": 0.06830438048001858,
+      "max_center_step": 0.16269831777130436,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 40,
+      "physics_frame": 80,
+      "sim_time": 1.3333333333333335,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6732061862945556,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.2697074556344569,
+      "grip_connected": true,
+      "max_joint_gap": 0.07449855147044784,
+      "max_center_step": 0.13152188321161076,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 41,
+      "physics_frame": 82,
+      "sim_time": 1.3666666666666667,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6457892417907715,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.18986434007592415,
+      "grip_connected": true,
+      "max_joint_gap": 0.07430346625550442,
+      "max_center_step": 0.12240412679923218,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 42,
+      "physics_frame": 84,
+      "sim_time": 1.4,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6419646501541137,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.008566906022960029,
+      "grip_connected": true,
+      "max_joint_gap": 0.0785825049812742,
+      "max_center_step": 0.1513948112055813,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 43,
+      "physics_frame": 86,
+      "sim_time": 1.4333333333333331,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6729601979255676,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.07690456403965185,
+      "grip_connected": true,
+      "max_joint_gap": 0.04962709511871883,
+      "max_center_step": 0.08319713588360816,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 44,
+      "physics_frame": 88,
+      "sim_time": 1.4666666666666663,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.9210318088531494,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.1220370726313406,
+      "grip_connected": true,
+      "max_joint_gap": 0.03838502854974617,
+      "max_center_step": 0.15562186424660757,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 45,
+      "physics_frame": 90,
+      "sim_time": 1.4999999999999996,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.1306150913238526,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.08483624307774874,
+      "grip_connected": true,
+      "max_joint_gap": 0.034257776685241534,
+      "max_center_step": 0.11712208282931416,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 46,
+      "physics_frame": 92,
+      "sim_time": 1.5333333333333328,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.151033616065979,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.003998822478129474,
+      "grip_connected": true,
+      "max_joint_gap": 0.05321620567084937,
+      "max_center_step": 0.05982572010930261,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 47,
+      "physics_frame": 94,
+      "sim_time": 1.566666666666666,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.0684993028640748,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.024124194086348295,
+      "grip_connected": true,
+      "max_joint_gap": 0.06424194104300357,
+      "max_center_step": 0.06255692133354727,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 48,
+      "physics_frame": 96,
+      "sim_time": 1.5999999999999992,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.0475449323654176,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.16314548695092013,
+      "grip_connected": true,
+      "max_joint_gap": 0.046978483413625656,
+      "max_center_step": 0.0756157679564335,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 49,
+      "physics_frame": 98,
+      "sim_time": 1.6333333333333324,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.2003077030181886,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.30021154092878605,
+      "grip_connected": true,
+      "max_joint_gap": 0.04893147220093866,
+      "max_center_step": 0.1304240644361785,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 50,
+      "physics_frame": 100,
+      "sim_time": 1.6666666666666656,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 1.1747387409210206,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.08599606389400485,
+      "grip_connected": true,
+      "max_joint_gap": 0.027798485839199014,
+      "max_center_step": 0.15652435847544272,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 51,
+      "physics_frame": 102,
+      "sim_time": 1.6999999999999988,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.9034696578979492,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.031287864984309216,
+      "grip_connected": true,
+      "max_joint_gap": 0.05174314765837054,
+      "max_center_step": 0.18759000258744296,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 52,
+      "physics_frame": 104,
+      "sim_time": 1.733333333333332,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6087519288063049,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.14652285787920005,
+      "grip_connected": true,
+      "max_joint_gap": 0.05766596032316166,
+      "max_center_step": 0.1473132315145635,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 53,
+      "physics_frame": 106,
+      "sim_time": 1.7666666666666653,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6140419006347656,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.2476571713254694,
+      "grip_connected": true,
+      "max_joint_gap": 0.0419732761862168,
+      "max_center_step": 0.07828496283730356,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 54,
+      "physics_frame": 108,
+      "sim_time": 1.7999999999999985,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.7948221325874328,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.21421493271433492,
+      "grip_connected": true,
+      "max_joint_gap": 0.053817779893196784,
+      "max_center_step": 0.13090905964494365,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 55,
+      "physics_frame": 110,
+      "sim_time": 1.8333333333333317,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.9205609321594238,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.07453873487717645,
+      "grip_connected": true,
+      "max_joint_gap": 0.034621557467149844,
+      "max_center_step": 0.08510781211272188,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 56,
+      "physics_frame": 112,
+      "sim_time": 1.866666666666665,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.8467212677001953,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.054910292354922556,
+      "grip_connected": true,
+      "max_joint_gap": 0.0370434746568672,
+      "max_center_step": 0.12348195041550261,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 57,
+      "physics_frame": 114,
+      "sim_time": 1.8999999999999981,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6358650684356689,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.08297906082718483,
+      "grip_connected": true,
+      "max_joint_gap": 0.0545673964029852,
+      "max_center_step": 0.15212752278662134,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 58,
+      "physics_frame": 116,
+      "sim_time": 1.9333333333333313,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.5885417222976684,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.17404853886127655,
+      "grip_connected": true,
+      "max_joint_gap": 0.06276859737556638,
+      "max_center_step": 0.1478372834494138,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 59,
+      "physics_frame": 118,
+      "sim_time": 1.9666666666666646,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6172551274299621,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.08899408899878657,
+      "grip_connected": true,
+      "max_joint_gap": 0.05520730118148327,
+      "max_center_step": 0.07814530896517469,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 60,
+      "physics_frame": 120,
+      "sim_time": 1.9999999999999978,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.6027007460594177,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.0010989222391517169,
+      "grip_connected": true,
+      "max_joint_gap": 0.0558875484561341,
+      "max_center_step": 0.0946851737438969,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 61,
+      "physics_frame": 122,
+      "sim_time": 2.033333333333331,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.4365676999092102,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.03762376411709237,
+      "grip_connected": true,
+      "max_joint_gap": 0.060937239517435834,
+      "max_center_step": 0.13066795783947927,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 62,
+      "physics_frame": 124,
+      "sim_time": 2.066666666666664,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.2129075288772583,
+      "minimum_post_contact_head_clearance": 0.13983575105667115,
+      "grip_gap": 0.14485456887884676,
+      "grip_connected": true,
+      "max_joint_gap": 0.031869828859372645,
+      "max_center_step": 0.12455431778658749,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 63,
+      "physics_frame": 126,
+      "sim_time": 2.0999999999999974,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.10651928782463074,
+      "minimum_post_contact_head_clearance": 0.10651928782463074,
+      "grip_gap": 0.12000203988598306,
+      "grip_connected": true,
+      "max_joint_gap": 0.05229792942330309,
+      "max_center_step": 0.1157525180664979,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 64,
+      "physics_frame": 128,
+      "sim_time": 2.1333333333333306,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.1732526481151581,
+      "minimum_post_contact_head_clearance": 0.10651928782463074,
+      "grip_gap": 0.004106805506977814,
+      "grip_connected": true,
+      "max_joint_gap": 0.062426435558606885,
+      "max_center_step": 0.10133134074513826,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 65,
+      "physics_frame": 130,
+      "sim_time": 2.166666666666664,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.2422474980354309,
+      "minimum_post_contact_head_clearance": 0.10651928782463074,
+      "grip_gap": 0.02166532868239384,
+      "grip_connected": true,
+      "max_joint_gap": 0.0606054842747325,
+      "max_center_step": 0.058294459809605716,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 66,
+      "physics_frame": 132,
+      "sim_time": 2.199999999999997,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.004999989271163935,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.2609689261244763,
+      "grip_connected": true,
+      "max_joint_gap": 0.11723723165664264,
+      "max_center_step": 0.17581729263802173,
+      "release_frame": null,
+      "back_contact": false,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 67,
+      "physics_frame": 134,
+      "sim_time": 2.2333333333333303,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.026080614328384405,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.06236972037284087,
+      "grip_connected": true,
+      "max_joint_gap": 0.053604771664502816,
+      "max_center_step": 0.18991693201563906,
+      "release_frame": null,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 68,
+      "physics_frame": 136,
+      "sim_time": 2.2666666666666635,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.018776303529739385,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.016418067902094595,
+      "grip_connected": true,
+      "max_joint_gap": 0.06264224135398025,
+      "max_center_step": 0.06990581024700074,
+      "release_frame": null,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 69,
+      "physics_frame": 138,
+      "sim_time": 2.2999999999999967,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.013031980395317083,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.18658794175494245,
+      "grip_connected": true,
+      "max_joint_gap": 0.0706581744293283,
+      "max_center_step": 0.05802400246511722,
+      "release_frame": null,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 70,
+      "physics_frame": 140,
+      "sim_time": 2.33333333333333,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.00030692815780639093,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.19485893474781676,
+      "grip_connected": false,
+      "max_joint_gap": 0.0600439970905861,
+      "max_center_step": 0.062350256362344904,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 71,
+      "physics_frame": 142,
+      "sim_time": 2.366666666666663,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": 0.0003131240606308039,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.09825407521806541,
+      "grip_connected": false,
+      "max_joint_gap": 0.05009909331910031,
+      "max_center_step": 0.044533324577256415,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 72,
+      "physics_frame": 144,
+      "sim_time": 2.3999999999999964,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0011193692684173528,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.09385753942413944,
+      "grip_connected": false,
+      "max_joint_gap": 0.0627798994750484,
+      "max_center_step": 0.05371821331938439,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 73,
+      "physics_frame": 146,
+      "sim_time": 2.4333333333333296,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.000870326161384577,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.11510881014167486,
+      "grip_connected": false,
+      "max_joint_gap": 0.038575838921072476,
+      "max_center_step": 0.05986225803862868,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 74,
+      "physics_frame": 148,
+      "sim_time": 2.466666666666663,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0006969809532165472,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.08882370693206759,
+      "grip_connected": false,
+      "max_joint_gap": 0.05088387163321524,
+      "max_center_step": 0.04548567254774931,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 75,
+      "physics_frame": 150,
+      "sim_time": 2.499999999999996,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.00019390285015105646,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.18128841446355268,
+      "grip_connected": false,
+      "max_joint_gap": 0.059030333811681046,
+      "max_center_step": 0.03813081391013483,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 76,
+      "physics_frame": 152,
+      "sim_time": 2.533333333333329,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.00024130344390868586,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.2182246013350211,
+      "grip_connected": false,
+      "max_joint_gap": 0.047623721316569216,
+      "max_center_step": 0.03790124884115043,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 77,
+      "physics_frame": 154,
+      "sim_time": 2.5666666666666624,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0002739369869232122,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.22638685059598043,
+      "grip_connected": false,
+      "max_joint_gap": 0.04433915734343344,
+      "max_center_step": 0.03603861148649679,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 78,
+      "physics_frame": 156,
+      "sim_time": 2.5999999999999956,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0002874672412872259,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.2609528621727094,
+      "grip_connected": false,
+      "max_joint_gap": 0.06139101333806055,
+      "max_center_step": 0.04273980216367274,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 79,
+      "physics_frame": 158,
+      "sim_time": 2.633333333333329,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.00029439628124236505,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.3251674616933244,
+      "grip_connected": false,
+      "max_joint_gap": 0.04455538968724209,
+      "max_center_step": 0.04574648305438303,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 80,
+      "physics_frame": 160,
+      "sim_time": 2.666666666666662,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0007905453443527166,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.3467912572436684,
+      "grip_connected": false,
+      "max_joint_gap": 0.04430611747920191,
+      "max_center_step": 0.029819823960321828,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 81,
+      "physics_frame": 162,
+      "sim_time": 2.6999999999999953,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.00016603767871856134,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.3223637353000754,
+      "grip_connected": false,
+      "max_joint_gap": 0.05145965593173561,
+      "max_center_step": 0.04576697391252219,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 82,
+      "physics_frame": 164,
+      "sim_time": 2.7333333333333285,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0006905287504196111,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.3206684857962867,
+      "grip_connected": false,
+      "max_joint_gap": 0.055426539028795706,
+      "max_center_step": 0.022428283573720093,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 83,
+      "physics_frame": 166,
+      "sim_time": 2.7666666666666617,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.002219566702842707,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.35973980087604135,
+      "grip_connected": false,
+      "max_joint_gap": 0.04888541266193827,
+      "max_center_step": 0.03718784802099027,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 84,
+      "physics_frame": 168,
+      "sim_time": 2.799999999999995,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0030392497777938787,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.4048528346535672,
+      "grip_connected": false,
+      "max_joint_gap": 0.03910038044918853,
+      "max_center_step": 0.04975808709261052,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 85,
+      "physics_frame": 170,
+      "sim_time": 2.833333333333328,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.002176308631896967,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.39968715422517787,
+      "grip_connected": false,
+      "max_joint_gap": 0.03010445914601594,
+      "max_center_step": 0.051764883316219354,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 86,
+      "physics_frame": 172,
+      "sim_time": 2.8666666666666614,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0014922559261321966,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.39909245464563714,
+      "grip_connected": false,
+      "max_joint_gap": 0.04551639485393413,
+      "max_center_step": 0.03284252616920562,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 87,
+      "physics_frame": 174,
+      "sim_time": 2.8999999999999946,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0009184867143630926,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.40674903290995923,
+      "grip_connected": false,
+      "max_joint_gap": 0.05896379258385192,
+      "max_center_step": 0.02603391409557852,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 88,
+      "physics_frame": 176,
+      "sim_time": 2.933333333333328,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.000794717669486994,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.4130968713749858,
+      "grip_connected": false,
+      "max_joint_gap": 0.03959344693175988,
+      "max_center_step": 0.027771193304506784,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 89,
+      "physics_frame": 178,
+      "sim_time": 2.966666666666661,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0009264141321182195,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.40184579738737514,
+      "grip_connected": false,
+      "max_joint_gap": 0.041297301297861876,
+      "max_center_step": 0.029877190944973733,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 90,
+      "physics_frame": 180,
+      "sim_time": 2.9999999999999942,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0012801378965377752,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.39034253496223015,
+      "grip_connected": false,
+      "max_joint_gap": 0.04359753395577028,
+      "max_center_step": 0.02508364708392393,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 91,
+      "physics_frame": 182,
+      "sim_time": 3.0333333333333274,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0010822206735610906,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.3816350521010988,
+      "grip_connected": false,
+      "max_joint_gap": 0.05147044956567513,
+      "max_center_step": 0.026429454960477022,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 92,
+      "physics_frame": 184,
+      "sim_time": 3.0666666666666607,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0009282618761062567,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.39684122716303805,
+      "grip_connected": false,
+      "max_joint_gap": 0.049759590842265417,
+      "max_center_step": 0.019017735601250783,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 93,
+      "physics_frame": 186,
+      "sim_time": 3.099999999999994,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0014386266469955389,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.4165906196140404,
+      "grip_connected": false,
+      "max_joint_gap": 0.02569167391302711,
+      "max_center_step": 0.024418057128022256,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 94,
+      "physics_frame": 188,
+      "sim_time": 3.133333333333327,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.001565569639205927,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.41512561108458784,
+      "grip_connected": false,
+      "max_joint_gap": 0.0509557335612551,
+      "max_center_step": 0.02672113997190918,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 95,
+      "physics_frame": 190,
+      "sim_time": 3.1666666666666603,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0006788313388824407,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.4042560672010003,
+      "grip_connected": false,
+      "max_joint_gap": 0.06212784439651999,
+      "max_center_step": 0.03472058184485185,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 96,
+      "physics_frame": 192,
+      "sim_time": 3.1999999999999935,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0005453318357467596,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.42827671025956254,
+      "grip_connected": false,
+      "max_joint_gap": 0.06776154918680544,
+      "max_center_step": 0.03468163652555892,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 97,
+      "physics_frame": 194,
+      "sim_time": 3.2333333333333267,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.003139892220497126,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.4934300953494658,
+      "grip_connected": false,
+      "max_joint_gap": 0.04492309726999358,
+      "max_center_step": 0.03897530864568134,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 98,
+      "physics_frame": 196,
+      "sim_time": 3.26666666666666,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.003927955031394953,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.5953495307895199,
+      "grip_connected": false,
+      "max_joint_gap": 0.03723472059371551,
+      "max_center_step": 0.04403371838126043,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 99,
+      "physics_frame": 198,
+      "sim_time": 3.299999999999993,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.002302491664886469,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.6441041378344807,
+      "grip_connected": false,
+      "max_joint_gap": 0.05988850040749944,
+      "max_center_step": 0.02686412224557821,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 100,
+      "physics_frame": 200,
+      "sim_time": 3.3333333333333264,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0013864129781722967,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.5862614861710805,
+      "grip_connected": false,
+      "max_joint_gap": 0.08221024285087546,
+      "max_center_step": 0.029157008166961033,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 101,
+      "physics_frame": 202,
+      "sim_time": 3.3666666666666596,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0019396632909774725,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.5833929065825579,
+      "grip_connected": false,
+      "max_joint_gap": 0.05780229411901397,
+      "max_center_step": 0.05476475137083555,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 102,
+      "physics_frame": 204,
+      "sim_time": 3.399999999999993,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.002626830339431757,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.651465473339433,
+      "grip_connected": false,
+      "max_joint_gap": 0.04177430789077805,
+      "max_center_step": 0.06672885666775415,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 103,
+      "physics_frame": 206,
+      "sim_time": 3.433333333333326,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.002080747485160822,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.7048564925850187,
+      "grip_connected": false,
+      "max_joint_gap": 0.0408308892088024,
+      "max_center_step": 0.07450167903169606,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 104,
+      "physics_frame": 208,
+      "sim_time": 3.4666666666666592,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0012356281280517523,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.6498623778009303,
+      "grip_connected": false,
+      "max_joint_gap": 0.0552472522841495,
+      "max_center_step": 0.041824974612909814,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 105,
+      "physics_frame": 210,
+      "sim_time": 3.4999999999999925,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0005145907402038519,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.5950208482379734,
+      "grip_connected": false,
+      "max_joint_gap": 0.06050762466827693,
+      "max_center_step": 0.03760626634692532,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 106,
+      "physics_frame": 212,
+      "sim_time": 3.5333333333333257,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.001208850741386408,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.6603756031634884,
+      "grip_connected": false,
+      "max_joint_gap": 0.03697030551043646,
+      "max_center_step": 0.050632764582095716,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    },
+    {
+      "video_frame": 107,
+      "physics_frame": 214,
+      "sim_time": 3.566666666666659,
+      "first_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "head_clearance": -0.0010287106037139837,
+      "minimum_post_contact_head_clearance": -0.004999989271163935,
+      "grip_gap": 0.7381184946678243,
+      "grip_connected": false,
+      "max_joint_gap": 0.04363998596932527,
+      "max_center_step": 0.049091454307326865,
+      "release_frame": 139,
+      "back_contact": true,
+      "landing_audit": {
+        "firstPart": "shinR",
+        "backFirst": false,
+        "headSafe": false,
+        "pass": false,
+        "reason": "WRONG_FIRST_CONTACT"
+      }
+    }
+  ]
+}

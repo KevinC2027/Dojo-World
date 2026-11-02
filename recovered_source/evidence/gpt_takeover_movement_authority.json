@@ -1,0 +1,191 @@
+{
+ "build": "candidates/gpt-hybrid-airanalytic.html",
+ "smoke": {
+  "ok": true
+ },
+ "runs": [
+  {
+   "label": "throw-blue-baseline",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "throw-red-baseline",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "throw-blue-away",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "throw-blue-toward",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "throw-blue-guard",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "throw-blue-mash",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "throw-red-away",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "throw-red-toward",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "throw-red-guard",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "throw-red-mash",
+   "mode": "throw",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 15,
+   "idleEntry": 164
+  },
+  {
+   "label": "knockdown-baseline",
+   "mode": "launcher",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 23,
+   "idleEntry": 160
+  },
+  {
+   "label": "knockdown-inputs",
+   "mode": "launcher",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 23,
+   "idleEntry": 160
+  },
+  {
+   "label": "stumble-0-baseline",
+   "mode": "stumble",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks",
+    "recovery victim hp change (expected fresh-punch range, not a scenario-hit violation): [{\"tick\":142,\"from\":86,\"to\":70,\"atkSt\":\"atk\",\"dist\":\"1.118\"}]"
+   ],
+   "hitTick": 16,
+   "idleEntry": 54
+  },
+  {
+   "label": "stumble-0-inputs",
+   "mode": "stumble",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 16,
+   "idleEntry": 54
+  },
+  {
+   "label": "stumble-1-desperation",
+   "mode": "stumble",
+   "hard": [],
+   "soft": [],
+   "setupOk": true,
+   "notes": [
+    "separation fired 0 ticks"
+   ],
+   "hitTick": 16,
+   "idleEntry": 87
+  }
+ ],
+ "gatingHasHard": false,
+ "nextTarget": "none"
+}

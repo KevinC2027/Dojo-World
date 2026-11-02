@@ -1,0 +1,206 @@
+{
+ "buildSha": "e9112cf7e30df03b42e0f33f3f6d556985d8438cba4f095f49d2be4433672858",
+ "runs": [
+  {
+   "name": "reference",
+   "throwSummary": {
+    "carryEntry": 45,
+    "releaseTick": 64,
+    "touchdownTick": 85,
+    "idleEntry": 194,
+    "landingX": 1.7303692892707856,
+    "finalHpA": 100,
+    "finalHpB": 77.2
+   },
+   "hpEvents": [
+    {
+     "tick": 16,
+     "fighter": "B",
+     "from": 100,
+     "to": 99.2
+    },
+    {
+     "tick": 45,
+     "fighter": "B",
+     "from": 99.2,
+     "to": 77.2
+    }
+   ]
+  },
+  {
+   "name": "replay",
+   "throwSummary": {
+    "carryEntry": 45,
+    "releaseTick": 64,
+    "touchdownTick": 85,
+    "idleEntry": 194,
+    "landingX": 1.7303692892707856,
+    "finalHpA": 100,
+    "finalHpB": 77.2
+   },
+   "hpEvents": [
+    {
+     "tick": 16,
+     "fighter": "B",
+     "from": 100,
+     "to": 99.2
+    },
+    {
+     "tick": 45,
+     "fighter": "B",
+     "from": 99.2,
+     "to": 77.2
+    }
+   ]
+  },
+  {
+   "name": "delayed",
+   "throwSummary": {
+    "carryEntry": 45,
+    "releaseTick": 64,
+    "touchdownTick": 85,
+    "idleEntry": 194,
+    "landingX": 1.850000000000001,
+    "finalHpA": 100,
+    "finalHpB": 70
+   },
+   "hpEvents": [
+    {
+     "tick": 16,
+     "fighter": "B",
+     "from": 100,
+     "to": 92
+    },
+    {
+     "tick": 45,
+     "fighter": "B",
+     "from": 92,
+     "to": 70
+    }
+   ]
+  },
+  {
+   "name": "reordered",
+   "throwSummary": {
+    "carryEntry": 45,
+    "releaseTick": 64,
+    "touchdownTick": 85,
+    "idleEntry": 194,
+    "landingX": 1.850000000000001,
+    "finalHpA": 100,
+    "finalHpB": 70
+   },
+   "hpEvents": [
+    {
+     "tick": 16,
+     "fighter": "B",
+     "from": 100,
+     "to": 92
+    },
+    {
+     "tick": 45,
+     "fighter": "B",
+     "from": 92,
+     "to": 70
+    }
+   ]
+  },
+  {
+   "name": "authority",
+   "throwSummary": {
+    "carryEntry": 45,
+    "releaseTick": 64,
+    "touchdownTick": 85,
+    "idleEntry": 194,
+    "landingX": 1.7303692892707856,
+    "finalHpA": 100,
+    "finalHpB": 77.2
+   },
+   "hpEvents": [
+    {
+     "tick": 16,
+     "fighter": "B",
+     "from": 100,
+     "to": 99.2
+    },
+    {
+     "tick": 45,
+     "fighter": "B",
+     "from": 99.2,
+     "to": 77.2
+    }
+   ]
+  }
+ ],
+ "comparisons": {
+  "replay": {
+   "firstDivergence": null,
+   "divergentTicks": 0,
+   "firstInputDelta": null,
+   "cause": null,
+   "throwDiff": {}
+  },
+  "delayed": {
+   "firstDivergence": {
+    "tick": 14,
+    "fighter": "b",
+    "field": "st",
+    "ref": "guard",
+    "variant": "idle"
+   },
+   "divergentTicks": 246,
+   "firstInputDelta": {
+    "tick": 14,
+    "refGuard": 1,
+    "variantGuard": 0
+   },
+   "cause": "B guard input first differs at tick 14 (ref 1 -> variant 0); first state divergence at tick 14 (b.st ref guard -> variant idle); hp events near that tick: ref [{\"tick\":16,\"fighter\":\"B\",\"from\":100,\"to\":99.2}] variant [{\"tick\":16,\"fighter\":\"B\",\"from\":100,\"to\":92}]",
+   "throwDiff": {
+    "landingX": {
+     "ref": 1.7303692892707856,
+     "variant": 1.850000000000001
+    },
+    "finalHpB": {
+     "ref": 77.2,
+     "variant": 70
+    }
+   }
+  },
+  "reordered": {
+   "firstDivergence": {
+    "tick": 14,
+    "fighter": "b",
+    "field": "st",
+    "ref": "guard",
+    "variant": "idle"
+   },
+   "divergentTicks": 246,
+   "firstInputDelta": {
+    "tick": 14,
+    "refGuard": 1,
+    "variantGuard": 0
+   },
+   "cause": "B guard input first differs at tick 14 (ref 1 -> variant 0); first state divergence at tick 14 (b.st ref guard -> variant idle); hp events near that tick: ref [{\"tick\":16,\"fighter\":\"B\",\"from\":100,\"to\":99.2}] variant [{\"tick\":16,\"fighter\":\"B\",\"from\":100,\"to\":92}]",
+   "throwDiff": {
+    "landingX": {
+     "ref": 1.7303692892707856,
+     "variant": 1.850000000000001
+    },
+    "finalHpB": {
+     "ref": 77.2,
+     "variant": 70
+    }
+   }
+  },
+  "authority": {
+   "firstDivergence": null,
+   "divergentTicks": 0,
+   "firstInputDelta": null,
+   "cause": null,
+   "throwDiff": {}
+  }
+ },
+ "replayOk": true,
+ "authorityOk": true,
+ "gatePass": true
+}

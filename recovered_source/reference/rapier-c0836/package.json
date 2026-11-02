@@ -1,0 +1,14 @@
+{
+  "name": "dojo-world-c0829-isolated-rapier-physics-lab",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Isolated 3D landing physics experiment; not a shipped game change",
+  "scripts": {
+    "start": "node serve.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "0.21.0"
+  }
+}

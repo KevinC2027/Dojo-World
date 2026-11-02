@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm');
+function load(path){const html=fs.readFileSync(path,'utf8');const script=html.match(/<script>([\s\S]*)<\/script>/)[1];const ctx2d=new Proxy({},{get:()=>()=>{},set:()=>true});const elem=()=>({getContext:()=>ctx2d,getBoundingClientRect:()=>({width:800,height:600}),addEventListener:()=>{},style:{}});const sb={document:{getElementById:elem,querySelectorAll:()=>[],documentElement:{}},getComputedStyle:()=>({getPropertyValue:()=>'#000'}),ResizeObserver:class{observe(){}},devicePixelRatio:1,addEventListener:()=>{},performance:{now:()=>0},requestAnimationFrame:()=>{},console};sb.window=sb;sb.globalThis=sb;vm.createContext(sb);vm.runInContext(script,sb);return sb;}
+const D3=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1],p[2]-q[2]);
+for(const [label,atk,def] of [['A',0,1],['B',1,0]]){
+ const sb=load(process.argv[2]);
+ const frames=vm.runInContext(`(()=>{const a=mk(0,${atk}),d=mk(0,${def});S=[d,a];phase='fight';hs=0;tm=45*60;sparks=[];a.x=0;a.z=0;a.fx=1;a.fz=0;a.ax=1;a.az=0;d.x=0.75;d.z=0;d.fx=-1;d.fz=0;d.ax=-1;d.az=0;a.st='idle';d.st='idle';a.aiT=1e9;d.aiT=1e9;a.i={l:0,r:0,u:0,d:0,g:0,bp:0,bk:0};d.i={l:0,r:0,u:0,d:0,g:0,bp:0,bk:0};const J=['pel','neck','head','hl','hr','el','er','kl','kr','fl','fr'];const world=(f,p)=>{const o={};for(const j of J){const q=p[j];if(!q)continue;o[j]=[f.x+f.fx*q[0]-f.fz*q[2],f.y+q[1],f.z+f.fz*q[0]+f.fx*q[2]];}return o;};const fr=[];go(a,'T');{const cf=pose(d);a.hit=1;a.throwMove='ippon';d.st='carry';d.t=0;d.throwStyle='ippon';d.carryFrom=cf;d.ic='mid';d.vy=0;d.vx=0;d.vz=0;d.rm=0;d.gy=-.08;d.kp=22;d.x=a.x+a.ax*0.8;d.z=a.z+a.az*0.8;d.y=0;}for(let tick=0;tick<40;tick++){update(a,d);update(d,a);const pa=pose(a),pd=pose(d);fr.push({tick,vicSt:d.st,vicT:d.t,wa:world(a,pa),wd:world(d,pd)});if(d.st==='air'&&d.t>6)break;}return fr;})()`,sb);
+ const rel=frames.findIndex(f=>f.vicSt==='air'&&f.vicT===0); const prev=frames[rel-1], cur=frames[rel];
+ console.log(label,'release thrower hl step', D3(prev.wa.hl,cur.wa.hl).toFixed(3), 'hr step', D3(prev.wa.hr,cur.wa.hr).toFixed(3));
+ const joints=['pel','neck','head','hl','hr','el','er','kl','kr','fl','fr'];
+ console.log(label,'victim max joint step at release', Math.max(...joints.map(j=>D3(prev.wd[j],cur.wd[j]))).toFixed(3), '| per-joint:', joints.map(j=>j+':'+D3(prev.wd[j],cur.wd[j]).toFixed(3)).join(' '));
+ let maxAir=0, maxAirNonFoot=0; for(let i=rel;i<frames.length-1;i++){ for(const j of joints){ const s=D3(frames[i].wd[j],frames[i+1].wd[j]); maxAir=Math.max(maxAir,s); if(j!=='fl'&&j!=='fr') maxAirNonFoot=Math.max(maxAirNonFoot,s); } }
+ console.log(label,'max victim joint step across air 0->6', maxAir.toFixed(3), 'non-foot', maxAirNonFoot.toFixed(3));
+}

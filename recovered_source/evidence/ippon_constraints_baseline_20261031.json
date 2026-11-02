@@ -1,0 +1,1418 @@
+{
+ "build": "prototype/index.html",
+ "spec": "hidden_files/claude-loop/ippon-contact-constraints-spec.md v1.1",
+ "runs": [
+  {
+   "label": "Blue throws Red (ippon, forced)",
+   "hitTick": 0,
+   "releaseTick": 23,
+   "touchTick": 48,
+   "downEnd": 157,
+   "grip": {
+    "sleeveByWin": {
+     "GRAB": 0.78,
+     "LOCK": 0.213,
+     "RELEASE": 1.25,
+     "FLIGHT": 1.936,
+     "LANDING": 2.804,
+     "RECOVERY": 2.816
+    },
+    "pointByWin": {
+     "GRAB": 0.412,
+     "LOCK": 0.156,
+     "RELEASE": 1.141,
+     "FLIGHT": 1.557,
+     "LANDING": 2.253,
+     "RECOVERY": 2.382
+    },
+    "heldTick": 17,
+    "lostTick": null,
+    "feetLeave": {
+     "tick": 19,
+     "vicT": 20
+    },
+    "releaseHandStepMax": {
+     "v": 0.167,
+     "t": 26
+    }
+   },
+   "feet": {
+    "vicGrab": {
+     "fl": {
+      "maxPerTick": 0.041,
+      "totalDrift": 0.517
+     },
+     "fr": {
+      "maxPerTick": 0.098,
+      "totalDrift": 0.594
+     }
+    },
+    "thrTurn": {
+     "fl": {
+      "maxPerTick": 0,
+      "totalDrift": 0
+     },
+     "fr": {
+      "maxPerTick": 0,
+      "totalDrift": 0
+     }
+    },
+    "pivotFoot": "fl",
+    "pivotDrift": 0
+   },
+   "joints": {
+    "byWin": {
+     "GRAB": {
+      "thr.elbowL": {
+       "min": 28.8,
+       "max": 134.7
+      },
+      "thr.elbowR": {
+       "min": 9.3,
+       "max": 132.7
+      },
+      "thr.kneeL": {
+       "min": 80,
+       "max": 169.7
+      },
+      "thr.kneeR": {
+       "min": 83.8,
+       "max": 169.7
+      },
+      "vic.elbowL": {
+       "min": 64.2,
+       "max": 100.7
+      },
+      "vic.elbowR": {
+       "min": 31.9,
+       "max": 56.7
+      },
+      "vic.kneeL": {
+       "min": 127.5,
+       "max": 147.1
+      },
+      "vic.kneeR": {
+       "min": 140.3,
+       "max": 158.4
+      }
+     },
+     "LOCK": {
+      "thr.elbowL": {
+       "min": 50,
+       "max": 167.2
+      },
+      "thr.elbowR": {
+       "min": 8.4,
+       "max": 25.1
+      },
+      "thr.kneeL": {
+       "min": 74.1,
+       "max": 102.7
+      },
+      "thr.kneeR": {
+       "min": 81.1,
+       "max": 89
+      },
+      "vic.elbowL": {
+       "min": 101.3,
+       "max": 106.2
+      },
+      "vic.elbowR": {
+       "min": 36.3,
+       "max": 171.2
+      },
+      "vic.kneeL": {
+       "min": 51.7,
+       "max": 124.5
+      },
+      "vic.kneeR": {
+       "min": 74.8,
+       "max": 137.2
+      }
+     },
+     "RELEASE": {
+      "thr.elbowL": {
+       "min": 56.7,
+       "max": 167.2
+      },
+      "thr.elbowR": {
+       "min": 7.4,
+       "max": 58.7
+      },
+      "thr.kneeL": {
+       "min": 76.8,
+       "max": 97
+      },
+      "thr.kneeR": {
+       "min": 78.4,
+       "max": 98.7
+      },
+      "vic.elbowL": {
+       "min": 110.8,
+       "max": 143.7
+      },
+      "vic.elbowR": {
+       "min": 74.2,
+       "max": 135.4
+      },
+      "vic.kneeL": {
+       "min": 75.6,
+       "max": 128.3
+      },
+      "vic.kneeR": {
+       "min": 80.1,
+       "max": 110.2
+      }
+     },
+     "FLIGHT": {
+      "thr.elbowL": {
+       "min": 94.8,
+       "max": 169
+      },
+      "thr.elbowR": {
+       "min": 43.2,
+       "max": 169.8
+      },
+      "thr.kneeL": {
+       "min": 103.6,
+       "max": 140.4
+      },
+      "thr.kneeR": {
+       "min": 105.3,
+       "max": 175.9
+      },
+      "vic.elbowL": {
+       "min": 134.3,
+       "max": 167.6
+      },
+      "vic.elbowR": {
+       "min": 129.2,
+       "max": 167.3
+      },
+      "vic.kneeL": {
+       "min": 78.2,
+       "max": 94.9
+      },
+      "vic.kneeR": {
+       "min": 80.5,
+       "max": 102
+      }
+     },
+     "LANDING": {
+      "thr.elbowL": {
+       "min": 127.3,
+       "max": 142
+      },
+      "thr.elbowR": {
+       "min": 89.8,
+       "max": 115.2
+      },
+      "thr.kneeL": {
+       "min": 130.6,
+       "max": 137.5
+      },
+      "thr.kneeR": {
+       "min": 118.6,
+       "max": 124.1
+      },
+      "vic.elbowL": {
+       "min": 162,
+       "max": 167.7
+      },
+      "vic.elbowR": {
+       "min": 155.9,
+       "max": 167.7
+      },
+      "vic.kneeL": {
+       "min": 95.4,
+       "max": 170.5
+      },
+      "vic.kneeR": {
+       "min": 102.5,
+       "max": 170.7
+      }
+     },
+     "RECOVERY": {
+      "thr.elbowL": {
+       "min": 139.8,
+       "max": 142
+      },
+      "thr.elbowR": {
+       "min": 115.2,
+       "max": 115.2
+      },
+      "thr.kneeL": {
+       "min": 135,
+       "max": 138.7
+      },
+      "thr.kneeR": {
+       "min": 119.3,
+       "max": 120.9
+      },
+      "vic.elbowL": {
+       "min": 49.4,
+       "max": 167.7
+      },
+      "vic.elbowR": {
+       "min": 48.1,
+       "max": 167.7
+      },
+      "vic.kneeL": {
+       "min": 71.3,
+       "max": 170.5
+      },
+      "vic.kneeR": {
+       "min": 53.3,
+       "max": 170.7
+      }
+     }
+    },
+    "floors": {
+     "thr.elbowL": {
+      "ticks": 1,
+      "worst": 28.8
+     },
+     "thr.elbowR": {
+      "ticks": 17,
+      "worst": 7.4
+     },
+     "vic.elbowL": {
+      "ticks": 0,
+      "worst": null
+     },
+     "vic.elbowR": {
+      "ticks": 0,
+      "worst": null
+     },
+     "thr.kneeL": {
+      "ticks": 0,
+      "worst": null
+     },
+     "thr.kneeR": {
+      "ticks": 0,
+      "worst": null
+     },
+     "vic.kneeL.carryAir": {
+      "ticks": 22,
+      "worst": 51.7
+     },
+     "vic.kneeR.carryAir": {
+      "ticks": 21,
+      "worst": 74.8
+     }
+    },
+    "flips": {
+     "thr": {
+      "elbowL": 34,
+      "elbowR": 4,
+      "kneeL": 40,
+      "kneeR": 51
+     },
+     "vic": {
+      "elbowL": 19,
+      "elbowR": 21,
+      "kneeL": 36,
+      "kneeR": 46
+     }
+    },
+    "flipTicks": {
+     "thr": {
+      "elbowL": [
+       3,
+       4,
+       6,
+       7,
+       9,
+       12,
+       14,
+       15,
+       25,
+       26,
+       38,
+       39,
+       40,
+       44,
+       54,
+       55,
+       56,
+       57,
+       66,
+       67,
+       101,
+       102,
+       106,
+       107,
+       117,
+       118,
+       124,
+       125,
+       134,
+       135,
+       140,
+       141,
+       144,
+       145
+      ],
+      "elbowR": [
+       2,
+       20,
+       27,
+       50
+      ],
+      "kneeL": [
+       1,
+       2,
+       22,
+       23,
+       27,
+       28,
+       31,
+       32,
+       35,
+       37,
+       38,
+       39,
+       41,
+       50,
+       58,
+       59,
+       70,
+       71,
+       77,
+       78,
+       83,
+       84,
+       86,
+       87,
+       88,
+       89,
+       92,
+       94,
+       98,
+       105,
+       109,
+       110,
+       112,
+       114,
+       140,
+       141,
+       144,
+       145,
+       151,
+       152
+      ],
+      "kneeR": [
+       2,
+       3,
+       12,
+       13,
+       14,
+       15,
+       23,
+       24,
+       27,
+       28,
+       36,
+       37,
+       39,
+       41,
+       48,
+       50,
+       54,
+       55,
+       61,
+       62,
+       63,
+       64,
+       66,
+       68,
+       83,
+       84,
+       85,
+       86,
+       93,
+       94,
+       100,
+       101,
+       102,
+       103,
+       105,
+       106,
+       111,
+       114,
+       121,
+       122,
+       123,
+       126,
+       128,
+       132,
+       137,
+       138,
+       142,
+       143,
+       149,
+       151,
+       157
+      ]
+     },
+     "vic": {
+      "elbowL": [
+       9,
+       29,
+       30,
+       31,
+       32,
+       36,
+       37,
+       41,
+       42,
+       47,
+       49,
+       148,
+       149,
+       150,
+       151,
+       153,
+       154,
+       155,
+       157
+      ],
+      "elbowR": [
+       10,
+       16,
+       20,
+       31,
+       34,
+       36,
+       37,
+       38,
+       42,
+       44,
+       46,
+       47,
+       49,
+       139,
+       140,
+       141,
+       148,
+       149,
+       154,
+       155,
+       157
+      ],
+      "kneeL": [
+       22,
+       23,
+       27,
+       29,
+       30,
+       33,
+       38,
+       40,
+       42,
+       44,
+       51,
+       53,
+       55,
+       56,
+       57,
+       58,
+       63,
+       64,
+       67,
+       68,
+       69,
+       70,
+       104,
+       106,
+       108,
+       109,
+       111,
+       114,
+       116,
+       117,
+       128,
+       129,
+       130,
+       131,
+       155,
+       156
+      ],
+      "kneeR": [
+       19,
+       22,
+       29,
+       30,
+       32,
+       33,
+       36,
+       39,
+       41,
+       46,
+       48,
+       49,
+       52,
+       54,
+       55,
+       56,
+       68,
+       69,
+       74,
+       105,
+       107,
+       108,
+       110,
+       112,
+       116,
+       117,
+       118,
+       119,
+       122,
+       123,
+       124,
+       125,
+       126,
+       127,
+       128,
+       130,
+       131,
+       132,
+       134,
+       135,
+       136,
+       137,
+       138,
+       139,
+       148,
+       149
+      ]
+     }
+    },
+    "maxHN": 0.247,
+    "maxPN": 0.56,
+    "maxStep": {
+     "v": 0.687,
+     "t": 21,
+     "j": "fl"
+    },
+    "maxSegDev": {
+     "v": 0.301,
+     "w": "vic.thighL@21"
+    }
+   },
+   "intersections": {
+    "minByWin": {
+     "GRAB": {
+      "torsoTorso": 0.145,
+      "ctrlArmTorso": 0.073,
+      "headTorso": 0.149,
+      "pelTorso": 0.348,
+      "limbTorso": 0.073
+     },
+     "LOCK": {
+      "torsoTorso": 0.45,
+      "ctrlArmTorso": 0.172,
+      "headTorso": 0.794,
+      "pelTorso": 0.455,
+      "limbTorso": 0.174
+     },
+     "RELEASE": {
+      "torsoTorso": 0.729,
+      "ctrlArmTorso": 0.863,
+      "headTorso": 1.457,
+      "pelTorso": 0.729,
+      "limbTorso": 0.831
+     },
+     "FLIGHT": {
+      "torsoTorso": 1.52,
+      "ctrlArmTorso": 1.711,
+      "headTorso": 2.26,
+      "pelTorso": 1.52,
+      "limbTorso": 1.001
+     },
+     "LANDING": {
+      "torsoTorso": 2.221,
+      "ctrlArmTorso": 2.671,
+      "headTorso": 2.991,
+      "pelTorso": 2.221,
+      "limbTorso": 1.292
+     },
+     "RECOVERY": {
+      "torsoTorso": 2.737,
+      "ctrlArmTorso": 2.357,
+      "headTorso": 2.736,
+      "pelTorso": 2.76,
+      "limbTorso": 1.609
+     }
+    },
+    "penTicks": {
+     "GRAB": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "LOCK": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "RELEASE": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "FLIGHT": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "LANDING": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "RECOVERY": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     }
+    }
+   },
+   "hard": [
+    "sleeve grip LOCK max 0.213m > 0.10",
+    "joint floor breach thr.elbowL: 1 ticks, worst 28.8deg",
+    "joint floor breach thr.elbowR: 17 ticks, worst 7.4deg",
+    "joint floor breach vic.kneeL.carryAir: 22 ticks, worst 51.7deg",
+    "joint floor breach vic.kneeR.carryAir: 21 ticks, worst 74.8deg",
+    "segment dev 0.301m > 0.10 (vic.thighL@21)"
+   ],
+   "soft": [
+    "joint step 0.687m > 0.20 (fl@21) \u2014 rank 7, sacrificed last"
+   ]
+  },
+  {
+   "label": "Red throws Blue (ippon, forced)",
+   "hitTick": 0,
+   "releaseTick": 23,
+   "touchTick": 48,
+   "downEnd": 157,
+   "grip": {
+    "sleeveByWin": {
+     "GRAB": 0.841,
+     "LOCK": 0.651,
+     "RELEASE": 1.25,
+     "FLIGHT": 2.583,
+     "LANDING": 3.655,
+     "RECOVERY": 3.669
+    },
+    "pointByWin": {
+     "GRAB": 0.715,
+     "LOCK": 0.481,
+     "RELEASE": 1.141,
+     "FLIGHT": 2.232,
+     "LANDING": 3.155,
+     "RECOVERY": 3.197
+    },
+    "heldTick": 18,
+    "lostTick": null,
+    "feetLeave": {
+     "tick": 19,
+     "vicT": 20
+    },
+    "releaseHandStepMax": {
+     "v": 0.164,
+     "t": 26
+    }
+   },
+   "feet": {
+    "vicGrab": {
+     "fl": {
+      "maxPerTick": 0.086,
+      "totalDrift": 0.582
+     },
+     "fr": {
+      "maxPerTick": 0.142,
+      "totalDrift": 0.637
+     }
+    },
+    "thrTurn": {
+     "fl": {
+      "maxPerTick": 0,
+      "totalDrift": 0
+     },
+     "fr": {
+      "maxPerTick": 0,
+      "totalDrift": 0
+     }
+    },
+    "pivotFoot": "fl",
+    "pivotDrift": 0
+   },
+   "joints": {
+    "byWin": {
+     "GRAB": {
+      "thr.elbowL": {
+       "min": 28.8,
+       "max": 134.7
+      },
+      "thr.elbowR": {
+       "min": 9.3,
+       "max": 132.7
+      },
+      "thr.kneeL": {
+       "min": 80,
+       "max": 169.7
+      },
+      "thr.kneeR": {
+       "min": 83.8,
+       "max": 169.7
+      },
+      "vic.elbowL": {
+       "min": 123.9,
+       "max": 141.9
+      },
+      "vic.elbowR": {
+       "min": 84.9,
+       "max": 121.3
+      },
+      "vic.kneeL": {
+       "min": 136.4,
+       "max": 145
+      },
+      "vic.kneeR": {
+       "min": 120.2,
+       "max": 170.6
+      }
+     },
+     "LOCK": {
+      "thr.elbowL": {
+       "min": 50,
+       "max": 113.1
+      },
+      "thr.elbowR": {
+       "min": 8.4,
+       "max": 25.1
+      },
+      "thr.kneeL": {
+       "min": 74.1,
+       "max": 87.1
+      },
+      "thr.kneeR": {
+       "min": 77.1,
+       "max": 83.8
+      },
+      "vic.elbowL": {
+       "min": 113.5,
+       "max": 126.1
+      },
+      "vic.elbowR": {
+       "min": 39.9,
+       "max": 71.7
+      },
+      "vic.kneeL": {
+       "min": 102.6,
+       "max": 156.8
+      },
+      "vic.kneeR": {
+       "min": 64.9,
+       "max": 178.2
+      }
+     },
+     "RELEASE": {
+      "thr.elbowL": {
+       "min": 57,
+       "max": 139.3
+      },
+      "thr.elbowR": {
+       "min": 7.4,
+       "max": 58.7
+      },
+      "thr.kneeL": {
+       "min": 76.8,
+       "max": 97
+      },
+      "thr.kneeR": {
+       "min": 78.4,
+       "max": 98.7
+      },
+      "vic.elbowL": {
+       "min": 114.9,
+       "max": 143.7
+      },
+      "vic.elbowR": {
+       "min": 77.9,
+       "max": 135.4
+      },
+      "vic.kneeL": {
+       "min": 76.8,
+       "max": 147.2
+      },
+      "vic.kneeR": {
+       "min": 80.1,
+       "max": 88.2
+      }
+     },
+     "FLIGHT": {
+      "thr.elbowL": {
+       "min": 47.9,
+       "max": 169
+      },
+      "thr.elbowR": {
+       "min": 60.8,
+       "max": 169.8
+      },
+      "thr.kneeL": {
+       "min": 103.6,
+       "max": 147.2
+      },
+      "thr.kneeR": {
+       "min": 105.3,
+       "max": 148.9
+      },
+      "vic.elbowL": {
+       "min": 134.3,
+       "max": 167.6
+      },
+      "vic.elbowR": {
+       "min": 129.2,
+       "max": 167.3
+      },
+      "vic.kneeL": {
+       "min": 78.2,
+       "max": 94.9
+      },
+      "vic.kneeR": {
+       "min": 80.5,
+       "max": 102
+      }
+     },
+     "LANDING": {
+      "thr.elbowL": {
+       "min": 55.3,
+       "max": 62.8
+      },
+      "thr.elbowR": {
+       "min": 55.3,
+       "max": 57.4
+      },
+      "thr.kneeL": {
+       "min": 139.2,
+       "max": 157.7
+      },
+      "thr.kneeR": {
+       "min": 147.5,
+       "max": 169.8
+      },
+      "vic.elbowL": {
+       "min": 162,
+       "max": 167.7
+      },
+      "vic.elbowR": {
+       "min": 155.9,
+       "max": 167.7
+      },
+      "vic.kneeL": {
+       "min": 95.4,
+       "max": 170.5
+      },
+      "vic.kneeR": {
+       "min": 102.5,
+       "max": 170.7
+      }
+     },
+     "RECOVERY": {
+      "thr.elbowL": {
+       "min": 62.8,
+       "max": 62.8
+      },
+      "thr.elbowR": {
+       "min": 55.3,
+       "max": 55.3
+      },
+      "thr.kneeL": {
+       "min": 139.2,
+       "max": 157.7
+      },
+      "thr.kneeR": {
+       "min": 147.5,
+       "max": 169.8
+      },
+      "vic.elbowL": {
+       "min": 49.4,
+       "max": 167.7
+      },
+      "vic.elbowR": {
+       "min": 39.5,
+       "max": 167.7
+      },
+      "vic.kneeL": {
+       "min": 71.3,
+       "max": 170.5
+      },
+      "vic.kneeR": {
+       "min": 59.6,
+       "max": 180
+      }
+     }
+    },
+    "floors": {
+     "thr.elbowL": {
+      "ticks": 1,
+      "worst": 28.8
+     },
+     "thr.elbowR": {
+      "ticks": 17,
+      "worst": 7.4
+     },
+     "vic.elbowL": {
+      "ticks": 0,
+      "worst": null
+     },
+     "vic.elbowR": {
+      "ticks": 0,
+      "worst": null
+     },
+     "thr.kneeL": {
+      "ticks": 0,
+      "worst": null
+     },
+     "thr.kneeR": {
+      "ticks": 0,
+      "worst": null
+     },
+     "vic.kneeL.carryAir": {
+      "ticks": 20,
+      "worst": 76.8
+     },
+     "vic.kneeR.carryAir": {
+      "ticks": 24,
+      "worst": 64.9
+     }
+    },
+    "flips": {
+     "thr": {
+      "elbowL": 66,
+      "elbowR": 6,
+      "kneeL": 10,
+      "kneeR": 30
+     },
+     "vic": {
+      "elbowL": 18,
+      "elbowR": 22,
+      "kneeL": 38,
+      "kneeR": 45
+     }
+    },
+    "flipTicks": {
+     "thr": {
+      "elbowL": [
+       6,
+       7,
+       9,
+       12,
+       14,
+       15,
+       38,
+       39,
+       40,
+       41,
+       47,
+       50,
+       52,
+       54,
+       56,
+       57,
+       61,
+       62,
+       64,
+       65,
+       67,
+       68,
+       69,
+       72,
+       78,
+       82,
+       83,
+       84,
+       85,
+       86,
+       87,
+       88,
+       93,
+       94,
+       95,
+       96,
+       98,
+       100,
+       101,
+       102,
+       103,
+       104,
+       105,
+       106,
+       111,
+       112,
+       113,
+       116,
+       118,
+       119,
+       122,
+       123,
+       124,
+       129,
+       132,
+       135,
+       136,
+       137,
+       139,
+       140,
+       143,
+       144,
+       146,
+       151,
+       155,
+       157
+      ],
+      "elbowR": [
+       1,
+       2,
+       8,
+       13,
+       20,
+       50
+      ],
+      "kneeL": [
+       22,
+       23,
+       27,
+       28,
+       31,
+       32,
+       35,
+       37,
+       38,
+       39
+      ],
+      "kneeR": [
+       1,
+       2,
+       12,
+       13,
+       14,
+       15,
+       23,
+       24,
+       27,
+       28,
+       36,
+       37,
+       39,
+       41,
+       87,
+       88,
+       94,
+       95,
+       103,
+       104,
+       112,
+       113,
+       123,
+       124,
+       128,
+       129,
+       146,
+       149,
+       154,
+       155
+      ]
+     },
+     "vic": {
+      "elbowL": [
+       4,
+       6,
+       29,
+       30,
+       31,
+       32,
+       36,
+       37,
+       41,
+       42,
+       47,
+       49,
+       148,
+       149,
+       151,
+       153,
+       156,
+       157
+      ],
+      "elbowR": [
+       15,
+       18,
+       29,
+       31,
+       34,
+       36,
+       37,
+       38,
+       42,
+       44,
+       46,
+       47,
+       49,
+       139,
+       144,
+       145,
+       148,
+       149,
+       151,
+       152,
+       153,
+       154
+      ],
+      "kneeL": [
+       28,
+       29,
+       30,
+       33,
+       38,
+       40,
+       42,
+       44,
+       51,
+       53,
+       55,
+       56,
+       57,
+       58,
+       63,
+       64,
+       67,
+       68,
+       69,
+       70,
+       104,
+       106,
+       108,
+       109,
+       111,
+       114,
+       116,
+       117,
+       128,
+       129,
+       130,
+       131,
+       144,
+       145,
+       148,
+       149,
+       153,
+       155
+      ],
+      "kneeR": [
+       1,
+       2,
+       4,
+       19,
+       22,
+       29,
+       30,
+       32,
+       33,
+       36,
+       39,
+       41,
+       46,
+       48,
+       49,
+       52,
+       54,
+       55,
+       56,
+       68,
+       69,
+       74,
+       105,
+       107,
+       108,
+       110,
+       112,
+       116,
+       117,
+       118,
+       119,
+       126,
+       127,
+       129,
+       130,
+       131,
+       133,
+       139,
+       140,
+       143,
+       144,
+       147,
+       149,
+       154,
+       157
+      ]
+     }
+    },
+    "maxHN": 0.247,
+    "maxPN": 0.556,
+    "maxStep": {
+     "v": 0.892,
+     "t": 22,
+     "j": "kr"
+    },
+    "maxSegDev": {
+     "v": 0.339,
+     "w": "vic.thighR@130"
+    }
+   },
+   "intersections": {
+    "minByWin": {
+     "GRAB": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0.35,
+      "headTorso": 0.061,
+      "pelTorso": 0.33,
+      "limbTorso": 0.366
+     },
+     "LOCK": {
+      "torsoTorso": 0.367,
+      "ctrlArmTorso": 0.062,
+      "headTorso": 0.673,
+      "pelTorso": 0.395,
+      "limbTorso": 0.062
+     },
+     "RELEASE": {
+      "torsoTorso": 0.705,
+      "ctrlArmTorso": 0.725,
+      "headTorso": 1.435,
+      "pelTorso": 0.705,
+      "limbTorso": 0.783
+     },
+     "FLIGHT": {
+      "torsoTorso": 1.52,
+      "ctrlArmTorso": 1.711,
+      "headTorso": 2.26,
+      "pelTorso": 1.52,
+      "limbTorso": 1.001
+     },
+     "LANDING": {
+      "torsoTorso": 2.44,
+      "ctrlArmTorso": 2.873,
+      "headTorso": 3.193,
+      "pelTorso": 2.44,
+      "limbTorso": 1.555
+     },
+     "RECOVERY": {
+      "torsoTorso": 2.742,
+      "ctrlArmTorso": 2.056,
+      "headTorso": 2.654,
+      "pelTorso": 2.892,
+      "limbTorso": 1.989
+     }
+    },
+    "penTicks": {
+     "GRAB": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "LOCK": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "RELEASE": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "FLIGHT": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "LANDING": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     },
+     "RECOVERY": {
+      "torsoTorso": 0,
+      "ctrlArmTorso": 0,
+      "headTorso": 0,
+      "pelTorso": 0,
+      "limbTorso": 0
+     }
+    }
+   },
+   "hard": [
+    "sleeve grip LOCK max 0.651m > 0.10",
+    "joint floor breach thr.elbowL: 1 ticks, worst 28.8deg",
+    "joint floor breach thr.elbowR: 17 ticks, worst 7.4deg",
+    "joint floor breach vic.kneeL.carryAir: 20 ticks, worst 76.8deg",
+    "joint floor breach vic.kneeR.carryAir: 24 ticks, worst 64.9deg",
+    "segment dev 0.339m > 0.10 (vic.thighR@130)"
+   ],
+   "soft": [
+    "point grip LOCK max 0.481m > 0.20",
+    "joint step 0.892m > 0.20 (kr@22) \u2014 rank 7, sacrificed last"
+   ]
+  }
+ ],
+ "gatingHasHard": true,
+ "notes": {
+  "method": "Forced ippon both directions, live build 786ac6bf, 2026-10-31. Probe: probe_ippon_constraints.cjs.",
+  "firm_passes": [
+   "Sleeve grip HELD at carry tick 17 (Blue) / 18 (Red), never lost during carry",
+   "Release hand follow-through max step 0.167/0.164 m (< 0.20, no snap-back; cycle-153 fade works)",
+   "Head-neck 0.247 m, pelvis-neck <= 0.560 m",
+   "Zero non-drape penetration ticks in any window"
+  ],
+  "firm_failures": [
+   "LOCK sleeve grip Blue 0.213 m / Red 0.651 m vs 0.10 gate \u2014 strong direction asymmetry, Red much worse",
+   "Thrower rear elbow collapses to 7.4 deg for 17 ticks across LOCK/RELEASE, both directions (trap geometry folds the arm shut)",
+   "Victim knees fold below the 90 deg carry floor (worst Blue L 51.7 deg, Red R 64.9 deg) \u2014 contradicts 8-panel beat 6 legs-extended; floor RETAINED, pose flagged (spec v1.1)",
+   "Late-carry snaps: Blue victim foot step 0.687 m @21, Red victim knee step 0.892 m @22; thigh segment devs 0.301 m (Blue @21) and 0.339 m (Red @130, getup)"
+  ],
+  "measurement_gaps_not_passes": [
+   "GRAB grip approach: forced path teleports victim into carry, skips the approach",
+   "Victim planted feet: no pre-carry standing phase exists on the forced path",
+   "Pivot foot: turn-in (thrower ticks 24-41) moves NO thrower feet \u2014 pose-only turn, so the pivot gate is untestable on this build",
+   "RELEASE sleeve distance: ungated in v1.1 \u2014 separation after release is expected ballistics, hand continuity gated instead",
+   "Bend-side flips: facing-frame formulation invalidated by frame rotation (turn-in yaw, victim tumble); counts kept as experimental data only"
+  ],
+  "open_conflicts": [
+   "Victim knee floor (90 deg) vs authored drape pose (folds to 51.7-76.8 deg): floor retained per diagram beat 6; pose rework is the Phase 3 item, not a gate loosening",
+   "Red-direction LOCK grip (0.651 m) vs Blue (0.213 m): asymmetry source uninvestigated \u2014 stance/facing geometry suspected, not yet proven"
+  ]
+ }
+}

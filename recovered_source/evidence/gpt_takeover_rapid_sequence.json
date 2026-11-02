@@ -1,0 +1,33 @@
+{
+ "seqA_timedChains": {
+  "presses": 4,
+  "fires": 4,
+  "fireFrames": [
+   13,
+   27,
+   41,
+   55
+  ],
+  "maxTransJointStep": {
+   "joint": "hr",
+   "val": 0.1662019085289394
+  },
+  "nanTicks": 0,
+  "badStateTicks": 0,
+  "finalSt": "idle",
+  "defenderHp": 67.39999999999999
+ },
+ "seqB_mash": {
+  "presses": 53,
+  "chainFires": 7,
+  "maxTransJointStep": {
+   "joint": "fr",
+   "val": 0.1512866627333279
+  },
+  "nanTicks": 0,
+  "badStateTicks": 0,
+  "finalSt": "idle",
+  "finalX": 2.885,
+  "defenderHp": 73.7
+ }
+}
