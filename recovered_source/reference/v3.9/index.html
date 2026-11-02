@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"><title>Street Dojo — Fluid Falls v3.9</title>
+<style>
+:root{color-scheme:dark;--paper:#d9ddd8;--accent:#e8a76f}*{box-sizing:border-box}html,body{padding:0;margin:0;background:#10141b;color:var(--paper);font-family:system-ui,-apple-system,Segoe UI,sans-serif;overscroll-behavior:none}body{display:flex;align-items:center;flex-direction:column;min-height:100dvh}header{width:min(100%,1100px);padding:12px 15px 7px;display:flex;align-items:center;justify-content:space-between;gap:10px}header strong{font-size:14px;letter-spacing:.16em}header small{color:#a1abb9;font-size:11px}.actions{display:flex;gap:8px}.actions button{padding:8px 10px;border:1px solid #657078;border-radius:6px;background:#28323b;color:white;font-size:12px;cursor:pointer}.actions button:active,.key.down{background:#8c5d46}#view{width:min(100%,1100px);aspect-ratio:16/9;display:block;touch-action:none;background:#202b38;box-shadow:0 0 30px #0006}#controls{width:min(100%,1100px);display:flex;align-items:center;justify-content:space-between;gap:18px;padding:8px 22px 18px;touch-action:none;user-select:none;-webkit-user-select:none}.group{display:flex;flex-direction:column;gap:7px}.shoulders{display:flex;gap:8px;justify-content:center}.left-pad{display:flex;gap:16px;align-items:center}.stick{position:relative;width:125px;height:125px;border-radius:50%;background:radial-gradient(circle,#222e38 0 28%,#172027 31% 62%,#111820 64%);border:1px solid #6b7785;touch-action:none;flex-shrink:0}.stick:after{content:'';position:absolute;inset:10px;border:1px dashed #65717f;border-radius:50%}.nub{position:absolute;width:50px;height:50px;border-radius:50%;background:#627380;border:2px solid #a3b4be;left:36px;top:36px;box-shadow:0 4px 7px #0008;z-index:1;pointer-events:none}.face{height:130px;width:158px;position:relative}.key{display:flex;align-items:center;justify-content:center;background:#29343e;border:1px solid #7a8791;border-radius:10px;color:white;font-size:13px;font-weight:800;touch-action:none;cursor:pointer}.face .key{position:absolute;width:51px;height:41px}.face .tri{top:0;left:53px}.face .sq{top:43px;left:0}.face .cir{top:43px;right:0}.face .x{bottom:0;left:53px}.shoulders .key{width:52px;height:33px;font-size:11px}.help{max-width:1100px;width:100%;padding:0 18px 20px;color:#97a3ad;font-size:12px;line-height:1.5}.controlhint{color:#ecb88b}body.demo #controls{display:none}body.demo .help{display:none}body.demo header{display:none}body.demo #view{width:min(100%,1200px)}@media(max-width:630px){header strong{font-size:11px}header small{display:none}#controls{padding:7px 9px;gap:4px}.left-pad{gap:3px}.stick{width:97px;height:97px}.nub{left:26px;top:26px;width:44px;height:44px}.shoulders{gap:3px}.shoulders .key{width:37px;height:30px;font-size:10px}.face{width:128px;height:116px}.face .key{width:42px;height:35px}.face .tri{left:43px}.face .sq{top:39px}.face .cir{top:39px}.face .x{left:43px}.help{font-size:11px}}
+</style></head><body>
+<header><div><strong>STREET DOJO · FLUID FALLS v3.9</strong><small> &nbsp; / STEP 0 / CONCEPT PREVIEW, NOT GAMEPLAY FOOTAGE</small></div><div class="actions"><button id="demoBtn">Watch 57s preview</button><button id="resetBtn">Restart</button></div></header>
+<canvas id="view" width="960" height="540" aria-label="Stylized faceless martial arts sparring mockup"></canvas>
+<div id="controls"><div class="left-pad"><div class="group"><div class="shoulders"><button class="key" data-b="l2">L2</button><button class="key" data-b="l1">L1</button></div><div class="stick" id="stick"><div class="nub" id="nub"></div></div></div></div><div class="group"><div class="shoulders"><button class="key" data-b="r1">R1</button><button class="key" data-b="r2">R2</button></div><div class="face"><button class="key tri" data-b="rear">▲</button><button class="key sq" data-b="lead">■</button><button class="key cir" data-b="evade">●</button><button class="key x" data-b="step">✕</button></div></div></div>
+<div class="help"><span class="controlhint">KEYBOARD:</span> A/D or ◀/▶ move · J lead straight · K rear straight · hold Shift + K for low kick · L high guard · L + Shift low guard · Space short evade · R clinch attempt · Enter restart. On-screen L1/R2 together = low guard; R2 + ▲ = low kick. <strong>No health bar.</strong> Internal condition is reflected by visible injury. This remains illustrative 2D Canvas, not verified 3D physics.</div>
+<script>
+'use strict';
+const cv=document.getElementById('view'),g=cv.getContext('2d');const W=960,H=540,FLOOR=418;
+const inputs={left:0,right:0,lead:false,rear:false,evade:false,step:false,l1:false,l2:false,r1:false,r2:false};
+const prevInputs={};let mode=new URLSearchParams(location.search).has('demo')?'demo':'play';
+if(mode==='demo')document.body.classList.add('demo');
+let gameTime=0,lastFrame=performance.now(),demoTime=0,stepCount=0,hitLog=[],statusMessage='FIGHT',statusTimer=105;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));const mix=(a,b,t)=>a+(b-a)*t;const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t)};
+const R={lead:{wind:4,active:4,recover:9,damage:7,reach:77,zone:'head'},rear:{wind:6,active:4,recover:11,damage:12,reach:90,zone:'head'},kick:{wind:7,active:6,recover:14,damage:14,reach:104,zone:'leg'},clinch:{wind:7,active:3,recover:14,damage:0,reach:43,zone:'body'}};
+const colors={p:'#76b6d3',e:'#db887d'};
+// Street Dojo v3.9: original procedural fall animation, 60 Hz.
+// Cosmetic after KO; this state never grants damage, movement or immunity.
+const KOFALL={kneel:{dur:20,settle:12},back:{dur:28,settle:14}};
+const KICK={lunge:20,chK:[34,70],exK:[44,68],thC:112,thE:20,shin:40,lean:14};
+let shake=0,dust=[];
+function puff(x,n,imp,d){for(let i=0;i<n;i++){const a=i-(n-1)/2;dust.push({x:x+a*9,y:FLOOR-2,vx:a*.7+d*imp*9,vy:-.5-Math.abs(a)*.12-imp*2,l:1})}}
+function clonePose(P){return Object.fromEntries(Object.entries(P).map(([n,p])=>[n,{x:p.x,y:p.y}]))}
+function startFall(att,def,type,zone,over,impactPose){
+ const mode=(type==='lead'||type==='clinch'||over<2)?'kneel':'back';
+ const start=clonePose(impactPose||pose(def)),d=att?att.face:-def.face;
+ return {mode,type,zone,over,d,fc:def.face,t:0,u:0,tau:0,
+  dur:Math.round(KOFALL[mode].dur*(type==='kick'?.90:1)*(1-.08*clamp(over,0,14)/14)),
+  freeze:1,landed:false,settled:false,start,origin:def.x};
+}
+function stepFall(f){
+ const k=f.fall;if(!k)return;
+ if(k.freeze>0){k.freeze--;return}
+ k.t++;k.tau=Math.min(1,k.t/k.dur);k.u=Math.max(0,k.t-k.dur);
+ if(!k.landed&&k.t>=k.dur){k.landed=true;shake=Math.max(shake,k.mode==='back'?1.8:1.1);puff(f.x+k.d*30,3,.09,k.d)}
+ k.settled=k.u>=KOFALL[k.mode].settle;
+ if(k.u>KOFALL[k.mode].settle+60)f.fade=Math.min(1,f.fade+.016);
+}
+// Cubic Hermite interpolation: continuous velocity through intermediate poses.
+function fallCurve(t,values){
+ const n=values.length-1,z=clamp(t,0,1)*n,i=Math.min(n-1,Math.floor(z)),u=z-i;
+ const a=values[i],b=values[i+1],ma=i===0?(values[1]-values[0]):(values[i+1]-values[i-1])*.5;
+ const mb=i+1===n?0:(values[i+2]-values[i])*.5;
+ return (2*u*u*u-3*u*u+1)*a+(u*u*u-2*u*u+u)*ma+(-2*u*u*u+3*u*u)*b+(u*u*u-u*u)*mb;
+}
+function fallIK(root,target,l1,l2,bend){
+ let dx=target.x-root.x,dy=target.y-root.y,L=Math.hypot(dx,dy)||.001;
+ L=clamp(L,Math.abs(l1-l2)+.01,l1+l2-.01);
+ const angle=Math.atan2(dy,dx),end={x:root.x+Math.cos(angle)*L,y:root.y+Math.sin(angle)*L};
+ const along=(l1*l1-l2*l2+L*L)/(2*L),h=Math.sqrt(Math.max(0,l1*l1-along*along));
+ const choices=[1,-1].map(s=>({x:root.x+Math.cos(angle)*along-Math.sin(angle)*h*s,y:root.y+Math.sin(angle)*along+Math.cos(angle)*h*s}));
+ const knee=bend==='up'?choices.reduce((a,b)=>a.y<b.y?a:b):choices.reduce((a,b)=>a.x*bend>b.x*bend?a:b);
+ return [knee,end];
+}
+function koPose(f,P){
+ const k=f.fall;if(!k)return;
+ const A=k.start,t=clamp(k.t/k.dur,0,1),d=k.d,fc=k.fc,back=k.mode==='back';
+ if(k.t===0){Object.keys(P).forEach(n=>{if(A[n])Object.assign(P[n],A[n])});return}
+ const u=k.u,settle=u?Math.exp(-u/3.5)*Math.sin(Math.PI*u/7):0;
+ const hipDrop=fallCurve(t,back?[0,9,38,54]:[0,8,27,34]);
+ const travel=fallCurve(t,back?[0,7,22,32]:[0,-2,-5,-7]);
+ const H={x:A.hip.x+(back?d:fc)*travel,y:Math.min(FLOOR-22,A.hip.y+hipDrop)-Math.max(0,settle)*1.6};
+ // v3.9: constrain only the current rotated silhouette; do not snap the
+ // standing hip into a full-body resting margin at the start of the fall.
+ const theta=fallCurve(t,back?[0,.24,.91,Math.PI/2]:[0,.08,.33,.58]);
+ const s=back?d:fc;
+ const neck=back?-.06*Math.sin(Math.PI*t):.15*smooth(t);
+ const headOffset=s*(61*Math.sin(theta)+27*Math.sin(theta+neck));
+ const freeHipX=H.x;
+ H.x=clamp(H.x,Math.max(15,19.5-headOffset),Math.min(W-15,W-19.5-headOffset));
+ const Sh={x:H.x+s*61*Math.sin(theta),y:H.y-61*Math.cos(theta)};
+ const Hd={x:Sh.x+s*27*Math.sin(theta+neck),y:Sh.y-27*Math.cos(theta+neck)};
+ const footProgress=smooth(clamp((t-.10)/.9,0,1));
+ let F={x:mix(A.frontFoot.x,k.origin+fc*(back?22:-26),footProgress),y:mix(A.frontFoot.y,FLOOR-9,footProgress)};
+ let Rf={x:mix(A.rearFoot.x,k.origin+fc*(back?5:-36),footProgress),y:mix(A.rearFoot.y,FLOOR-9,footProgress)};
+ // Carry the feet with boundary displacement, avoiding a stretched leg at contact.
+ if(back){F.x+=H.x-freeHipX;Rf.x+=H.x-freeHipX}
+ const [FK,FF]=fallIK(H,F,41,40,fc),[RK,RF]=fallIK(H,Rf,41,40,fc);
+ function arm(side){
+  const hand=A[side+'Hand'],delay=side==='near'?.03:.09;
+  const a=smooth(clamp((t-delay)/(1-delay),0,1));
+  const lag=Math.sin(Math.PI*t)*(side==='near'?10:15);
+  const tx=back?Sh.x-d*(side==='near'?43:30):Sh.x+fc*(side==='near'?25:9);
+  const ty=back?FLOOR-9:Math.min(FLOOR-9,Sh.y+57);
+  const target={x:mix(hand.x,tx,a)-d*lag,y:mix(hand.y,ty,a)};
+  return fallIK(Sh,target,34,30,'up');
+ }
+ const [NE,NH]=arm('near'),[FE,FH]=arm('far');
+ const Q={hip:H,shoulder:Sh,head:Hd,frontKnee:FK,rearKnee:RK,frontFoot:FF,rearFoot:RF,nearEl:NE,nearHand:NH,farEl:FE,farHand:FH,root:H};
+ // v3.9: release residual muscle tension after back contact, over 14 ticks.
+ // Endpoints include the dark outline radius, not just joint-center height.
+ // Cosmetic only: no movement of f.x, hitboxes, stun or combat state.
+ if(back&&u>0){
+  const relax=smooth(clamp(u/14,0,1));
+  const restHip={x:H.x,y:FLOOR-19.5};
+  const restSh={x:Sh.x,y:FLOOR-19.5};
+  const resting={hip:restHip,root:restHip,shoulder:restSh,
+   head:{x:Hd.x,y:FLOOR-19.5}};
+  for(const [side,offset] of [['front',0],['rear',4]]){
+   // A shallow knee bend leaves calf and foot supported, without a tented leg.
+   const knee={x:restHip.x-d*(39-offset),y:FLOOR-11};
+   const foot={x:knee.x-d*39.9,y:FLOOR-10};
+   resting[side+'Knee']=knee;resting[side+'Foot']=foot;
+  }
+  for(const [side,elRadius,handRadius] of [['near',10,9],['far',9,8.5]]){
+   const elbow={x:restSh.x-d*Math.sqrt(34*34-(19.5-elRadius)**2),y:FLOOR-elRadius};
+   resting[side+'El']=elbow;
+   resting[side+'Hand']={x:elbow.x-d*Math.sqrt(30*30-(elRadius-handRadius)**2),y:FLOOR-handRadius};
+  }
+  for(const n in resting){Q[n].x=mix(Q[n].x,resting[n].x,relax);Q[n].y=mix(Q[n].y,resting[n].y,relax)}
+  const radius={hip:15,shoulder:15,head:19.5,frontKnee:11,rearKnee:10,frontFoot:10,rearFoot:9.5,nearEl:10,farEl:9,nearHand:9,farHand:8.5};
+  for(const [n,r] of Object.entries(radius))Q[n].y=Math.min(Q[n].y,FLOOR-r);
+ }
+
+ const join=smooth(clamp(k.t/4,0,1));
+ for(const n in Q){P[n].x=mix(A[n].x,Q[n].x,join);P[n].y=mix(A[n].y,Q[n].y,join)}
+}
+// Interpolate presentation only; authoritative hit geometry remains at 60 Hz.
+function renderPose(f,alpha=1){const current=pose(f),old=f.prevPose;if(!old)return current;const P={};for(const n in current)P[n]={x:mix(old[n].x,current[n].x,alpha),y:mix(old[n].y,current[n].y,alpha)};return P;}
+
+function makeF(x,dir,col,name){return {x,y:FLOOR,face:dir,col,name,condition:0,ko:false,fade:0,act:null,guard:'',hurt:0,stun:0,evade:0,drift:0,stepCycle:0,lastX:x,prevPose:null,worldPose:null,ai:{decision:0,cool:0,plan:'approach'},received:[],lastResult:'',fall:null}}
+let player,enemy;function reset(){player=makeF(290,1,colors.p,'CHALLENGER');enemy=makeF(660,-1,colors.e,'RIVAL');gameTime=0;hitLog=[];statusMessage='FIGHT';statusTimer=90;shake=0;dust=[]}reset();
+const controlButtons=[...document.querySelectorAll('[data-b]')];controlButtons.forEach(b=>{const key=b.dataset.b;const press=e=>{e.preventDefault();inputs[key]=true;b.classList.add('down');try{b.setPointerCapture(e.pointerId)}catch(_){}};const release=e=>{e.preventDefault();inputs[key]=false;b.classList.remove('down')};b.addEventListener('pointerdown',press);b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);b.addEventListener('lostpointercapture',release)});
+let joystickId=null;const stick=document.getElementById('stick'),nub=document.getElementById('nub');function updateStick(e){const r=stick.getBoundingClientRect();const dx=(e.clientX-r.left-r.width/2)/(r.width/2),dy=(e.clientY-r.top-r.height/2)/(r.height/2);const m=Math.min(1,Math.hypot(dx,dy)),a=Math.atan2(dy,dx);const nx=m*Math.cos(a),ny=m*Math.sin(a);nub.style.transform=`translate(${nx*30}px,${ny*30}px)`;inputs.left=nx<-.3?Math.abs(nx):0;inputs.right=nx>.3?nx:0}stick.addEventListener('pointerdown',e=>{e.preventDefault();joystickId=e.pointerId;stick.setPointerCapture(e.pointerId);updateStick(e)});stick.addEventListener('pointermove',e=>{if(e.pointerId===joystickId)updateStick(e)});function resetStick(){joystickId=null;nub.style.transform='';inputs.left=0;inputs.right=0}stick.addEventListener('pointercancel',resetStick);stick.addEventListener('pointerup',resetStick);
+const kb={};window.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();kb[e.code]=true;if(e.code==='Enter')reset()});window.addEventListener('keyup',e=>{kb[e.code]=false});function readInput(){return {left:(inputs.left||kb.KeyA||kb.ArrowLeft)?1:0,right:(inputs.right||kb.KeyD||kb.ArrowRight)?1:0,lead:inputs.lead||kb.KeyJ||kb.KeyZ,rear:inputs.rear||kb.KeyK||kb.KeyX,evade:inputs.evade||kb.Space,step:inputs.step||kb.KeyS,high:inputs.l1||kb.KeyL,low:(inputs.l1||kb.KeyL)&&(inputs.r2||kb.ShiftLeft||kb.ShiftRight),modifier:inputs.r2||kb.ShiftLeft||kb.ShiftRight,clinch:inputs.r1||kb.KeyR,focus:inputs.l2||kb.KeyF}}
+function action(f,type){if(!f.act&&!f.ko&&f.stun<=0){f.act={type,t:0,connected:false,blocked:false,hitTarget:null};f.guard=''}}
+function readAI(f,o){const a={};let dist=Math.abs(f.x-o.x);if(f.ai.decision--<=0){f.ai.decision=12+Math.floor(Math.random()*23);const seed=Math.random();f.ai.plan=dist>126?'approach':dist<85?'recede':seed<.3?'guard':seed<.68?'lead':seed<.89?'rear':'kick'}if(f.act||f.stun>0)return a;if(dist>120)a[o.x>f.x?'right':'left']=1;else if(dist<87)a[o.x<f.x?'right':'left']=.8;if(o.act&&o.act.t<8&&dist<135&&Math.random()<.18)a.high=true;else if(o.act&&o.act.type==='kick'&&dist<140&&Math.random()<.32)a.low=true;if(f.ai.cool>0)f.ai.cool--;else if(dist<143&&!a.high&&!a.low){if(['lead','rear','kick'].includes(f.ai.plan)){a[f.ai.plan]=true;f.ai.cool=20+Math.floor(Math.random()*22)}}return a}
+function moveF(f,o,i){f.lastX=f.x;if(f.hurt>0)f.hurt--;if(f.stun>0)f.stun--;if(f.evade>0)f.evade--;if(f.ko){stepFall(f);return}f.face=o.x>=f.x?1:-1;f.guard=!f.act&&f.stun===0&&(i.low?'low':i.high?'high':'');if(f.stun===0&&!f.act){const d=(i.right?1:0)-(i.left?1:0);if(!f.guard){f.x+=d*(i.focus?2.4:3.8);f.stepCycle+=Math.abs(d)*.30}if(i.evade&&f.evade===0){f.evade=13;f.x-=f.face*21;f.stepCycle+=1.8}if(i.step)f.x+=f.face*1.4;if(!f.guard){if(i.lead)action(f,'lead');else if(i.rear)action(f,i.modifier?'kick':'rear');else if(i.kick)action(f,'kick');else if(i.clinch)action(f,'clinch')}}f.x=clamp(f.x,70,890);if(f.act)f.act.t++}
+const v=(x,y)=>({x,y});const segDist=(a,b,c,d)=>{let dx=b.x-a.x,dy=b.y-a.y,ex=d.x-c.x,ey=d.y-c.y;let best=Infinity;for(let i=0;i<=12;i++){let t=i/12,px=a.x+dx*t,py=a.y+dy*t,tt=clamp(((px-c.x)*ex+(py-c.y)*ey)/(ex*ex+ey*ey||1),0,1);best=Math.min(best,Math.hypot(px-(c.x+tt*ex),py-(c.y+tt*ey)))}for(let i=0;i<=12;i++){let t=i/12,px=c.x+ex*t,py=c.y+ey*t,tt=clamp(((px-a.x)*dx+(py-a.y)*dy)/(dx*dx+dy*dy||1),0,1);best=Math.min(best,Math.hypot(px-(a.x+tt*dx),py-(a.y+tt*dy)))}return best};
+// Player-facing geometry is also collision geometry: attack limb capsules against defensible body capsules.
+function pose(f){let x=f.x,y=FLOOR,dir=f.face,bruise=clamp(f.condition/72,0,1);let grounded=!!f.ko;
+let stance= f.ko?0: f.stun>0?.23: f.guard==='low'?.16:0;let sway=(f.stun>0&&!f.ko?f.face*-11:0)+bruise*8*f.face;let cy=y-86+stance*15,root=v(x,cy),shoulder=v(x+sway*.32,y-137+stance*17),head=v(x+sway*.57,y-164+stance*16);
+const move= Math.sin(f.stepCycle)*Math.min(1,Math.abs(f.x-f.lastX)/4);
+let hip=v(x,y-76+stance*12),frontFoot=v(x+dir*(27+move*11),y),rearFoot=v(x-dir*(26+move*11),y),frontKnee=v(x+dir*(15+move*12),y-38),rearKnee=v(x-dir*(20+move*8),y-37);
+let nearEl=v(x+dir*28,y-115),nearHand=v(x+dir*40,y-135),farEl=v(x-dir*18,y-121),farHand=v(x+dir*18,y-135);
+if(f.guard==='high'){nearEl=v(x+dir*20,y-125);nearHand=v(x+dir*27,y-157);farEl=v(x-dir*10,y-124);farHand=v(x+dir*16,y-164)}
+if(f.guard==='low'){nearEl=v(x+dir*27,y-100);nearHand=v(x+dir*19,y-85);farEl=v(x-dir*16,y-103);farHand=v(x+dir*3,y-91)}
+if(f.evade>0){let q=Math.sin((13-f.evade)/13*Math.PI);head.x-=dir*20*q;shoulder.x-=dir*15*q;nearHand.x-=dir*10*q;farHand.x-=dir*10*q}
+if(f.act){const a=f.act,t=a.t,rule=R[a.type];let q= t<=rule.wind? -.22*smooth(t/rule.wind): t<=rule.wind+rule.active?mix(-.22,1,smooth((t-rule.wind)/rule.active)):mix(1,0,smooth((t-rule.wind-rule.active)/rule.recover));let drive=Math.max(0,q);let wind=Math.max(0,-q);let twist=dir*(drive*13-wind*12);shoulder.x+=twist;head.x+=twist*.35;
+if(a.type==='lead'){nearEl=v(x+dir*(27+drive*38-wind*14),y-121-drive*15);nearHand=v(x+dir*(41+drive*83-wind*18),y-140-drive*3);farHand=v(x+dir*15,y-147)}
+if(a.type==='rear'){farEl=v(x+dir*(drive*45-16-wind*12),y-126-drive*5);farHand=v(x+dir*(19+drive*109-wind*23),y-144);nearHand=v(x+dir*38,y-150)}
+if(a.type==='kick'){shoulder.x-=twist;head.x-=twist*.35;const K=KICK,Rk=R.kick;let ch,e=0;
+if(t<=Rk.wind)ch=smooth(t/Rk.wind);else if(t<=Rk.wind+Rk.active){ch=1;e=smooth((t-Rk.wind)/Rk.active)}else{const rp=(t-Rk.wind-Rk.active)/Rk.recover;e=1-smooth(clamp(rp*1.6,0,1));ch=1-smooth(clamp((rp-.45)/.55,0,1))}
+const hx=x+dir*K.lunge*e,ke=smooth(clamp(e*1.6,0,1)),th=mix(K.thC,K.thE,smooth(clamp((e-.25)/.75,0,1)))*Math.PI/180;
+hip.x=hx;const cx=hx+dir*mix(K.chK[0],K.exK[0],ke),cy=y-mix(K.chK[1],K.exK[1],ke);
+frontKnee=v(mix(x+dir*15,cx,ch),mix(y-38,cy,ch));frontFoot=v(mix(x+dir*27,cx+dir*Math.cos(th)*K.shin,ch),mix(y,cy+Math.sin(th)*K.shin,ch));
+rearFoot=v(x-dir*(27-14*e),y);rearKnee=v((hx+rearFoot.x)/2+dir*5,y-39);
+const sd=dir*e*(K.lunge*.6-K.lean);shoulder.x+=sd;head.x+=sd-dir*4*e;
+nearEl=v(shoulder.x+dir*16,y-122);nearHand=v(shoulder.x+dir*(24-6*e),y-148);farEl=v(shoulder.x-dir*(6+8*e),y-122);farHand=v(shoulder.x-dir*(10+14*e),y-138+6*e)}
+if(a.type==='clinch'){nearHand=v(x+dir*(39+drive*54),y-127);farHand=v(x+dir*(27+drive*47),y-132)}
+}
+if(f.ko)koPose(f,{hip,shoulder,head,frontKnee,rearKnee,frontFoot,rearFoot,nearEl,nearHand,farEl,farHand,root});
+return{hip,shoulder,head,frontKnee,rearKnee,frontFoot,rearFoot,nearEl,nearHand,farEl,farHand,root};}
+function segments(f,p){return [{name:'head',a:v(p.head.x,p.head.y-13),b:v(p.head.x,p.head.y+12),r:15},{name:'body',a:p.shoulder,b:p.hip,r:19},{name:'leg',a:p.hip,b:p.frontKnee,r:15},{name:'leg',a:p.frontKnee,b:p.frontFoot,r:10},{name:'leg',a:p.hip,b:p.rearKnee,r:12}];}
+function detectContact(att,def){if(!att.act||att.ko||def.ko)return;const a=att.act,rule=R[a.type];if(a.t<=rule.wind||a.t>rule.wind+rule.active||a.connected)return;const pp=pose(att),op=pose(def);let limb=a.type==='kick'?{a:pp.frontKnee,b:pp.frontFoot,r:10}:a.type==='rear'?{a:pp.farEl,b:pp.farHand,r:8}:{a:pp.nearEl,b:pp.nearHand,r:8};let targets=segments(def,op).filter(s=>rule.zone==='head'?s.name==='head'||s.name==='body':rule.zone==='leg'?s.name==='leg':s.name==='body');let hit=null;let old=att.prevPose||pp;let last= a.type==='kick'?{a:old.frontKnee,b:old.frontFoot}:a.type==='rear'?{a:old.farEl,b:old.farHand}:{a:old.nearEl,b:old.nearHand};const prevZones=segments(def,def.prevPose||op);for(let i=0;i<=5&&!hit;i++){let u=i/5;let sa=v(mix(last.a.x,limb.a.x,u),mix(last.a.y,limb.a.y,u)),sb=v(mix(last.b.x,limb.b.x,u),mix(last.b.y,limb.b.y,u));for(let j=0;j<targets.length;j++){const s=targets[j],prior=prevZones.find(z=>z.name===s.name)||s;if(segDist(sa,sb,v(mix(prior.a.x,s.a.x,u),mix(prior.a.y,s.a.y,u)),v(mix(prior.b.x,s.b.x,u),mix(prior.b.y,s.b.y,u)))<limb.r+s.r){hit=s;break}}}
+if(!hit)return;
+const guarded=(def.guard==='high'&&hit.name!=='leg')||(def.guard==='low'&&hit.name==='leg');
+return {att,def,a,rule,hit,op,guarded,direction:att.face};}
+// v3.9: discover both contacts before either strike can cancel the other.
+// Snapshot action, guard and pose; only previously valid contacts may resolve.
+function applyContact(contact){if(!contact)return;
+const {att,def,a,rule,hit,op,guarded,direction}=contact;
+if(a.connected)return;
+a.connected=true;a.hitTarget=hit.name;a.blocked=guarded;att.lastResult=guarded?'BLOCK':'CONTACT';def.lastResult=att.lastResult;
+if(!guarded){def.condition+=rule.damage;def.stun=11;def.hurt=9;def.x+=direction*11;def.act=null;def.guard='';if(def.condition>=72){def.fall=startFall(att,def,a.type,hit.name,def.condition-72,op);def.ko=true;statusMessage='KNOCKOUT';statusTimer=130}}else {def.x+=direction*3;def.hurt=3;}
+hitLog.push({t:gameTime,type:a.type,result:guarded?'block':'hit',zone:hit.name});}
+function resultContact(att,def){applyContact(detectContact(att,def));}
+function resolveContacts(first,second){const contacts=[detectContact(first,second),detectContact(second,first)];contacts.forEach(applyContact);}
+function roundOutcome(){return player.ko&&enemy.ko?'DOUBLE KNOCKOUT':player.ko?'DEFEAT':enemy.ko?'VICTORY':'';}
+function simulationStep(){gameTime++;shake*=.85;for(const q of dust){q.x+=q.vx;q.y+=q.vy;q.vx*=.94;q.vy=q.vy*.9-.02;q.l-=.035}dust=dust.filter(q=>q.l>0);statusTimer=Math.max(0,statusTimer-1);player.prevPose=pose(player);enemy.prevPose=pose(enemy);let pi=readInput();let ai=readAI(enemy,player);moveF(player,enemy,pi);moveF(enemy,player,ai);resolveContacts(player,enemy);for(let f of [player,enemy])if(f.act&&f.act.t>=R[f.act.type].wind+R[f.act.type].active+R[f.act.type].recover){if(!f.act.connected)f.lastResult='WHIFF';f.act=null;}if(player.ko||enemy.ko){statusMessage=roundOutcome()}}
+// Environment and 2D figures are 100% original procedural artwork. No animation or game models are imported.
+function stage(alpha=1){g.fillStyle='#0c1520';g.fillRect(0,0,W,H);let sky=g.createLinearGradient(0,0,0,390);sky.addColorStop(0,'#142337');sky.addColorStop(.64,'#2a3645');sky.addColorStop(1,'#78665a');g.fillStyle=sky;g.fillRect(0,0,W,380);
+g.save();g.globalAlpha=.45;g.fillStyle='#e2bd98';g.beginPath();g.arc(780,110,43,0,7);g.fill();g.restore();
+for(let j=0;j<15;j++){const h=47+(j*31)%60;const bx=j*75-24;g.fillStyle=j%2?'#1b2730':'#172430';g.fillRect(bx,246-h,63,h+91);for(let k=0;k<3;k++){g.fillStyle='rgba(220,174,110,.14)';g.fillRect(bx+8+k*17,270-h+((j+k)%3)*16,6,13)}}
+// Dojo wall, roof, posts, lanterns, and wet stone floor.
+g.fillStyle='#1a242c';g.fillRect(0,255,960,118);g.fillStyle='#34404a';g.fillRect(0,265,960,6);g.fillStyle='#161f28';g.fillRect(0,298,960,64);
+for(let i=0;i<7;i++){let x=i*162-22;g.fillStyle='#273039';g.fillRect(x,248,18,135);g.fillStyle='#4b4240';g.fillRect(x-5,243,28,10);g.fillStyle='#101b22';g.fillRect(x+20,279,110,76);g.strokeStyle='#53606c';g.lineWidth=2;g.strokeRect(x+23,283,106,67);g.beginPath();g.moveTo(x+76,283);g.lineTo(x+76,351);g.stroke()}
+for(let x of [108,836]){g.fillStyle='#9f7151';g.fillRect(x,250,7,50);g.fillStyle='#f6c084';g.shadowBlur=30;g.shadowColor='#f3ad67';g.fillRect(x-8,270,23,30);g.shadowBlur=0;g.fillStyle='#352c2b';g.fillRect(x-11,264,29,5)}
+g.fillStyle='#252e36';g.beginPath();g.moveTo(0,361);g.lineTo(960,361);g.lineTo(960,540);g.lineTo(0,540);g.fill();g.strokeStyle='#65727b';g.globalAlpha=.19;for(let i=-2;i<=13;i++){g.beginPath();g.moveTo(480+i*25,355);g.lineTo(480+i*91,540);g.stroke()}for(let y of [372,390,418,454,500]){g.beginPath();g.moveTo(0,y);g.lineTo(960,y);g.stroke()}g.globalAlpha=1;let light=g.createRadialGradient(500,430,1,500,430,410);light.addColorStop(0,'#c9a88020');light.addColorStop(1,'#c9a88000');g.fillStyle=light;g.fillRect(0,340,960,200);
+g.fillStyle='#a9c2c8';g.globalAlpha=.15;for(let j=0;j<18;j++){const x=(j*173)%960;g.fillRect(x,410+(j*17)%110,34+(j%3)*17,1)}g.globalAlpha=1}
+function limb(a,b,width,color){g.lineCap='round';g.lineJoin='round';g.strokeStyle='#07141a';g.lineWidth=width+5;g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();g.strokeStyle=color;g.lineWidth=width;g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke()}
+function drawF(f,p){let x=f.x,dir=f.face,alpha=1-(f.ko?clamp((f.fade-.52)*1.85,0,1):0);g.save();g.globalAlpha=alpha;g.fillStyle='#080e14af';g.beginPath();g.ellipse(f.fall?(p.head.x+p.frontFoot.x)/2:x,FLOOR+4,f.fall?36+Math.abs(p.head.x-p.frontFoot.x)/2:36,9,0,0,7);g.fill();let color=f.col;if(f.hurt>0&&Math.floor(f.hurt/2)%2===0)color='#e5e6dc';if(f.condition>22)color= color===colors.p?'#5d91aa':'#ad665f';
+// Articulated, rounded limbs, no hands, feet, eyes, mouth, facial anatomy or health bars.
+limb(p.hip,p.rearKnee,15,color);limb(p.rearKnee,p.rearFoot,14,color);limb(p.hip,p.frontKnee,17,color);limb(p.frontKnee,p.frontFoot,15,color);
+limb(p.shoulder,p.hip,25,color);limb(p.shoulder,p.farEl,13,color);limb(p.farEl,p.farHand,12,color);limb(p.shoulder,p.nearEl,15,color);limb(p.nearEl,p.nearHand,13,color);
+g.fillStyle=color;g.strokeStyle='#0f1c26';g.lineWidth=3;g.beginPath();g.arc(p.head.x,p.head.y,18,0,7);g.fill();g.stroke();
+let stage=Math.floor(clamp(f.condition/72,0,0.99)*4);if(f.ko)stage=4;
+if(stage>0){g.strokeStyle='#25313b';g.lineWidth=1.8;g.globalAlpha*=.9;g.beginPath();g.moveTo(p.shoulder.x-8,p.shoulder.y+23);g.lineTo(p.shoulder.x+6,p.shoulder.y+31);g.lineTo(p.shoulder.x-5,p.shoulder.y+40);if(stage>1){g.moveTo(p.head.x-11,p.head.y-10);g.lineTo(p.head.x-4,p.head.y-4);g.lineTo(p.head.x-10,p.head.y+4);g.moveTo(p.hip.x+5,p.hip.y-18);g.lineTo(p.hip.x-6,p.hip.y-25)}if(stage>2){g.moveTo(p.shoulder.x+7,p.shoulder.y+7);g.lineTo(p.shoulder.x-6,p.shoulder.y+14);g.lineTo(p.shoulder.x+5,p.shoulder.y+24);g.moveTo(p.frontKnee.x,p.frontKnee.y-8);g.lineTo(p.frontKnee.x+9,p.frontKnee.y+7)}g.stroke()}
+g.restore()}
+function vignette(){let vg=g.createRadialGradient(W/2,H/2,130,W/2,H/2,640);vg.addColorStop(0,'#0000');vg.addColorStop(1,'#0009');g.fillStyle=vg;g.fillRect(0,0,W,H)}
+function textLabel(t,x,y,size=16,color='#e0e6e8',align='left',weight='600'){g.font=`${weight} ${size}px system-ui,sans-serif`;g.fillStyle=color;g.textAlign=align;g.fillText(t,x,y)}
+function drawOverlay(stageLabel='',sub='',isDemo=false){vignette();g.fillStyle='#0b1524a6';g.fillRect(0,0,960,59);textLabel('HBI  /  STREET DOJO',30,29,16,'#e5e7e9','left','800');textLabel('STEP 0   •   CONCEPT PREVIEW  /  NOT GAMEPLAY',930,29,12,'#e6b286','right');
+if(stageLabel){g.fillStyle='#071017b5';g.fillRect(0,455,960,85);textLabel(stageLabel,35,496,28,'#ecedec');if(sub)textLabel(sub,36,521,12,'#c1cbd1')}if(!isDemo&&(statusTimer>0||player.ko||enemy.ko))textLabel(roundOutcome()||statusMessage,W/2,132,24,'#f5c599','center','800');
+if(!isDemo){const hint=roundOutcome()?roundOutcome()+' · PRESS RESTART':'A/D TO MOVE   •   J LEAD   •   K REAR   •   SHIFT + K LOW KICK   •   L GUARD';textLabel(hint,480,529,12,'#c8cfd0','center')}}
+function renderGame(alpha=1){g.clearRect(0,0,W,H);g.save();g.translate(Math.sin(gameTime*2.3)*shake,Math.cos(gameTime*3.1)*shake*.6);stage();let fighters=[player,enemy].sort((a,b)=>a.x-b.x);fighters.forEach(f=>drawF(f,renderPose(f,alpha)));for(const q of dust){g.globalAlpha=q.l*.4;g.fillStyle='#b7c4c6';g.beginPath();g.arc(q.x,q.y,4+(1-q.l)*7,0,7);g.fill()}g.globalAlpha=1;g.restore();drawOverlay()}
+function setDemoPose(f,x,face,opts={}){f.x=x;f.lastX=x;f.face=face;f.stepCycle=opts.step||0;f.act=opts.atk?{type:opts.atk,t:opts.t||0,connected:true}:null;f.guard=opts.guard||'';f.condition=opts.condition||0;f.ko=!!opts.ko;f.fade=opts.fade||0;f.evade=opts.evade||0;f.hurt=opts.hurt||0;f.stun=opts.stun||0;f.fall=null;if(f.ko){f.ko=false;f.fade=0;f.fall=startFall(null,f,'rear','body',6,pose(f));f.ko=true;const ticks=Math.round((opts.fade||0)*60);for(let j=0;j<ticks;j++)stepFall(f)}return f}
+const sample={};function snapshot(x,y,opts={}){return opts}
+function phoneOverlay(){g.fillStyle='#0a111cde';g.fillRect(0,59,960,397);g.save();g.translate(155,104);g.strokeStyle='#bec4cd';g.lineWidth=9;g.fillStyle='#070c12';roundRect(0,0,650,322,35,true,true);g.lineWidth=2;g.strokeStyle='#777d86';roundRect(6,6,638,309,29,false,true);g.fillStyle='#24323b';roundRect(18,20,614,278,17,true,false);g.fillStyle='#293a46';g.fillRect(20,22,610,272);
+// Inner phone screen = same ground scene framed in perspective. No fighting mechanics claimed.
+g.save();g.beginPath();g.rect(20,22,610,274);g.clip();g.fillStyle='#43505e';g.fillRect(20,22,610,274);g.fillStyle='#1c303e';g.fillRect(20,22,610,145);g.fillStyle='#32404a';g.fillRect(20,159,610,133);for(let i=0;i<5;i++){g.fillStyle='#172733';g.fillRect(30+i*125,102,90,90)}
+const ph1=makeF(255,1,colors.p,'A'),ph2=makeF(430,-1,colors.e,'B');g.save();g.translate(0,-39);g.scale(.69,.69);setDemoPose(ph1,370,1,{guard:'high'});setDemoPose(ph2,595,-1,{});drawF(ph1,pose(ph1));drawF(ph2,pose(ph2));g.restore();
+// clearly visible PlayStation-inspired virtual controls.
+g.fillStyle='#e6ebf133';g.beginPath();g.arc(117,234,52,0,7);g.fill();g.lineWidth=2;g.strokeStyle='#d0dbe49e';g.stroke();g.fillStyle='#e6ebf17f';g.beginPath();g.arc(117,234,24,0,7);g.fill();
+for(const [tx,ty,l] of [[495,201,'▲'],[453,237,'■'],[538,237,'●'],[495,272,'✕']]){g.fillStyle='#26333cc9';g.strokeStyle='#d5dae4a8';g.beginPath();g.arc(tx,ty,22,0,7);g.fill();g.stroke();textLabel(l,tx,ty+6,22,'#e8edf0','center')}
+for(const [tx,l] of [[68,'L2'],[157,'L1'],[456,'R1'],[551,'R2']]){g.fillStyle='#0a1017be';roundRect(tx,42,53,30,8,true,false);textLabel(l,tx+26,61,12,'#e5e9ec','center')}
+g.restore();g.fillStyle='#151c29';roundRect(285,9,75,12,8,true,false);g.restore()}
+function roundRect(x,y,w,h,r,fill,stroke){g.beginPath();g.roundRect(x,y,w,h,r);if(fill)g.fill();if(stroke)g.stroke()}
+// 57s concept preview: shot boundaries are exact, subject motion within each shot uses quick combat cadence.
+const shots=[
+ {a:0,b:6,title:'THE ARENA',sub:'An atmospheric place; deliberately simple fighters.'},
+ {a:6,b:11,title:'THE STANCE',sub:'Weight grounded. Guard up. Eyes and facial features absent.'},
+ {a:11,b:16,title:'LEAD STRAIGHT',sub:'Compact windup → direct contact → immediate recovery.'},
+ {a:16,b:21,title:'REAR STRAIGHT',sub:'Shoulder rotation and committed extension.'},
+ {a:21,b:27,title:'LOW KICK',sub:'Plant → chamber → shin / leg contact → recoil.'},
+ {a:27,b:31,title:'HIGH GUARD',sub:'Hands protect the head and torso.'},
+ {a:31,b:35,title:'LOW GUARD',sub:'Elbows and forearms lower to cover the body.'},
+ {a:35,b:39,title:'SHORT EVADE',sub:'A fast grounded angle-out, no jump.'},
+ {a:39,b:43,title:'BLOCK',sub:'The protected zone absorbs the blow.'},
+ {a:43,b:47,title:'WHIFF',sub:'A strike visibly misses; no phantom hit.'},
+ {a:47,b:52,title:'VISIBLE DAMAGE',sub:'Clean · Light · Heavy · Critical · KO, never a health bar.'},
+ {a:52,b:55,title:'MOBILE TOUCH LAYOUT',sub:'Left stick · face-button diamond · L1/L2/R1/R2.'},
+ {a:55,b:57,title:'STREET DOJO',sub:'Working title · concept preview only'}];
+function attackDemo(f,type,tSec){const r=R[type];const frames=r.wind+r.active+r.recover;f.act={type,t:clamp(tSec*60,0,frames),connected:true};return f}
+function drawDemoAt(t){demoTime=t;g.clearRect(0,0,W,H);stage();let sh=shots.find(s=>t>=s.a&&t<s.b)||shots.at(-1),local=t-sh.a,pa=makeF(338,1,colors.p,'A'),ea=makeF(602,-1,colors.e,'B');
+let show=true; if(t<6){show=t>2;setDemoPose(pa,220+smooth((t-2)/4)*130,1,{step:t*2});setDemoPose(ea,735-smooth((t-2)/4)*118,-1,{step:t*2})}
+else if(t<11){setDemoPose(pa,345,1,{guard:local>2.2&&local<3.6?'high':'',step:Math.sin(local*3)});setDemoPose(ea,592,-1,{guard:local>2.7?'high':'',step:Math.sin(local*3+2)})}
+else if(t<16){let beat=((local-.48)%1.08+1.08)%1.08,has=local>.48;let recoil=has&&beat>.10&&beat<.40?Math.sin((beat-.1)/.3*Math.PI)*12:0;setDemoPose(pa,410,1);setDemoPose(ea,544+recoil,-1,{condition:local>1.6?7:0,hurt:recoil>6?7:0});if(has&&beat<.37)attackDemo(pa,'lead',beat)}
+else if(t<21){let beat=((local-.35)%1.05+1.05)%1.05,has=local>.35;let recoil=has&&beat>.15&&beat<.45?Math.sin((beat-.15)/.3*Math.PI)*11:0;setDemoPose(pa,412,1);setDemoPose(ea,548+recoil,-1,{condition:14,hurt:recoil>6?8:0});if(has&&beat<.42)attackDemo(pa,'rear',beat)}
+else if(t<27){let beat=((local-.5)%1.23+1.23)%1.23,has=local>.5;let recoil=has&&beat>.19&&beat<.5?Math.sin((beat-.19)/.31*Math.PI)*12:0;setDemoPose(pa,410,1);setDemoPose(ea,543+recoil,-1,{condition:30,hurt:recoil>7?7:0});if(has&&beat<.5)attackDemo(pa,'kick',beat)}
+else if(t<31){setDemoPose(pa,408,1,{guard:'high'});setDemoPose(ea,543,-1);let beat=((local-.4)%1.07+1.07)%1.07;if(local>.4&&beat<.4)attackDemo(ea,'lead',beat)}
+else if(t<35){setDemoPose(pa,408,1,{guard:'low'});setDemoPose(ea,540,-1);let beat=((local-.4)%1.09+1.09)%1.09;if(local>.4&&beat<.49)attackDemo(ea,'kick',beat)}
+else if(t<39){let dodge=(local>1&&local<1.8)?Math.sin((local-1)/.8*Math.PI):0;setDemoPose(pa,390-45*dodge,1,{evade:dodge*9});setDemoPose(ea,564,-1);if(local>.9&&local<1.7)attackDemo(ea,'lead',local-.9)}
+else if(t<43){setDemoPose(pa,418,1,{guard:'high'});setDemoPose(ea,548,-1);let beat=((local-.4)%1.12+1.12)%1.12;if(local>.4&&beat<.37)attackDemo(ea,'lead',beat)}
+else if(t<47){setDemoPose(pa,313,1);setDemoPose(ea,666,-1);let beat=((local-.4)%1.04+1.04)%1.04;if(local>.4&&beat<.40)attackDemo(pa,'rear',beat)}
+else if(t<52){let stageIndex=Math.min(4,Math.floor(local));setDemoPose(pa,397,1,{condition:stageIndex===4?75:stageIndex*22,ko:stageIndex===4,fade:stageIndex===4?clamp(local-4,0,1):0});setDemoPose(ea,606,-1)}
+else if(t<55){show=false;phoneOverlay()}
+else {show=false;g.fillStyle='#0c1720e8';g.fillRect(0,0,960,540);textLabel('STREET DOJO',480,269,65,'#ede4d5','center','900');textLabel('FIGHT  •  TRAIN  •  EXPLORE',480,308,16,'#dba06d','center','650');textLabel('WORKING TITLE   /   CONCEPT PREVIEW',480,478,13,'#c6cdd0','center')}
+if(show){drawF(ea,pose(ea));drawF(pa,pose(pa));}
+if(t<55)drawOverlay(sh.title,sh.sub,true);
+let fadeStart=(t-sh.a),fadeEnd=(sh.b-t),fade=Math.max(1-smooth(fadeStart/.20),1-smooth(fadeEnd/.18));if(t<55&&fade>0){g.fillStyle=`rgba(8,16,25,${Math.min(.88,fade*.75)})`;g.fillRect(0,0,W,H)}
+}
+function main(now){if(mode==='demo'){drawDemoAt((now-startDemoAt)/1000%57)}else{const dt=Math.min(70,now-lastFrame);accumulator+=dt;let rounds=0;while(accumulator>=1000/60&&rounds<5){simulationStep();accumulator-=1000/60;rounds++}renderGame(clamp(accumulator/(1000/60),0,1))}lastFrame=now;requestAnimationFrame(main)}let accumulator=0,startDemoAt=performance.now();document.getElementById('demoBtn').addEventListener('click',()=>{mode=mode==='demo'?'play':'demo';startDemoAt=performance.now();document.getElementById('demoBtn').textContent=mode==='demo'?'Play interactive':'Watch 57s preview';document.body.classList.toggle('demo',mode==='demo');if(mode==='play')reset()});document.getElementById('resetBtn').addEventListener('click',reset);
+window.drawDemoAt=drawDemoAt;window.getState=()=>({mode,result:roundOutcome(),player:{x:player.x,condition:player.condition,lastResult:player.lastResult},enemy:{x:enemy.x,condition:enemy.condition,lastResult:enemy.lastResult},hitLog});window.testStep=simulationStep;window.testAction=action;
+requestAnimationFrame(main);
+</script></body></html>

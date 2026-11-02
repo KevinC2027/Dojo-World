@@ -1,0 +1,38 @@
+{
+  "source": "USER_PROPOSED_throwController.mjs",
+  "current_baseline": "C0835",
+  "actual_rapier_simulation_of_proposed_controller": false,
+  "checks": [
+    {
+      "name": "User supplied JS parses and can instantiate on expected rig shape",
+      "result": "PASS"
+    },
+    {
+      "name": "Current C0835 rig exposes torso as controller expects",
+      "result": "FAIL",
+      "detail": "C0835 actually calls its torso upper_back; proposed controller dereferences missing torso\n\ntrue !== false\n"
+    },
+    {
+      "name": "Collision gate rejects shin-first event even if torso contacts later",
+      "result": "FAIL",
+      "detail": "controller transitions to SETTLE after torso event despite shinR being first"
+    },
+    {
+      "name": "Release occurs at initial back contact (not +150ms)",
+      "result": "FAIL",
+      "detail": "grip is intentionally retained 150ms after contact, contrary to previous visual target\n\n0 !== 1\n"
+    },
+    {
+      "name": "setAngvel ramp respects dt not raw frame count",
+      "result": "FAIL",
+      "detail": "same blend factor at 30 and 60fps, independent of dt"
+    },
+    {
+      "name": "Positive X throw rotation moves back normal toward ground from neutral pose",
+      "result": "FAIL",
+      "detail": "positive X rotation increases back angle 1.571→1.721 rad"
+    }
+  ],
+  "pass": 1,
+  "fail": 5
+}

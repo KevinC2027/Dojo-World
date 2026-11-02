@@ -1,0 +1,640 @@
+{
+ "build": "prototype/index.html",
+ "runs": [
+  {
+   "label": "Blue throws Red (shipped)",
+   "forced": "shipped",
+   "hitTick": 4,
+   "releaseTick": 15,
+   "touchTick": 36,
+   "downEnd": 145,
+   "grip": {
+    "grabMin": 0.1,
+    "carryMax": 0.374,
+    "atRelease": 0.205,
+    "overGateTicks": 6,
+    "established": {
+     "tick": 10,
+     "vicT": 7
+    },
+    "first": {
+     "tick": 10,
+     "vicT": 7
+    },
+    "atLift": 0.238
+   },
+   "timing": {
+    "feetLeave": {
+     "tick": 5,
+     "vicT": 2
+    },
+    "liftAfterFirst": -5,
+    "liftAfterStable": -5,
+    "dipTick": 0,
+    "dipBeforeRelease": true,
+    "dipAfterRelease": false,
+    "flightTicks": 21,
+    "flightDx": 1.05,
+    "flightDxRatio": 1,
+    "apexRootY": 0.88,
+    "apexBallistic": 1.08,
+    "touchdownMinJointY": 0,
+    "releaseVel": {
+     "vx": 3,
+     "vy": 4.8,
+     "x": 0.8,
+     "y": 0.6
+    }
+   },
+   "joints": {
+    "maxHN": {
+     "v": 0.247,
+     "t": 145
+    },
+    "maxPN": {
+     "v": 0.56,
+     "t": 145
+    },
+    "maxStep": {
+     "v": 0.444,
+     "t": 36,
+     "j": "er"
+    },
+    "maxSegDev": {
+     "v": 0.344,
+     "where": "thr.foreArmR@36"
+    },
+    "segDevByPhase": {
+     "vic_carry": 0.263,
+     "vic_air": 0,
+     "vic_down": 0,
+     "vic_getup": 0.113,
+     "thr_airDownGetup": 0.344
+    },
+    "minAngle": {
+     "v": 19.9,
+     "where": "vic.elbowR@97"
+    },
+    "invertedTicks": 0
+   },
+   "intersections": {
+    "minTorsoTorso": 0.516,
+    "minTorsoTorsoTick": 3,
+    "minTorsoTorsoCarry": 0.545,
+    "minTorsoTorsoAirDown": 0.634,
+    "minHeadTorso": 0.54,
+    "minPelTorso": 0.621,
+    "minLimbTorso": 0.336
+   },
+   "flight": {
+    "rigidRun": 10,
+    "landAng": {
+     "td": 56.8,
+     "plus12": 83.4
+    }
+   },
+   "hard": [
+    "joint step 0.444m > 0.20 (er)",
+    "segment dev 0.344m > 0.10 (thr.foreArmR@36)"
+   ],
+   "soft": [
+    "grip carry max 0.374m > 0.20",
+    "grip at release 0.205m > 0.20",
+    "grip over gate 6 carry ticks",
+    "lift without grip (g at lift 0.238m > 0.20)",
+    "lift -5 ticks after stable grip (< 3)",
+    "rigid flight run 10 ticks > 5"
+   ]
+  },
+  {
+   "label": "Red throws Blue (shipped)",
+   "forced": "shipped",
+   "hitTick": 4,
+   "releaseTick": 15,
+   "touchTick": 36,
+   "downEnd": 145,
+   "grip": {
+    "grabMin": 0.067,
+    "carryMax": 0.277,
+    "atRelease": 0.148,
+    "overGateTicks": 5,
+    "established": {
+     "tick": 9,
+     "vicT": 6
+    },
+    "first": {
+     "tick": 9,
+     "vicT": 6
+    },
+    "atLift": 0.216
+   },
+   "timing": {
+    "feetLeave": {
+     "tick": 5,
+     "vicT": 2
+    },
+    "liftAfterFirst": -4,
+    "liftAfterStable": -4,
+    "dipTick": 10,
+    "dipBeforeRelease": true,
+    "dipAfterRelease": false,
+    "flightTicks": 21,
+    "flightDx": 1.05,
+    "flightDxRatio": 1,
+    "apexRootY": 0.88,
+    "apexBallistic": 1.08,
+    "touchdownMinJointY": 0,
+    "releaseVel": {
+     "vx": 3,
+     "vy": 4.8,
+     "x": 0.8,
+     "y": 0.6
+    }
+   },
+   "joints": {
+    "maxHN": {
+     "v": 0.247,
+     "t": 145
+    },
+    "maxPN": {
+     "v": 0.557,
+     "t": 0
+    },
+    "maxStep": {
+     "v": 0.756,
+     "t": 96,
+     "j": "er"
+    },
+    "maxSegDev": {
+     "v": 0.416,
+     "where": "vic.thighR@10"
+    },
+    "segDevByPhase": {
+     "vic_carry": 0.416,
+     "vic_air": 0,
+     "vic_down": 0,
+     "vic_getup": 0.339,
+     "thr_airDownGetup": 0.053
+    },
+    "minAngle": {
+     "v": 20,
+     "where": "vic.elbowR@97"
+    },
+    "invertedTicks": 0
+   },
+   "intersections": {
+    "minTorsoTorso": 0.515,
+    "minTorsoTorsoTick": 3,
+    "minTorsoTorsoCarry": 0.542,
+    "minTorsoTorsoAirDown": 0.593,
+    "minHeadTorso": 0.396,
+    "minPelTorso": 0.588,
+    "minLimbTorso": 0.435
+   },
+   "flight": {
+    "rigidRun": 10,
+    "landAng": {
+     "td": 56.8,
+     "plus12": 83.4
+    }
+   },
+   "hard": [
+    "joint step 0.756m > 0.20 (er)",
+    "segment dev 0.416m > 0.10 (vic.thighR@10)"
+   ],
+   "soft": [
+    "grip carry max 0.277m > 0.20",
+    "grip over gate 5 carry ticks",
+    "lift without grip (g at lift 0.216m > 0.20)",
+    "lift -4 ticks after stable grip (< 3)",
+    "rigid flight run 10 ticks > 5"
+   ]
+  },
+  {
+   "label": "Blue throws Red (ippon, forced)",
+   "forced": "ippon",
+   "hitTick": 0,
+   "releaseTick": 23,
+   "touchTick": 48,
+   "downEnd": 157,
+   "grip": {
+    "grabMin": 0.036,
+    "carryMax": 0.722,
+    "atRelease": 0.769,
+    "overGateTicks": 11,
+    "established": {
+     "tick": 9,
+     "vicT": 10
+    },
+    "first": {
+     "tick": 4,
+     "vicT": 5
+    },
+    "atLift": 0.284
+   },
+   "timing": {
+    "feetLeave": {
+     "tick": 19,
+     "vicT": 20
+    },
+    "liftAfterFirst": 15,
+    "liftAfterStable": 10,
+    "dipTick": 23,
+    "dipBeforeRelease": true,
+    "dipAfterRelease": false,
+    "flightTicks": 25,
+    "flightDx": 2,
+    "flightDxRatio": 1,
+    "apexRootY": 1.1,
+    "apexBallistic": 1.4,
+    "touchdownMinJointY": 0.479,
+    "releaseVel": {
+     "vx": 4.8,
+     "vy": 6,
+     "x": 0.3,
+     "y": 0.65
+    }
+   },
+   "joints": {
+    "maxHN": {
+     "v": 0.247,
+     "t": 157
+    },
+    "maxPN": {
+     "v": 0.56,
+     "t": 157
+    },
+    "maxStep": {
+     "v": 0.687,
+     "t": 21,
+     "j": "fl"
+    },
+    "maxSegDev": {
+     "v": 0.301,
+     "where": "vic.thighL@21"
+    },
+    "segDevByPhase": {
+     "vic_carry": 0.301,
+     "vic_air": 0.025,
+     "vic_down": 0.156,
+     "vic_getup": 0.156,
+     "thr_airDownGetup": 0.269
+    },
+    "minAngle": {
+     "v": 7.4,
+     "where": "thr.elbowR@26"
+    },
+    "invertedTicks": 0
+   },
+   "intersections": {
+    "minTorsoTorso": 0.145,
+    "minTorsoTorsoTick": 9,
+    "minTorsoTorsoCarry": 0.145,
+    "minTorsoTorsoAirDown": 0.747,
+    "minHeadTorso": 0.149,
+    "minPelTorso": 0.348,
+    "minLimbTorso": 0.073
+   },
+   "flight": {
+    "rigidRun": 21,
+    "landAng": {
+     "td": 83.5,
+     "plus12": 91.7
+    }
+   },
+   "hard": [
+    "joint step 0.687m > 0.20 (fl)",
+    "segment dev 0.301m > 0.10 (vic.thighL@21)",
+    "grip lost at release 0.769m > 0.30"
+   ],
+   "soft": [
+    "grip carry max 0.722m > 0.20",
+    "grip over gate 11 carry ticks",
+    "lift without grip (g at lift 0.284m > 0.20)",
+    "rigid flight run 21 ticks > 5",
+    "touchdown torso 83.5deg > 70",
+    "touchdown contact gap/penetration (min joint y 0.479m)"
+   ]
+  },
+  {
+   "label": "Red throws Blue (ippon, forced)",
+   "forced": "ippon",
+   "hitTick": 0,
+   "releaseTick": 23,
+   "touchTick": 48,
+   "downEnd": 157,
+   "grip": {
+    "grabMin": 0.175,
+    "carryMax": 0.715,
+    "atRelease": 0.769,
+    "overGateTicks": 18,
+    "established": {
+     "tick": 3,
+     "vicT": 4
+    },
+    "first": {
+     "tick": 3,
+     "vicT": 4
+    },
+    "atLift": 0.289
+   },
+   "timing": {
+    "feetLeave": {
+     "tick": 19,
+     "vicT": 20
+    },
+    "liftAfterFirst": 16,
+    "liftAfterStable": 16,
+    "dipTick": 23,
+    "dipBeforeRelease": true,
+    "dipAfterRelease": false,
+    "flightTicks": 25,
+    "flightDx": 2,
+    "flightDxRatio": 1,
+    "apexRootY": 1.1,
+    "apexBallistic": 1.4,
+    "touchdownMinJointY": 0.479,
+    "releaseVel": {
+     "vx": 4.8,
+     "vy": 6,
+     "x": 0.3,
+     "y": 0.65
+    }
+   },
+   "joints": {
+    "maxHN": {
+     "v": 0.247,
+     "t": 157
+    },
+    "maxPN": {
+     "v": 0.556,
+     "t": 157
+    },
+    "maxStep": {
+     "v": 0.892,
+     "t": 22,
+     "j": "kr"
+    },
+    "maxSegDev": {
+     "v": 0.339,
+     "where": "vic.thighR@130"
+    },
+    "segDevByPhase": {
+     "vic_carry": 0.31,
+     "vic_air": 0.025,
+     "vic_down": 0.156,
+     "vic_getup": 0.339,
+     "thr_airDownGetup": 0.269
+    },
+    "minAngle": {
+     "v": 7.4,
+     "where": "thr.elbowR@26"
+    },
+    "invertedTicks": 0
+   },
+   "intersections": {
+    "minTorsoTorso": 0,
+    "minTorsoTorsoTick": 10,
+    "minTorsoTorsoCarry": 0,
+    "minTorsoTorsoAirDown": 0.747,
+    "minHeadTorso": 0.061,
+    "minPelTorso": 0.33,
+    "minLimbTorso": 0.062
+   },
+   "flight": {
+    "rigidRun": 21,
+    "landAng": {
+     "td": 83.5,
+     "plus12": 91.7
+    }
+   },
+   "hard": [
+    "joint step 0.892m > 0.20 (kr)",
+    "segment dev 0.339m > 0.10 (vic.thighR@130)",
+    "grip lost at release 0.769m > 0.30"
+   ],
+   "soft": [
+    "grip carry max 0.715m > 0.20",
+    "grip over gate 18 carry ticks",
+    "lift without grip (g at lift 0.289m > 0.20)",
+    "rigid flight run 21 ticks > 5",
+    "touchdown torso 83.5deg > 70",
+    "touchdown contact gap/penetration (min joint y 0.479m)"
+   ]
+  },
+  {
+   "label": "Blue throws Red (shoulder, forced, INFO)",
+   "forced": "shoulder",
+   "hitTick": 0,
+   "releaseTick": 15,
+   "touchTick": 36,
+   "downEnd": 145,
+   "grip": {
+    "grabMin": 0.074,
+    "carryMax": 0.494,
+    "atRelease": 0.08,
+    "overGateTicks": 11,
+    "established": {
+     "tick": 11,
+     "vicT": 12
+    },
+    "first": {
+     "tick": 11,
+     "vicT": 12
+    },
+    "atLift": 0.376
+   },
+   "timing": {
+    "feetLeave": {
+     "tick": 1,
+     "vicT": 2
+    },
+    "liftAfterFirst": -10,
+    "liftAfterStable": -10,
+    "dipTick": 0,
+    "dipBeforeRelease": true,
+    "dipAfterRelease": false,
+    "flightTicks": 21,
+    "flightDx": 1.05,
+    "flightDxRatio": 1,
+    "apexRootY": 0.88,
+    "apexBallistic": 1.08,
+    "touchdownMinJointY": 0.47,
+    "releaseVel": {
+     "vx": 3,
+     "vy": 4.8,
+     "x": 0.5,
+     "y": 0.6
+    }
+   },
+   "joints": {
+    "maxHN": {
+     "v": 0.247,
+     "t": 145
+    },
+    "maxPN": {
+     "v": 0.56,
+     "t": 145
+    },
+    "maxStep": {
+     "v": 0.642,
+     "t": 99,
+     "j": "el"
+    },
+    "maxSegDev": {
+     "v": 0.344,
+     "where": "thr.foreArmR@36"
+    },
+    "segDevByPhase": {
+     "vic_carry": 0.22,
+     "vic_air": 0,
+     "vic_down": 0,
+     "vic_getup": 0.113,
+     "thr_airDownGetup": 0.344
+    },
+    "minAngle": {
+     "v": 9.1,
+     "where": "vic.elbowR@99"
+    },
+    "invertedTicks": 21
+   },
+   "intersections": {
+    "minTorsoTorso": 0.024,
+    "minTorsoTorsoTick": 12,
+    "minTorsoTorsoCarry": 0.024,
+    "minTorsoTorsoAirDown": 0.11,
+    "minHeadTorso": 0.244,
+    "minPelTorso": 0.082,
+    "minLimbTorso": 0.206
+   },
+   "flight": {
+    "rigidRun": 2,
+    "landAng": {
+     "td": 78.7,
+     "plus12": 88.1
+    }
+   },
+   "hard": [
+    "joint step 0.642m > 0.20 (el)",
+    "inverted ticks 21",
+    "segment dev 0.344m > 0.10 (thr.foreArmR@36)"
+   ],
+   "soft": [
+    "grip carry max 0.494m > 0.20",
+    "grip over gate 11 carry ticks",
+    "lift without grip (g at lift 0.376m > 0.20)",
+    "lift -10 ticks after stable grip (< 3)",
+    "touchdown torso 78.7deg > 70",
+    "touchdown contact gap/penetration (min joint y 0.47m)"
+   ]
+  },
+  {
+   "label": "Red throws Blue (shoulder, forced, INFO)",
+   "forced": "shoulder",
+   "hitTick": 0,
+   "releaseTick": 15,
+   "touchTick": 36,
+   "downEnd": 145,
+   "grip": {
+    "grabMin": 0.11,
+    "carryMax": 0.695,
+    "atRelease": 0.08,
+    "overGateTicks": 9,
+    "established": {
+     "tick": 11,
+     "vicT": 12
+    },
+    "first": {
+     "tick": 2,
+     "vicT": 3
+    },
+    "atLift": 0.447
+   },
+   "timing": {
+    "feetLeave": {
+     "tick": 1,
+     "vicT": 2
+    },
+    "liftAfterFirst": -1,
+    "liftAfterStable": -10,
+    "dipTick": 10,
+    "dipBeforeRelease": true,
+    "dipAfterRelease": false,
+    "flightTicks": 21,
+    "flightDx": 1.05,
+    "flightDxRatio": 1,
+    "apexRootY": 0.88,
+    "apexBallistic": 1.08,
+    "touchdownMinJointY": 0.47,
+    "releaseVel": {
+     "vx": 3,
+     "vy": 4.8,
+     "x": 0.5,
+     "y": 0.6
+    }
+   },
+   "joints": {
+    "maxHN": {
+     "v": 0.247,
+     "t": 145
+    },
+    "maxPN": {
+     "v": 0.556,
+     "t": 145
+    },
+    "maxStep": {
+     "v": 0.702,
+     "t": 127,
+     "j": "er"
+    },
+    "maxSegDev": {
+     "v": 0.492,
+     "where": "vic.thighL@7"
+    },
+    "segDevByPhase": {
+     "vic_carry": 0.492,
+     "vic_air": 0,
+     "vic_down": 0,
+     "vic_getup": 0.339,
+     "thr_airDownGetup": 0.039
+    },
+    "minAngle": {
+     "v": 22.1,
+     "where": "vic.kneeL@5"
+    },
+    "invertedTicks": 21
+   },
+   "intersections": {
+    "minTorsoTorso": 0.021,
+    "minTorsoTorsoTick": 10,
+    "minTorsoTorsoCarry": 0.021,
+    "minTorsoTorsoAirDown": 0.11,
+    "minHeadTorso": 0.161,
+    "minPelTorso": 0.043,
+    "minLimbTorso": 0.21
+   },
+   "flight": {
+    "rigidRun": 2,
+    "landAng": {
+     "td": 78.7,
+     "plus12": 88.1
+    }
+   },
+   "hard": [
+    "joint step 0.702m > 0.20 (er)",
+    "inverted ticks 21",
+    "segment dev 0.492m > 0.10 (vic.thighL@7)"
+   ],
+   "soft": [
+    "grip carry max 0.695m > 0.20",
+    "grip over gate 9 carry ticks",
+    "lift without grip (g at lift 0.447m > 0.20)",
+    "lift -10 ticks after stable grip (< 3)",
+    "touchdown torso 78.7deg > 70",
+    "touchdown contact gap/penetration (min joint y 0.47m)"
+   ]
+  }
+ ],
+ "gatingHasHard": true,
+ "nextTarget": "Red throws Blue (ippon, forced): grip lost at release 0.769m > 0.30"
+}

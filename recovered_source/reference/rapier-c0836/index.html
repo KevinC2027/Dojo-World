@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Dojo World C0829 — Rapier 3D Physics Isolation Lab</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,Arial;background:#10151b;color:#eeeee8}*{box-sizing:border-box}body{margin:0;padding:14px;max-width:1130px;margin:auto}header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}h1{font-size:19px;margin:4px 0 10px}p{color:#b8c1c8;font-size:13px;line-height:1.45}#status{font-size:12px;border:1px solid #53626b;padding:6px 10px;border-radius:6px;color:#faf1da}.stage{position:relative;border:1px solid #3f4b56;border-radius:12px;overflow:hidden;background:#15212e;box-shadow:0 8px 35px #0004}canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;touch-action:none}#overlay{position:absolute;top:10px;left:11px;background:#09131dd0;border:1px solid #ffffff23;border-radius:8px;padding:10px;color:#baccde;font:12px ui-monospace,monospace;max-width:calc(100% - 22px);pointer-events:none;white-space:pre-line}.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}button{background:#27445f;color:#fff;border:1px solid #466985;border-radius:9px;padding:12px 15px;min-height:45px;font-size:14px;cursor:pointer;touch-action:manipulation}button:disabled{opacity:.55}button.primary{background:#3c4fa9}button.secondary{background:#303942}button:focus-visible{outline:2px solid #bbd9ff}.bad{color:#ffac90}.good{color:#a0e9b8}.notes{border-top:1px solid #26313d;padding-top:9px}.notes code{color:#9cd0fb}.pill{font-size:11px;padding:4px 7px;background:#364d5c;border-radius:5px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:680px){.cols{grid-template-columns:1fr}h1{font-size:17px}.actions button{flex:1 1 30%}body{padding:7px}#overlay{font-size:9px}}
+</style></head>
+<body>
+<header><h1>DOJO WORLD <span class="pill">C0829 / isolated Rapier 3D lab</span></h1><span id="status" aria-live="polite">Rapier not initialized — requires package</span></header>
+<div class="stage"><canvas id="arena" width="960" height="540" aria-label="Dojo World 3D collision experiment in original Fuji arena style"></canvas><div id="overlay">Physics not running until Rapier initializes</div></div>
+<div class="actions"><button id="throw" class="primary" disabled>Start shoulder-load fall</button><button id="reset" class="secondary" disabled>Reset</button><button id="view" class="secondary">Rotate camera</button><button id="pause" class="secondary" disabled>Pause</button><button id="step" class="secondary" disabled>+1 simulation frame</button></div>
+<div class="cols notes"><p><strong>What this tests:</strong> an initial shoulder-load state, 3D gravity, spherical ball joints, Red's articulated fall, ground events, and a kinematic Blue sleeve anchor. <strong>It does NOT include the approved V2 entry motion, a production throw, an anatomically complete joint rig, or finished ground-impact pose.</strong></p><p><strong>How to run:</strong> download the ZIP, run <code>npm install</code> and <code>npm start</code>, then open <code>http://127.0.0.1:8765/</code>. This HTML also attempts a pinned CDN fallback if the package isn't installed. If loading fails, there is no physics simulation.</p></div>
+<script type="module">
+import {buildRapierThrowLab,DT} from './rapier-throw-lab.mjs';
+const canvas=document.getElementById('arena'),ctx=canvas.getContext('2d');
+const status=document.getElementById('status'), hud=document.getElementById('overlay');
+let lab=null, yaw=-.28, playing=false,paused=false,acc=0,last=0,lastRender=0;
+const $=id=>document.getElementById(id);
+function pr(p){let ca=Math.cos(yaw),sa=Math.sin(yaw);const x=p.x*ca-p.z*sa;const z=p.x*sa+p.z*ca;return {x:480+158*x,y:438-153*p.y+14*z};}
+function stick(a,b,color,width){const x=pr(a),y=pr(b);ctx.strokeStyle=color;ctx.lineCap='round';ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x.x,x.y);ctx.lineTo(y.x,y.y);ctx.stroke();}
+function dot(p,color,r){const s=pr(p);ctx.fillStyle=color;ctx.beginPath();ctx.arc(s.x,s.y,r,0,Math.PI*2);ctx.fill();}
+function v(x,y,z=0){return {x,y,z};}function add(a,b){return v(a.x+b.x,a.y+b.y,a.z+b.z);}
+function rot(q,p){const u=v(q.x,q.y,q.z),s=q.w;
+const c=v(u.y*p.z-u.z*p.y,u.z*p.x-u.x*p.z,u.x*p.y-u.y*p.x);const d=v(u.y*c.z-u.z*c.y,u.z*c.x-u.x*c.z,u.x*c.y-u.y*c.x);return add(p,v(2*(s*c.x+d.x),2*(s*c.y+d.y),2*(s*c.z+d.z)));}
+function arena(){const g=ctx.createLinearGradient(0,0,0,540);g.addColorStop(0,'#142537');g.addColorStop(.70,'#71859a');g.addColorStop(.71,'#5b6570');g.addColorStop(1,'#273940');ctx.fillStyle=g;ctx.fillRect(0,0,960,540);
+ctx.fillStyle='#c0c8c9';ctx.beginPath();ctx.moveTo(250,340);ctx.lineTo(440,132);ctx.lineTo(637,340);ctx.closePath();ctx.fill();ctx.fillStyle='#758da0';ctx.beginPath();ctx.moveTo(398,172);ctx.lineTo(440,132);ctx.lineTo(484,175);ctx.lineTo(450,169);ctx.lineTo(433,184);ctx.closePath();ctx.fill();
+ctx.fillStyle='#263d40';ctx.fillRect(0,421,960,119);ctx.strokeStyle='#718c7e';ctx.lineWidth=1;for(let i=-4;i<=4;i++){let p=pr(v(i*.6,0,0));ctx.beginPath();ctx.moveTo(p.x,420);ctx.lineTo(p.x,540);ctx.stroke();}
+ctx.strokeStyle='#5f7c72';ctx.beginPath();ctx.moveTo(0,439);ctx.lineTo(960,439);ctx.stroke();
+ctx.font='12px ui-monospace,monospace';ctx.fillStyle='#d2dadb';ctx.fillText('FUJI TRAINING GROUND / RAP​​IER ISOLATED PHYSICS',17,515);
+}
+function drawBlue(hand){const hip=v(-.93,.92,-.12),shoulder=v(-.80,1.48,-.12),head=v(-.78,1.75,-.12),ankle1=v(-1.2,.07,-.09),ankle2=v(-.59,.07,-.13),k1=v(-1.03,.45,-.11),k2=v(-.70,.44,-.12);
+stick(hip,shoulder,'#427dca',31);stick(hip,k1,'#427dca',16);stick(k1,ankle1,'#427dca',14);stick(hip,k2,'#427dca',16);stick(k2,ankle2,'#427dca',14);dot(head,'#8bb4ef',19);
+// This left elbow is illustrative only; NOT a validated three-dimensional arm IK solver.
+const elbow=v((shoulder.x+hand.x)/2-.06,(shoulder.y+hand.y)/2-.10,-.24);stick(shoulder,elbow,'#3f7bd5',14);stick(elbow,hand,'#3f7bd5',11);dot(hand,'#d1e5ff',7);
+}
+function drawRed(rig){const bodies=rig.bodies;
+const segs=[['shinL',.22,12],['shinR',.22,12],['thighL',.25,15],['thighR',.25,15],['armL',.28,12],['armR',.28,12],['pelvis',.17,39],['upper_back',.36,43]];
+for(const [name,half,r] of segs){let b=bodies[name];if(!b)continue;const a=add(b.position,rot(b.rotation,v(0,-half,0))),c=add(b.position,rot(b.rotation,v(0,half,0)));stick(a,c,name==='upper_back'?'#cc4a52':'#db6067',r);}
+if(bodies.head)dot(bodies.head.position,'#f59f9d',20);
+}
+function draw(){arena();if(lab){let p=lab.pose();drawBlue(p.blueHand);drawRed(p);}else{drawBlue(v(-.38,1.35,-.06));}
+const m=lab?.metrics();hud.textContent=m?`RAPIER 3D / 60 Hz ${m.phase}\nFRAME ${m.step} | t = ${m.frameTime.toFixed(3)} s\nGRIP ${m.gripConnected?'CONNECTED':'UNBOUND'} | GAP ${(m.gripGap||0).toFixed(3)} m\nFIRST FLOOR HIT: ${m.firstGroundContact?.part||'NONE'}\nHEAD BOTTOM: ${m.headClearance?.toFixed(3)??'—'} m\nBACK HIT: ${m.upperBackContact?'YES':'NO'}\nFINAL VERDICT: NOT USER APPROVED`:'RAPIER NOT LOADED: PHYSICS DISABLED';}
+function update(now){if(!last)last=now;let dt=Math.min(.075,(now-last)/1000);last=now;if(lab&&playing&&!paused){acc+=dt;let n=0;while(acc>=DT && n++<8){lab.step();acc-=DT;}if(n>8)acc=0;}draw();requestAnimationFrame(update);}
+function enable(){for(let el of ['throw','reset','step','pause'])$(el).disabled=false;}
+$('throw').onclick=()=>{if(!lab)return;lab.reset();playing=lab.start();paused=false;acc=0;};
+$('reset').onclick=()=>{if(!lab)return;lab.reset();playing=false;paused=false;acc=0;};
+$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'Resume':'Pause';};
+$('step').onclick=()=>{if(!lab)return;if(!playing){lab.start();playing=true;paused=true;}else paused=true;lab.step();};
+$('view').onclick=()=>{yaw+=(Math.PI/4);};
+window.__dojoRapierQA={getState:()=>lab?.metrics()||null,start:()=>{if(!lab)return false;lab.reset();playing=lab.start();return playing;},step:n=>{if(!lab)throw Error('Real Rapier is not loaded');for(let i=0;i<n;i++)lab.step();draw();return lab.metrics();},reset:()=>lab?.reset()};
+async function boot(){let RAPIER=null;let reason='';try{const mod=await import('./node_modules/@dimforge/rapier3d-compat/dist/rapier.mjs');RAPIER=mod.default||mod;}catch(e){reason=e.message;}
+if(!RAPIER){try{const mod=await import('https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-compat@0.21.0/dist/rapier.mjs');RAPIER=mod.default||mod;}catch(e){reason+=' | CDN: '+e.message;}}
+if(!RAPIER){status.textContent='Rapier unavailable — no physics running';status.className='bad';console.error('Rapier unavailable',reason);return;}
+try{await RAPIER.init();lab=buildRapierThrowLab(RAPIER);status.textContent='Rapier 0.21.0 loaded — isolated physics';status.className='good';enable();}catch(e){status.textContent='Rapier initialization error — no physics';status.className='bad';console.error(e);}}
+requestAnimationFrame(update);boot();
+</script></body></html>
