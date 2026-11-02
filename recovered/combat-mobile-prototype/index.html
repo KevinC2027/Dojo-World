@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dojo World — mobile fighting prototype</title>
+<style>
+:root{--bg:#eceae4;--fg:#1b1b1f;--panel:#fff;--accent:#d6452b;--blue:#2b6fd6;--ring:#d6d0c0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--fg:#eee;--panel:#1d2128;--accent:#ff6a4d;--blue:#5a9bff;--ring:#272c35}}
+:root[data-theme="dark"]{--bg:#0f1115;--fg:#eee;--panel:#1d2128;--accent:#ff6a4d;--blue:#5a9bff;--ring:#272c35}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+#app{height:100%;display:flex;flex-direction:column}
+#c{flex:1;min-height:0;width:100%;display:block}
+#pad{display:flex;justify-content:space-between;align-items:center;padding:8px 14px 12px;gap:10px}
+#dp{display:grid;grid-template-columns:repeat(3,54px);grid-auto-rows:46px;gap:5px}
+#ab{display:grid;grid-template-columns:repeat(2,64px);grid-auto-rows:46px;gap:5px}
+button{background:var(--panel);color:var(--fg);border:1px solid var(--ring);border-radius:12px;font:600 16px system-ui;touch-action:none}
+button.on{background:var(--accent);color:#fff}
+#u{grid-column:2}
+</style></head><body>
+<div id="app"><canvas id="c"></canvas>
+<div id="pad">
+<div id="dp"><button id="u" data-k="u">▲</button><button data-k="l" style="grid-row:2">◀</button><button data-k="d" style="grid-row:2">▼</button><button data-k="r" style="grid-row:2">▶</button></div>
+<div id="ab"><button data-k="p">P</button><button data-k="k">K</button><button data-k="g">G</button><button data-k="pk">P+K</button></div>
+</div></div>
+<script>
+// ================= CONFIG =================
+const DT=1/60, GRAV=24, RING=4, FWD=2.3, BACK=1.5, STEPV=3.4;
+const CHAIN_DRIFT=0.030, CHAIN_CROUCH=0.22, CHAIN_LIFT=0.13; // C1/C2: chained-link forward drift per frame (startup+active only), crouch depth, step lift.
+const CYCLE_DIST=1.12, STEP_LEN=.56;   // R2: metres per full gait cycle; stance sweep length (= CYCLE_DIST/2, so stance speed == body speed)
+// Moves: su=startup, ac=active, rc=recovery (frames); reach/h in meters; kb=knockback
+const M={
+  P:{su:6, ac:3,rc:10,dmg:8, reach:.85,h:1.35,kb:2.2,hs:14,bs:7},
+  K:{su:9, ac:4,rc:18,dmg:14,reach:1.15,h:1.0, kb:3.2,hs:20,bs:12,lunge:1.5},  // KickSpeed (Kev 2026-10-26): kick strike phase a little faster - su 11->9 only; ac/rc/reach/dmg unchanged
+  L:{su:13,ac:3,rc:28,dmg:16,reach:1.0, h:.9,  kb:4.0,hs:30,bs:18,launch:7},  // KickSpeed: launcher kick su 16->13 only; ac/rc/reach/dmg/launch unchanged
+  T:{su:5, ac:2,rc:26,dmg:22,reach:.75,h:1.1, kb:3,  hs:30,bs:0, throw:1}
+};
+// Hit test: strike point (reach along facing) must land inside the defender's body radius (~.3m), not merely near its center. Throws are a two-hand grab, so slightly more forgiving.
+const HURT=.3, HURT_T=.4;
+const cv=document.getElementById('c'),g=cv.getContext('2d');
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let W=300,H=300;
+function rs(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+new ResizeObserver(rs).observe(cv);
+
+// ================= STATE =================
+const R=Math.random;
+function mk(x,ai){return{x,z:0,y:0,vx:0,vy:0,vz:0,hp:100,st:'idle',t:0,dur:0,mv:null,hit:0,ic:'mid',rm:0,gy:0,ax:1,az:0,fx:1,fz:0,sd:0,ai,aiT:0,wins:0,combo:0,cd:0,w:0,imp:1,pc:0,pn:0,kc:0,kn:0,buf:null,kp:14,sdur:0,ssteps:0,samp:0,ssev:0,sdesp:0,sdone:0,srem:0,desp:0,originPose:null,rootX0:0,rootZ0:0,prevTip:null,style:ai?'lunge':'back',chainN:0,chainBlend:0,chainStart:null,i:{l:0,r:0,u:0,d:0,g:0,bp:0,bk:0},legX:{pdL:999,pdR:999,laL:0,laR:0,raL:0,raR:0}}} // LEGFIX: Blue crossover-straightening state per leg (prev foot gap, latch, ramp) — pose() also creates it lazily
+let S=[mk(-1.3,0),mk(1.3,1)],phase='intro',pt=0,tm=45*60,round=1,hs=0,shake=0,msg='ROUND 1',msgT=90,cmb=0,cmbT=0,sparks=[];
+const cam={yaw:0,mx:0,mz:0,D:11};
+const H0={l:0,r:0,u:0,d:0,g:0};
+
+function reset(full){
+  const w=[S[0].wins,S[1].wins];
+  S=[mk(-1.3,0),mk(1.3,1)];
+  if(!full){S[0].wins=w[0];S[1].wins=w[1]}else round=1;
+  phase='intro';pt=0;tm=45*60;hs=0;msg='ROUND '+round;msgT=90;cmb=0;sparks=[];
+}
+
+// ================= COMBAT =================
+// XIAO: universal captured-pose entry (README rule 1) — every attack starts from the pose the fighter is in.
+function go(f,k){f.originPose=pose(f);if(f.st==='atk'){f.chainStart=pose(f);f.chainN=(f.chainN||0)+1;f.chainBlend=1}else{f.chainN=0;f.chainBlend=0};f.rootX0=f.x;f.rootZ0=f.z;f.prevTip=null;f.st='atk';f.mv=M[k];f.t=0;f.hit=0;f.ax=f.fx;f.az=f.fz;f.i.bp=f.i.bk=0;f.buf=null; // C2: chain bookkeeping above (go from atk = chain cancel).
+  if(k==='P'){f.pn=f.pc%5;f.pc++}   // DQ18b/DQ18c/DQ18e: punch counter cycles the style strike set - RED boxing (jab/cross/hook/uppercut/overhand), BLUE kung fu (lead palm/rear straight/chop/flowing rear palm/sweeping back palm)
+  if(k==='K'){f.kn=f.kc%3;f.kc++}   // DQ18c2/DQ18e: kick counter cycles each style's leg set - BLUE kung fu (snapping front kick/sweep/side kick), RED boxing (front kick/roundhouse/crescent kick)
+  if(f.mv.lunge){f.vx=f.ax*f.mv.lunge;f.vz=f.az*f.mv.lunge}}
+
+function spark(x,y,z,c){sparks.push({x,y,z,t:0,c})}
+
+let XIAO_SWEEP=0; // XIAO: swept-tip contact trial (README) — 0 = original fixed-point tryHit (live); 1 = pose-derived swept-tip contact (trial: palm range extends, see probe).
+function sweepHit(f,o){ // XIAO: pose-derived swept-tip contact (trial only) — tip segment prev->cur frame vs defender vertical capsule; updates f.prevTip; guard/damage/reactions stay in tryHit.
+  const m=f.mv,limb=m===M.P?((f.pn===1||f.pn===3||f.pn===4)?'hr':'hl'):(f.kn===0?'fl':'fr');
+  const q=pose(f),L=q[limb],cur=[f.x+f.fx*L[0]-f.fz*L[2],f.y+L[1],f.z+f.fz*L[0]+f.fx*L[2]];
+  const prev=f.prevTip||cur,rad=(m===M.P?0.11:0.14)+HURT;
+  f.prevTip=cur;
+  const sub=(a,b)=>a.map((n,i)=>n-b[i]),add=(a,b)=>a.map((n,i)=>n+b[i]),mul=(a,k)=>a.map(n=>n*k),dot=(a,b)=>a.reduce((s,n,i)=>s+n*b[i],0),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const d1=sub(cur,prev),d2=[0,1.8,0],r=sub(prev,[o.x,o.y,o.z]),a=dot(d1,d1),e=dot(d2,d2),ff=dot(d2,r);let s=0,t=0;
+  if(a<=1e-9&&e<=1e-9) return dot(r,r)<=rad*rad;
+  if(a<=1e-9) t=cl(ff/e,0,1);
+  else{const c=dot(d1,r);if(e<=1e-9)s=cl(-c/a,0,1);else{const b=dot(d1,d2),dn=a*e-b*b;if(dn>1e-9)s=cl((b*ff-c*e)/dn,0,1);t=(b*s+ff)/e;if(t<0){t=0;s=cl(-c/a,0,1)}else if(t>1){t=1;s=cl((b-c)/a,0,1)}}}
+  const dl=sub(add(prev,mul(d1,s)),add([o.x,o.y,o.z],mul(d2,t)));return dot(dl,dl)<=rad*rad;
+}
+function tryHit(f,o){
+  const m=f.mv;
+  const er2=(m===M.K&&f.style==='lunge'&&(f.kn||0)===1)?.88:m.reach,lx=f.x+f.ax*er2,lz=f.z+f.az*er2,ly=f.y+m.h;   // DQ26a: posture-bound reach - BLUE's sweep foot truly reaches .88 from the DQ25 stance (its wide low arc cannot extend to M.K's 1.15), so its strike point is tested at .88; all other strikes keep m.reach
+  if(XIAO_SWEEP&&m!==M.L&&!m.throw){if(!sweepHit(f,o))return} // XIAO: swept-tip trial path (P/K only; launcher/throw keep the original test)
+  else{if(Math.hypot(lx-o.x,lz-o.z)>(m.throw?HURT_T:HURT))return;if(ly<o.y-.1||ly>o.y+1.8)return} // sidestepping pulls o out of the strike line
+  if(o.st==='down'||o.st==='getup')return;   // DQ17i: the gradual get-up is uninterrupted, like down
+  if(m.throw){
+    if(o.y>.05||!['idle','walk','guard','step'].includes(o.st))return;
+    f.hit=1;o.hp=Math.max(0,o.hp-m.dmg);o.st='down';o.t=0;o.ic='mid';o.rm=0;o.gy=-.08;o.kp=22;   // DQ17f: throw is a mid-class back-down landing, no roll-through; DQ17g: gy = ground-contact offset (see pose())
+    o.x=f.x+f.ax*.8;o.z=f.z+f.az*.8;o.vx=f.ax*m.kb;o.vz=f.az*m.kb;
+    spark(o.x,1,o.z,1);hs=8;shake=.4;if(o.hp<=0)endRound(f,'K.O.');return;
+  }
+  f.hit=1;
+  const air=o.y>.05;
+  const facing=(o.fx*f.ax+o.fz*f.az)<-.3;
+  if(o.st==='guard'&&facing&&!air){           // BLOCK: chip damage, blockstun, pushback
+    const pwB=m===M.P?m.dmg+(f.pn||0)*2:(m===M.K?f.style==='lunge'?(f.kn||0)===1?12:(f.kn||0)===2?15:14:(f.kn||0)===1?16:(f.kn||0)===2?13:14:m.dmg),bsf=m===M.P?pwB/8:(m===M.K?pwB/14:1);o.hp=Math.max(1,o.hp-m.dmg*.1);o.st='stun';o.t=0;o.dur=Math.round(m.bs*bsf);o.imp=m.kb/5*bsf;   // DQ19 blockstun channel: blockstun duration and block recoil scale with per-strike power for punches (bsf=pw/8: jab/palm 7/.44 unchanged, cross/straight 9/.55, hook/chop 11/.66, uppercut/flow 12/.77, DQ18e slice 4: fifth strikes (overhand/back palm) pw 16 -> 14/.88); punch variants scale by pw/8; DQ19 kick-variant channel (cycle 46): kicks scale by pw/14 (BLUE snap pw 14 unchanged 12/.64, sweep pw 12 -> 10/.549; DQ18e: RED front pw 14 unchanged, roundhouse pw 16 -> 14/.731; DQ18e slice 2: BLUE side pw 15 -> 13/.686; DQ18e slice 3: RED crescent pw 13 -> 11/.594); launcher keeps class bs exactly; chip damage unchanged
+    o.vx=f.ax*m.kb*.5*bsf;o.vz=f.az*m.kb*.5*bsf;f.vx-=f.ax*1.2;f.vz-=f.az*1.2;   // DQ19 blockstun channel: block pushback velocity scales with bsf (punches: jab 1.1 unchanged, cross 1.375, hook 1.65, uppercut 1.925; kicks: snap/front 1.6 unchanged, sweep 1.371, roundhouse 1.829, BLUE side 1.714, RED crescent 1.486)
+    spark(lx,ly,lz,0);hs=3;return;
+  }
+  const sc=Math.max(.4,1-.15*o.combo);       // damage scaling in combos
+  o.combo++;cmb=o.combo;cmbT=90;
+  o.ic=(m===M.K&&f.style==='lunge'&&(f.kn||0)===1)?'low':(m.h>=1.2?'high':(m.h<=.95?'low':'mid'));   // DQ17c: impact class from strike height; DQ19 kick-variant channel: BLUE's sweep strikes at ankle height (pose foot y .05) so its impact class is low (face-down fall family) while the snap kick stays mid
+  const pw=m===M.P?m.dmg+(f.pn||0)*2:(m===M.K?f.style==='lunge'?(f.kn||0)===1?12:(f.kn||0)===2?15:14:(f.kn||0)===1?16:(f.kn||0)===2?13:14:m.dmg);o.kp=pw;
+  o.hp=Math.max(0,o.hp-pw*sc*(f.desp?.6:1));   // DQ19 damage channel: standing-hit damage = per-strike power pw (for non-punches pw===m.dmg, so kick 14 / launcher 16 are byte-identical in effect; jab/palm stay 8, cross/straight 10, hook/chop 12, uppercut/flow 14); DQ17j: a desperation strike from the stumble hits at x0.6 power   // DQ17k: per-strike power for the standing-hit stumble band - punches scale by style strike order (jab/palm 8, cross/straight 10, hook/chop 12, uppercut/flowing palm 14), kick 14, launcher 16
+  if(m.launch||air){o.st='air';o.vy=m.launch||4.5;o.gy=o.ic==='low'?-.002:-.08}else if(pw>=12){o.st='stumble';const sev=Math.max(0,Math.min(1,(pw-8)/8));o.sdur=Math.round(24+12*sev);o.ssteps=1+Math.round(2*sev);o.samp=.14+.26*sev;o.ssev=sev;o.sdesp=R()<.15?1:0;o.sdone=0;o.srem=0;o.desp=0}else{o.st='stun';o.dur=Math.round(m.hs*pw/8);o.imp=m.kb/3*(pw/8)}   // DQ19: hitstun duration and stun-pose recoil scale with per-strike power pw/8 - jab/palm (pw 8) unchanged at hs/imp baseline, cross/straight (pw 10) proportionally longer/stronger   // DQ17g: gy = -(LAND pose's lowest rendered joint: face-down knee 0.002 / back-down foot 0.080, measured on a92304d4); DQ17k: standing hits with pw>=12 stumble instead of stun (band between recoil and knockdown) - DQ17j COM-step/desperation machinery reused, severity scales with pw
+  o.t=0;const kv=m.kb*(m===M.P?pw/8:(m===M.K?pw/14:1));o.vx=f.ax*kv*(f.desp?.6:1);o.vz=f.az*kv*(f.desp?.6:1);   // DQ19: knockback velocity scales with per-strike power for punches (pw/8: jab 2.2 unchanged, cross 2.75, hook 3.3, uppercut 3.85, DQ18e slice 4: fifth strikes 4.4); launcher keeps its class kb exactly; DQ19 kick-variant channel: kicks scale by pw/14 (snap/front 3.2 unchanged, sweep 2.743, DQ18e roundhouse 3.657, BLUE side 3.429, RED crescent 2.971)
+  spark(lx,ly,lz,1);hs=6;shake=.25;
+  if(o.hp<=0){o.st='air';o.vy=5;o.vx=f.ax*6;o.vz=f.az*6;endRound(f,'K.O.')}
+}
+
+function endRound(w,m){
+  if(phase!=='fight')return;
+  phase='end';pt=0;msg=m;msgT=200;if(w)w.wins++;
+}
+
+// ================= PER-FIGHTER UPDATE =================
+function update(f,o){
+  const i=f.i,dx=o.x-f.x,dz=o.z-f.z,d=Math.hypot(dx,dz)||1;
+  f.t++;if(f.cd>0)f.cd--;
+  if(f.st!=='atk'&&f.buf)f.buf=null;   // DQ18d: an interrupted attack drops its buffered chain - no stale combos
+  if(f.st!=='atk'&&f.desp)f.desp=0;   // DQ17j: an interrupted desperation strike loses its reduced-power flag
+  if(f.combo>0&&o.st!=='atk'&&!['stun','air','down','getup','stumble'].includes(f.st))f.combo=0;   // DQ18d: the combo count survives hitstun only during a live chain - it clears once the attacker's attack ends
+  const free=['idle','walk','guard','step'].includes(f.st);
+  if(free&&f.y<=0){f.fx=dx/d;f.fz=dz/d}       // always face opponent (VF auto-turn)
+  const rx=-f.fz,rz=f.fx;
+  if(free&&phase==='fight'){
+    if(i.bp>0&&i.bk>0)go(f,'L');
+    else if(i.g&&i.bp>0&&d<1.4)go(f,'T');
+    else if(i.bp>0)go(f,'P');
+    else if(i.bk>0)go(f,'K');
+    else if(i.g){f.st='guard';f.vx*=.7;f.vz*=.7}
+    else{
+      const mf=i.r-i.l,ms=i.d-i.u;
+      if(ms&&f.cd<=0&&f.st!=='step'){f.st='step';f.t=0;f.sd=ms}
+      if(f.st==='step'){
+        if(f.t>12){f.st='idle';f.cd=6}else{f.vx=rx*f.sd*STEPV;f.vz=rz*f.sd*STEPV}
+      }else{
+        const sp=mf>0?FWD:BACK;f.vx=f.fx*mf*sp;f.vz=f.fz*mf*sp;f.st=mf?'walk':'idle';
+        if(mf)f.w+=(mf*sp*DT)/CYCLE_DIST*2*Math.PI;   // R2: phase advances by signed distance travelled
+      }
+    }
+  }else if(free){f.vx*=.8;f.vz*=.8;f.st='idle'}
+  if(f.st==='atk'){
+    const m=f.mv;f.vx*=.85;f.vz*=.85;
+    if(f.chainBlend&&f.t<=m.su+m.ac){f.vx=0;f.vz=0;f.x+=f.ax*CHAIN_DRIFT;f.z+=f.az*CHAIN_DRIFT} // C2: chained links drift forward (Kev 2026-10-27: forward drift) — root only; pose() compensates the feet so nothing slides.
+    if(!f.desp&&f.t>=m.su&&(f.i.bp>0||f.i.bk>0)){f.buf=(f.i.bp>0&&f.i.bk>0)?'L':f.i.bp>0?'P':'K';f.i.bp=f.i.bk=0}   // DQ18d: chain window - an attack input from the first active frame on is buffered for a combo chain instead of expiring
+    if(f.t>=m.su&&f.t<m.su+m.ac&&!f.hit)tryHit(f,o);
+    const chainAt=m.su+m.ac+(m.rc>>1);   // DQ18d: a connected strike cancels into its buffered chain at half recovery - fluid, no idle frame between attacks; a whiffed strike's buffer fires only at the natural end of recovery
+    if(f.buf&&f.hit&&f.t>=chainAt){const bk=f.buf;f.buf=null;go(f,bk)}
+    else if(f.t>=m.su+m.ac+m.rc){if(f.buf){const bk=f.buf;f.buf=null;go(f,bk)}else if(f.desp){f.desp=0;f.st='stumble';f.t=Math.max(0,f.sdur-f.srem)}else f.st='idle'}   // DQ17j: a desperation strike returns to the stumble, extended by the balance it cost
+  }else if(f.st==='stun'){f.vx*=.88;f.vz*=.88;if(f.t>=f.dur){f.st='idle';if(o.st!=='atk')f.combo=0}}   // DQ18d: hitstun ending mid-chain does not reset the combo count while the attacker is still attacking
+  else if(f.st==='down'){f.vx*=.9;f.vz*=.9;if(f.t>=55&&f.hp>0){f.st='getup';f.t=0;f.combo=0;f.gy=0}}   // DQ17i: down now hands off to the gradual get-up instead of snapping to idle
+  else if(f.st==='getup'){f.vx*=.9;f.vz*=.9;if(f.t>=54&&f.hp>0){f.st='idle'}}   // DQ17i: 54f staged rise (3x 18f phases in pose()); DQ17k: the rise returns cleanly to stance - no stumble after a fall, ever (Kev correction 2026-10-26 ~11:33: stumbling is a standing hit reaction, not a post-fall behavior)
+  else if(f.st==='stumble'){   // DQ17j: standing recovery - corrective steps chase the drifting COM in the knockback direction (-facing); no guard/walk (not a free state); a ~15% desperation strike fires once, mid-stumble
+    const ss=stubStep(f);
+    if(ss.i>=0){const disp=(f.samp*.9)/ss.n,vv=disp/((f.sdur*(.44/ss.n))*DT)*(Math.PI/2)*Math.sin(Math.PI*ss.p);f.vx=-f.fx*vv;f.vz=-f.fz*vv}else{f.vx*=.8;f.vz*=.8}
+    if(f.sdesp&&!f.sdone&&f.t>=(f.sdur>>1)){f.sdone=1;f.srem=f.sdur-f.t+8;go(f,'P');f.desp=1}
+    else if(f.t>=f.sdur){f.st='idle'}
+  }
+  // ---- physics: semi-implicit Euler, gravity, ring-only ground ----
+  f.vy-=GRAV*DT*(f.st==='air'?1.5:1);   // DQ17c: heavier descent while airborne
+  f.x+=f.vx*DT;f.z+=f.vz*DT;f.y+=f.vy*DT;
+  const on=Math.abs(f.x)<RING&&Math.abs(f.z)<RING;
+  if(on&&f.y<=0){
+    if(f.st==='air'){
+      const hm=Math.hypot(f.vx,f.vz),ds=-f.vy;f.rm=hm;   // DQ17e: touchdown momentum (horizontal speed, descent speed); DQ17f: rm records it for the roll-through check in pose()
+      f.st='down';f.t=0;f.gy=f.ic==='low'?-.002:-.08;const sf=.5+.35*Math.min(1,hm/5);f.vx*=sf;f.vz*=sf;   // DQ17e: ground slide - retained horizontal fraction scales with touchdown momentum (was flat .5)
+      f.vy=(ds>=5&&hm>=2)?Math.min(1.5,ds*.24):0;   // DQ17e: one small bounce off a fast touchdown - down-state rebound, pose stays on the touchdown blend
+      shake=Math.max(shake,.2);spark(f.x,.05,f.z,0)
+    }else f.vy=0;
+    f.y=0;
+  }else if(!on&&f.y<-.05&&f.st!=='air'){f.st='air'}
+  if(!on&&f.y<-2.5)endRound(o,'RING OUT!');
+  if(phase!=='fight'&&f.y<-3){f.y=-3;f.vy=0;if(f.st==='air')f.st='down'}  // park fallen fighters after the round (default-build fix 2026-10-20)
+}
+
+// ================= AI =================
+function ai(f,o){
+  const i=f.i;if(f.aiT-->0)return;f.aiT=8+(R()*12|0);
+  i.l=i.r=i.u=i.d=i.g=0;
+  const d=Math.hypot(o.x-f.x,o.z-f.z),threat=o.st==='atk';
+  if(threat&&d<1.6&&R()<.5){i.g=1;f.aiT=14;return}
+  if(threat&&d<1.6&&R()<.3){i[R()<.5?'u':'d']=1;f.aiT=10;return}
+  if(d>1.1){i.r=1;if(R()<.15)i[R()<.5?'u':'d']=1}
+  else{const r=R();
+    if(r<.3)i.bp=6;else if(r<.5)i.bk=6;else if(r<.58){i.bp=6;i.bk=6}
+    else if(r<.66){i.g=1;i.bp=6}else if(r<.8)i.g=1;else i.l=1}
+}
+
+// ================= MAIN TICK =================
+function tick(){
+  if(hs>0){hs--;return}
+  const[a,b]=S;
+  Object.assign(a.i,H0);
+  if(phase==='intro'){if(++pt>90){phase='fight';msg='FIGHT!';msgT=50}}
+  if(phase==='fight'){ai(b,a);if(--tm<=0){tm=0;
+    endRound(a.hp>b.hp?a:b.hp>a.hp?b:null,a.hp===b.hp?'DRAW':'TIME UP')}}
+  for(const f of S){if(f.i.bp>0)f.i.bp--;if(f.i.bk>0)f.i.bk--}
+  update(a,b);update(b,a);
+  const d=Math.hypot(b.x-a.x,b.z-a.z);               // body-body separation
+  if(d<.6&&a.y<.6&&b.y<.6){const p=(.6-d)/2,nx=(b.x-a.x)/(d||1),nz=(b.z-a.z)/(d||1);a.x-=nx*p;a.z-=nz*p;b.x+=nx*p;b.z+=nz*p}
+  // camera follows the line between fighters
+  const ty=Math.atan2(b.z-a.z,b.x-a.x);let dy=ty-cam.yaw;dy=Math.atan2(Math.sin(dy),Math.cos(dy));
+  cam.yaw+=dy*.12;cam.mx+=((a.x+b.x)/2-cam.mx)*.15;cam.mz+=((a.z+b.z)/2-cam.mz)*.15;
+  cam.D+=(11+d*.5-cam.D)*.1;
+  shake*=.88;if(cmbT>0)cmbT--;if(msgT>0)msgT--;
+  for(const s of sparks)s.t++;sparks=sparks.filter(s=>s.t<14);
+  if(phase==='end'&&++pt>160){
+    if(S[0].wins>=2||S[1].wins>=2){phase='over';msg=(S[0].wins>=2?'YOU WIN':'YOU LOSE')+' – TAP TO REMATCH';msgT=1e9}
+    else{round++;reset(0)}
+  }
+}
+
+// ================= RENDER =================
+let ox=0,oy=0;
+function P(x,y,z){
+  const F=Math.min(W*1.5,H*1.55),rx=x-cam.mx,rz=z-cam.mz,c=Math.cos(cam.yaw),s=Math.sin(cam.yaw);
+  const a=rx*c+rz*s,dp=-rx*s+rz*c,k=F/Math.max(2,cam.D+dp);
+  return{x:W/2+a*k+ox,y:H*.4+(2.4-y)*k+oy,s:k,d:dp};
+}
+// ---- R1 JOINT LAYER (rig track step R1): analytic two-bone IK under pose() ----
+// Segment constants (m): arm 0.40+0.40 (reach 0.80), leg 0.62+0.62 (reach 1.24).
+// Elbows/knees derive from root anchor + endpoint + lengths only; hands/feet never move.
+// R2: single continuous bend = cross(u,[0,0,1]); sg=-1 knees (bow +x/+y), sg=+1 elbows (bow -x/-y). No pole blend.
+const ARM1=.40,ARM2=.40,LEG1=.62,LEG2=.62;
+function ik2(r,e,L1,L2,sg){
+  const dx=e[0]-r[0],dy=e[1]-r[1],dz=e[2]-r[2],rd=Math.hypot(dx,dy,dz);
+  const u=rd>1e-6?[dx/rd,dy/rd,dz/rd]:[1,0,0];
+  const d=Math.min(Math.max(rd,.05),L1+L2-.005);      // clamp solve distance only; endpoint untouched
+  const bn=Math.hypot(u[1],u[0]);                      // |cross(u,z)|; bendRaw=[u1,-u0,0] is exactly perpendicular to u
+  let v;
+  if(bn>=1e-4)v=[sg*u[1]/bn,-sg*u[0]/bn,0];
+  else{const t=-sg*u[0];v=[-sg-t*u[0],-t*u[1],-t*u[2]]}   // degenerate (u ~ +-z): old primary-pole perpendicular
+  const vl=Math.hypot(v[0],v[1],v[2])||1;              // ~1 on the main path; keeps fallback finite
+  const a=(L1*L1-L2*L2+d*d)/(2*d),h=Math.sqrt(Math.max(0,L1*L1-a*a));
+  return[r[0]+u[0]*a+v[0]/vl*h,r[1]+u[1]*a+v[1]/vl*h,r[2]+u[2]*a+v[2]/vl*h];
+}
+// R2: phase-locked linear stance foot. c = cycle fraction (any real, normalised here). Returns [dx,y] relative to base x.
+// Stance (c<.5): x sweeps +STEP/2 -> -STEP/2 linearly, y=0. Swing: x returns linearly, y = .12*sin(pi*swingFrac).
+function ikFlat(r,e,sd){  // DQ17h: ground-plane arm IK - same a/h construction as ik2, but the bend direction is the component of [0,0,sd] perpendicular to the shoulder->hand axis (elbows splay flat/outward instead of bowing down)
+  const dx=e[0]-r[0],dy=e[1]-r[1],dz=e[2]-r[2],rd=Math.hypot(dx,dy,dz);
+  const u=rd>1e-6?[dx/rd,dy/rd,dz/rd]:[1,0,0];
+  const d=Math.min(Math.max(rd,.05),ARM1+ARM2-.005);
+  const wu=sd*u[2];let v=[-wu*u[0],-wu*u[1],sd-wu*u[2]];
+  const vl=Math.hypot(v[0],v[1],v[2]);
+  v=vl<1e-4?[0,1,0]:[v[0]/vl,v[1]/vl,v[2]/vl];
+  const a=(ARM1*ARM1-ARM2*ARM2+d*d)/(2*d),h=Math.sqrt(Math.max(0,ARM1*ARM1-a*a));
+  return[r[0]+u[0]*a+v[0]*h,r[1]+u[1]*a+v[1]*h,r[2]+u[2]*a+v[2]*h];
+}
+function ikBend(r,e,sd,fw){  // DQ17i: arm IK with the bend direction blended between ik2's standard bend (fw=0) and ikFlat's ground-plane bend (fw=1); same a/h construction as both, so arm segment lengths stay 0.40+0.40 at every blend
+  const dx=e[0]-r[0],dy=e[1]-r[1],dz=e[2]-r[2],rd=Math.hypot(dx,dy,dz);
+  const u=rd>1e-6?[dx/rd,dy/rd,dz/rd]:[1,0,0];
+  const d=Math.min(Math.max(rd,.05),ARM1+ARM2-.005);
+  const bn=Math.hypot(u[1],u[0]);let vs;
+  if(bn>=1e-4)vs=[u[1]/bn,-u[0]/bn,0];
+  else{const t=-u[0];vs=[-1-t*u[0],-t*u[1],-t*u[2]];const l=Math.hypot(vs[0],vs[1],vs[2])||1;vs=[vs[0]/l,vs[1]/l,vs[2]/l]}
+  const wu=sd*u[2];let vf=[-wu*u[0],-wu*u[1],sd-wu*u[2]];
+  const vl=Math.hypot(vf[0],vf[1],vf[2]);vf=vl<1e-4?[0,1,0]:[vf[0]/vl,vf[1]/vl,vf[2]/vl];
+  let v=[vs[0]*(1-fw)+vf[0]*fw,vs[1]*(1-fw)+vf[1]*fw,vs[2]*(1-fw)+vf[2]*fw];
+  const wl=Math.hypot(v[0],v[1],v[2]);v=wl<1e-4?vs:[v[0]/wl,v[1]/wl,v[2]/wl];
+  const a=(ARM1*ARM1-ARM2*ARM2+d*d)/(2*d),h=Math.sqrt(Math.max(0,ARM1*ARM1-a*a));
+  return[r[0]+u[0]*a+v[0]*h,r[1]+u[1]*a+v[1]*h,r[2]+u[2]*a+v[2]*h];
+}
+function gaitFoot(c){
+  c-=Math.floor(c);
+  if(c<.5)return[STEP_LEN*(.5-c*2),0];
+  const q=(c-.5)*2;
+  return[STEP_LEN*(q-.5),Math.sin(q*Math.PI)*.14];
+}
+function stubStep(f){   // DQ17j: corrective-step phase for the stumble - steps spread over the first 80% of the window, each step window 55% of its segment; returns {u, i (active step index or -1), p (phase 0..1), n}
+  const dur=f.sdur||30,u=Math.max(0,Math.min(1,f.t/dur)),n=f.ssteps||1,tw=.8/n*.55;
+  for(let i=0;i<n;i++){const c=(i+.5)/n*.8;if(Math.abs(u-c)<=tw/2)return{u,i,p:(u-(c-tw/2))/tw,n}}
+  return{u,i:-1,p:0,n};
+}
+function pose(f){
+  const m=f.mv,b=Math.sin(f.t*.12)*.02,s=f.st;
+  const p={pel:[0,1.232+b,.11],neck:[.09,1.782+b,-.01],head:[.15,2.022+b,-.01],hl:[.27,1.42,.22],hr:[.23,1.30,-.22],fl:[.02,0,.21],fr:[.04,0,-.05]};
+  let rotS=0,rotH=0;
+  if(s==='walk'){const cf=f.w/(2*Math.PI),L=gaitFoot(cf),R2=gaitFoot(cf+.5);p.fl=[.02+L[0],L[1],.2];p.fr=[-.02+R2[0],R2[1],-.2];p.pel[2]=.045*Math.sin(f.w);p.pel[1]=1.21+b-.015*Math.cos(2*f.w);p.neck[1]=p.pel[1]+.55;p.head[1]=p.pel[1]+.79;p.hl=[.27-.09*Math.cos(f.w),1.42,.22];p.hr=[.23+.09*Math.cos(f.w),1.30,-.22];rotS=-.3*Math.sin(f.w)}
+  if(s==='walk'&&f.style==='lunge'){p.hl=[.55,1.45,.22];p.hr=[.05,1.15,-.22]}   // DQ18a: kung fu walks with the lead palm extended and rear hand low
+  if(s==='walk'&&f.style==='back'){p.hl=[.32,1.92,.18];p.hr=[.28,1.90,-.18]}   // DQ18a: boxing walks with the high guard up
+  if(s==='guard'){p.hl=[.36,1.52,.20];p.hr=[.32,1.43,-.20];p.neck[0]=.12;p.head[0]=.15;p.pel[0]=-.05;p.pel[1]=1.23+b;p.pel[2]=.10;p.neck[1]=1.78+b;p.head[1]=2.02+b}
+  if(s==='guard'&&f.style==='back'){p.hl=[.37,2.00+b,.15];p.hr=[.33,1.98+b,-.16];p.fl=[.03,0,.18];p.fr=[-.04,0,-.09]}   // DQ18a: RED BOXING guard - high guard at the cheeks, narrow feet
+  if(s==='guard'&&f.style==='lunge'){p.pel=[-.02,.98+b,.07];p.neck=[.10,1.53+b,-.02];p.head=[.20,1.77+b,-.02];p.hl=[.78,1.45,.20];p.hr=[.02,1.02,-.24];p.fl=[.62,0,.26];p.fr=[-.44,0,-.20]}   // DQ18a: BLUE KUNG FU guard - low rooted stance, lead palm extended, rear hand at the waist
+  if(s==='step'){p.pel[1]=1.18;p.neck[1]=1.73;p.head[1]=1.97;p.fl=[.05,0,.30];p.fr=[-.05,0,-.30]}
+  if(s==='atk'){
+    let e=f.t<m.su?f.t/m.su:f.t<m.su+m.ac?1:1-(f.t-m.su-m.ac)/m.rc;e=Math.max(0,e);if((m===M.K||m===M.L)&&!(m===M.K&&f.style==='lunge'&&(f.kn||0)===0))e=e*e*(3-2*e);   // DQ29: kick/launcher extension eases into the contact frame (smoothstep on e for K/L, snap kick excluded - its chamber w below is its own full smoothstep) so the knee angle no longer jumps 22-38 deg in the final frame (the visible lock); endpoints e=0/1 and contact geometry unchanged
+    if(m===M.P||m===M.T)p.pel[0]+=.10*e;else{p.pel[0]-=.06*e;p.pel[1]-=.03*e}
+    if(m===M.P&&f.style==='back'&&(f.pn||0)===0){p.hl=[.30+.71*e,1.42+.31*e,.20-.01*e];p.hr=[.23-.18*e,1.30+.04*e,-.22-.02*e];p.neck[0]+=.02*e;p.head[0]+=.05*e;p.pel[1]-=.02*e;rotS=e;rotH=e}   // DQ18b2 JAB (RED boxing): lead hand drives straight to full extension - shoulder->hand 0.79 m at the contact frame, elbow ~162 deg (Kev 2026-10-26: no bent-arm punch); rear hand pullback preserved from DQ14a
+    else if(m===M.P&&f.style==='back'&&(f.pn||0)===1){p.hr=[.30+.67*e,1.88-.148*e,-.20-.05*e];p.hl=[.30-.05*e,1.42+.46*e,.20-.03*e];p.neck[0]-=.02*e;p.head[0]+=.01*e;p.pel[0]+=.06*e;p.pel[1]-=.02*e;rotS=-e;rotH=-.7*e}   // DQ18b2 CROSS (RED boxing): rear hand starts at the DQ18a cheek guard and drives straight to full extension (0.79 m, elbow ~162 deg) along the shoulder line, lead hand rises to guard, weight drives furthest forward, torso counter-rotates
+    else if(m===M.P&&f.style==='back'&&(f.pn||0)===2){p.hl=[.30+.58*e,1.42+.18*e,.20+.12*e+.23*Math.sin(Math.PI*e)];p.hr=[.23+.02*e,1.30+.58*e,-.22+.05*e];p.neck[0]+=.12*e;p.head[0]+=.15*e;p.pel[0]+=.02*e;p.pel[1]-=.02*e;rotS=1.2*e;rotH=e}   // DQ18b2 HOOK (RED boxing): lead hand arcs wide mid-swing and lands at the side of the head at its full arc radius - extension grows monotonically to the contact frame, no bent-arm retreat; rear hand rises to guard
+    else if(m===M.P&&f.style==='back'&&(f.pn||0)===3){const w=.4*e+.6*(e*e*(3-2*e));p.hr=[.23+.71*w,1.30-.26*Math.sin(Math.PI*Math.pow(e,.7))+.54*w,-.22-.01*e];p.hl=[.30-.05*e,1.42+.46*e-.16*Math.sin(Math.PI*e),.20-.03*e];p.neck[0]+=.08*e;p.neck[1]-=.16*Math.sin(Math.PI*e);p.head[0]+=.10*e;p.head[1]-=.16*Math.sin(Math.PI*e);p.pel[0]+=.04*e;p.pel[1]-=(.02*e+.08*Math.sin(Math.PI*e));rotS=-.5*e;rotH=-.5*e}   // DQ18b2 UPPERCUT (RED boxing): rear hand loads low as the torso crouches, then rises extending through the chin - extension grows from the loaded dip to full reach at the contact frame, lead hand guards
+    else if(m===M.P&&f.style==='lunge'&&(f.pn||0)===0){const sw2=Math.sin(f.t*.045)*.032*(1-e),bb=b*(.4+.6*e),w=e*e*(3-2*e);p.pel=[.10+.06*w,.70+bb+.23*w,.06+sw2+.02*w];p.neck=[.18+.08*w,1.25+bb+.23*w,.09+sw2*.7+.02*w];p.head=[.24+.08*w,1.49+bb+.23*w,.09+sw2*.7+.02*w];p.hl=[.92-.07*w-.20*Math.sin(Math.PI*e),1.16+b*.4*(1-e)+.39*w,.36+sw2*.5-.17*e];p.hr=[-.22+.52*w,1.72+bb-.17*w,-.38+.10*w];p.fl=[1.00-.03*w,0,.34];p.fr=[-.70+.22*e,0,-.22+.02*e];rotS=.5*w;rotH=.5*w}   // DQ69 FACING (Kev 2026-10-27 correction #2): yaw halved to the set-wide profile value; DQ68 low drive + chin guard preserved (Kev 2026-10-27 ~13:18 arm-identity rule): striking arm stays hl = RIGHT = lead arm (right-lead stance); lead (right) foot planted forward as the brace, rear (left) foot pivots back, pelvis drives forward while staying low, guard (left) hand comes to the chin, striking hand keeps ~0.79 extension // ANATOMY-PORT-J5: fist forward extent now 0.85 (reach), not 1.15; elbow bends since the approved body drive is preserved
+    else if(m===M.P&&f.style==='lunge'&&(f.pn||0)===1){const sw2=Math.sin(f.t*.045)*.032*(1-e),bb=b*(.4+.6*e),w=e*e*(3-2*e);p.pel=[.10+.06*w,.70+bb+.23*w,.06+sw2+.05*w];p.neck=[.18-.02*w,1.25+bb+.23*w,.09+sw2*.7-.05*w];p.head=[.24-.01*w,1.49+bb+.23*w,.09+sw2*.7-.05*w];p.hl=[.92-.64*w,1.16+b*.4*(1-e)+.39*w,.36+sw2*.5-.16*e];p.hr=[-.22+1.22*e,1.72+bb-.22*e,-.38+.14*e];p.fl=[1.00-.06*w,0,.34];p.fr=[-.70+.22*e,0,-.22+.02*e];rotS=-.5*e;rotH=-.35*e}   // DQ70 REAR-STRAIGHT ANATOMY (Kev 2026-10-27 arm-identity rule + DQ69 facing, rotS/rotH untouched): striking arm stays hr = LEFT = rear arm; lead (right) foot planted forward as the brace, rear (left) foot pivots back, pelvis drives forward while staying low, lead guard hand comes to the chin, striking hand drives straight (no depth swing) to ~0.79 extension
+    else if(m===M.P&&f.style==='lunge'&&(f.pn||0)===2){const sw2=Math.sin(f.t*.045)*.032*(1-e),bb=b*(.4+.6*e),w=e*e*(3-2*e);p.pel=[.10+.06*w,.70+bb+.23*w,.06+sw2+.05*w];p.neck=[.18+.08*w,1.25+bb+.23*w,.09+sw2*.7+.02*w];p.head=[.24+.08*w,1.49+bb+.23*w,.09+sw2*.7+.02*w];p.hl=[.92+.16*w,1.16+b*.4*(1-e)+.36*e+.20*Math.sin(Math.PI*e),.36+sw2*.5+.01*e+.18*Math.sin(Math.PI*e)];p.hr=[-.22+.52*w,1.72+bb-.17*w,-.38+.10*w];p.fl=[1.00-.03*w,0,.34];p.fr=[-.70+.22*e,0,-.22+.02*e];rotS=.5*e;rotH=.5*e}   // DQ71 LEAD-CHOP ANATOMY (Kev 2026-10-27 arm-identity rule + DQ69 facing, rotS/rotH untouched): striking arm stays hl = RIGHT = lead arm; lead (right) foot planted forward as the brace, rear (left) foot pivots back, pelvis drives forward while staying low, rear guard hand comes to the chin, striking hand keeps the rise-then-chop shape and drives forward to ~0.79 extension
+    else if(m===M.P&&f.style==='lunge'&&(f.pn||0)===3){const w=.4*e+.6*(e*e*(3-2*e)),sw2=Math.sin(f.t*.045)*.032*(1-e),bb=b*(.4+.6*e),w2=e*e*(3-2*e);p.pel=[.10+.06*w2,.70+bb+.23*w2,.06+sw2+.05*w2];p.neck=[.18-.02*w2,1.25+bb+.23*w2,.09+sw2*.7-.05*w2];p.head=[.24-.01*w2,1.49+bb+.23*w2,.09+sw2*.7-.05*w2];p.hl=[.92-.64*w2,1.16+b*.4*(1-e)+.39*w2,.36+sw2*.5-.16*e];p.hr=[-.22+1.19*w,1.72+b*.4*(1-w)-.14*w+.16*Math.sin(Math.PI*e),-.38+.19*w];p.fl=[1.00-.07*w2,0,.34];p.fr=[-.70+.22*e,0,-.22+.02*e];rotS=-.5*e;rotH=-.5*e}   // DQ72 FLOWING REAR PALM ANATOMY (Kev 2026-10-27 arm-identity rule + DQ69 facing, rotS/rotH untouched): striking arm stays hr = LEFT = rear arm; lead (right) foot planted forward as the brace, rear (left) foot pivots back, pelvis drives forward while staying low, lead guard hand comes to the chin, striking hand keeps its exact flow shape to ~0.79 extension
+    else if(m===M.P&&f.style==='back'&&(f.pn||0)===4){p.hr=[.23+.72*e,1.30+.70*e-.30*e*e,-.22+.35*e];p.hl=[.30-.10*e,1.42-.35*e,.20-.02*e];p.neck[0]+=.10*e;p.head[0]+=.12*e;p.pel[0]+=.05*e;p.pel[1]-=.04*e;rotS=-1.1*e;rotH=-.8*e}   // DQ18e OVERHAND (RED boxing): rear hand loops over and across the body (hand z -.22 -> +.13) landing at the head at full reach at the contact frame (elbow 138 deg), lead hand drops low - the overhand commits the whole rear side, no guard rise
+    else if(m===M.P&&f.style==='lunge'&&(f.pn||0)===4){const sw2=Math.sin(f.t*.045)*.032*(1-e),bb=b*(.4+.6*e),w=e*e*(3-2*e);p.pel=[.10+.06*w,.70+bb+.23*w,.06+sw2+.05*w];p.neck=[.18-.02*w,1.25+bb+.23*w,.09+sw2*.7-.05*w];p.head=[.24-.01*w,1.49+bb+.23*w,.09+sw2*.7-.05*w];p.hl=[.92-.64*w,1.16+b*.4*(1-e)+.39*w,.36+sw2*.5-.16*e];p.hr=[-.22+1.15*e,1.72+b*.4*(1-e)+.03*e+.14*Math.sin(Math.PI*e)-.28*w,(e<.5?-.38+.87*e:.055+.15*(e-.5))];p.fl=[1.00-.08*w,0,.34];p.fr=[-.70+.22*e,0,-.22+.02*e];rotS=-1.1*e;rotH=-.8*e}   // DQ73 SWEEPING BACK PALM ANATOMY (Kev 2026-10-27 arm-identity rule + DQ69 facing, rotS/rotH untouched): striking arm stays hr = LEFT = rear arm; lead (right) foot planted forward as the brace, rear (left) foot pivots back, pelvis drives forward while staying low, lead guard hand comes to the chin, striking hand keeps its exact wide x/z arc with its y path lowered by 0.28*w so it drops with the low pelvis
+    else if(m===M.P){p.hl=[.3+.58*e,1.42,.2];p.hr=[.23-.18*e,1.30+.04*e,-.22-.02*e];p.neck[0]+=.12*e;p.head[0]+=.15*e;p.pel[1]-=.02*e;rotS=e;rotH=e}
+    else if(m===M.T){p.hl=[.3+.47*e,1.2,.25];p.hr=[.3+.47*e,1.2,-.25];p.neck[0]+=.15*e;p.head[0]+=.2*e}
+    else if(m===M.K&&f.style==='lunge'&&(f.kn||0)===0){const u=Math.min(1,e/.55),v=Math.max(0,(e-.35)/.65),w=(1-0.7)*(v*v*(3-2*v))+0.7*(1-(1-v)*(1-v)),sw2=Math.sin(f.t*.045)*.032*(1-e),bb=b*(.4+.6*e);p.pel=[.10-.13*e,.70+bb+.492*e,.06+sw2+.05*e];p.neck=[.18-.24*e,1.25+bb+.532*e,.09+sw2*.7-.10*e];p.head=[.24-.27*e,1.49+bb+.532*e,.09+sw2*.7-.10*e];p.hl=[.92-.47*e,1.16+b*.4*(1-e)+.19*e,.36+sw2*.5-.06*e];p.hr=[-.22+.27*e,1.72+b*.4*(1-e)-.57*e-.30*Math.sin(Math.PI*e),-.38+.13*e];p.fl=[1.00-.55*u+.71*w,.65*u+.35*w,.34-.14*w];p.fr=[-.70+.74*e,0,-.22+.17*e];rotS=.6*e;rotH=-.4*e}   // DQ18c2 SNAPPING FRONT KICK (BLUE kung fu): lead leg chambers knee-up through the first half of the strike phase, then snaps out to full extension at the contact frame, rear foot stays planted as the support leg
+    else if(m===M.K&&f.style==='lunge'&&(f.kn||0)===1){const sw2=Math.sin(f.t*.045)*.032*(1-e),bb=b*(.4+.6*e);p.fr=[-.70+1.58*e,.05*e,-.22-.36*e-.12*Math.sin(Math.PI*e)];p.fl=[1.00-.70*e,0,.34-.04*e];p.hl=[.92-.40*e,1.16+b*.4*(1-e)-.56*e,.36+sw2*.5-.01*e];p.hr=[-.22+.12*e,1.72-.77*e,-.38+.08*e];p.neck=[.18+.01*e,1.25+bb+.032*e,.09+sw2*.7-.10*e];p.head=[.24+.03*e,1.49+bb+.032*e,.09+sw2*.7-.10*e];p.pel=[.10-.08*e,.70+bb-.078*e,.06+sw2+.09*e];rotS=.5*e;rotH=.3*e}   // DQ18c2 SWEEP (BLUE kung fu): rear leg sweeps low and wide in an arc as the pelvis drops into a deep crouch, lead foot stays planted as the support leg, lead hand flows down toward the ground
+    else if(m===M.K&&f.style==='lunge'&&(f.kn||0)===2){p.fr=[.04+1.14*e,.10+1.14*e,-.05+.10*e];p.fl=[.02,0,.21];p.hl=[.27+.33*e,1.42-.12*e,.22+.08*e];p.hr=[.23-.10*e,1.30+.10*e,-.22-.03*e];p.neck[0]-=.10*e;p.head[0]-=.12*e;p.pel[0]+=.04*e;p.pel[1]-=.03*e;p.pel[2]+=.10*e;rotS=1.0*e;rotH=.6*e}   // DQ18e SIDE KICK (BLUE kung fu): rear leg chambers (knee 86 deg mid-swing) then thrusts out to the side at full extension (foot [1.18,1.24,.05], knee 163 deg at contact), lead foot planted as the support leg, hands flow open for balance
+    else if(m===M.K&&f.style==='back'&&(f.kn||0)===2){p.fr=[.04+1.12*e,.10+1.24*e,-.05+.40*e+.38*Math.sin(Math.PI*e)];p.fl=[.02,0,.21];p.hl=[.30,1.88,.18];p.hr=[.26,1.86,-.18];p.neck[0]-=.08*e;p.head[0]-=.10*e;p.pel[0]+=.02*e;p.pel[1]-=.02*e;p.pel[2]+=.06*e;rotS=-.9*e;rotH=-.7*e}   // DQ18e CRESCENT KICK (RED boxing): rear leg chambers then arcs wide to the opposite side from the roundhouse (foot z +.55 mid-swing) and lands high at full extension (foot [1.16,1.34,.35], knee 159 deg at contact), lead foot planted as the support leg, boxing guard stays high
+    else if(m===M.K&&f.style==='back'&&(f.kn||0)===1){p.fr=[.04+1.06*e,.10+.95*e,-.05-.30*e-.38*Math.sin(Math.PI*e)];p.fl=[.02,0,.21];p.hl=[.30,1.88,.18];p.hr=[.26,1.86,-.18];p.neck[0]-=.12*e;p.head[0]-=.15*e;p.pel[0]+=.02*e;p.pel[1]-=.02*e;p.pel[2]-=.06*e;rotS=1.1*e;rotH=.8*e}   // DQ18e ROUNDHOUSE (RED boxing): rear leg arcs wide mid-swing (foot z -.58 at e=.5) and lands at the side at full extension (foot [1.10,1.05,-.35], knee 157 deg at contact), lead foot planted as the support leg, boxing guard stays high
+    else{p.fr=[m.reach*e,.15+(m.h+.2)*e*(m===M.L?1.2:1),-.1];p.neck[0]-=.2*e;p.head[0]-=.25*e;p.hl=[.1,1.2,.3];p.hr=[.23-.22*e,1.30-.08*e,-.22-.06*e];p.pel[0]+=.02*e;p.pel[2]+=.06*e;p.pel[1]-=.015*e;rotS=.8*e;rotH=-.6*e}
+  }
+  if(s==='atk'&&m===M.K&&f.style==='lunge'&&(f.kn||0)===0&&f.t>=f.mv.su+f.mv.ac){const plant4=1-Math.max(0,Math.min(1,p.fl[1]/0.50));const fix4=(1-plant4)*(-0.03+(p.fr[0]-0.04))+plant4*0.10;const sh4=fix4-p.pel[0];p.pel[0]=fix4;p.neck[0]+=sh4;p.head[0]+=sh4;p.hl[0]+=sh4;p.hr[0]+=sh4} // ANATOMY-PORT-J4: snap-kick recovery weight return (recovery only; startup/contact untouched) - pelvis tracks the support foot while single-supported, then settles to stance; plant is LINEAR in foot height (the smoothstep version snapped 0.418/0.337 and was rejected); trunk and hands ride with the pelvis so torso/arm geometry is preserved.
+  if(s==='stun'){const ir=f.imp||1;p.neck=[-.25*ir,1.45,0];p.head=[-.4*ir,1.65,0];p.hl=[.02,1.09,.28];p.hr=[.02,1.09,-.28]}
+  if(s==='air'||s==='down'){   // DQ17: progressive weighted fall - descending air blends into a touchdown pose in the last .6m, then down settles touchdown->rest over 18f (ease-out); cruise air and rest down poses unchanged
+    const AC={low:[[0,.8,0],[.10,.98,0],[.36,.86,0],[.05,.85,.38],[.10,.80,-.42],[.55,.25,.25],[.45,.35,-.30]],mid:[[0,.8,0],[-.55,1.12,.16],[-.88,.98,.24],[-.35,1.05,.45],[-.30,.95,-.40],[.40,.28,.48],[.50,.40,-.44]],high:[[0,.8,0],[-.78,1.12,0],[-1.12,.92,0],[-.55,1.15,.35],[-.50,1.10,-.35],[.72,.02,.16],[.80,.10,-.18]]};
+    const A0=AC[f.ic]||AC.mid,ln2=0.055*Math.min(4,Math.hypot(f.vx||0,f.vz||0)),A=A0.map(q=>q.slice());
+    A[1][0]-=.9*ln2;A[2][0]-=1.8*ln2;A[3][0]+=.45*ln2;A[4][0]+=.45*ln2;A[5][0]+=.5*ln2;A[6][0]+=.5*ln2;   // DQ17c: airborne pose contorts by impact class (f.ic), leans along travel scaled by knockback speed
+    const RP={low:-.26,mid:.04,high:.14},RR={low:-.06,mid:.50,high:.05},rp=RP[f.ic]||0,rr=RR[f.ic]||0;   // DQ17d: per-strike flight signature - whole-body pitch (x-y plane) and roll (y-z plane) about the pelvis, by impact class
+    if(rp||rr){const cp=Math.cos(rp),sp2=Math.sin(rp),cr=Math.cos(rr),sr=Math.sin(rr),px=A[0][0],py=A[0][1],pz=A[0][2];for(let j=1;j<7;j++){const q=A[j];let dx=q[0]-px,dy=q[1]-py,dz=q[2]-pz;const ex=dx*cp-dy*sp2,ey=dx*sp2+dy*cp,wy=ey*cr-dz*sr,wz=ey*sr+dz*cr;q[0]=px+ex;q[1]=py+wy;q[2]=pz+wz}}
+    const lg=Math.min(1,Math.hypot(f.vx||0,f.vz||0)/4)*Math.min(1,(f.t||0)/10),sw=Math.sin((f.t||0)*.55)*.05*lg;   // DQ17e: loose limbs in flight - trail/droop/sway builds over the first 10 air frames, scaled by speed
+    if(lg>0){A[3][0]+=.10*lg;A[4][0]+=.10*lg;A[5][0]+=.16*lg;A[6][0]+=.16*lg;A[3][1]-=.04*lg;A[4][1]-=.04*lg;A[5][1]-=.03*lg;A[6][1]-=.03*lg;A[3][2]+=sw;A[4][2]-=sw;A[5][2]-=sw*.7;A[6][2]+=sw*.7}
+    const L0=[[0,.62,0],[-.55,.98,0],[-.85,.88,0],[-.35,.62,.38],[-.35,.62,-.38],[.55,.08,.2],[.65,.1,-.18]];
+    const D0=[[0,.14,0],[-.82,.14,0],[-1.12,.16,0],[-.45,.08,.42],[-.62,.08,-.40],[1.22,.04,.20],[1.21,.04,-.20]];   // DQ17b: loose sprawl rest - knees extend through the settle, body laid across the ground (Kev 2026-10-25)
+    const face=f.ic==='low';   // DQ17f: landing variety - a low impact (legs swept; DQ17d flight folds forward) lands FACE-DOWN, touchdown+rest mirrored in x; mid/high land back-down exactly as before
+    const L=face?L0.map(q=>[-q[0],q[1],q[2]]):L0,D=face?D0.map(q=>[-q[0],q[1],q[2]]):D0;
+    const imp=u=>u<=0?0:u>=1?1:u<1/6?3.9*u:.65+.35*(1-Math.pow(1-(u-1/6)/(5/6),3));   // DQ17g: impact easing - 65% of a settle segment lands in its first 1/6 (3f of 18f), the remainder decays ease-out; endpoints and segment lengths unchanged
+    let from,to,k,off=0;
+    if(s==='air'){from=A;to=L.map(q=>[q[0],q[1]+(f.gy||0),q[2]]);let q=0;if(f.vy<0&&Math.abs(f.x)<RING&&Math.abs(f.z)<RING)q=Math.max(0,Math.min(1,(.6-f.y)/.6));k=q*q*(3-2*q)}
+    else if((f.rm||0)>=3){   // DQ17f: roll-through on high touchdown momentum - settle LAND -> ROLL over 9f, then ROLL -> rest over 18f; ROLL is the LAND/rest midpoint lifted (pelvis +.20, feet +.32) and shifted -.18 along travel, limbs tucked; the final rest pose is exact
+      const R=L.map((q,j)=>{const e=D[j];return[(q[0]+e[0])/2+(j===0?-.18:j<=2?-.10:0),(q[1]+e[1])/2+(j===0?.20:j<=2?.16:j<=4?.12:.32),(q[2]+e[2])/2]});
+      if(f.t<=9){from=L;to=R;const u=Math.max(0,Math.min(1,f.t/9));k=imp(u)}
+      else{from=R;to=D;const u=Math.max(0,Math.min(1,(f.t-9)/18));k=1-Math.pow(1-u,3)}
+      off=(f.gy||0)*Math.max(0,1-f.t/27);   // DQ17g: contact offset decays across the whole roll settle
+    }
+    else{from=L;to=D;const u=Math.max(0,Math.min(1,f.t/18));k=imp(u);off=(f.gy||0)*(1-k)}
+    const mix=(a,b)=>[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k,a[2]+(b[2]-a[2])*k];
+    p.pel=mix(from[0],to[0]);p.neck=mix(from[1],to[1]);p.head=mix(from[2],to[2]);p.hl=mix(from[3],to[3]);p.hr=mix(from[4],to[4]);p.fl=mix(from[5],to[5]);p.fr=mix(from[6],to[6]);
+    if(off)for(const j of['pel','neck','head','hl','hr','fl','fr']){const q=p[j];p[j]=[q[0],q[1]+off,q[2]]}   // DQ17g: ground-contact offset - the body meets the plane exactly at touchdown and settles from there; zero at rest
+  }
+  if(s==='getup'){   // DQ17i: gradual get-up (Kev 2026-10-26) - staged rise over 54f in 3 smoothstep 18f phases: sprawl rest -> I1 -> I2 kneel/crouch -> the fighter's exact DQ18a style idle stance; face-down (ic low) pushes up from prone, back-down rolls to a side first; pelvis rises progressively, no single-frame pop
+    const face=f.ic==='low';
+    const D=face?[[0,.14,0],[.82,.14,0],[1.12,.16,0],[.45,.08,.42],[.62,.08,-.40],[-1.22,.04,.20],[-1.21,.04,-.20]]:[[0,.14,0],[-.82,.14,0],[-1.12,.16,0],[-.45,.08,.42],[-.62,.08,-.40],[1.22,.04,.20],[1.21,.04,-.20]];
+    const I1=face?[[.05,.45,0],[.35,.65,0],[.55,.85,0],[.30,.08,.40],[.30,.08,-.40],[-.70,.05,.20],[-.75,.05,-.20]]:[[-.20,.35,.15],[-.60,.45,.20],[-.85,.50,.20],[-.30,.08,.45],[-.40,.08,-.10],[.60,.08,.25],[.50,.08,-.20]];
+    const I2=face?[[0,.70,0],[.20,1.20,0],[.30,1.43,0],[.40,.95,.28],[.30,.90,-.28],[.40,0,.22],[-.20,0,-.18]]:[[0,.65,.05],[-.15,1.15,0],[-.05,1.38,0],[.35,.95,.28],[.25,.90,-.28],[.35,0,.22],[-.15,0,-.18]];
+    if(f.style==='lunge'){I1[4]=[-.30,.45,-.18];I2[4]=[-.10,1.50,-.26]}   // DQ20: BLUE get-up - the rear hand lifts through the roll (I1) and is already swept up in the crouch (I2), so the final rise into the new high stance stays fluid (no rear-elbow solver flip)
+    let ID;
+    if(f.style==='lunge'){const sw=Math.sin(f.t*.045)*.032;ID=[[.10,.70+b*.4,.06+sw],[.18,1.25+b*.4,.09+sw*.7],[.24,1.49+b*.4,.09+sw*.7],[.92,1.16+b*.4,.36+sw*.5],[-.22,1.72+b*.4,-.38],[1.00,0,.34],[-.70,0,-.22]]}
+    else{const bn=Math.sin(f.t*.30)*.028;ID=[[-.04,1.212+bn,.06],[.03,1.762+bn,-.02],[.09,2.002+bn,-.02],[.35,1.972+bn,.16],[.30,1.962+bn,-.17],[.21,.05,.14],[-.15,0,-.11]]}
+    const seg=f.t<18?0:f.t<36?1:2,u=Math.max(0,Math.min(1,(f.t-seg*18)/18)),k=u*u*(3-2*u);
+    const GA=seg===0?D:seg===1?I1:I2,GB=seg===0?I1:seg===1?I2:ID;
+    const gmix=(a,c)=>[a[0]+(c[0]-a[0])*k,a[1]+(c[1]-a[1])*k,a[2]+(c[2]-a[2])*k];
+    p.pel=gmix(GA[0],GB[0]);p.neck=gmix(GA[1],GB[1]);p.head=gmix(GA[2],GB[2]);p.hl=gmix(GA[3],GB[3]);p.hr=gmix(GA[4],GB[4]);p.fl=gmix(GA[5],GB[5]);p.fr=gmix(GA[6],GB[6]);
+  }
+  if(s==='down'||s==='getup'){const dx=p.neck[0]-p.pel[0],dy=p.neck[1]-p.pel[1],dz=p.neck[2]-p.pel[2],dl=Math.hypot(dx,dy,dz)||1;p.neck=[p.pel[0]+dx/dl*.55,p.pel[1]+dy/dl*.55,p.pel[2]+dz/dl*.55];const ex=p.head[0]-p.neck[0],ey=p.head[1]-p.neck[1],ez=p.head[2]-p.neck[2],dh=Math.hypot(ex,ey,ez)||1;p.head=[p.neck[0]+ex/dh*.24,p.neck[1]+ey/dh*.24,p.neck[2]+ez/dh*.24]} // ANATOMY-PORT-J3: torso bones are fixed length; the sprawl rest stretches pelvis-neck to 0.82, so renormalize to 0.55 (neck-head 0.24) with the pelvis as the untouched anchor; air state excluded.
+  if(s==='stumble'){   // DQ17j: standing recovery - the style stance is regained only at the window's end: COM (pelvis) drifts backward past the support base and returns, pelvis drops (soft knees), arms windmill for balance, corrective steps lift the trailing feet under the falling COM; the last quarter blends back to the exact style idle stance
+    let ID;
+    if(f.style==='lunge'){const sw=Math.sin(f.t*.045)*.032;ID=[[.10,.70+b*.4,.06+sw],[.18,1.25+b*.4,.09+sw*.7],[.24,1.49+b*.4,.09+sw*.7],[.92,1.16+b*.4,.36+sw*.5],[-.22,1.72+b*.4,-.38],[1.00,0,.34],[-.70,0,-.22]]}
+    else{const bn=Math.sin(f.t*.30)*.028;ID=[[-.04,1.212+bn,.06],[.03,1.762+bn,-.02],[.09,2.002+bn,-.02],[.35,1.972+bn,.16],[.30,1.962+bn,-.17],[.21,.05,.14],[-.15,0,-.11]]}
+    p.pel=ID[0].slice();p.neck=ID[1].slice();p.head=ID[2].slice();p.hl=ID[3].slice();p.hr=ID[4].slice();p.fl=ID[5].slice();p.fr=ID[6].slice();
+    const dur=f.sdur||30,u=Math.max(0,Math.min(1,f.t/dur)),env=Math.sin(Math.PI*Math.min(1,u/.92)),cx=-(f.samp||.27)*Math.sin(Math.PI*Math.min(1,u/.85)),dy=-.07*env;
+    p.pel[0]+=cx;p.pel[1]+=dy;p.neck[0]+=cx;p.neck[1]+=dy;p.head[0]+=cx;p.head[1]+=dy;
+    const wm=Math.sin(f.t*.55)*.16*env,wc=Math.cos(f.t*.55)*.13*env;
+    p.hl[0]+=cx*.4-.05*env;p.hl[1]+=dy+.10*env+wc;p.hl[2]+=wm;
+    p.hr[0]+=cx*.4-.05*env;p.hr[1]+=dy+.10*env-wc;p.hr[2]-=wm;
+    const ss=stubStep(f);
+    if(ss.i>=0){const foot=ss.i%2===0?'fl':'fr',lift=Math.sin(Math.PI*ss.p);p[foot][1]+=.13*lift;p[foot][0]-=((f.samp*.9)/(f.ssteps||1))*.5*lift}
+    if(u>.75){const bu=(u-.75)/.25,bk=bu*bu*(3-2*bu),JJ=['pel','neck','head','hl','hr','fl','fr'];for(let j=0;j<7;j++){const q=p[JJ[j]],w=ID[j];p[JJ[j]]=[q[0]+(w[0]-q[0])*bk,q[1]+(w[1]-q[1])*bk,q[2]+(w[2]-q[2])*bk]}}
+  }
+  if(s==='idle'&&f.style==='lunge'){const sw=Math.sin(f.t*.045)*.032;p.pel=[.10,.70+b*.4,.06+sw];p.neck=[.18,1.25+b*.4,.09+sw*.7];p.head=[.24,1.49+b*.4,.09+sw*.7];p.hl=[.92,1.16+b*.4,.36+sw*.5];p.hr=[-.22,1.72+b*.4,-.38];p.fl=[1.00,0,.34];p.fr=[-.70,0,-.22]}   // DQ25 CANDIDATE (Kev 2026-10-27, NOT accepted - accepted default stays DQ22/DQ23): BLUE wide low stance - pelvis lowered to 0.70, feet spread 1.79 m (lead leg extended farther toward Red, rear foot pushed back), both knees bent (front 134.9, rear 120.7 deeper), balanced grounded COG (pelvis horiz 0.934 front / 0.858 rear), lead arm extended with a slight elbow bend (142.4 deg), rear arm higher and farther behind the torso (hand 0.23 m above head, 0.46 m behind it), broad diagonal hand-to-hand line 1.478 m, torso lean 0.14, head upright
+  if(s==='idle'&&f.style==='back'){const bn=Math.sin(f.t*.30)*.028;p.pel=[-.04,1.212+bn,.06];p.neck=[.03,1.762+bn,-.02];p.head=[.09,2.002+bn,-.02];p.hl=[.35,1.972+bn,.16];p.hr=[.30,1.962+bn,-.17];p.fl=[.21,.05,.14];p.fr=[-.15,0,-.11]}   // DQ18a: RED = BOXING (Kev swap 2026-10-26) - upright narrow stance, high guard at the cheeks, light rhythmic bounce
+  if(f.originPose&&s==='atk'&&f.t<f.mv.su){const cs=f.originPose,kk=f.t/f.mv.su,ku=kk*kk*(3-2*kk);for(const j of['pel','neck','head','hl','hr'])p[j]=[cs[j][0]+(p[j][0]-cs[j][0])*ku,cs[j][1]+(p[j][1]-cs[j][1])*ku,cs[j][2]+(p[j][2]-cs[j][2])*ku];for(const j of['fl','fr']){const a=p[j],d0=Math.hypot(a[0]-cs[j][0],a[1]-cs[j][1],a[2]-cs[j][2]),lift=0.10*Math.min(1,d0/0.5)*Math.sin(Math.PI*ku);p[j]=[cs[j][0]+(a[0]-cs[j][0])*ku,cs[j][1]+(a[1]-cs[j][1])*ku+lift,cs[j][2]+(a[2]-cs[j][2])*ku]}rotS=cs.rotS+(rotS-cs.rotS)*ku;rotH=cs.rotH+(rotH-cs.rotH)*ku} // XIAO: blend from the captured pose over startup (smoothstep); contact pose (t>=su) is the pure branch pose. // ANATOMY-PORT-J1: relocating feet step (lift scales with relocation distance, zero at contact) instead of gliding on the ground; planted feet (d0~0) get no lift.
+  if(s==='atk'&&!f.mv.lunge&&!f.chainBlend){const sx=f.x-f.rootX0,sz=f.z-f.rootZ0;for(const fk of['fl','fr']){const cy=Math.max(0,Math.min(1,1-p[fk][1]/0.10));p[fk][0]-=sx*cy;p[fk][2]-=sz*cy}} // XIAO: world-pinned planted feet (README rule 7) — root slide from incoming momentum is removed from grounded feet so they stay planted; lifted feet travel with the body; kicks excluded (their lunge travel is the move itself); chains excluded (C2 owns chain feet).
+  // NOTE: C1's chain blend is intentionally NOT applied — Xiao's universal captured-pose entry already blends every attack (including chain links) from the captured pose over startup; applying C1 again would double-blend. C2 (drift/crouch/steps/clamp) below is the combo's new behavior.
+  if(f.chainBlend&&s==='atk'){const m2=f.mv,sa=m2.su+m2.ac,tt=Math.min(f.t,sa),A=CHAIN_DRIFT*tt,At=CHAIN_DRIFT*sa; // C2: root advance so far A (matches update()'s drift exactly) and this link's total drift At.
+    const ph=f.t<m2.su?f.t/m2.su:1,dc=f.t<m2.su?ph*ph*(3-2*ph):f.t<sa?1:1-((f.t-sa)/m2.rc)*((f.t-sa)/m2.rc)*(3-2*((f.t-sa)/m2.rc)),D=CHAIN_CROUCH*dc; // C2: crouch ramps over startup, holds through active, releases over recovery.
+    p.pel[1]-=D;p.neck[1]-=D;p.head[1]-=D;p.hl[1]-=D;p.hr[1]-=D; // C2: whole upper body drops as one rigid unit (torso and arm geometry unchanged relative to the shoulders).
+    const stepping=(f.chainN||0)%2===1?'fr':'fl',sw0=sa*0.3,sw1=sa*0.8,swPh=Math.max(0,Math.min(1,(f.t-sw0)/(sw1-sw0))),swS=swPh*swPh*(3-2*swPh); // C2: odd chained links step the rear foot, even links step the lead foot; swing window mid-link.
+    for(const j of['fl','fr']){const comp=Math.max(0,Math.min(1,1-p[j][1]/0.10));p[j][0]-=A*comp;if(j===stepping){p[j][0]+=At*swS;p[j][1]+=CHAIN_LIFT*Math.sin(Math.PI*swPh)}} // C2: feet cancel root drift in world (comp fades as a foot lifts, so kicks travel with the body); stepping foot swings forward with lift.
+  } // C2: end of chain drift/crouch/feet.
+  const SL=[p.neck[0]+.11*rotS,p.neck[1]-.05,.22-.03*rotS],SR=[p.neck[0]-.11*rotS,p.neck[1]-.05,-.22+.03*rotS],HL=[p.pel[0]+.04*rotH,p.pel[1],p.pel[2]+.12-.009*rotH],HR=[p.pel[0]-.04*rotH,p.pel[1],p.pel[2]-.12+.009*rotH];
+  if(s==='stumble'){const clJ6=(a,e,cap)=>{const dx=e[0]-a[0],dy=e[1]-a[1],dz=e[2]-a[2],d=Math.hypot(dx,dy,dz);return d>cap?[a[0]+dx/d*cap,a[1]+dy/d*cap,a[2]+dz/d*cap]:e};p.hl=clJ6(SL,p.hl,.793);p.hr=clJ6(SR,p.hr,.793);p.fl=clJ6(HL,p.fl,1.229);p.fr=clJ6(HR,p.fr,1.229)} // ANATOMY-PORT-J6: stumble limb targets are clamped to reachable length before the IK solves, so no segment stretches (pelvis/COM path untouched); 0.793/1.229 = the 165-degree reach of 0.40+0.40 arms / 0.62+0.62 legs.
+  if(f.chainBlend&&s==='atk'){const cl=(a,e,cap)=>{const dx=e[0]-a[0],dy=e[1]-a[1],dz=e[2]-a[2],d=Math.hypot(dx,dy,dz);return d>cap?[a[0]+dx/d*cap,a[1]+dy/d*cap,a[2]+dz/d*cap]:e};p.fl=cl(HL,p.fl,1.229);p.fr=cl(HR,p.fr,1.229)} // C2: safety net — crouch + steps keep chained-link legs legal, but no leg ever stretches past the 165-degree reach.
+  if(f.style==='lunge'){const LX=f.legX||(f.legX={pdL:999,pdR:999,laL:0,laR:0,raL:0,raR:0}); // LEGFIX: Blue-only crossover straightening state (prev foot gap, latch, ramp per leg) — created lazily so any fighter object works
+  if(s!=='walk'&&s!=='atk'){LX.pdL=999;LX.pdR=999;LX.laL=0;LX.laR=0;LX.raL=0;LX.raR=0} // LEGFIX: outside walk/attack (idle, guard, falls, stumble) the latch resets — falls and stance are never straightened
+  else for(const[fk,ok,hip,sd2]of[['fl','fr',HL,'L'],['fr','fl',HR,'R']]){const ft=p[fk],ot=p[ok],pd=sd2==='L'?LX.pdL:LX.pdR,df=ft[0]-ot[0]; // LEGFIX: per leg, df is this foot ahead (+) or behind (-) the other foot in the facing axis
+  if(ft[1]<=0.01){if(sd2==='L'){LX.laL=0;LX.raL=0}else{LX.laR=0;LX.raR=0}} // LEGFIX: a planted foot releases its latch — planted feet are never moved, so they never slide
+  else{if(sd2==='L'?!LX.laL:!LX.laR){if(pd!==999&&Math.abs(df)<0.30&&Math.abs(df)<Math.abs(pd)){if(sd2==='L'){LX.laL=1;LX.raL=0}else{LX.laR=1;LX.raR=0}}} // LEGFIX: engage when an airborne foot closes to within 0.30 m of the other foot — the pass is starting
+  const la=sd2==='L'?LX.laL:LX.laR;if(la){if(sd2==='L')LX.raL=Math.min(1,LX.raL+0.25);else LX.raR=Math.min(1,LX.raR+0.25);let w=sd2==='L'?LX.raL:LX.raR;w=w*w*(3-2*w); // LEGFIX: ramp the straightening in over 4 frames (smoothstep) so the foot never jumps
+  if(s==='atk'){const mm=f.mv;let cf=1;if(f.t<mm.su)cf=f.t<mm.su-2?1:(mm.su-f.t)/2;else if(f.t<mm.su+mm.ac)cf=0;else cf=f.t<mm.su+mm.ac+2?(f.t-(mm.su+mm.ac))/2:1;w*=cf;const eA=f.t<mm.su?f.t/mm.su:f.t<mm.su+mm.ac?1:Math.max(0,1-(f.t-mm.su-mm.ac)/mm.rc);w*=eA<0.2?eA/0.2:1} // LEGFIX: attack fades — zero through the contact window so contact poses stay byte-identical, out as the move ends so the plant never snaps
+  else w*=Math.max(0,Math.min(1,(ft[1]-0.01)/0.06)); // LEGFIX: walk fade — extension eases out as the foot descends to the ground, so heel strike lands on the authored path
+  if(w>0){const dx=ft[0]-hip[0],dy=ft[1]-hip[1],dz=ft[2]-hip[2],dd=Math.hypot(dx,dy,dz)||1e-6,dd2=dd+(1.229-dd)*w;p[fk]=[hip[0]+dx/dd*dd2,Math.max(0.012,hip[1]+dy/dd*dd2),hip[2]+dz/dd*dd2]}}} // LEGFIX: extend the crossing ankle along its own hip->ankle axis toward the 165-degree reach (1.229 m), floored 0.012 m above ground so a gliding foot never counts as planted — IK re-solves it, so bone lengths stay exactly 0.62 and pelvis/support leg are untouched
+  if(sd2==='L')LX.pdL=df;else LX.pdR=df;}} // LEGFIX: remember this frame's foot gap for next frame's approach test
+  p.el=ik2(SL,p.hl,ARM1,ARM2,1);
+  p.er=ik2(SR,p.hr,ARM1,ARM2,1);
+  p.kl=ik2(HL,p.fl,LEG1,LEG2,-1);
+  p.kr=ik2(HR,p.fr,LEG1,LEG2,-1);
+  if(((s==='idle'||s==='getup'||s==='stumble')||(s==='atk'&&f.mv===M.K&&((f.kn||0)===1||(f.kn||0)===0))||(s==='atk'&&f.mv===M.P&&(f.pn||0)===0)||(s==='atk'&&f.mv===M.P&&(f.pn||0)===1)||(s==='atk'&&f.mv===M.P&&(f.pn||0)===2)||(s==='atk'&&f.mv===M.P&&(f.pn||0)===3)||(s==='atk'&&f.mv===M.P&&(f.pn||0)===4))&&f.style==='lunge')p.kr=ik2(HR,p.fr,LEG1,LEG2,1);   // DQ26a: BLUE's sweep keeps the stance IK poles through the strike, so the rear knee does not pop at strike start   // DQ12: blue crouch knee flares away from facing, shin drops near-vertical
+  if(((s==='idle'||s==='getup'||s==='stumble')||(s==='atk'&&f.mv===M.K&&((f.kn||0)===1||(f.kn||0)===0))||(s==='atk'&&f.mv===M.P&&(f.pn||0)===0)||(s==='atk'&&f.mv===M.P&&(f.pn||0)===1)||(s==='atk'&&f.mv===M.P&&(f.pn||0)===2)||(s==='atk'&&f.mv===M.P&&(f.pn||0)===3)||(s==='atk'&&f.mv===M.P&&(f.pn||0)===4))&&f.style==='lunge')p.er=ik2(SR,p.hr,ARM1,ARM2,-1);   // DQ26a: same for the rear elbow (reverse-L pole) during the sweep   // DQ21: BLUE rear elbow pole flipped in stance-family states - the elbow sits UP/BACK of the shoulder->hand line, so the raised rear arm bends as a reverse-L (forearm forward over the elbow), not backward
+  if((s==='down'||s==='getup')){let fw=1;if(s==='getup'&&f.t>=18){const gu=Math.max(0,Math.min(1,(f.t-18)/18));fw=1-gu*gu*(3-2*gu)}if(fw>0){p.el=ikBend(SL,p.hl,1,fw);p.er=ikBend(SR,p.hr,-1,fw)}} // ANATOMY-PORT-J3: flat-bend elbows run AFTER the DQ26a rear-elbow pole line (prototype-only reorder: the demo chain has no DQ26a er line, but on prototype that line overwrote the floor-safe solution); face-down elbows splay flat too, or the down-out pole drives them through the floor.
+  if(s==='down'||s==='getup'){const klS=ik2(HL,p.fl,LEG1,LEG2,(p.fl[0]-HL[0])>=0?-1:1);const krS=ik2(HR,p.fr,LEG1,LEG2,(p.fr[0]-HR[0])>=0?-1:1);if(s==='down'){p.kl=klS;p.kr=krS}else if(f.t<18){p.kl=klS;p.kr=krS}else if(f.t<36){const gu3=(f.t-18)/18,gg3=gu3*gu3*(3-2*gu3);p.kl=[klS[0]+(p.kl[0]-klS[0])*gg3,klS[1]+(p.kl[1]-klS[1])*gg3,klS[2]+(p.kl[2]-klS[2])*gg3];p.kr=[krS[0]+(p.kr[0]-krS[0])*gg3,krS[1]+(p.kr[1]-krS[1])*gg3,krS[2]+(p.kr[2]-krS[2])*gg3]}} // ANATOMY-PORT-J3: sprawl knees must clear the floor - floor-safe pole bows the knee up for horizontal legs; get-up phase 2 smoothstep-mixes to the stance poles, phase 3 keeps stance poles so the idle transition is seamless; pelvis path untouched.
+  p.rotS=rotS;p.rotH=rotH;
+  return p;
+}
+function ln(a,b,w,c){g.strokeStyle=c;g.lineWidth=w;g.lineCap='round';g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke()}
+// R4 STICK RETURN (Kev direct 2026-10-21): clean stick figures - uniform limbs, solid silhouette colour, no taper, no gloss. Rig/IK underneath unchanged.
+const LEGW=.15,ARMW=.13;
+function jt(p,r,col){g.fillStyle=col;g.beginPath();g.arc(p.x,p.y,r,0,7);g.fill()}
+function limb(r,m,e,w,col,k){
+  ln(r,m,w*k,col);ln(m,e,w*k,col);
+  jt(r,w*k/2,col);jt(m,w*k/2,col);jt(e,w*k/2,col);
+}
+function segOne(a,b,w,col,k){   // one independent segment drawable: d = avg projected depth of its 2 endpoints
+  return{d:(a.d+b.d)/2,draw(){ln(a,b,w*k,col);jt(a,w*k/2,col);jt(b,w*k/2,col)}};
+}
+function segLeg(a,m,b,w,col,k){   // DQ29 BLENDED LEG (Kev 2026-10-27): one continuous curve through the knee - quadratic through the knee point to the knee->foot midpoint, then straight to the foot (tangents match at the join, so the corner rounds); NO joint circle at the knee, so the leg reads as one blended limb, not two segments hinging at a prominent knee. Hip/foot joint circles only.
+  return{d:(a.d+m.d+b.d)/3,draw(){g.strokeStyle=col;g.lineWidth=w*k;g.lineCap='round';g.lineJoin='round';g.beginPath();g.moveTo(a.x,a.y);g.quadraticCurveTo(m.x,m.y,(m.x+b.x)/2,(m.y+b.y)/2);g.lineTo(b.x,b.y);g.stroke();jt(a,w*k/2,col);jt(b,w*k/2,col)}};
+}
+function drawF(f,col){
+  const p=pose(f),rx=-f.fz,rz=f.fx;
+  const J=q=>P(f.x+f.fx*q[0]+rx*q[2],f.y+q[1],f.z+f.fz*q[0]+rz*q[2]);
+  const sh=P(f.x,0,f.z);
+  if(Math.abs(f.x)<RING&&Math.abs(f.z)<RING){g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.ellipse(sh.x,sh.y,.42*sh.s,.14*sh.s,0,0,7);g.fill()}
+  const A=J(p.pel),N=J(p.neck),Hd=J(p.head),k=A.s;
+  const sl=J([p.neck[0]+.11*(p.rotS||0),p.neck[1]-.05,.22-.03*(p.rotS||0)]),sr=J([p.neck[0]-.11*(p.rotS||0),p.neck[1]-.05,-.22+.03*(p.rotS||0)]);
+  const hl=J([p.pel[0]+.04*(p.rotH||0),p.pel[1],p.pel[2]+.12-.009*(p.rotH||0)]),hr=J([p.pel[0]-.04*(p.rotH||0),p.pel[1],p.pel[2]-.12+.009*(p.rotH||0)]);
+  const atkOn=f.st==='atk'&&f.t>=f.mv.su&&f.t<f.mv.su+f.mv.ac;
+  const el=J(p.el),hL=J(p.hl),kl=J(p.kl),fl=J(p.fl),er=J(p.er),hR=J(p.hr),kr=J(p.kr),fr=J(p.fr);
+  const aLc=atkOn?'#fff':col,lRc=atkOn?'#fff':col;
+  const limbs=[
+    segOne(sl,el,ARMW,aLc,k),segOne(el,hL,ARMW,aLc,k),     // armL (punch highlight, as before)
+    segOne(sr,er,ARMW,col,k),segOne(er,hR,ARMW,col,k),     // armR
+    segLeg(hl,kl,fl,LEGW,col,k),      // legL (DQ29 blended curve through the knee)
+    segLeg(hr,kr,fr,LEGW,lRc,k)       // legR (kick highlight, as before; DQ29 blended)
+  ];
+  const td=(A.d+N.d)/2;   // torso depth; larger projected d = farther = drawn first
+  const byFar=(a,b)=>b.d-a.d;
+  const behind=limbs.filter(l=>l.d>=td).sort(byFar),front=limbs.filter(l=>l.d<td).sort(byFar);
+  behind.forEach(l=>l.draw());
+  ln(A,N,.17*k,col);
+  g.fillStyle=col;g.beginPath();g.arc(Hd.x,Hd.y,.17*k,0,7);g.fill();   // faceless head
+  front.forEach(l=>l.draw());
+}
+function draw(){
+  ox=(R()-.5)*shake*30;oy=(R()-.5)*shake*30;
+  const bg=css('--bg'),fg=css('--fg'),ring=css('--ring'),ac=css('--accent'),bl=css('--blue');
+  g.fillStyle=bg;g.fillRect(0,0,W,H);
+  // R4 BACKDROP (Kev direct 2026-10-21): procedural Fuji scene per canonical staff-duel reference - golden-hour sky, snow-capped Fuji, blossom clusters, wet reflective ground.
+  const hz=H*.46;
+  const sky=g.createLinearGradient(0,0,0,hz*1.15);
+  sky.addColorStop(0,'#f6d8a8');sky.addColorStop(.45,'#e8a87c');sky.addColorStop(.75,'#9db4c8');sky.addColorStop(1,'#6e8299');
+  g.fillStyle=sky;g.fillRect(0,0,W,hz+2);
+  const sun=g.createRadialGradient(W*.32,H*.16,4,W*.32,H*.16,W*.28);
+  sun.addColorStop(0,'rgba(255,236,190,.95)');sun.addColorStop(1,'rgba(255,236,190,0)');
+  g.fillStyle=sun;g.fillRect(0,0,W,hz+2);
+  const fx=W*.58,fw=W*.30,fa=H*.13,fb=hz+4;
+  g.fillStyle='#66788f';g.beginPath();g.moveTo(fx-fw,fb);g.lineTo(fx,fa);g.lineTo(fx+fw,fb);g.closePath();g.fill();
+  g.fillStyle='#f4f7f9';g.beginPath();g.moveTo(fx-fw*.22,fa+(fb-fa)*.22);g.lineTo(fx,fa);g.lineTo(fx+fw*.22,fa+(fb-fa)*.22);g.lineTo(fx+fw*.07,fa+(fb-fa)*.32);g.lineTo(fx,fa+(fb-fa)*.26);g.lineTo(fx-fw*.07,fa+(fb-fa)*.32);g.closePath();g.fill();
+  g.fillStyle='rgba(84,96,84,.55)';g.beginPath();g.moveTo(0,hz);for(let x=0;x<=W;x+=W/8)g.lineTo(x,hz-10-Math.sin(x*.01)*8);g.lineTo(W,hz+2);g.lineTo(0,hz+2);g.closePath();g.fill();
+  g.fillStyle='rgba(246,194,202,.9)';
+  for(let i=0;i<14;i++){const bx=i<7?W*.04+i*W*.03:W*.72+(i-7)*W*.035,by=hz-14-((i*37)%18),br=7+((i*29)%9);g.beginPath();g.arc(bx,by,br,0,7);g.fill()}
+  const wet=g.createLinearGradient(0,hz,0,H);
+  wet.addColorStop(0,'#9a8f7a');wet.addColorStop(.35,'#6f6a5e');wet.addColorStop(1,'#3d3a36');
+  g.fillStyle=wet;g.fillRect(0,hz,W,H-hz);
+  const cs=[[-RING,-RING],[RING,-RING],[RING,RING],[-RING,RING]].map(c=>P(c[0],0,c[1]));
+  g.fillStyle=ring;g.beginPath();cs.forEach((c,i)=>i?g.lineTo(c.x,c.y):g.moveTo(c.x,c.y));g.closePath();g.fill();
+  g.fillStyle='rgba(255,224,170,.16)';for(let i=0;i<4;i++)g.fillRect(W*.22+i*8,H*.60+i*H*.065,W*.42,3);   // wet-ground sun sheen streaks
+  g.strokeStyle=fg;g.globalAlpha=.12;g.lineWidth=1;
+  for(let k=-RING;k<=RING;k++){let a=P(k,0,-RING),b=P(k,0,RING);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();a=P(-RING,0,k);b=P(RING,0,k);g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke()}
+  g.globalAlpha=.5;g.lineWidth=3;g.beginPath();cs.forEach((c,i)=>i?g.lineTo(c.x,c.y):g.moveTo(c.x,c.y));g.closePath();g.stroke();g.globalAlpha=1;
+  const order=[[S[0],ac],[S[1],bl]].sort((a,b)=>P(b[0].x,0,b[0].z).d-P(a[0].x,0,a[0].z).d);
+  for(const[f,c]of order)drawF(f,c);
+  for(const s of sparks){const q=P(s.x,s.y,s.z),r=(s.t+2)*.012*q.s*3;g.strokeStyle=s.c?'#ffb020':bl;g.globalAlpha=1-s.t/14;g.lineWidth=3;g.beginPath();g.arc(q.x,q.y,r,0,7);g.stroke();g.globalAlpha=1}
+  // HUD
+  const bw=W*.4,bh=12,y=12;
+  for(let n=0;n<2;n++){const f=S[n],x=n?W-W*.04-bw:W*.04;
+    g.fillStyle=ring;g.fillRect(x,y,bw,bh);g.fillStyle=n?bl:ac;
+    const w=bw*f.hp/100;g.fillRect(n?x+bw-w:x,y,w,bh);
+    for(let k=0;k<2;k++){g.fillStyle=k<f.wins?(n?bl:ac):ring;g.beginPath();g.arc(n?x+bw-6-k*16:x+6+k*16,y+24,5,0,7);g.fill()}}
+  g.fillStyle=fg;g.font='700 20px system-ui';g.textAlign='center';g.fillText(Math.ceil(tm/60),W/2,y+14);
+  if(cmbT>0&&cmb>1){g.font='700 22px system-ui';g.fillStyle=ac;g.fillText(cmb+' HIT',W/2,y+58)}
+  if(msgT>0){g.fillStyle=fg;g.font='800 '+Math.min(40,W/9)+'px system-ui';g.fillText(msg,W/2,H*.3)}
+  if(phase==='intro'){g.font='13px system-ui';g.fillStyle=fg;g.globalAlpha=.7;g.fillText('◀▶ move · ▲▼ sidestep · P K · G guard · G+P throw · P+K launcher',W/2,H*.3+26);g.globalAlpha=1}
+}
+
+// ================= INPUT =================
+function press(k,v){
+  const i=S[0].i;
+  if(k==='p'){if(v)i.bp=6}else if(k==='k'){if(v)i.bk=6}else if(k==='pk'){if(v){i.bp=6;i.bk=6}}
+  else H0[k]=v?1:0;
+}
+document.querySelectorAll('button[data-k]').forEach(b=>{
+  const k=b.dataset.k;
+  b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);b.classList.add('on');press(k,1)});
+  ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,()=>{b.classList.remove('on');press(k,0)}));
+});
+const KM={KeyA:'l',ArrowLeft:'l',KeyD:'r',ArrowRight:'r',KeyW:'u',ArrowUp:'u',KeyS:'d',ArrowDown:'d',KeyJ:'p',KeyK:'k',KeyL:'g',Space:'pk'};
+addEventListener('keydown',e=>{const k=KM[e.code];if(k&&!e.repeat){e.preventDefault();press(k,1)}});
+addEventListener('keyup',e=>{const k=KM[e.code];if(k)press(k,0)});
+cv.addEventListener('pointerdown',()=>{if(phase==='over')reset(1)});
+
+// ================= LOOP =================
+let acc=0,last=performance.now();
+function loop(now){acc+=Math.min(.1,(now-last)/1000);last=now;while(acc>=DT){tick();acc-=DT}draw();requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+</script></body></html>

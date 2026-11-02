@@ -1,0 +1,26 @@
+name: Source recovery audit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'recovery/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    name: Validate recovered inventory (no gameplay execution)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate inventory metadata and JSON
+        run: python3 tools/recovery_audit.py
+      - name: Explain limited scope
+        run: echo "PASS means only that the partial recovered inventory exists. No game, animation, or integration test was executed."
