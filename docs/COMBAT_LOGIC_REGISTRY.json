@@ -1,0 +1,1041 @@
+{
+  "schema_version": "1.0",
+  "title": "Dojo World Combat Logic & Move Registry",
+  "maintained_by": "ChatGPT",
+  "recorded_date": "2026-10-31",
+  "baseline_sha256": "786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b",
+  "baseline_path": "Dojo_World_Combat_Project/index.html",
+  "preservation_rules": {
+    "original_baseline_immutable": true,
+    "V2_ippon_visual_reference": "Dojo_World_Ippon_Animation_Study_v2.html",
+    "V3_V4_rejected": true,
+    "no_live_binding_without_user_approval": true,
+    "autonomous_candidate_advance_after_15min_only": true,
+    "user_final_quality_verdict": true
+  },
+  "engineering_target": "Complete distinct, realistic move sets for both fighters, then reliable, responsive, unscripted full combat sequences using those moves; only then design special/bonus moves.",
+  "phase_gates": [
+    {
+      "phase": 1,
+      "name": "complete baseline move catalog",
+      "criterion": "every entry has a repeatable real input, correct move identity, motion plan, attack/defense interaction, recovery, empirical tests and footage; no missing core move"
+    },
+    {
+      "phase": 2,
+      "name": "believable combat exchanges",
+      "criterion": "multiple real user-input-driven sequences, correct range/guard/whiff/stun/KO/throw transitions, stable frame timing and recovery without animation snapping; unscripted variation, replay proof"
+    },
+    {
+      "phase": 3,
+      "name": "special moves",
+      "criterion": "only after user acceptance of phase 2; separately define original/hybrid/classical named provenance, balance, risk/recovery and input fairness"
+    }
+  ],
+  "engine_common_move_classes": {
+    "P": {
+      "startup_frames": 6,
+      "active_frames": 3,
+      "recovery_frames": 10,
+      "damage_base": 8,
+      "reach_m": 0.85
+    },
+    "K": {
+      "startup_frames": 9,
+      "active_frames": 4,
+      "recovery_frames": 18,
+      "damage_base": 14,
+      "reach_m": 1.15
+    },
+    "L": {
+      "startup_frames": 13,
+      "active_frames": 3,
+      "recovery_frames": 28,
+      "damage_base": 16,
+      "reach_m": 1.0
+    },
+    "T": {
+      "startup_frames": 5,
+      "active_frames": 2,
+      "recovery_frames": 26,
+      "damage_base": 22,
+      "reach_m": 0.75
+    }
+  },
+  "engine_verified_semantics": {
+    "fixed_step_hz": 60,
+    "starting_hp": 100,
+    "two_fighters": [
+      "BLUE",
+      "RED"
+    ],
+    "inputs": [
+      "P",
+      "K",
+      "G",
+      "P+K",
+      "G+P",
+      "direction"
+    ],
+    "hit_reach": "posture-based; swept limb contact for P and K, baseline class values are not exact observed connect limits",
+    "guard": "level held, not buffered",
+    "chain": "P/K/L; chain guard prevents throws chaining from attacks",
+    "throw_damage": "resolved at contact",
+    "fall_reactions": "vary by power and strike height",
+    "movement": "walking, lateral step, guard; positional avoidance, support foot constraints"
+  },
+  "motion_logic_template": {
+    "stable_fields": [
+      "move_id",
+      "variant_name",
+      "style_identity_and_authenticity_source",
+      "input_trigger",
+      "starting_stance_and_pose_origin",
+      "center_of_mass_start",
+      "support_foot_intervals",
+      "foot_world_contact_tracks",
+      "kinetic_chain_timeline",
+      "limb_joint_target_tracks",
+      "contact_geometry_target_and_hit_window",
+      "distance_reach_test",
+      "phase_windows_startup_active_recovery",
+      "reaction_impulse_damage_and_guard",
+      "transition_in_out",
+      "recovery_and_return_to_stance",
+      "reference_media_licensing",
+      "visual_review_and_user_verdict",
+      "per_step_joint_and_segment_metrics",
+      "failure_cases_and_regressions",
+      "build_hash_and_artifact_paths"
+    ],
+    "pre_code_reasoning_order": [
+      "initial weight distribution",
+      "support foot and step/pivot",
+      "force through legs, hips, torso, limb",
+      "strike contact or grip and victim throw trajectory",
+      "recovery stance and balance"
+    ],
+    "reference_and_realism_policy": "Do not infer time courses or 3D mocap from still images; visual stills define pose and staging only. Differentiate tests that passed from tests not run."
+  },
+  "known_deferred_animation": {
+    "id": "BLUE-IPPN-V2",
+    "technique": "ippon seoi nage shoulder throw",
+    "status": "ISOLATED_VISUAL_REFERENCE_NOT_GAMEPLAY_BOUND",
+    "accepted_as": "PREFERRED_STARTING_POINT_NOT_FINAL_SIGNOFF",
+    "goal": "Blue sleeve pull and step-under shoulder load, followed by a controlled downward slam near Blue and upper-back-first landing; retain arm control until near impact; no head impact, long outward toss or floating.",
+    "reference_photo": "IMG_7944.jpeg",
+    "special_moves": false,
+    "latest_isolated_candidate": {
+      "recorded_at_utc": "2026-11-01T03:28:35Z",
+      "study_id": "BLUE-IPPN-V2",
+      "candidate_file": "Dojo_World_Ippon_Downward_Control_20261031.html",
+      "candidate_sha256": "3d8f802205c75b402b3e912085ce4952d261997936d21a1504461db5f0a8bff3",
+      "reference_sha256": "e6643d50000d61cabdd20642b4336aa157fce9e80fd8eaa139545f7b5135b073",
+      "verdict": "USER_REVIEW_PENDING_AND_GROUND_RECOVERY_REQUIRES_REVIEW",
+      "live_gameplay_bound": false,
+      "presentation_status": "pending_actual_conversation_delivery",
+      "presented_at": null,
+      "preview_video": "Dojo_World_Downward_Slam_Study_20261031.mp4",
+      "frame_comparison": "Dojo_World_Downward_Slam_Comparison_20261031.png",
+      "test_archive": "Dojo_World_Downward_Slam_Evidence_20261031.zip",
+      "measured_findings": {
+        "previous_red_horizontal_travel_frame43_to65_m": 1.37,
+        "new_red_horizontal_travel_frame43_to65_m": 0.0,
+        "new_red_downward_travel_frame43_to65_m": 1.26,
+        "new_pelvis_final_step_down_m": 0.10826666666666662,
+        "prior_pelvis_final_step_down_m": 0.010702222222222169,
+        "grip_gap_frame64_m": 0.04114248412529313,
+        "grip_gap_at_contact_frame65_m": 0.1435845295516286,
+        "shoulder_contact_proxy_frame": 65,
+        "head_clearance_at_contact_m": 0.06382110992084847,
+        "feet_centers_at_contact_m": [
+          1.18,
+          1.18
+        ],
+        "max_joint_step_m": 0.18177621011011616,
+        "max_segment_error_m": 0.007467613618395874,
+        "carried_red_min_knee_degrees": 95.9878991544461,
+        "post_contact_red_min_knee_degrees": 30.50233781821276
+      },
+      "limitations": [
+        "authored geometry, no collision or impact physics",
+        "post-contact knee angle needs review",
+        "fighter interpenetration not instrumented",
+        "ippon not connected to actual combat input",
+        "browser, mobile emulation and real-device tests not run"
+      ],
+      "next": "Improve post-impact leg recovery and verify body contact/collisions; continue full-roster audit."
+    },
+    "candidate_history": [
+      {
+        "recorded_at_utc": "2026-11-01T03:10:02Z",
+        "study_id": "BLUE-IPPN-V2",
+        "candidate_file": "Dojo_World_Ippon_Landing_Study_20261031_2204.html",
+        "candidate_sha256": "e6643d50000d61cabdd20642b4336aa157fce9e80fd8eaa139545f7b5135b073",
+        "reference_sha256": "eb90e76c621187408939eb15cfc0ece887e70ad9ba8b08e5ac2c47b56301a8ed",
+        "verdict": "REVISE_REQUIRED_NOT_APPROVED",
+        "live_gameplay_bound": false,
+        "presentation_status": "pending_actual_conversation_delivery",
+        "presented_at": null,
+        "preview_video": "Dojo_World_Ippon_Landing_Study_20261031_2204.mp4",
+        "frame_comparison": "Dojo_World_Ippon_Before_After_20261031_2204.png",
+        "test_archive": "Dojo_World_Combat_Evidence_20261031_2204.zip",
+        "measured_findings": {
+          "shoulder_proxy_first_contact_frame": 65,
+          "head_sphere_clearance_at_contact_m": 0.06382110992084858,
+          "feet_center_y_at_contact_m": [
+            0.9507057894936088,
+            0.9808091028517015
+          ],
+          "grip_first_over_0_10m_frame": 45,
+          "grip_gap_at_shoulder_contact_m": 2.2329586899317655,
+          "max_joint_step_m": 0.1969074694180322,
+          "max_segment_error_m": 0.007467613618395874
+        },
+        "limitations": [
+          "geometric contact proxy, not collision physics",
+          "ippon not connected to genuine combat input",
+          "grip is lost too early",
+          "browser and device tests not run"
+        ],
+        "next": "Revise sleeve coupling and reachable Blue follow-through; continue roster-wide audit.",
+        "user_feedback": "Red is still tossed forward instead of being slammed into the ground; outward-toss finishing trajectory needs revision.",
+        "user_verdict": "REVISION_REQUESTED_OUTWARD_TRAJECTORY"
+      }
+    ]
+  },
+  "entries": [
+    {
+      "id": "BLUE-P0",
+      "fighter": "BLUE",
+      "name": "lead palm",
+      "engine_key": "P",
+      "engine_variant_index": 0,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 8,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "BLUE-P1",
+      "fighter": "BLUE",
+      "name": "rear straight",
+      "engine_key": "P",
+      "engine_variant_index": 1,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 10,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "BLUE-P2",
+      "fighter": "BLUE",
+      "name": "lead chop",
+      "engine_key": "P",
+      "engine_variant_index": 2,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 12,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "BLUE-P3",
+      "fighter": "BLUE",
+      "name": "flowing rear palm",
+      "engine_key": "P",
+      "engine_variant_index": 3,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 14,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "BLUE-P4",
+      "fighter": "BLUE",
+      "name": "sweeping back palm",
+      "engine_key": "P",
+      "engine_variant_index": 4,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 16,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "BLUE-K0",
+      "fighter": "BLUE",
+      "name": "snapping front kick",
+      "engine_key": "K",
+      "engine_variant_index": 0,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "K (cycle through three existing variants)",
+      "base_class_stats": {
+        "startup_frames": 9,
+        "active_frames": 4,
+        "recovery_frames": 18,
+        "reach_m": 1.15
+      },
+      "power_nominal": 14,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "BLUE-K1",
+      "fighter": "BLUE",
+      "name": "low sweep",
+      "engine_key": "K",
+      "engine_variant_index": 1,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "K (cycle through three existing variants)",
+      "base_class_stats": {
+        "startup_frames": 9,
+        "active_frames": 4,
+        "recovery_frames": 18,
+        "reach_m": 1.15
+      },
+      "power_nominal": 12,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "BLUE-K2",
+      "fighter": "BLUE",
+      "name": "side kick",
+      "engine_key": "K",
+      "engine_variant_index": 2,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "K (cycle through three existing variants)",
+      "base_class_stats": {
+        "startup_frames": 9,
+        "active_frames": 4,
+        "recovery_frames": 18,
+        "reach_m": 1.15
+      },
+      "power_nominal": 15,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "BLUE-L0",
+      "fighter": "BLUE",
+      "name": "launcher",
+      "engine_key": "L",
+      "engine_variant_index": 0,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P+K",
+      "base_class_stats": {
+        "startup_frames": 13,
+        "active_frames": 3,
+        "recovery_frames": 28,
+        "reach_m": 1.0
+      },
+      "power_nominal": 16,
+      "authenticity": "GAMEPLAY_TECHNIQUE",
+      "reference_source": "not required for an unnamed launcher",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "BLUE-T0",
+      "fighter": "BLUE",
+      "name": "arm grab / turning toss",
+      "engine_key": "T",
+      "engine_variant_index": 0,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "G+P near opponent",
+      "base_class_stats": {
+        "startup_frames": 5,
+        "active_frames": 2,
+        "recovery_frames": 26,
+        "reach_m": 0.75
+      },
+      "power_nominal": 22,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "phase table in approved engine",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": {
+        "cycle": "C0825",
+        "date_utc": "2026-11-02T12:02:52+00:00",
+        "status": "THROW_BLOCKED_GEOMETRY_TESTED_NOT_USER_APPROVED",
+        "baseline": "C0816 isolated contact experiment; this is not live shipped move",
+        "candidate_sha256": "3e6b4f197d4189c3464c3b27eb8d515eeb50a2844d923479939f454110158694",
+        "metrics": {
+          "60hz_offsets": 21,
+          "samples": 4557,
+          "back_contact_crossings": 0,
+          "safe_contacts": 0,
+          "min_back_proxy_clearance_m": 0.364312987935052,
+          "nominal_max_joint_step_m": 0.6372465589339217,
+          "all_offsets_max_joint_step_m": 0.7489450866367123,
+          "leg_segment_passes": 21,
+          "grip_loading_passes": 21
+        },
+        "verified_input_scope": "Browser touch gate whiff, guard and accepted; gated authored study only",
+        "missing": [
+          "authoritative back-first contact",
+          "head clearance at actual impact",
+          "release timing at actual impact",
+          "post-collision damping",
+          "true full-match input-to-impact",
+          "real iPhone device"
+        ]
+      },
+      "defect_verdict": "New downward study is not input-bound or user-approved; post-contact leg folding and interpenetration need review."
+    },
+    {
+      "id": "RED-P0",
+      "fighter": "RED",
+      "name": "jab",
+      "engine_key": "P",
+      "engine_variant_index": 0,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 8,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "RED-P1",
+      "fighter": "RED",
+      "name": "cross",
+      "engine_key": "P",
+      "engine_variant_index": 1,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 10,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "RED-P2",
+      "fighter": "RED",
+      "name": "hook",
+      "engine_key": "P",
+      "engine_variant_index": 2,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 12,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "RED-P3",
+      "fighter": "RED",
+      "name": "uppercut",
+      "engine_key": "P",
+      "engine_variant_index": 3,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 14,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "RED-P4",
+      "fighter": "RED",
+      "name": "overhand",
+      "engine_key": "P",
+      "engine_variant_index": 4,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P (cycle through five existing variants)",
+      "base_class_stats": {
+        "startup_frames": 6,
+        "active_frames": 3,
+        "recovery_frames": 10,
+        "reach_m": 0.85
+      },
+      "power_nominal": 16,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "RED-K0",
+      "fighter": "RED",
+      "name": "front kick",
+      "engine_key": "K",
+      "engine_variant_index": 0,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "K (cycle through three existing variants)",
+      "base_class_stats": {
+        "startup_frames": 9,
+        "active_frames": 4,
+        "recovery_frames": 18,
+        "reach_m": 1.15
+      },
+      "power_nominal": 14,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "RED-K1",
+      "fighter": "RED",
+      "name": "roundhouse kick",
+      "engine_key": "K",
+      "engine_variant_index": 1,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "K (cycle through three existing variants)",
+      "base_class_stats": {
+        "startup_frames": 9,
+        "active_frames": 4,
+        "recovery_frames": 18,
+        "reach_m": 1.15
+      },
+      "power_nominal": 16,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "RED-K2",
+      "fighter": "RED",
+      "name": "crescent kick",
+      "engine_key": "K",
+      "engine_variant_index": 2,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "K (cycle through three existing variants)",
+      "base_class_stats": {
+        "startup_frames": 9,
+        "active_frames": 4,
+        "recovery_frames": 18,
+        "reach_m": 1.15
+      },
+      "power_nominal": 13,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "none verified for individual move",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "RED-L0",
+      "fighter": "RED",
+      "name": "launcher",
+      "engine_key": "L",
+      "engine_variant_index": 0,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "P+K",
+      "base_class_stats": {
+        "startup_frames": 13,
+        "active_frames": 3,
+        "recovery_frames": 28,
+        "reach_m": 1.0
+      },
+      "power_nominal": 16,
+      "authenticity": "GAMEPLAY_TECHNIQUE",
+      "reference_source": "not required for an unnamed launcher",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    },
+    {
+      "id": "RED-T0",
+      "fighter": "RED",
+      "name": "clinch hip/body toss",
+      "engine_key": "T",
+      "engine_variant_index": 0,
+      "status": "IMPLEMENTED_UNVERIFIED_REALISM",
+      "input": "G+P near opponent",
+      "base_class_stats": {
+        "startup_frames": 5,
+        "active_frames": 2,
+        "recovery_frames": 26,
+        "reach_m": 0.75
+      },
+      "power_nominal": 22,
+      "authenticity": "UNVERIFIED_LABEL",
+      "reference_source": "phase table in approved engine",
+      "visual_verdict": "NOT_GRANTED",
+      "latest_evidence": null
+    }
+  ],
+  "complete_realism_verified_moves": [],
+  "comments": [
+    "Move labels reflect current engine prototypes, not externally verified formal martial-art lineage.",
+    "Red is called boxing style in code but already has three kicks; preserve current game implementation pending explicit future roster/style decision.",
+    "This is a registry, not a claim that every current move has passed a per-move biomechanics or actual-device test."
+  ],
+  "latest_isolated_input_gate": {
+    "source_sha256": "0ae0fb3d10471c40b664c4ce431ad9b46361ca4db1a38e81894d1152c7597c0a",
+    "artifact": "Dojo_World_Input_Gate_Isolated_20261101.html",
+    "status": "ISOLATED_COMMAND_GATE_TESTED_NOT_USER_APPROVED",
+    "test_result": "4 command cases and recovery passed Chromium; not live gameplay",
+    "known_defects": [
+      "no collision/guard geometry",
+      "no actual gameplay input-to-impact",
+      "v2 grip release blend still inaccurate"
+    ]
+  },
+  "latest_touch_usable_candidate": {
+    "file": "Dojo_World_Touch_Playable_Throw_Lab_20261101.html",
+    "sha256": "b9a1d89e8ab9ced36f310c7002da34c4c838e2736343c040787ae93422ed7ba0",
+    "verified_at_utc": "2026-11-01T05:04:30+00:00",
+    "status": "ISOLATED_TOUCH_LAB_BROWSERS_EMULATED_PASS_NOT_SHIPPED",
+    "features": [
+      "mobile touch input",
+      "throw proximity gate",
+      "defender guard gate",
+      "state recovery",
+      "reset",
+      "in-page switch to original game and motion study"
+    ],
+    "test_file": "Dojo_World_Touch_Demo_QA_20261101.json",
+    "preserves": [
+      "user approved v2 motion and throw keyframes",
+      "protected shipped original",
+      "original renderer and Fuji art"
+    ],
+    "limitations": [
+      "Browser emulation only, not tested on a physical iPhone",
+      "ChatGPT file preview may block HTML JavaScript; file must execute in a compatible browser",
+      "Successful throw displays authored approved v2 animation, not verified collision physics or live match input",
+      "Original combat mode uses original engine; v2 throw is not integrated into shipped game"
+    ]
+  },
+  "cycle4_20261101_0300": {
+    "status": "REVERT",
+    "candidate_sha256": "60a970ea80ef2daf6482aef8e78227b0814ce6c5bfab04d1aace9a77e09ea4be",
+    "reason": "0.553m hand displacement at 30Hz",
+    "grip_failures": 1,
+    "approved_v2_unchanged": true,
+    "shipped_unchanged": true
+  },
+  "cycle_20261101_0600": {
+    "candidate_sha256": "47e035d1722cad568ceebb9767cf8032d2318f52bb981198e61f32a10ef350f0",
+    "status": "REVISE",
+    "grip_violations_frames": [
+      60,
+      61
+    ],
+    "false_held_frames": 0,
+    "real_combat_throw": "UNVERIFIED",
+    "source": "touch input gated authored study"
+  },
+  "cycle_20261101_0700": {
+    "source_sha256": "f53c4cd83015e2bd2cf1385a5ae08ab080f6e8a407f3879868c814e35b04844b",
+    "source": "Dojo_World_Reach_Coupled_Grip_C0700.html",
+    "status": "REVISE",
+    "user_approved": false,
+    "autonomously_advanced": false,
+    "evidence": {
+      "baseline_grip_violations_60hz": 4,
+      "candidate_grip_violations_60hz": 0,
+      "max_joint_step_m": 0.7727185625252964,
+      "joint_steps_over_0_20m": 8,
+      "leg_segment_max_error_m": 2.7755575615628914e-16,
+      "browser_page_errors": 0,
+      "touch_whiff_then_accepted": true
+    },
+    "unverified": [
+      "physical impact",
+      "back-first landing",
+      "true game input-to-impact",
+      "iPhone device",
+      "full roster regression"
+    ],
+    "next": "Stabilize elbow IK branch before any candidate advancement"
+  },
+  "cycle_20261101_C0801": {
+    "source_file": "Dojo_World_Continuous_Grip_IK_C0801.html",
+    "sha256": "6c71373d646f81548d55357a647181f9c37db7d046a16f05b9b7067e0593f20c",
+    "status": "SOLVER_PASS_THROW_REVISE",
+    "user_approved": false,
+    "autonomously_advanced": false,
+    "user_supplied_design": "Unity TwoBoneGripIK C# conceptual input (stable pole, analytic solve, smoothed target); not directly runtime compatible with JS engine",
+    "changes": [
+      "Fixed Blue elbow bend pole to prior approved side (no dot-sign reversal during pivot)",
+      "Constrained shared wrist anchor to >=0.24m from Blue shoulder through pivot; based on 30-degree minimum elbow bend",
+      "Smoothed pole direction on deterministic 60Hz track so pause/seek/renderFrame is repeatable",
+      "Reused shared grip anchor and original V2 feet/pelvis/red arcs; no production bindings"
+    ],
+    "observed_tests": {
+      "source_sha256": "6c71373d646f81548d55357a647181f9c37db7d046a16f05b9b7067e0593f20c",
+      "reference_c0700_sha256": "f53c4cd83015e2bd2cf1385a5ae08ab080f6e8a407f3879868c814e35b04844b",
+      "60hz_samples": 217,
+      "baseline_20cm_joint_failures": 6,
+      "candidate_20cm_joint_failures": 0,
+      "baseline_max_joint_step_m": 0.7727185625252964,
+      "candidate_max_joint_step_m": 0.18106553132370465,
+      "baseline_blue_elbow_step_m": 0.7727185625252964,
+      "candidate_blue_elbow_step_m": 0.1067537591542256,
+      "grip_failures_through_impact": 0,
+      "arm_segment_length_violations": 0,
+      "elbow_angle_floor_deg": 35.72369748838322,
+      "elbow_angle_min_requirement_deg": 30,
+      "mobile_browser_error_count": 0,
+      "mobile_input": {
+        "status_before": "Step closer, then tap THROW",
+        "has_throw": 1,
+        "has_step": 1,
+        "out_of_range_status": "WHIFF: Too far away. Tap STEP CLOSER.",
+        "in_range_status": "SUCCESS: Grip accepted — shoulder load, throw, impact, then recovery."
+      },
+      "impact_at_t_1_84_red_shoulder_center_above_floor_m": 0.40912497586422686,
+      "impact_at_t_1_84_red_head_bottom_above_floor_m": 0.28035630818790946,
+      "upper_back_collision_test": "UNRUN: authored shoulder at 0.409m is not collision evidence",
+      "head_vs_back_first_contact_test": "UNRUN: head is floor-clamped later; full collision proxy/capsule needed",
+      "actual_match_input_to_throw": "UNRUN: separate touch-lab gates authored pose, not live full-match bindings",
+      "physical_iphone": "UNRUN",
+      "full_move_roster_regressions": "UNRUN",
+      "status": "SOLVER_CONTINUITY_GATE_PASS_OVERALL_THROW_REVISE",
+      "promotion": "NONE; immutable production and user-approved v2 unchanged",
+      "visual_review_presented_at": "pending delivery in this conversation; do not start 15min fallback until user-visible files are linked",
+      "code_change_summary": "Stable 2D bend hemisphere for Blue grip elbow plus min shoulder-wrist radius 0.24m with 60Hz smoothed pole-angle track applied to shared sleeve anchor. Original user v2 body, feet, legs, red trajectory and animation phases unchanged."
+    },
+    "unverified": [
+      "upper-back collision timing",
+      "head-clearance under physical collision",
+      "full match unscripted attack sequence",
+      "physical iPhone"
+    ],
+    "next": "Build physically grounded back/shoulder collision and true G+P throw command within isolated multi-move engine; no unrelated visual footage."
+  },
+  "cycle_20261101_C0802": {
+    "source_file": "Dojo_World_Anterior_Elbow_C0802.html",
+    "source_sha256": "c1b1f876f63c93cb234c7f1080e9b61ddd5cb3ab79c95c564222d8a4fb3edf5b",
+    "based_on": "Dojo_World_Continuous_Grip_IK_C0801.html",
+    "based_on_sha256": "6c71373d646f81548d55357a647181f9c37db7d046a16f05b9b7067e0593f20c",
+    "status": "USER_APPROVED_VISUAL_ELBOW_DIRECTION_ISOLATED_REFERENCE",
+    "observed_user_feedback": "C0801 elbow bends in reverse; user described as anatomically incorrect",
+    "user_approved": true,
+    "autonomously_advanced": false,
+    "approved_v2_reference_sha256": "c098b2401aa4271f70f8ccaea03d181ee8101be84ea55758bb62b5c4756777ac",
+    "shipped_engine_sha256": "786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b",
+    "code_change": "Fixed Blue gripping-arm elbow hemisphere from -1 to +1, identical input pose keys, wrist targets, shared grip anchor, foot tracks, red impact trajectory",
+    "biomechanics_reasoning": {
+      "balance": "Blue pelvis/center path unchanged",
+      "planted_foot": "foot targets unmodified",
+      "kinetic_chain": "preserves V2 hip and torso pivot, retains analytic upper/forearm length",
+      "grip_trajectory": "shared wrist anchor unchanged; change only elbow bend hemisphere",
+      "recovery": "all authored post-throw timing unchanged"
+    },
+    "60hz_regression": {
+      "samples": 217,
+      "preimpact_wrong_bend_samples_previous": 111,
+      "preimpact_wrong_bend_samples_current": 0,
+      "large_jumps_previous": 0,
+      "large_jumps_current": 0,
+      "max_joint_step_m": 0.13573516135251187,
+      "grip_reach_failures": 0,
+      "limb_lengths_failures": 0,
+      "browser_page_errors": 0
+    },
+    "input_gate": "out of range whiff, guard block, in-range accepted in mobile Chromium",
+    "remaining_unrun": [
+      "actual 3D elbow hinge/pronation",
+      "upper back physically collides with ground",
+      "opponent reaction and landing",
+      "full live-match button-to-contact",
+      "real iPhone"
+    ],
+    "video_files": [
+      "Dojo_World_C0802_Normal.mp4",
+      "Dojo_World_C0802_QuarterSpeed.mp4",
+      "Dojo_World_C0802_Preview.gif"
+    ],
+    "comparison": "Dojo_World_C0802_Elbow_Before_After.png",
+    "review_presented_at_utc": "2026-11-01T13:42:42.449829+00:00",
+    "visual_approval": "APPROVED_BY_USER",
+    "next_action": "Freeze C0802 elbow appearance, validate Red upper-back-first grounded impact/head clearance/legs raised, then isolated button-controlled full-match integration and 20-move roster interactions; do not repeat elbow correction without new feedback",
+    "approval_scope": "Blue gripping elbow bend direction and resulting visible C0802 authored throw appearance; NOT impact physics, full-match input-to-impact, core move set, real iPhone, or shipping/deployment",
+    "approval_user_quote": "Much better. I approve",
+    "approval_recorded_at_utc": "2026-11-01T13:46:20.961876+00:00",
+    "source_is_immutable_visual_reference": true
+  },
+  "latest_approved_visual_candidate": {
+    "name": "Dojo_World_Anterior_Elbow_C0802.html",
+    "sha256": "c1b1f876f63c93cb234c7f1080e9b61ddd5cb3ab79c95c564222d8a4fb3edf5b",
+    "approved_at_recorded_utc": "2026-11-01T13:46:20.961876+00:00",
+    "approved_user_quote": "Much better. I approve",
+    "scope": "Blue elbow bend direction and visible authored throw relative to C0801; isolated visual signoff only",
+    "not_approved": [
+      "physical landing/ground collision",
+      "full-match input-to-throw",
+      "real iPhone verification",
+      "deployed original game",
+      "special moves"
+    ]
+  },
+  "current_next_priority": "C0835 RAPiER ACTUAL PHYSICS NOW RUNNING. Fix first contact shin->upper back, <15cm head clearance, 30cm joint-gap and anatomical 3D constraints. Timebox ends Nov 3 07:22 CST then switch to 20 basic moves.",
+  "cycle_20261102_C0825": {
+    "timestamp_utc": "2026-11-02T12:02:52+00:00",
+    "candidate": "Dojo_World_C0825_Throw_Impact_Gate_20261102.html",
+    "candidate_sha256": "3e6b4f197d4189c3464c3b27eb8d515eeb50a2844d923479939f454110158694",
+    "parent_C0816_sha256": "1abc178c8a40b7d709009b5a3d778a771cd9a181520cbbdb3e089fa36d3b99ca",
+    "immutable_shipped_sha256": "786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b",
+    "status": "REVISE_THROW_BLOCKED",
+    "user_approved": false,
+    "autonomously_advanced": false,
+    "observed": {
+      "identity": "C0825 60Hz isolated authored-animation contact audit",
+      "reference": "C0816 experimental contact branch; C0802 elbow sign protected",
+      "scope": "DETERMINISTIC GEOMETRY ONLY; not physics; not full-match user input",
+      "hz": 60,
+      "frames_per_run": 217,
+      "offsets_tested": 21,
+      "totalSamples": 4557,
+      "floorCrossings": 0,
+      "safeImpactGeometries": 0,
+      "jointContinuityPassing": 0,
+      "legLengthPassing": 21,
+      "gripLoadingPassing": 21,
+      "speedDampingPassing": 0,
+      "fullThrowPassing": 0,
+      "maxJointStep_m": 0.7489450866367123,
+      "maxLegSegmentError_m": 4.440892098500626e-16,
+      "minBackClearance_m": 0.364312987935052,
+      "minHeadClearance_m": 0.3256192137542744,
+      "tests_real_device": "UNRUN",
+      "tests_full_match_input": "UNRUN",
+      "authoritative_collision": "ABSENT",
+      "user_approval": "NONE",
+      "status": "REVISE_THROW_BLOCKED",
+      "browser_input_gates": {
+        "first_whiff": true,
+        "guard_blocked": true,
+        "in_range_accepted": true
+      },
+      "browser_page_errors": [],
+      "normal_video": "Dojo_World_C0825_InputAccepted_Throw_Normal.mp4",
+      "slow_video": "Dojo_World_C0825_InputAccepted_Throw_Slow_025x.mp4",
+      "capture_kind": "in-memory touch-accepted authored animation, NOT live-input-to-physics"
+    },
+    "next": "Physical collision solver with proper upper back contact surface, then genuine full-match input trigger and per-move roster audit."
+  },
+  "cycle_20261102_C0826": {
+    "timestamp_utc": "2026-11-02T12:35:33.879756+00:00",
+    "source": "Dojo_World_C0826_Gravity_3D_Elbow_20261102.html",
+    "sha256": "ef0f927fee49290d84e108054fe8e171ea1619baabb7bd5c433d35206d405083",
+    "status": "ISOLATED_REVISE",
+    "approval": "NONE",
+    "original_immutable": true,
+    "v2_visual_immutable": true,
+    "c0802_elbow_side_immutable": true,
+    "change": "gravity linked-body no-rebound ground proxy + 3D anterior elbow plane",
+    "verified": {
+      "offsets": 21,
+      "samples": 4557,
+      "back_proxy_contact_offsets": 21,
+      "postImpactRise_m": 0,
+      "minHeadAtContact_m": 0.15930105343759307,
+      "arm3d_segment_error_m": 3.3306690738754696e-16,
+      "arm3d_30Hz_frames": 108,
+      "touch_whiff_guard_accepted": true,
+      "pageErrors": 0
+    },
+    "failed": {
+      "true_3d_rigidbody": "UNIMPLEMENTED",
+      "safe_raised_foot_contact_offsets": "0/21",
+      "earliest_grip_release_early_s": 0.25,
+      "jointContinuity_offsets": "0/21",
+      "full_match": "UNRUN",
+      "real_device": "UNRUN"
+    },
+    "next": "Rebuild 3D reach/torso/grip and landing articulation without moving approved sources, then input-driven mixed-move exchanges."
+  },
+  "C0827_diagnostics": {
+    "cycle": "C0827",
+    "at_utc": "2026-11-02T13:04:55.989489+00:00",
+    "source_sha256": "fea5ea247c358e664df2f4a776e00a095f74a62eb6ec91d35ce45ef2d1c3ace2",
+    "elbow3d_passing": 0,
+    "max_elbow_step_m": 0.33494286551684166,
+    "max_elbow_length_error_m": 3.3306690738754696e-16,
+    "browser_errors": [],
+    "landing_safe": 0,
+    "full_throw_pass": 0,
+    "video_scope": "touch command accepted, deterministic authored motion frames; NOT full-match physics",
+    "verdict": "REVISE_THROW_BLOCKED"
+  },
+  "cycle_20261102_C0828": {
+    "timestamp_utc": "2026-11-02T13:36:09.666970+00:00",
+    "source": "Dojo_World_C0828_Clinch_Followthrough_20261102.html",
+    "sha256": "787fb55f0f861615da6d8108776e835c655c408e3c90140331bfca32d0cfdb6d",
+    "parent_sha256": "fea5ea247c358e664df2f4a776e00a095f74a62eb6ec91d35ce45ef2d1c3ace2",
+    "status": "ISOLATED_REVISE_THROW_BLOCKED",
+    "source_verified": true,
+    "protected_engine_sha256": "786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b",
+    "approved_visuals_unchanged": true,
+    "user_approved": false,
+    "autonomously_advanced": false,
+    "observations": {
+      "last_held_sec_baseline": 2.35,
+      "last_held_sec_new": 2.566667,
+      "contact_sec": 2.608719,
+      "max_joint_step_m_old": 0.5908124521310053,
+      "max_joint_step_m_new": 0.3319454278666451,
+      "three_d_elbow_max_step_m": 0.2845174559733231,
+      "full_throw_passes": 0,
+      "contact_proxies": 21,
+      "tested_offsets": 21,
+      "touch_whiff_guard_accepted": true,
+      "js_errors": []
+    },
+    "limits": [
+      "ground proxy not rigid body",
+      "still failing 60Hz joint continuity",
+      "feet too low at proxy contact",
+      "2D display projection, genuine 3D dynamic system absent",
+      "no full-match input-to-impact",
+      "physical iPhone unrun"
+    ],
+    "next": "3D articulated impact and elbow pole continuity",
+    "media_presentation_time_utc": "2026-11-02T13:36:44.993197+00:00"
+  },
+  "isolated_rapier_lab_cycles": [
+    {
+      "cycle": "C0832",
+      "source_sha256": "dbe861eb09a86ee260db28df0bf72ca73fdd4058ddc8eb850b7616a37ff3e347",
+      "change": "3D joint-anchor and per-frame body-center continuity instrumentation",
+      "node_pass": 15,
+      "physics_test": "SKIPPED_DEPENDENCY_UNAVAILABLE",
+      "verdict": "BLOCKED/REVISE",
+      "production_bound": false
+    },
+    {
+      "cycle": "C0835",
+      "source_sha256": "1740c1163fd5a36a46cba83ce270039489af4b612e4160be783ac40fc6c0fcb6",
+      "engine_version": "Rapier 0.21.0",
+      "installed_offline_user_package_sha256": "e036e2e958b8d314b5731cbae256d3c4e42198cda8a56bf3b25fce983ded05b4",
+      "runtime": "Node + Chromium WASM physics verified",
+      "tests_passed": 18,
+      "tests_failed": 0,
+      "skipped": 0,
+      "first_ground_contact": {
+        "frame": 14,
+        "part": "shinR",
+        "time": 0.2333333333333333
+      },
+      "upper_back_contact_later": true,
+      "minimum_head_clearance_m": -0.004999989271163935,
+      "max_grip_gap_while_joint_connected_m": 0.30021154092878605,
+      "max_joint_anchor_gap_m": 0.17725576563007622,
+      "touch": "Chromium mobile emulation; no real iPhone",
+      "physics_video_normal": "Dojo_World_C0835_Actual_Rapier_Normal.mp4",
+      "physics_video_slow": "Dojo_World_C0835_Actual_Rapier_Slow_025x.mp4",
+      "verdict": "REVISE_SHIN_FIRST_HEAD_CLEARANCE_GRIP_GAP",
+      "user_approved": false,
+      "production_bound": false,
+      "presented_at_utc": "2026-11-02T18:12:36.302464+00:00"
+    }
+  ],
+  "animation_failure_source_handoff_policy": {
+    "user_directive_utc": "2026-11-02T18:37:36.386250+00:00",
+    "mandatory": true,
+    "deliverables": [
+      "exact runnable code",
+      "diff from predecessor",
+      "actual failed tests",
+      "reproduction commands",
+      "source SHA",
+      "screenshots and footage when available",
+      "Claude-ready handoff prompt"
+    ],
+    "proposed_vs_executed_must_be_labeled": true,
+    "reviewer": "user may choose to ask Claude; GPT primary developer"
+  },
+  "cycle_20261102_C0836": {
+    "timestamp_utc": "2026-11-02T18:37:36.386250+00:00",
+    "status": "HANDOFF_ONLY_PROPOSED_CONTROLLER_UNINTEGRATED",
+    "real_rapier_motion_from_this_controller": "NOT_RUN",
+    "current_C0835_runtime": "REAL_RAPIER_EXECUTED_BUT_LANDING_FAILED",
+    "proposed_module_syntax": "PASS",
+    "proposed_controller_compatibility_mock": {
+      "pass": 1,
+      "fail": 5,
+      "issues": [
+        "torso vs upper_back naming",
+        "late upper back after shin first wrongly accepted",
+        "release 150ms after ground contact",
+        "frame-rate-dependent interpolation",
+        "sign-dependent rotation drives away from back landing"
+      ]
+    },
+    "source_package": "Dojo_World_C0836_Claude_Debug_Source.zip",
+    "source_package_sha256": "c2cf2e6ea0d26a1e60b83d2e6706112a469f354855d12b9423ca5ceb9bb0a892",
+    "user_approved": false,
+    "next": "Isolated integration after correcting actual API mismatches and rerun real Rapier 60Hz; preserve throw timebox"
+  }
+}
