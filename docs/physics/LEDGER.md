@@ -1,5 +1,55 @@
 # Combat physics program ledger
 
+## Cycle 2 — first carry-to-air elbow handoff, BLOCKED checkpoint
+
+Issue #7 and the limited-autonomy protocol were read from `codex/combat-physics-program-2026-11-02` at `cb57ce1`. The protocol is copied verbatim onto this branch. Work is isolated on `physics/carry-air-continuity-cycle-2`, based on Cycle 1 commit `829ec0ea085609606eeb30979b491e1a901b17cc` so its harness and evidence remain available. The **gameplay baseline is still the protected original**, never the rejected Cycle 1 HTML. No parallel/delegated agents, purchases, deployment, merge or scheduler were used. The Usage dashboard is not exposed by these tools; no remaining allowance or reset is claimed.
+
+**Disposition: BLOCKED after the first failed physics gate.** One initial candidate was implemented; no post-gate repair revisions were run. This follows the current task's explicit stop-on-failed-gate instruction rather than spending the remaining two-revision ceiling on additional hypotheses.
+
+### Focused diagnosis and hypothesis
+
+The first ordered Cycle 1 carry→air failure is victim left elbow `el` in `back-slot0-face+1-gap0.85`. At simulation tick 20, protected source enters unchanged `air,t=0` geometry; Cycle 1 changes the preceding `carry,t=11` elbow, raising release step from **0.153444413 to 0.155407824 m**. Air endpoints themselves are unchanged. Projecting the unchanged first-air elbow onto the last-carry feasible two-bone circle gives a diagnostic lower bound of **0.107276458 m**, so a local handoff improvement is geometrically feasible.
+
+Preserve the stance/support-foot paths, root lift, authored pelvis/torso trajectory, grip endpoints, reach, damage and timings. The hypothesis guides only the left-elbow bend target during the last four carry ticks toward the unchanged first-air bend direction. Prediction uses a **deep cloned** actor because `pose()` mutates animation caches; it advances no gameplay tick and cannot mutate the original actor. This is candidate solver work, not an extra observer evaluation. It does not establish physical forces, mass-weighted COM or anatomical realism.
+
+Candidate: `workbench/carry-air-continuity-v2/index.html`, SHA-256 **`368fc07f48f1c3a0215620a5f295a704aa7f6bd852cd07ddaea2a1dc6043c406`**. `tests/physics/build_cycle2.py` builds it directly from protected SHA `786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b`, with a separately named experimental constraint helper. Cycle 1 constraint math is a diagnostic reference, not an approved runtime. Its artifacts/code were not edited.
+
+### Results and unchanged acceptance gate
+
+- **8/8 conditions PASS**: both styles, both native update slots, mirrored facings, two deterministic repeats and observer-neutral controls for every condition. Existing Cycle 1 baseline traces were reused rather than regenerated.
+- **25/25 Chromium checks PASS**, with zero failed/skipped/unrun and source bytes unchanged. Results were produced locally using the existing browser installation; no new CI reproduction is claimed here.
+- **Physics comparator FAIL**, exit 1, with **48** remaining continuity-distribution regressions (Cycle 1 had 56). The selected air-phase `el` regression clears in all eight cases. Material carry-length improvement remains, but this is **not an accepted physics improvement** because the complete gate is still red.
+- Original integrity PASS: all 179 extracted archive entries, 178 manifest hashes, original ZIP and protected combat hash. All measured gameplay fields, roots, endpoints and untargeted geometry remain unchanged. No thresholds/comparator behavior were altered.
+
+Representative Red/S0→Blue +X measurements (metres per advancing simulation step unless stated otherwise):
+
+| Metric | Protected | Rejected Cycle 1 | Cycle 2 candidate |
+| --- | --- | --- | --- |
+| Release elbow step | 0.153444413 | 0.155407824 | 0.113553482 |
+| Air-phase step p50 | 0.069351391 | 0.069351391 | 0.069351391 |
+| Air-phase step p95 | 0.162698988 | 0.162698988 | 0.162698988 |
+| Air-phase step p99 | 0.164364545 | 0.164364545 | 0.164364545 |
+| Air-phase step maximum | 0.164780934 | 0.164780934 | 0.164780934 |
+| Air-phase step RMS | 0.093976844 | 0.094130355 | 0.091238515 |
+| Air-phase acceleration RMS (m/s² proxy) | 135.045555966 | 124.971741630 | 120.548648310 |
+
+The native Blue/S1 +X release elbow step changes **0.143289445 → 0.106873501 m** versus the protected source. All eight per-case values, matched boundary positions, 60 Hz velocity/acceleration and flexion-angle derivatives, and full p50/p95/p99/max/RMS distributions are in [release diagnostics](cycle-2/release-diagnostics.json). These are kinematic derivatives, not validated anatomical angular velocity or forces. Full preserved traces and aligned render screenshots: [revision 1](cycle-2/revision-1/). Full red gate: [comparison](cycle-2/comparison/report.md). Browser proof: [results](cycle-2/browser/results.json). No new video batch was generated after the failed gate; Cycle 1 clips depict Cycle 1 only.
+
+### Reproduce and next single action
+
+```sh
+python3 tests/physics/build_cycle2.py
+python3 tests/physics/record.py --source workbench/carry-air-continuity-v2/index.html --output-dir artifacts/cycle2-replay --browser-executable /usr/bin/chromium --check-observer --images
+python3 tests/browser_smoke/run.py --source workbench/carry-air-continuity-v2/index.html --output-dir artifacts/cycle2-browser --browser-executable /usr/bin/chromium
+python3 tests/physics/compare.py --baseline-dir docs/physics/cycle-1/baseline --candidate-dir artifacts/cycle2-replay --output-dir artifacts/cycle2-compare
+# Comparator returns 1: this candidate is BLOCKED. Do not invert or ignore it.
+python3 tests/physics/release_diagnostics.py --candidate-dir artifacts/cycle2-replay --output artifacts/cycle2-release.json
+```
+
+Use fresh output directories. Exact source/runner hashes, seeds, clocks and environment metadata are preserved with the traces. A checksum manifest accompanies this checkpoint. The published Git commit/branch is recorded in the issue/PR; trace `commit` fields describe the pre-commit working-tree base and must be read together with the exact candidate hash.
+
+**Next single action:** diagnose the first remaining `back-slot0-face+1-gap0.85` victim **right-elbow (`er`) carry→air** distribution failure using the existing matched boundary traces. Check feasible fixed-length pole/velocity handoff before another source edit, retain the same acceptance thresholds, and leave unrelated carry/knee/grip/landing work outside that task. Do not promote this candidate or resume automatically.
+
 ## Cycle 1 — deterministic shipped throws and blocked carry-IK experiment
 
 **Disposition: BLOCKED. No verified improvement is delivered or approved.** The immutable recovered source remains byte-exact. Work is isolated on `physics/shipped-throw-cycle-1`, based on program commit `fe22c12`; root `AGENTS.md` and issue #5 explicitly authorize this work. No merge, deployment, expense, world/MMO/Rapier integration or special-move binding occurred.

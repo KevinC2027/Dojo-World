@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="Dojo World browser smoke regression" tests="26" failures="0" skipped="0" errors="0">
+  <testsuite name="desktop" tests="16" failures="0" skipped="0" errors="0">
+    <testcase classname="desktop" name="startup-and-render">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>original game startup; controlled browser clock and fixed test-side RNG seed</system-out>
+    </testcase>
+    <testcase classname="desktop" name="movement-and-sidestep">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="desktop" name="guard-hold-release">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="desktop" name="attack-P">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="desktop" name="attack-K">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="desktop" name="attack-L">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="desktop" name="attack-T">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="desktop" name="ko-next-round-match-rematch">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>opponent HP=1 and neutral range fixtures; real attack/canvas inputs; normal round timers</system-out>
+    </testcase>
+    <testcase classname="desktop" name="browser-errors">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>collected across entire browser profile</system-out>
+    </testcase>
+    <testcase classname="desktop" name="natural-opponent-ai">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>normal game AI logic with fixed test-side RNG seed; no state fixture or player attacks</system-out>
+    </testcase>
+    <testcase classname="desktop" name="out-of-range-whiff">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="desktop" name="guard-chip-and-blockstun">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="desktop" name="buffered-punch-kick-chain">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="desktop" name="timeout-win">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>timer=1 and unequal-HP fixture; ordinary loop resolves timeout</system-out>
+    </testcase>
+    <testcase classname="desktop" name="timeout-draw">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>timer=1 and equal-HP fixture; ordinary loop resolves draw</system-out>
+    </testcase>
+    <testcase classname="desktop" name="ring-out">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>opponent beyond ring fixture; ordinary gravity/loop resolves fall</system-out>
+    </testcase>
+  </testsuite>
+  <testsuite name="mobile-chromium-emulation" tests="9" failures="0" skipped="0" errors="0">
+    <testcase classname="mobile-chromium-emulation" name="startup-and-render">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>original game startup; controlled browser clock and fixed test-side RNG seed</system-out>
+    </testcase>
+    <testcase classname="mobile-chromium-emulation" name="movement-and-sidestep">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="mobile-chromium-emulation" name="guard-hold-release">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="mobile-chromium-emulation" name="attack-P">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="mobile-chromium-emulation" name="attack-K">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="mobile-chromium-emulation" name="attack-L">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="mobile-chromium-emulation" name="attack-T">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>controlled in-memory fixture; real browser input and original animation loop</system-out>
+    </testcase>
+    <testcase classname="mobile-chromium-emulation" name="ko-next-round-match-rematch">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>opponent HP=1 and neutral range fixtures; real attack/canvas inputs; normal round timers</system-out>
+    </testcase>
+    <testcase classname="mobile-chromium-emulation" name="browser-errors">
+      <properties>
+        <property name="status" value="PASS" />
+      </properties>
+      <system-out>collected across entire browser profile</system-out>
+    </testcase>
+  </testsuite>
+  <testsuite name="infrastructure-and-completeness-gate" tests="1" failures="0" skipped="0" errors="0">
+    <testcase classname="runner" name="all-25-checks-and-source-preservation" />
+  </testsuite>
+</testsuites>
