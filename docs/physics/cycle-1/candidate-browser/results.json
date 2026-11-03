@@ -1,0 +1,1992 @@
+{
+  "started_at_utc": "2026-11-03T10:20:31.058804+00:00",
+  "commit": "fe22c1267f236d35b69cbf6efcace77599c68003",
+  "source_last_modified_commit": null,
+  "source": "workbench/throw-carry-ik-v1/index.html",
+  "protected_baseline_sha256": "786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b",
+  "source_sha256_before": "39e425f2318debf00743700cfb283a89d875901c02e5e9ba75fdcd1b1e96b930",
+  "source_sha256_after": "39e425f2318debf00743700cfb283a89d875901c02e5e9ba75fdcd1b1e96b930",
+  "source_sha256": "39e425f2318debf00743700cfb283a89d875901c02e5e9ba75fdcd1b1e96b930",
+  "source_unchanged": true,
+  "runner_sha256": "d746a8824819cd9e913c52a44e87c6ceffbcbcd966246d35aa09de5484d763dc",
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "playwright_version": "1.62.0",
+  "browser": "154.0.8037.57",
+  "browser_executable": "/usr/bin/chromium",
+  "required_source_sha256": null,
+  "profile_settings": {
+    "desktop": {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "device_scale_factor": 1,
+      "is_mobile": false,
+      "has_touch": false,
+      "color_scheme": "light"
+    },
+    "mobile-chromium-emulation": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 3,
+      "is_mobile": true,
+      "has_touch": true,
+      "color_scheme": "light"
+    }
+  },
+  "seed": 20261102,
+  "profiles": [
+    {
+      "profile": "desktop",
+      "tests": [
+        {
+          "name": "startup-and-render",
+          "status": "PASS",
+          "scope": "original game startup; controlled browser clock and fixed test-side RNG seed",
+          "evidence": {
+            "initial": {
+              "phase": "intro",
+              "pt": 0,
+              "tm": 2700,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 0,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 0,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "state": {
+              "phase": "fight",
+              "pt": 91,
+              "tm": 2671,
+              "round": 1,
+              "msg": "FIGHT!",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 119,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 0.18833333333333346,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "walk",
+                  "t": 119,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 1,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "canvas": {
+              "width": 1280,
+              "height": 683,
+              "colors": 215,
+              "opaqueFraction": 1
+            },
+            "screenshot": "desktop-startup.png"
+          }
+        },
+        {
+          "name": "movement-and-sidestep",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "before": {
+              "x": -1.5,
+              "y": 0,
+              "z": 0,
+              "hp": 100,
+              "st": "idle",
+              "t": 2,
+              "hit": 0,
+              "wins": 0,
+              "pc": 0,
+              "kc": 0,
+              "pn": 0,
+              "kn": 0,
+              "combo": 0,
+              "chainN": 0,
+              "aiT": 0,
+              "move": null,
+              "finite": true
+            },
+            "forward": {
+              "x": -0.925,
+              "y": 0,
+              "z": 0,
+              "hp": 100,
+              "st": "idle",
+              "t": 19,
+              "hit": 0,
+              "wins": 0,
+              "pc": 0,
+              "kc": 0,
+              "pn": 0,
+              "kn": 0,
+              "combo": 0,
+              "chainN": 0,
+              "aiT": 0,
+              "move": null,
+              "finite": true
+            },
+            "back": {
+              "x": -1.299999999999999,
+              "y": 0,
+              "z": 0,
+              "hp": 100,
+              "st": "idle",
+              "t": 36,
+              "hit": 0,
+              "wins": 0,
+              "pc": 0,
+              "kc": 0,
+              "pn": 0,
+              "kn": 0,
+              "combo": 0,
+              "chainN": 0,
+              "aiT": 0,
+              "move": null,
+              "finite": true
+            },
+            "sidestep": {
+              "x": -1.1974904362248395,
+              "y": 0,
+              "z": -0.7841703413502051,
+              "hp": 100,
+              "st": "idle",
+              "t": 15,
+              "hit": 0,
+              "wins": 0,
+              "pc": 0,
+              "kc": 0,
+              "pn": 0,
+              "kn": 0,
+              "combo": 0,
+              "chainN": 0,
+              "aiT": 0,
+              "move": null,
+              "finite": true
+            }
+          }
+        },
+        {
+          "name": "guard-hold-release",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "held": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2692,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.5,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "guard",
+                  "t": 8,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.5,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 8,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999992,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "released": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2685,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.5,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 15,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.5,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 15,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999985,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "attack-P",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "move": "P",
+            "defender_expected_hp": 92,
+            "final": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2491,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 207,
+                  "hit": 1,
+                  "wins": 0,
+                  "pc": 1,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "P",
+                  "finite": true
+                },
+                {
+                  "x": 0.648980211308299,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 92,
+                  "st": "idle",
+                  "t": 202,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999791,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "victim_states": [
+              "idle",
+              "stun"
+            ]
+          }
+        },
+        {
+          "name": "attack-K",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "move": "K",
+            "defender_expected_hp": 86,
+            "final": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2491,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.2841143733726917,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 207,
+                  "hit": 1,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 1,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "K",
+                  "finite": true
+                },
+                {
+                  "x": 0.8695006225015103,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 86,
+                  "st": "idle",
+                  "t": 199,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999791,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "victim_states": [
+              "idle",
+              "stumble"
+            ]
+          }
+        },
+        {
+          "name": "attack-L",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "move": "L",
+            "defender_expected_hp": 84,
+            "final": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2490,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 207,
+                  "hit": 1,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "L",
+                  "finite": true
+                },
+                {
+                  "x": 2.4263285174120264,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 84,
+                  "st": "idle",
+                  "t": 117,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999790,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "victim_states": [
+              "air",
+              "down",
+              "getup",
+              "idle"
+            ]
+          }
+        },
+        {
+          "name": "attack-T",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "move": "T",
+            "defender_expected_hp": 78,
+            "final": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2488,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 206,
+                  "hit": 1,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "T",
+                  "finite": true
+                },
+                {
+                  "x": 1.7444967122075692,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 78,
+                  "st": "idle",
+                  "t": 114,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999788,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "victim_states": [
+              "air",
+              "carry",
+              "down",
+              "getup",
+              "idle"
+            ]
+          }
+        },
+        {
+          "name": "ko-next-round-match-rematch",
+          "status": "PASS",
+          "scope": "opponent HP=1 and neutral range fixtures; real attack/canvas inputs; normal round timers",
+          "evidence": {
+            "first_ko": {
+              "phase": "end",
+              "pt": 9,
+              "tm": 2691,
+              "round": 1,
+              "msg": "K.O.",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "atk",
+                  "t": 14,
+                  "hit": 1,
+                  "wins": 1,
+                  "pc": 1,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "P",
+                  "finite": true
+                },
+                {
+                  "x": 1.3250000000000002,
+                  "y": 0.3,
+                  "z": 0,
+                  "hp": 0,
+                  "st": "air",
+                  "t": 9,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 1,
+                  "chainN": 0,
+                  "aiT": 999999991,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "next_round": {
+              "phase": "intro",
+              "pt": 13,
+              "tm": 2700,
+              "round": 2,
+              "msg": "ROUND 2",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 13,
+                  "hit": 0,
+                  "wins": 1,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 13,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "match_over": {
+              "phase": "over",
+              "pt": 161,
+              "tm": 2674,
+              "round": 2,
+              "msg": "YOU WIN \u2013 TAP TO REMATCH",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 191,
+                  "hit": 1,
+                  "wins": 2,
+                  "pc": 1,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "P",
+                  "finite": true
+                },
+                {
+                  "x": 2.7899999872682524,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 0,
+                  "st": "down",
+                  "t": 170,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 1,
+                  "chainN": 0,
+                  "aiT": 999999974,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "rematch": {
+              "phase": "intro",
+              "pt": 3,
+              "tm": 2700,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 3,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 3,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "screenshot": "desktop-match-over.png"
+          }
+        },
+        {
+          "name": "browser-errors",
+          "status": "PASS",
+          "scope": "collected across entire browser profile",
+          "evidence": {
+            "page_errors": [],
+            "console_errors": [],
+            "observer_errors": []
+          }
+        },
+        {
+          "name": "natural-opponent-ai",
+          "status": "PASS",
+          "scope": "normal game AI logic with fixed test-side RNG seed; no state fixture or player attacks",
+          "evidence": {
+            "observed_frames": 125,
+            "attack_frames": 26,
+            "final": {
+              "phase": "fight",
+              "pt": 91,
+              "tm": 2559,
+              "round": 1,
+              "msg": "FIGHT!",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.6356004937462516,
+                  "y": 0.6,
+                  "z": 0,
+                  "hp": 78,
+                  "st": "air",
+                  "t": 0,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": -0.8356073279179991,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "atk",
+                  "t": 17,
+                  "hit": 1,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 8,
+                  "move": "T",
+                  "finite": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "out-of-range-whiff",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "phase": "fight",
+            "pt": 0,
+            "tm": 2667,
+            "round": 1,
+            "msg": "ROUND 1",
+            "hs": 0,
+            "sweptContact": 1,
+            "fighters": [
+              {
+                "x": -1.5,
+                "y": 0,
+                "z": 0,
+                "hp": 100,
+                "st": "idle",
+                "t": 29,
+                "hit": 0,
+                "wins": 0,
+                "pc": 1,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 0,
+                "move": "P",
+                "finite": true
+              },
+              {
+                "x": 1.5,
+                "y": 0,
+                "z": 0,
+                "hp": 100,
+                "st": "idle",
+                "t": 33,
+                "hit": 0,
+                "wins": 0,
+                "pc": 0,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 999999967,
+                "move": null,
+                "finite": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "guard-chip-and-blockstun",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "phase": "fight",
+            "pt": 0,
+            "tm": 2670,
+            "round": 1,
+            "msg": "ROUND 1",
+            "hs": 0,
+            "sweptContact": 1,
+            "fighters": [
+              {
+                "x": -0.5446307107292155,
+                "y": 0,
+                "z": 0,
+                "hp": 100,
+                "st": "idle",
+                "t": 26,
+                "hit": 1,
+                "wins": 0,
+                "pc": 1,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 0,
+                "move": "P",
+                "finite": true
+              },
+              {
+                "x": 0.5218639462336176,
+                "y": 0,
+                "z": 0,
+                "hp": 99.2,
+                "st": "guard",
+                "t": 21,
+                "hit": 0,
+                "wins": 0,
+                "pc": 0,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 999999970,
+                "move": null,
+                "finite": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "buffered-punch-kick-chain",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "phase": "fight",
+            "pt": 0,
+            "tm": 2665,
+            "round": 1,
+            "msg": "ROUND 1",
+            "hs": 0,
+            "sweptContact": 1,
+            "fighters": [
+              {
+                "x": -0.009999999999999926,
+                "y": 0,
+                "z": 0,
+                "hp": 100,
+                "st": "atk",
+                "t": 18,
+                "hit": 1,
+                "wins": 0,
+                "pc": 1,
+                "kc": 1,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 1,
+                "aiT": 0,
+                "move": "K",
+                "finite": true
+              },
+              {
+                "x": 0.8294612701061943,
+                "y": 0,
+                "z": 0,
+                "hp": 80.1,
+                "st": "stumble",
+                "t": 10,
+                "hit": 0,
+                "wins": 0,
+                "pc": 0,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 2,
+                "chainN": 0,
+                "aiT": 999999965,
+                "move": null,
+                "finite": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "timeout-win",
+          "status": "PASS",
+          "scope": "timer=1 and unequal-HP fixture; ordinary loop resolves timeout",
+          "evidence": {
+            "phase": "end",
+            "pt": 5,
+            "tm": 0,
+            "round": 1,
+            "msg": "TIME UP",
+            "hs": 0,
+            "sweptContact": 1,
+            "fighters": [
+              {
+                "x": -1.5,
+                "y": 0,
+                "z": 0,
+                "hp": 100,
+                "st": "idle",
+                "t": 5,
+                "hit": 0,
+                "wins": 1,
+                "pc": 0,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 0,
+                "move": null,
+                "finite": true
+              },
+              {
+                "x": 1.5,
+                "y": 0,
+                "z": 0,
+                "hp": 70,
+                "st": "idle",
+                "t": 5,
+                "hit": 0,
+                "wins": 0,
+                "pc": 0,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 999999999,
+                "move": null,
+                "finite": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "timeout-draw",
+          "status": "PASS",
+          "scope": "timer=1 and equal-HP fixture; ordinary loop resolves draw",
+          "evidence": {
+            "phase": "end",
+            "pt": 4,
+            "tm": 0,
+            "round": 1,
+            "msg": "DRAW",
+            "hs": 0,
+            "sweptContact": 1,
+            "fighters": [
+              {
+                "x": -1.5,
+                "y": 0,
+                "z": 0,
+                "hp": 100,
+                "st": "idle",
+                "t": 4,
+                "hit": 0,
+                "wins": 0,
+                "pc": 0,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 0,
+                "move": null,
+                "finite": true
+              },
+              {
+                "x": 1.5,
+                "y": 0,
+                "z": 0,
+                "hp": 100,
+                "st": "idle",
+                "t": 4,
+                "hit": 0,
+                "wins": 0,
+                "pc": 0,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 999999999,
+                "move": null,
+                "finite": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "ring-out",
+          "status": "PASS",
+          "scope": "opponent beyond ring fixture; ordinary gravity/loop resolves fall",
+          "evidence": {
+            "phase": "end",
+            "pt": 38,
+            "tm": 2674,
+            "round": 1,
+            "msg": "RING OUT!",
+            "hs": 0,
+            "sweptContact": 1,
+            "fighters": [
+              {
+                "x": -1.5,
+                "y": 0,
+                "z": 0,
+                "hp": 100,
+                "st": "idle",
+                "t": 63,
+                "hit": 0,
+                "wins": 1,
+                "pc": 0,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 0,
+                "move": null,
+                "finite": true
+              },
+              {
+                "x": 4.1,
+                "y": -3,
+                "z": 0,
+                "hp": 100,
+                "st": "down",
+                "t": 8,
+                "hit": 0,
+                "wins": 0,
+                "pc": 0,
+                "kc": 0,
+                "pn": 0,
+                "kn": 0,
+                "combo": 0,
+                "chainN": 0,
+                "aiT": 999999974,
+                "move": null,
+                "finite": true
+              }
+            ]
+          }
+        }
+      ],
+      "page_errors": [],
+      "console_errors": []
+    },
+    {
+      "profile": "mobile-chromium-emulation",
+      "tests": [
+        {
+          "name": "startup-and-render",
+          "status": "PASS",
+          "scope": "original game startup; controlled browser clock and fixed test-side RNG seed",
+          "evidence": {
+            "initial": {
+              "phase": "intro",
+              "pt": 0,
+              "tm": 2700,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 0,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 0,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "state": {
+              "phase": "fight",
+              "pt": 91,
+              "tm": 2671,
+              "round": 1,
+              "msg": "FIGHT!",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 119,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 0.18833333333333346,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "walk",
+                  "t": 119,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 1,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "canvas": {
+              "width": 1170,
+              "height": 2181,
+              "colors": 191,
+              "opaqueFraction": 1
+            },
+            "screenshot": "mobile-chromium-emulation-startup.png"
+          }
+        },
+        {
+          "name": "movement-and-sidestep",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "before": {
+              "x": -1.5,
+              "y": 0,
+              "z": 0,
+              "hp": 100,
+              "st": "idle",
+              "t": 2,
+              "hit": 0,
+              "wins": 0,
+              "pc": 0,
+              "kc": 0,
+              "pn": 0,
+              "kn": 0,
+              "combo": 0,
+              "chainN": 0,
+              "aiT": 0,
+              "move": null,
+              "finite": true
+            },
+            "forward": {
+              "x": -0.925,
+              "y": 0,
+              "z": 0,
+              "hp": 100,
+              "st": "idle",
+              "t": 19,
+              "hit": 0,
+              "wins": 0,
+              "pc": 0,
+              "kc": 0,
+              "pn": 0,
+              "kn": 0,
+              "combo": 0,
+              "chainN": 0,
+              "aiT": 0,
+              "move": null,
+              "finite": true
+            },
+            "back": {
+              "x": -1.299999999999999,
+              "y": 0,
+              "z": 0,
+              "hp": 100,
+              "st": "idle",
+              "t": 36,
+              "hit": 0,
+              "wins": 0,
+              "pc": 0,
+              "kc": 0,
+              "pn": 0,
+              "kn": 0,
+              "combo": 0,
+              "chainN": 0,
+              "aiT": 0,
+              "move": null,
+              "finite": true
+            },
+            "sidestep": {
+              "x": -1.1974904362248395,
+              "y": 0,
+              "z": -0.7841703413502051,
+              "hp": 100,
+              "st": "idle",
+              "t": 15,
+              "hit": 0,
+              "wins": 0,
+              "pc": 0,
+              "kc": 0,
+              "pn": 0,
+              "kn": 0,
+              "combo": 0,
+              "chainN": 0,
+              "aiT": 0,
+              "move": null,
+              "finite": true
+            }
+          }
+        },
+        {
+          "name": "guard-hold-release",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "held": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2692,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.5,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "guard",
+                  "t": 8,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.5,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 8,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999992,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "released": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2685,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.5,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 15,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.5,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 15,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999985,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "attack-P",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "move": "P",
+            "defender_expected_hp": 92,
+            "final": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2491,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 207,
+                  "hit": 1,
+                  "wins": 0,
+                  "pc": 1,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "P",
+                  "finite": true
+                },
+                {
+                  "x": 0.648980211308299,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 92,
+                  "st": "idle",
+                  "t": 202,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999791,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "victim_states": [
+              "idle",
+              "stun"
+            ]
+          }
+        },
+        {
+          "name": "attack-K",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "move": "K",
+            "defender_expected_hp": 86,
+            "final": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2491,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.2841143733726917,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 207,
+                  "hit": 1,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 1,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "K",
+                  "finite": true
+                },
+                {
+                  "x": 0.8695006225015103,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 86,
+                  "st": "idle",
+                  "t": 199,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999791,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "victim_states": [
+              "idle",
+              "stumble"
+            ]
+          }
+        },
+        {
+          "name": "attack-L",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "move": "L",
+            "defender_expected_hp": 84,
+            "final": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2490,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 207,
+                  "hit": 1,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "L",
+                  "finite": true
+                },
+                {
+                  "x": 2.4263285174120264,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 84,
+                  "st": "idle",
+                  "t": 117,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999790,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "victim_states": [
+              "air",
+              "down",
+              "getup",
+              "idle"
+            ]
+          }
+        },
+        {
+          "name": "attack-T",
+          "status": "PASS",
+          "scope": "controlled in-memory fixture; real browser input and original animation loop",
+          "evidence": {
+            "move": "T",
+            "defender_expected_hp": 78,
+            "final": {
+              "phase": "fight",
+              "pt": 0,
+              "tm": 2486,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 208,
+                  "hit": 1,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "T",
+                  "finite": true
+                },
+                {
+                  "x": 1.7444967122075692,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 78,
+                  "st": "idle",
+                  "t": 116,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 999999786,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "victim_states": [
+              "air",
+              "carry",
+              "down",
+              "getup",
+              "idle"
+            ]
+          }
+        },
+        {
+          "name": "ko-next-round-match-rematch",
+          "status": "PASS",
+          "scope": "opponent HP=1 and neutral range fixtures; real attack/canvas inputs; normal round timers",
+          "evidence": {
+            "first_ko": {
+              "phase": "end",
+              "pt": 9,
+              "tm": 2691,
+              "round": 1,
+              "msg": "K.O.",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "atk",
+                  "t": 14,
+                  "hit": 1,
+                  "wins": 1,
+                  "pc": 1,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "P",
+                  "finite": true
+                },
+                {
+                  "x": 1.3250000000000002,
+                  "y": 0.3,
+                  "z": 0,
+                  "hp": 0,
+                  "st": "air",
+                  "t": 9,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 1,
+                  "chainN": 0,
+                  "aiT": 999999991,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "next_round": {
+              "phase": "intro",
+              "pt": 13,
+              "tm": 2700,
+              "round": 2,
+              "msg": "ROUND 2",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 13,
+                  "hit": 0,
+                  "wins": 1,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 13,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "match_over": {
+              "phase": "over",
+              "pt": 161,
+              "tm": 2674,
+              "round": 2,
+              "msg": "YOU WIN \u2013 TAP TO REMATCH",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -0.425,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 191,
+                  "hit": 1,
+                  "wins": 2,
+                  "pc": 1,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": "P",
+                  "finite": true
+                },
+                {
+                  "x": 2.7899999872682524,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 0,
+                  "st": "down",
+                  "t": 170,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 1,
+                  "chainN": 0,
+                  "aiT": 999999974,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "rematch": {
+              "phase": "intro",
+              "pt": 3,
+              "tm": 2700,
+              "round": 1,
+              "msg": "ROUND 1",
+              "hs": 0,
+              "sweptContact": 1,
+              "fighters": [
+                {
+                  "x": -1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 3,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                },
+                {
+                  "x": 1.3,
+                  "y": 0,
+                  "z": 0,
+                  "hp": 100,
+                  "st": "idle",
+                  "t": 3,
+                  "hit": 0,
+                  "wins": 0,
+                  "pc": 0,
+                  "kc": 0,
+                  "pn": 0,
+                  "kn": 0,
+                  "combo": 0,
+                  "chainN": 0,
+                  "aiT": 0,
+                  "move": null,
+                  "finite": true
+                }
+              ]
+            },
+            "screenshot": "mobile-chromium-emulation-match-over.png"
+          }
+        },
+        {
+          "name": "browser-errors",
+          "status": "PASS",
+          "scope": "collected across entire browser profile",
+          "evidence": {
+            "page_errors": [],
+            "console_errors": [],
+            "observer_errors": []
+          }
+        }
+      ],
+      "page_errors": [],
+      "console_errors": []
+    }
+  ],
+  "infrastructure_errors": [],
+  "git_worktree_clean_before": false,
+  "git_worktree_clean_after": false,
+  "limitations": [
+    "Chromium desktop and mobile touch emulation only; no physical-device or Safari/WebKit validation.",
+    "Runtime fixtures disclose neutral range, health, timer and AI-freeze preparation. Tests use real browser input and the original animation loop, with a fixed test-side RNG seed.",
+    "Clock-stepped checks do not measure real-time frame rate or latency.",
+    "Most controlled attack checks use default human Red; this is not a complete two-fighter move-variant regression.",
+    "No full natural match, biomechanics/animation acceptance, or world/Rapier integration claim.",
+    "The protected baseline hash is a reference; actual candidate source hashes are recorded independently. An optional --require-source-sha256 adds an explicit source identity gate.",
+    "The runner edits no game source, installs no dependencies, and performs no Git commits, pushes or merges. The temporary loopback server and browser are closed after the run."
+  ],
+  "passed": 25,
+  "failed": 0,
+  "skipped": 0,
+  "unrun": 0,
+  "total": 25,
+  "gate_errors": [],
+  "gate_status": "PASS",
+  "finished_at_utc": "2026-11-03T10:21:33.445170+00:00"
+}

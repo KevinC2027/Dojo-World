@@ -1,0 +1,56 @@
+[
+  {
+    "event": "carry-1",
+    "engine_tick": 18,
+    "simulation_tick": 10,
+    "path": "lunge-slot1-face+1-gap0.85-carry-1.png"
+  },
+  {
+    "event": "carry-3",
+    "engine_tick": 20,
+    "simulation_tick": 12,
+    "path": "lunge-slot1-face+1-gap0.85-carry-3.png"
+  },
+  {
+    "event": "carry-6",
+    "engine_tick": 23,
+    "simulation_tick": 15,
+    "path": "lunge-slot1-face+1-gap0.85-carry-6.png"
+  },
+  {
+    "event": "carry-9",
+    "engine_tick": 26,
+    "simulation_tick": 18,
+    "path": "lunge-slot1-face+1-gap0.85-carry-9.png"
+  },
+  {
+    "event": "carry-11",
+    "engine_tick": 28,
+    "simulation_tick": 20,
+    "path": "lunge-slot1-face+1-gap0.85-carry-11.png"
+  },
+  {
+    "event": "air",
+    "engine_tick": 29,
+    "simulation_tick": 21,
+    "path": "lunge-slot1-face+1-gap0.85-air.png"
+  },
+  {
+    "event": "down",
+    "engine_tick": 50,
+    "simulation_tick": 42,
+    "path": "lunge-slot1-face+1-gap0.85-down.png"
+  },
+  {
+    "event": "getup",
+    "engine_tick": 105,
+    "simulation_tick": 97,
+    "path": "lunge-slot1-face+1-gap0.85-getup.png"
+  },
+  {
+    "event": "recovered",
+    "engine_tick": 159,
+    "simulation_tick": 151,
+    "path": "lunge-slot1-face+1-gap0.85-recovered.png"
+  }
+]
