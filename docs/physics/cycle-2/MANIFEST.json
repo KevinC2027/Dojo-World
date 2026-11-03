@@ -1,0 +1,237 @@
+{
+  "status": "BLOCKED",
+  "issue": 7,
+  "branch": "physics/carry-air-continuity-cycle-2",
+  "base_commit": "829ec0ea085609606eeb30979b491e1a901b17cc",
+  "protected_source_sha256": "786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b",
+  "candidate_sha256": "368fc07f48f1c3a0215620a5f295a704aa7f6bd852cd07ddaea2a1dc6043c406",
+  "candidate_versions": 1,
+  "post_gate_repair_revisions": 0,
+  "agents_started": 0,
+  "gate_status": {
+    "deterministic_conditions": "8/8 PASS",
+    "browser": "25/25 PASS",
+    "physics": "FAIL:48 remaining continuity distributions"
+  },
+  "stop_reason": "First failed physics gate; no thresholds relaxed.",
+  "next_action": "Diagnose first remaining native Red/S0 +X right-elbow carry-to-air distribution using existing traces.",
+  "files": [
+    {
+      "path": "browser/desktop-match-over.png",
+      "bytes": 150374,
+      "sha256": "2d9332480134c2609171a0dd7f3cb8aecc5a8baf295e8596d5b9adef9424ee91"
+    },
+    {
+      "path": "browser/desktop-startup.png",
+      "bytes": 150851,
+      "sha256": "68db273d2b08c8698ea7e430e19a42bed45bcf390621af29d6c758a3cad1e10d"
+    },
+    {
+      "path": "browser/desktop-trace.json",
+      "bytes": 773405,
+      "sha256": "2f89224b24c5b048e67456fbf6f7b44741e533764ab466c9dfd37830207d172d"
+    },
+    {
+      "path": "browser/junit.xml",
+      "bytes": 7359,
+      "sha256": "08bc37e8d8e3a7cd3855667096f55ceb5beb0fb64c7ccd2263c3b03d11869fa9"
+    },
+    {
+      "path": "browser/mobile-chromium-emulation-match-over.png",
+      "bytes": 291512,
+      "sha256": "dc400b2ee5bcb659cef4df6165e28e5f5d3b9fbcf1e7c0983d504eba165254b7"
+    },
+    {
+      "path": "browser/mobile-chromium-emulation-startup.png",
+      "bytes": 287053,
+      "sha256": "b62948d7b7c2b4162b857fc21337c8343ba99dfddbf436f96ea9417068693583"
+    },
+    {
+      "path": "browser/mobile-chromium-emulation-trace.json",
+      "bytes": 641150,
+      "sha256": "05fa002ed732f3a1d1a74a1cfc9cf6fb61dc0191d65e86bac8dfd909372239b1"
+    },
+    {
+      "path": "browser/report.md",
+      "bytes": 3477,
+      "sha256": "0fb2438729861e0760f43078b2380a2067ed2ee79956ee3190745348947cdb1a"
+    },
+    {
+      "path": "browser/results.json",
+      "bytes": 55278,
+      "sha256": "cd14ee298c1b58f3c5307d4105ffc6477d320ac8953a2ee443ce016458d4b348"
+    },
+    {
+      "path": "comparison/comparison.json",
+      "bytes": 1260851,
+      "sha256": "530839a3fa3b8e62eee4ea3d3f09fe65d31c70dad06c1f6ef175c8ee7e32a92b"
+    },
+    {
+      "path": "comparison/report.md",
+      "bytes": 4608,
+      "sha256": "160d15bf006d9de14a99d04d62ce896aa00ceb965dbba5912519b26b25b1bc83"
+    },
+    {
+      "path": "initial-diagnosis.json",
+      "bytes": 261157,
+      "sha256": "1f3cf5e0985eb8c954806303378a1e9c5030114e2739a28124eb3103042d0f25"
+    },
+    {
+      "path": "release-diagnostics.json",
+      "bytes": 391343,
+      "sha256": "7f4c0cdd04b8cdb7928194ab110de2741b24311e3d9fce1e68354d98ab18347b"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-air.png",
+      "bytes": 193391,
+      "sha256": "db647b9be590c58e81c0db859b0003230ee2c889c0ded56646c3a7b4a77f0ada"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-carry-1.png",
+      "bytes": 192915,
+      "sha256": "8e79c3680a9ff3572c7b656c50c1c83e8fdced79a5ecf9472ca66d73aa2ebf8f"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-carry-11.png",
+      "bytes": 193323,
+      "sha256": "36d7208e9a82c75b70d640a16fd5967a32b220901b3c353fd08cc801b8c28f1f"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-carry-3.png",
+      "bytes": 193824,
+      "sha256": "f7a94edd4d55174279c61ae736efcc7171345ad670533aca8da732997f97a63b"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-carry-6.png",
+      "bytes": 193586,
+      "sha256": "9aabc2ff79bc28f894ee97703fc16837c4197e8834acde5e591ece0a0acb29da"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-carry-9.png",
+      "bytes": 193013,
+      "sha256": "7df727f4470c75c730210d487e2c65d2373aafc2dcb360a0c954862afb1271de"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-down.png",
+      "bytes": 188491,
+      "sha256": "aa9cb841a3e9f5992d88b402c2635695b8f024064f4393d9842fe5387ccba004"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-frames.json",
+      "bytes": 1207,
+      "sha256": "304a2c8bfe1ed191ebd6b1214cdaad08175cbff61eef71f3c9e50efb8b7bbdf1"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-getup.png",
+      "bytes": 185881,
+      "sha256": "6d4f37c7e044c4bec2a109b7d37fadfcb8aec7a427bd80e458ae98601d8cb460"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85-recovered.png",
+      "bytes": 188850,
+      "sha256": "08d5966882832fda09301add7f61efd6dcea006d9597ed982561d4e1fe905e4c"
+    },
+    {
+      "path": "revision-1/back-slot0-face+1-gap0.85.json.gz",
+      "bytes": 161869,
+      "sha256": "6b551141ba4ca24b607687eda5db641218192c0348ad1e5732d2202b6d3d06ed"
+    },
+    {
+      "path": "revision-1/back-slot0-face-1-gap0.85.json.gz",
+      "bytes": 167281,
+      "sha256": "00d1daf09ddc46747fad688bc5144b07f700491691e0b3248208f7dc7794354e"
+    },
+    {
+      "path": "revision-1/back-slot1-face+1-gap0.85.json.gz",
+      "bytes": 162177,
+      "sha256": "54507a38a7817d8518fdfb701d96fda1074516b1b8693d8aea4e3fc13068f6a2"
+    },
+    {
+      "path": "revision-1/back-slot1-face-1-gap0.85.json.gz",
+      "bytes": 167598,
+      "sha256": "7a2d41cdc58b53e7e4465711f457419e8a83ba34ffebf5c3faeb52b0235d7302"
+    },
+    {
+      "path": "revision-1/lunge-slot0-face+1-gap0.85.json.gz",
+      "bytes": 166223,
+      "sha256": "3e10625ad2569e8f74981aaa13740b343e895921326fc8655ffcf5ac2c284566"
+    },
+    {
+      "path": "revision-1/lunge-slot0-face-1-gap0.85.json.gz",
+      "bytes": 174377,
+      "sha256": "2e961249dd9c458bfb431026c082b5225666b4cdbfb3f6fe40b41c09f9810fc6"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-air.png",
+      "bytes": 229013,
+      "sha256": "4fde484ae3dc4d6a8a904b80100dfc8db8b1833af749aff6ca41d52cb3c7d5f8"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-carry-1.png",
+      "bytes": 233443,
+      "sha256": "894fe656e7a85f485f8fe56edf0ac6bc5bbeedb2e6365ce8b4c2caefe3b1df94"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-carry-11.png",
+      "bytes": 229459,
+      "sha256": "149453514a81d673c8b328abee7b72b7ad9d18c47d6be2ee53ae20cd2f37d4cb"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-carry-3.png",
+      "bytes": 234354,
+      "sha256": "dfaddfaff043555d8429c2a034ae30c74be127aed9d9f82d7c0ed0a9779a4640"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-carry-6.png",
+      "bytes": 232544,
+      "sha256": "a94a521a95f78e5a4e8cdb4f78946e0f5003ca5c12fe554d888a60ea847e2a6f"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-carry-9.png",
+      "bytes": 227804,
+      "sha256": "a6b9ab6255e681400b3c6d809b2e948fb451f99be43f51e938df0d3d976fef6f"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-down.png",
+      "bytes": 207079,
+      "sha256": "49a097d519946be84a3e30602c6c8f3d4ae9524161cd6a6e899f1ce371330c10"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-frames.json",
+      "bytes": 1218,
+      "sha256": "634435b79eb051321a835dbeeb480347a7f844d0b262bceb38bf2b8e37e53b1a"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-getup.png",
+      "bytes": 186724,
+      "sha256": "67127bf003362b4e4d17b5ffc2308ce9461780c2cbad716c262022a70ca6b4d0"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85-recovered.png",
+      "bytes": 188520,
+      "sha256": "947675dd2ba48438c777dd9b62eb984670870e9a6a822c5c574cd765d7f66ba7"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face+1-gap0.85.json.gz",
+      "bytes": 166388,
+      "sha256": "332c4b922facd52a362235a0fdc9023a1f173cfd182145f528a238d93fb55685"
+    },
+    {
+      "path": "revision-1/lunge-slot1-face-1-gap0.85.json.gz",
+      "bytes": 174561,
+      "sha256": "e8f6088dcb3d0ba34df42eecb8b1fb37e830f763dc1a00c92a4b8389e661b88f"
+    },
+    {
+      "path": "revision-1/scorecard.json",
+      "bytes": 2105587,
+      "sha256": "7168b48729a192d637bd6cc4cf004388f33aceb952ffafff28ff963f4c07bc3c"
+    }
+  ],
+  "code_sha256": {
+    "tests/physics/build_cycle2.py": "6f453f298c490e37bdef4a2f2030f32398497cb38804941ff483892b86ce69f1",
+    "tests/physics/release_diagnostics.py": "6ce4da665fdf59239bd0b45c1617134d7f75cce48a397069c1fe7654abfe79fe",
+    "workbench/carry-air-continuity-v2/README.md": "e3ef259bb9474cde46f2e8203be9bf5607b20a9284002900273a2536cdc2cdff",
+    "workbench/carry-air-continuity-v2/index.html": "368fc07f48f1c3a0215620a5f295a704aa7f6bd852cd07ddaea2a1dc6043c406",
+    "workbench/carry-air-continuity-v2/solver.js": "a4626588ce7e8779a3167fe87cbc2fa9e941dde3e7801e4c50595b48897afaa4"
+  }
+}
