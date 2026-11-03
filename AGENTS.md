@@ -13,6 +13,14 @@ Continuously improve believable, grounded, expressive, responsive combat physics
 - Current controls: **buttons**, not dual-stick. Blue's style is Kung Fu; Red is boxing-inspired, but the existing eight ordinary hand/kick attacks and launcher/throw variants must be preserved pending explicit style decision.
 - Retain the three-stage roadmap: complete ordinary move sets, verify natural combat exchanges, then develop special moves.
 
+## Owner's mandatory phase-boundary correction (2026-11-03)
+
+**Before any combat-physics candidate or review, read and obey `docs/physics/MOTION_CONTINUITY_CONTRACT.md`.** This owner directive overrides any earlier instruction that would optimize one solver or phase in isolation or declare a correction fixed before adjacent phases, full regression and video acceptance.
+
+Priority requirements: (1) **treat complete motion and phase interfaces as the unit of correctness**; (2) pass pose, position, velocity, bend-pole and contact state across every affected boundary, ordinarily using a measured 4–6 tick constrained blend where feasible; (3) repair the physical throw path, not just impact safety gates; (4) **prove reachable geometry and the step gate mathematically before editing** (stop if infeasible under fixed endpoints/lengths); (5) **produce actual normal-speed and 0.25× video for every revision** and give the owner's visual verdict independent standing; (6) rerun neighboring phases **and the full 8-condition physics comparator and 25 browser checks** before stating a fix is accepted. If any gate fails, label BLOCKED and do not merge/promote.
+
+Preserve PR #6/#8 as blocked evidence; current Issue #7 next action is **feasibility diagnosis of the first remaining right-elbow carry→air seam before any more code changes**. No gameplay changes or merges are authorized merely by writing these instructions.
+
 ## Non-negotiable engineering loop
 1. **Read:** identify current baseline SHA, owner directives, archived accepted decisions, open defects, last comparable candidate, and actual input path that triggers the behavior.
 2. **Measure before editing:** reproduce one highest-impact physics defect through actual gameplay input when possible; save deterministic state traces, geometry/physics measurements, and relevant video/frame evidence. Label forced tests distinctly.
