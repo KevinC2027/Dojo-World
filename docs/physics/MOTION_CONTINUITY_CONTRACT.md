@@ -31,6 +31,16 @@
 - Owner example: the closest reachable point was **0.0228 m** away, but the local step limit was **0.0117 m**. **Provably infeasible with those locked endpoints and lengths.** No iteration may tune a solver under those fixed constraints and then claim it could satisfy the gate.
 - If infeasible, stop and propose the **smallest interface-level constraint redesign** (e.g. continuity-preserving change to endpoint trajectory, blend window, neighboring pose, or permitted timing) with explicit before/after test prediction. **Do not simply loosen a safety or visual gate.** Get owner review for any changed locked constraint.
 
+### Owner-approved bounded right-arm length exception (2026-11-03)
+
+For the **victim's right-arm upper-arm and forearm segments in the shipped back-style throw only**, the final **two advancing carry simulation ticks immediately before carry→air** may have absolute segment-length error of at most **0.015 m (15 mm)** relative to 0.40 m: each segment must remain in **[0.385, 0.415] m**. At every other tick, these right-arm segments retain the exact **0.40 m** requirement. This exception supersedes the exact-length requirement above only for those two segments and ticks.
+
+This decision changes no endpoint, shoulder, root, other-joint, gameplay timing, input, HP, outcome, contact or bend-pole constraint. Lunge is outside its scope. The comparator, its tolerances and the strict rankwise distribution gate remain unchanged; this contract allowance does not waive any comparator failure.
+
+Before gameplay edits, demonstrate last-carry feasibility in all four back-style slot/facing conditions, with release step **≤0.011730731 m for slot 0** and **≤0.011712655 m for slot 1**. If no solution exists, report the minimum and stop. Only one candidate is authorized after feasibility; no chained repairs. Evaluate all eight conditions and report the existing lunge rank-19 failure separately without changing lunge.
+
+Every candidate revision, including a rejected one, still requires actual normal-speed and **0.25×** footage, full-move traces through landing and recovery, all eight conditions, the full comparator and **25/25** browser checks with nothing skipped. Report what was and was not run. The owner's visual verdict remains independent of the numerical gate.
+
 ### 5. Every revision includes actual video
 - **Mandatory each candidate revision**, including failed/rejected ones: actual captured runtime footage, labeled baseline vs candidate, **normal-speed and 0.25× slow motion**, covering at minimum **pre-grip/entry → carry/load → release/air → floor contact → recovery**, plus focused seam frames; include both relevant fighter directions/facings when testing that scope.
 - Attach timestamp/frame index, candidate SHA, actual input path, phase markers and, where feasible, diagnostic skeleton/constraint overlays. A still photo, static test report, or hand-authored animation is not substitute video evidence.
