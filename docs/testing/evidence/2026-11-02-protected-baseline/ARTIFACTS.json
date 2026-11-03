@@ -1,0 +1,52 @@
+{
+  "source_commit": "0b84692b5f3bf24bcdf10837935f7877a9e16a94",
+  "source_sha256": "786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b",
+  "provenance": "Original Codex browser run; copied byte-for-byte, not an independent reproduction. Historical absolute paths are retained in original definitions/report.",
+  "files": [
+    {
+      "path": "browser_smoke.py",
+      "bytes": 20627,
+      "sha256": "e9b448ec0585d7e9c4c97558cf191def658fc937b4aa736635550613ebf9e54f"
+    },
+    {
+      "path": "desktop-match-over.png",
+      "bytes": 150395,
+      "sha256": "00b1ebb160764ffb41d0f22a5484a3744d3c833624ac20db53cbfdbecabdd051"
+    },
+    {
+      "path": "desktop-startup.png",
+      "bytes": 163047,
+      "sha256": "99c7753094d25213419828ed5c711fdbcb47ad424049a61ad9cb9ff5e1c4b94a"
+    },
+    {
+      "path": "desktop-trace.json",
+      "bytes": 747927,
+      "sha256": "ff103791b49e14cb16c14d1104d6e3bafe6d437d1acd37d386a935af8a3cbf8c"
+    },
+    {
+      "path": "mobile-chromium-emulation-match-over.png",
+      "bytes": 291623,
+      "sha256": "1307b3332735efde2969f64efa69845b170972cd0e39c451bcd91d49d98bdccb"
+    },
+    {
+      "path": "mobile-chromium-emulation-startup.png",
+      "bytes": 287053,
+      "sha256": "b62948d7b7c2b4162b857fc21337c8343ba99dfddbf436f96ea9417068693583"
+    },
+    {
+      "path": "mobile-chromium-emulation-trace.json",
+      "bytes": 639775,
+      "sha256": "25b32adcb1b5d5a46760cf61e699e894ae217b6160bebe9d8b94d58b2271de27"
+    },
+    {
+      "path": "report.md",
+      "bytes": 3479,
+      "sha256": "616dc6942cf901b5a34d0427a15088601fffaa07b27716e12d8ab727a8c9c764"
+    },
+    {
+      "path": "results.json",
+      "bytes": 53451,
+      "sha256": "f00eb3bdc971225b5ca282fbba8d27adc87e941fe05db3712775464044548862"
+    }
+  ]
+}

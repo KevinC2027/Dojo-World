@@ -1,0 +1,70 @@
+name: Browser smoke regression
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - source/recovered-2026-11-02
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: browser-smoke-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-smoke:
+    name: Browser smoke regression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out proposed source without retained credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # Preserve exact source-history provenance on PR merge checkouts.
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12.14'
+          cache: pip
+          cache-dependency-path: tests/browser_smoke/requirements.txt
+
+      - name: Verify preserved browser evidence
+        run: python3 tests/browser_smoke/verify_evidence.py
+
+      - name: Validate regression result gates
+        run: python3 -m unittest discover -s tests/browser_smoke -p 'test_*.py'
+
+      - name: Install pinned browser test dependencies
+        run: python3 -m pip install --disable-pip-version-check --requirement tests/browser_smoke/requirements.txt
+
+      - name: Install the pinned Playwright Chromium revision
+        run: python3 -m playwright install --with-deps chromium
+
+      - name: Run both browser profiles and record every expected check
+        if: ${{ !cancelled() }}
+        run: python3 tests/browser_smoke/run.py --output-dir artifacts/browser-smoke
+
+      - name: Publish the browser report in the job summary
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          if [[ -f artifacts/browser-smoke/report.md ]]; then
+            cat artifacts/browser-smoke/report.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Browser smoke report is missing; inspect setup and runner failures above.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Preserve reports, results, traces and screenshots
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: browser-smoke-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/browser-smoke/
+          if-no-files-found: error
+          retention-days: 30
