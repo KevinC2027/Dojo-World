@@ -1,5 +1,14 @@
 # Combat physics program ledger
 
+## Right-elbow diagnosis after Cycle 2 — BLOCKED, no repair
+
+Resumed Issue #7 / PR #8 from exact commit `9b784ca886575a14a2c79fb4b27759b491bfb024` on isolated branch `physics/right-elbow-feasibility-checkpoint`. Tested one hypothesis: late-carry right-elbow pole anticipation with fixed 0.40/0.40 m segments and unchanged endpoints/air poses. **Rejected before editing**: closest feasible last-carry elbow is 0.022830137790 m from first air, while the unchanged rankwise step gate requires <=0.011730731305 m. The saved regression is 0.011729731305 → 0.029375425041 m at tick 20; only sorted rank 0 fails although p50/p95/p99/max agree. Exact discrete velocity handoff has a minimum 3.841086072877 m/s mismatch. The carry-to-authored-air constraint mismatch cannot be repaired solely by pole/alpha/cache tuning.
+
+[Diagnosis, distributions, cause, commands and next single action](right-elbow-diagnosis/README.md); [machine-readable evidence](right-elbow-diagnosis/result.json). Script reuses existing measurements/harness and returns **exit 1 / BLOCKED** after successful diagnostic assertions. Zero candidate edits, zero repair revisions. New eight-case/gameplay/browser acceptance tests UNRUN; Git clone blocked by unavailable configured proxy. Historical PR #8 remains physics FAIL/48; no green promotion. All original source/evidence/gates preserved. This commit is a diagnostic checkpoint, not a repair. No agents, purchases, merges or deployment.
+
+Next single action: test feasibility of a fixed-endpoint right-elbow handoff allowing early-air elbow changes against **all existing** rankwise gates in saved eight-case traces, before source editing. New hypothesis deferred to a later explicit task.
+
+
 ## Cycle 2 — first carry-to-air elbow handoff, BLOCKED checkpoint
 
 Issue #7 and the limited-autonomy protocol were read from `codex/combat-physics-program-2026-11-02` at `cb57ce1`. The protocol is copied verbatim onto this branch. Work is isolated on `physics/carry-air-continuity-cycle-2`, based on Cycle 1 commit `829ec0ea085609606eeb30979b491e1a901b17cc` so its harness and evidence remain available. The **gameplay baseline is still the protected original**, never the rejected Cycle 1 HTML. No parallel/delegated agents, purchases, deployment, merge or scheduler were used. The Usage dashboard is not exposed by these tools; no remaining allowance or reset is claimed.
