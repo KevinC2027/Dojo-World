@@ -1,4 +1,4 @@
-# Dojo World — Clean-room Combat Engine v0.7
+# Dojo World — Clean-room Combat Engine v0.8
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
 
@@ -46,7 +46,7 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 
 ## Next priority
 
-Connect the new procedural per-tick 3D strike trajectories to authoritative hit resolution, replacing the range-only gate. First preserve current hit/trade tests and phase continuity; then add moving defender capsules and realistic articulated joints.
+Verify and inspect collision-probe mismatches in replay, then introduce moving-defender relative sweeps and reliable articulated limb poses before making 3D collision authoritative. Preserve current hit/trade tests and phase continuity.
 
 ## v0.5 geometry increment
 
@@ -60,6 +60,14 @@ Connect the new procedural per-tick 3D strike trajectories to authoritative hit 
 - Added four focused tests for first-entry timing, initial overlap, misses/determinism, and tangency in `test/sweep.test.mjs`.
 - **Important:** The geometry is still independent of authoritative combat hits. Moving defender capsules, anatomical strike trajectories, limb IK and phase-transition continuity are not implemented. These tests must be executed before claiming passing status.
 
+## v0.8 3D collision shadow telemetry
+
+- Added `src/collision-probe.mjs`, evaluating the current attack's active-frame hand/foot sweep against a stationary defender torso capsule with deterministic first-entry geometry.
+- `src/engine.mjs` now attaches `collisionProbe` to every resolved hit/block event. It identifies the limb, active frame, whether the 3D sweep intersected, and first-impact geometry when available. This makes disagreements between range-proxy damage and visible limb contact inspectable.
+- Added `test/collision-probe.test.mjs` with five tests covering deterministic replay, non-mutation, range miss, invalid active frames, and event attachment.
+- **No hit authority changed:** the range/facing gate still determines damage, guarding, and simultaneous trades. The 3D probe is deliberately diagnostic-only. It samples a stationary defender capsule at each tick and is not a validated articulated limb/body collision model.
+- Test results and CI are **not confirmed** until the full Node test suite runs. The release branch and Cloudflare deployment remain unchanged.
+
 ## v0.7 procedural trajectory increment
 
 - Added `src/trajectory.mjs` with deterministic 3D world-space striking endpoint paths for Blue palm, straight and front kick, plus Red jab, cross and hook. Each move specifies striking limb and radius; trajectories rotate with the fighter's facing, translate with their world position, and use a smooth extend-and-return curve with matching endpoints at active-phase boundaries.
@@ -68,6 +76,8 @@ Connect the new procedural per-tick 3D strike trajectories to authoritative hit 
 - Tests were committed but must be executed before reporting passing results. The GitHub workflow lives outside the permitted edit directory and was only inspected, not changed.
 
 ## Changelog
+
+2026-11-04: v0.8 added per-active-tick swept 3D collision shadow telemetry to resolved hit/block events, plus five targeted tests; authoritative damage still uses range/facing proxy.
 
 2026-11-04: Review Station alpha committed separately from the gameplay engine. Four replay scenarios, frame scrubbers, 3D and SVG viewers, and structured reviewer packets; mobile and CI unverified.
 
