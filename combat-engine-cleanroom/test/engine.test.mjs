@@ -123,3 +123,59 @@ test('front-facing guard still blocks a strike', () => {
   assert.equal(events.filter(e => e.type === 'blocked').length, 1);
   assert.equal(events.filter(e => e.type === 'hit').length, 0);
 });
+
+test('recovery input buffer executes on the first free tick without skipping recovery', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const events = [];
+  events.push(...w.step({ blue: { attack: 'straight' } }));
+  // The straight completes its startup and active frames, then enters recovery.
+  for (let i = 0; i < 6; i++) events.push(...w.step());
+  assert.equal(w.fighters.blue.action.phase, 'recovery');
+  events.push(...w.step({ blue: { attack: 'palm' } }));
+  assert.equal(w.fighters.blue.bufferedAttack.name, 'palm');
+  assert.equal(w.fighters.blue.action.name, 'straight');
+  // Refresh the buffer near the end of recovery so it survives until the fighter is free.
+  for (let i = 0; i < 7; i++) events.push(...w.step());
+  events.push(...w.step({ blue: { attack: 'palm' } }));
+  for (let i = 0; i < 7; i++) events.push(...w.step());
+  assert.equal(w.fighters.blue.action, null);
+  events.push(...w.step());
+  assert.equal(w.fighters.blue.action.name, 'palm');
+  assert.equal(events.filter(e => e.type === 'attack_started' && e.move === 'palm').length, 1);
+});
+
+test('expired buffered attack does not launch after recovery', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  w.step({ blue: { attack: 'frontKick' } });
+  for (let i = 0; i < 16; i++) w.step();
+  assert.equal(w.fighters.blue.action.phase, 'recovery');
+  w.step({ blue: { attack: 'palm' } });
+  for (let i = 0; i < 30; i++) w.step();
+  assert.equal(w.fighters.blue.action, null);
+  assert.equal(w.fighters.blue.bufferedAttack, null);
+});
+
+test('a hit interrupts and clears the defender recovery buffer', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  w.step({ blue: { attack: 'frontKick' } });
+  for (let i = 0; i < 16; i++) w.step();
+  assert.equal(w.fighters.blue.action.phase, 'recovery');
+  w.step({ blue: { attack: 'palm' }, red: { attack: 'jab' } });
+  assert.equal(w.fighters.blue.bufferedAttack.name, 'palm');
+  for (let i = 0; i < 8; i++) w.step();
+  assert.ok(w.fighters.blue.stunFrames > 0);
+  assert.equal(w.fighters.blue.bufferedAttack, null);
+});
+
+test('guard prevents a queued attack from firing while held', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  w.step({ blue: { attack: 'straight' } });
+  for (let i = 0; i < 15; i++) w.step();
+  assert.equal(w.fighters.blue.action.phase, 'recovery');
+  w.step({ blue: { attack: 'palm' } });
+  for (let i = 0; i < 4; i++) w.step({ blue: { guard: true } });
+  assert.equal(w.fighters.blue.action, null);
+  w.step({ blue: { guard: true } });
+  assert.equal(w.fighters.blue.guarding, true);
+  assert.equal(w.fighters.blue.action, null);
+});
