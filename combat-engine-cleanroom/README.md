@@ -1,4 +1,4 @@
-# Dojo World — Clean-room Combat Engine v0.1
+# Dojo World — Clean-room Combat Engine v0.2
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
 
@@ -23,7 +23,7 @@ Run `npm run demo` for an example duel.
 
 ## Not implemented yet
 
-This is a headless rules core, not a playable 3D game: no skeletal animation, camera, controller UI, limb-level collision, actual vertical physics, grapples, throws, network play, Unreal integration, sound or visuals. Facing currently tracks the opponent instantly and must be improved. Internal condition thresholds are preliminary gameplay parameters, not a real biomechanical model.
+This is a headless rules core, not a playable 3D game: no skeletal animation, camera, controller UI, limb-level collision, actual vertical physics, grapples, throws, network play, Unreal integration, sound or visuals. Facing now turns at a bounded 270 degrees/second; directional guard covers a 130-degree frontal arc. Limb-level collisions remain to be implemented. Internal condition thresholds are preliminary gameplay parameters, not a real biomechanical model.
 
 ## Clean-room development principles
 
@@ -35,8 +35,10 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 
 ## Next priority
 
-Implement limited turn speed, directional guard and buffered inputs; then expand the basic move roster, realistic exchanges, and animation-to-contact contracts before special moves.
+Implement buffered attack input; then expand the basic move roster, realistic exchanges, and animation-to-contact contracts before special moves.
 
 ## Changelog
+
+2026-11-04: v0.2 added capped angular turning and directional guarding; added three targeted regression tests (12 total). GitHub CI execution must be checked separately.
 
 2026-11-04: Created fresh v0.1 combat rules engine, six moves, fixed-timestep movement, guard, hits and KO. Local Node 22 test suite: 9/9 passed.
