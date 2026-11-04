@@ -95,3 +95,31 @@ test('separate worlds with same inputs produce identical state and events', () =
     assert.deepEqual(a.snapshot(), b.snapshot());
   }
 });
+
+test('facing rotates at a bounded angular speed rather than snapping', () => {
+  const w = new CombatWorld({ startingGap: 1.5 });
+  w.fighters.blue.facing = { x: 0, z: 1 };
+  w.step();
+  const actual = Math.atan2(w.fighters.blue.facing.z, w.fighters.blue.facing.x);
+  assert.ok(actual > 0);
+  assert.ok(actual < Math.PI / 2);
+  assert.ok(Math.abs(actual - (Math.PI / 2 - Math.PI * 1.5 / 60)) < 1e-10);
+});
+
+test('guard only blocks incoming strikes inside the facing cone', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  w.fighters.blue.facing = { x: -1, z: 0 }; // looking away from Red
+  const events = [ ...w.step({ red: { attack: 'cross' }, blue: { guard: true } }) ];
+  for (let i = 0; i < 14; i++) events.push(...w.step({ blue: { guard: true } }));
+  assert.equal(events.filter(e => e.type === 'blocked').length, 0);
+  assert.equal(events.filter(e => e.type === 'hit').length, 1);
+  assert.equal(w.fighters.blue.condition.headStrain, MOVESETS.red.cross.impact);
+});
+
+test('front-facing guard still blocks a strike', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const events = [ ...w.step({ red: { attack: 'cross' }, blue: { guard: true } }) ];
+  for (let i = 0; i < 14; i++) events.push(...w.step({ blue: { guard: true } }));
+  assert.equal(events.filter(e => e.type === 'blocked').length, 1);
+  assert.equal(events.filter(e => e.type === 'hit').length, 0);
+});
