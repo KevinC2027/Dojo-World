@@ -28,7 +28,7 @@ export function recordSoloMotion(fighterId,scenarioId){
   if(!['blue','red'].includes(fighterId))throw new RangeError('Unknown fighter');
   const scenario=sequences[scenarioId];
   if(!scenario)throw new RangeError('Unknown solo motion scenario');
-  const world=new CombatWorld({startingGap:6});
+  const world=new CombatWorld({startingGap:30});
   const frames=[];
   for(let t=0;t<=scenario.frames;t++){
     if(t>0)world.step({[fighterId]:{move:scenario.vector(t-1),guard:!!scenario.guard}});
