@@ -2,6 +2,17 @@
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
 
+## Review Station alpha (2026-11-04)
+
+A separate Review Station is now committed on the **development branch only**:
+- `review.html` — fixed-scenario 3D replay with frame-by-frame scrubbing, playback speed, and copyable feedback.
+- `review-lite.html` — SVG compatibility replay without WebGL, as a fallback for mobile devices.
+- `src/review.mjs` — deterministically records actual engine steps for palm contact, guarded cross, simultaneous trade, and range miss.
+- `test/review.test.mjs` and `test/review-lite.test.mjs` — deterministic fixtures, parser/static UI contracts and feedback provenance.
+- `REVIEW-STATION.md` — Cloudflare hosting guide and acceptance gates.
+
+**No gameplay authority has changed:** engine remains v0.7 and contact damage is still range based. These review files have been committed but the new tests, mobile browser operation, and public deployment are **not yet verified**. No Replit is used and the release branch was not modified.
+
 ## Run
 
 Requires Node.js 20 or later, with no external dependencies.
@@ -57,6 +68,8 @@ Connect the new procedural per-tick 3D strike trajectories to authoritative hit 
 - Tests were committed but must be executed before reporting passing results. The GitHub workflow lives outside the permitted edit directory and was only inspected, not changed.
 
 ## Changelog
+
+2026-11-04: Review Station alpha committed separately from the gameplay engine. Four replay scenarios, frame scrubbers, 3D and SVG viewers, and structured reviewer packets; mobile and CI unverified.
 
 2026-11-04: v0.7 added six deterministic 3D strike endpoint paths and six regression tests; collision geometry can now consume per-tick paths, but authoritative hit resolution is unchanged.
 
