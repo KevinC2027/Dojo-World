@@ -206,16 +206,23 @@ export class CombatWorld {
         z: defender.position.z - attacker.position.z
       });
       const frontDot = attacker.facing.x * toward.x + attacker.facing.z * toward.z;
-      if (d <= move.range + RADIUS && d >= RADIUS * 2 - EPS && frontDot >= 0.65) {
-        contacts.push({
-          attacker, defender, move, moveName: attacker.action.name,
-          collisionProbe: strikeContactProbe(
-            attacker, defender, attacker.action.name,
-            move.active - attacker.action.framesLeft, move.active,
-            { attacker: previousPose[attacker.id], defender: previousPose[defender.id] }
-          )
-        });
+      const proxyEligible = d <= move.range + RADIUS && d >= RADIUS * 2 - EPS && frontDot >= 0.65;
+      // Evaluate shadow geometry for *all* active attempts, including proxy rejects.
+      // This remains observational: only the existing proxy gate can cause damage.
+      const collisionProbe = strikeContactProbe(
+        attacker, defender, attacker.action.name,
+        move.active - attacker.action.framesLeft, move.active,
+        { attacker: previousPose[attacker.id], defender: previousPose[defender.id] }
+      );
+      if (proxyEligible) {
+        contacts.push({ attacker, defender, move, moveName: attacker.action.name, collisionProbe });
         attacker.action.connected = true;
+      } else if (collisionProbe.intersected) {
+        events.push({
+          tick: this.tick, type: 'shadow_contact_rejected',
+          attacker: attacker.id, defender: defender.id, move: attacker.action.name,
+          reason: '3d_intersection_without_range_authority', collisionProbe
+        });
       }
     }
     for (const { attacker, defender, move, moveName, collisionProbe } of contacts) {
