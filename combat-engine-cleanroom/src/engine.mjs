@@ -17,6 +17,8 @@ const STAMINA_REGEN_PER_SEC = 9;
 const KO_HEAD_STRAIN = 95;
 const KO_BODY_STRAIN = 120;
 const MIN_GUARD_STAMINA = 3;
+const MAX_TURN_RADIANS_PER_TICK = Math.PI * 1.5 / TICK_RATE; // 270 degrees/second
+const GUARD_CONE_COS = Math.cos(Math.PI * 65 / 180); // +/-65 degrees from facing
 
 const defineMove = (startup, active, recovery, range, cost, impact, target, stun, push) =>
   Object.freeze({ startup, active, recovery, range, cost, impact, target, stun, push });
@@ -42,6 +44,15 @@ const norm = (v) => {
 };
 const dist = (a, b) => Math.hypot(a.position.x - b.position.x, a.position.z - b.position.z);
 const active = (f) => !f.knockedOut && f.stunFrames === 0;
+const dot = (a, b) => a.x * b.x + a.z * b.z;
+const rotateToward = (current, target, limit) => {
+  if (Math.hypot(target.x, target.z) < EPS) return current;
+  const from = Math.atan2(current.z, current.x);
+  const to = Math.atan2(target.z, target.x);
+  const delta = Math.atan2(Math.sin(to - from), Math.cos(to - from));
+  const next = from + clamp(delta, -limit, limit);
+  return { x: Math.cos(next), z: Math.sin(next) };
+};
 
 const createFighter = (id, x) => ({
   id,
@@ -149,12 +160,12 @@ export class CombatWorld {
       red.position.z += n.z * correction;
     }
 
-    // Facing is continuously updated in the horizontal plane, not snapped to a sprite pose.
+    // Turn by a bounded angular step. A sudden cross-over cannot flip facing instantly.
     for (const [self, other] of [[blue, red], [red, blue]]) {
-      self.facing = norm({
+      self.facing = rotateToward(self.facing, {
         x: other.position.x - self.position.x,
         z: other.position.z - self.position.z
-      });
+      }, MAX_TURN_RADIANS_PER_TICK);
     }
 
     // Collect all contacts BEFORE applying damage: simultaneous hits can trade fairly.
@@ -174,7 +185,9 @@ export class CombatWorld {
       }
     }
     for (const { attacker, defender, move, moveName } of contacts) {
-      const guarded = defender.guarding && defender.stamina >= MIN_GUARD_STAMINA;
+      const incoming = norm({ x: attacker.position.x - defender.position.x, z: attacker.position.z - defender.position.z });
+      const guarded = defender.guarding && defender.stamina >= MIN_GUARD_STAMINA &&
+        dot(defender.facing, incoming) >= GUARD_CONE_COS;
       const strain = guarded ? move.impact * 0.12 : move.impact;
       const conditionKey = move.target === 'head' ? 'headStrain' : 'bodyStrain';
       defender.condition[conditionKey] += strain;
