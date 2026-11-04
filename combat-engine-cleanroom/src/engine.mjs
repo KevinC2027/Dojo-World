@@ -88,6 +88,7 @@ export class CombatWorld {
       throw new RangeError('startingGap must be finite and >= 0.84 meters');
     }
     this.tick = 0;
+    this.nextAttackInstanceId = 1;
     this.finished = false;
     this.winner = null;
     this.fighters = {
@@ -99,6 +100,7 @@ export class CombatWorld {
   snapshot() {
     return structuredClone({
       tick: this.tick,
+      nextAttackInstanceId: this.nextAttackInstanceId,
       timeSeconds: this.tick * DT,
       finished: this.finished,
       winner: this.winner,
@@ -153,11 +155,12 @@ export class CombatWorld {
           fighter.bufferedAttack = null;
           fighter.action = {
             name: requested,
+            instanceId: this.nextAttackInstanceId++,
             phase: 'startup',
             framesLeft: move.startup,
             connected: false
           };
-          events.push({ tick: this.tick, type: 'attack_started', fighter: fighter.id, move: requested });
+          events.push({ tick: this.tick, type: 'attack_started', fighter: fighter.id, move: requested, attackInstanceId: fighter.action.instanceId });
         }
       }
       const direction = norm(input.move ?? { x: 0, z: 0 });
@@ -215,17 +218,17 @@ export class CombatWorld {
         { attacker: previousPose[attacker.id], defender: previousPose[defender.id] }
       );
       if (proxyEligible) {
-        contacts.push({ attacker, defender, move, moveName: attacker.action.name, collisionProbe });
+        contacts.push({ attacker, defender, move, moveName: attacker.action.name, attackInstanceId: attacker.action.instanceId, collisionProbe });
         attacker.action.connected = true;
       } else if (collisionProbe.intersected) {
         events.push({
-          tick: this.tick, type: 'shadow_contact_rejected',
+          tick: this.tick, type: 'shadow_contact_rejected', attackInstanceId: attacker.action.instanceId,
           attacker: attacker.id, defender: defender.id, move: attacker.action.name,
           reason: '3d_intersection_without_range_authority', collisionProbe
         });
       }
     }
-    for (const { attacker, defender, move, moveName, collisionProbe } of contacts) {
+    for (const { attacker, defender, move, moveName, attackInstanceId, collisionProbe } of contacts) {
       const incoming = norm({ x: attacker.position.x - defender.position.x, z: attacker.position.z - defender.position.z });
       const guarded = defender.guarding && defender.stamina >= MIN_GUARD_STAMINA &&
         dot(defender.facing, incoming) >= GUARD_CONE_COS;
@@ -243,7 +246,7 @@ export class CombatWorld {
       defender.velocity.x += away.x * impulse;
       defender.velocity.z += away.z * impulse;
       events.push({
-        tick: this.tick, type: guarded ? 'blocked' : 'hit', attacker: attacker.id,
+        tick: this.tick, type: guarded ? 'blocked' : 'hit', attackInstanceId, attacker: attacker.id,
         defender: defender.id, move: moveName, target: move.target,
         strain: Number(strain.toFixed(3)),
         contact: contactTelemetry(attacker, defender, moveName, move.target),
@@ -275,7 +278,7 @@ export class CombatWorld {
         state.phase = 'recovery'; state.framesLeft = move.recovery;
       } else {
         fighter.action = null;
-        events.push({ tick: this.tick, type: 'attack_finished', fighter: fighter.id });
+        events.push({ tick: this.tick, type: 'attack_finished', fighter: fighter.id, attackInstanceId: state.instanceId });
       }
     }
     if (blue.knockedOut || red.knockedOut) {
