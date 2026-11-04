@@ -44,6 +44,13 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 4. Every hourly increment identifies specific source changes, test results, remaining failures, and next scope.
 5. Do not merge legacy combat implementations into this engine.
 
+## v0.11 diagnostic discrepancy increment (2026-11-04)
+
+- Every range-authorized hit or block event now reports `contactDiscrepancy`: `null` when the moving 3D swept-sphere/torso capsule intersects, or `range_hit_without_3d_intersection` when the authoritative range proxy says contact but the shadow geometry disagrees.
+- Added `test/contact-discrepancy.test.mjs` with three regression tests covering multiple attack types, guarding, deterministic replay, and long-range non-contact.
+- **No damage, guard, timing, stamina, knockback, or KO authority changes.** This is a targeted observable mismatch signal, not a switch to skeletal hit detection. The diagnostic does not yet count missed 3D contacts when the range proxy denies an attack.
+- Tests are committed but require execution verification; GitHub push CI status must be confirmed independently.
+
 ## Next priority
 
 Run the complete regression suite, then inspect range-proxy versus moving-torso shadow mismatches in deterministic replays. Add anatomical limb and foot-support continuity before promoting collision to hit authority.
