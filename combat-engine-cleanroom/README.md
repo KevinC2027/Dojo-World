@@ -1,4 +1,4 @@
-# Dojo World — Clean-room Combat Engine v0.5
+# Dojo World — Clean-room Combat Engine v0.6
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
 
@@ -35,7 +35,7 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 
 ## Next priority
 
-Connect the new swept sphere/capsule geometry to authored per-tick hand and foot trajectories and defender hit volumes; gate hit authority on verified limb intersection, then test contact continuity across phase boundaries.
+Connect the swept sphere/capsule first-impact geometry to authored per-tick hand and foot trajectories and defender hit volumes; gate hit authority on verified limb intersection, then test contact continuity across phase boundaries.
 
 ## v0.5 geometry increment
 
@@ -43,7 +43,16 @@ Connect the new swept sphere/capsule geometry to authored per-tick hand and foot
 - Added six regression tests in `test/sweep.test.mjs`. This geometry is **not wired to authoritative hit resolution yet**: the engine still uses `range_proxy_v1` for hits and blocks. `sweepFraction` is the fraction of closest approach, **not** first time of impact. No animation or biomechanics have been validated.
 - New tests and CI require independent execution verification.
 
+## v0.6 first-entry geometry increment
+
+- Added `sweptSphereCapsuleFirstImpact` in `src/sweep.mjs`, which determines the earliest swept-sphere entry into a stationary defender capsule by deterministic 48-iteration bisection before the closest-approach fraction. Returns entry fraction, contact center, contact point, normal and initial-overlap flag.
+- Added four focused tests for first-entry timing, initial overlap, misses/determinism, and tangency in `test/sweep.test.mjs`.
+- **Important:** The geometry is still independent of authoritative combat hits. Moving defender capsules, anatomical strike trajectories, limb IK and phase-transition continuity are not implemented. These tests must be executed before claiming passing status.
+
 ## Changelog
+
+2026-11-04: v0.6 added deterministic first-entry time and contact geometry for swept sphere/capsule intersection (four new regression tests). Hit authority remains unchanged.
+
 
 2026-11-04: v0.5 added isolated swept-sphere/capsule contact geometry and six focused tests without changing hit authority or existing gameplay.
 
