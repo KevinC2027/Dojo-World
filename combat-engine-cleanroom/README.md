@@ -51,6 +51,13 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 - **No damage, guard, timing, stamina, knockback, or KO authority changes.** This is a targeted observable mismatch signal, not a switch to skeletal hit detection. The diagnostic does not yet count missed 3D contacts when the range proxy denies an attack.
 - Tests are committed but require execution verification; GitHub push CI status must be confirmed independently.
 
+## v0.12 deterministic exchange audit (2026-11-04)
+
+- Added `src/exchange-audit.mjs`: pure deterministic aggregation of resolved hit/block events into counts by attacker and move, shadow 3D intersections, range-only contacts, and missing/unclassified telemetry.
+- Added `test/exchange-audit.test.mjs` with three tests for counts/nonmutation, actual engine replay determinism, and missing probe handling.
+- This report observes **only range-authorized events**. It cannot detect geometry-only intersections rejected by range/facing rules, and it does not change hit authority, damage, movement, or guarding.
+- Tests and GitHub Actions results require independent verification; no passing status is implied by committing.
+
 ## Next priority
 
 Run the complete regression suite, then inspect range-proxy versus moving-torso shadow mismatches in deterministic replays. Add anatomical limb and foot-support continuity before promoting collision to hit authority.
