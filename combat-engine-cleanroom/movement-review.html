@@ -1,0 +1,92 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#151618"><title>HIT // Dojo World — Solo Movement Lab</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#f6eadb;background:#0f1112}*{box-sizing:border-box}body{margin:0}
+main{max-width:1000px;margin:0 auto;padding:16px;display:grid;gap:14px}h1{font-size:clamp(23px,5vw,37px);margin:0;letter-spacing:.08em}h2{font-size:15px;margin:0}
+a{color:#f2bf88}p{color:#cbbba8;line-height:1.55;margin:4px 0}.toolbar,.stats{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+select,button,input{font:inherit;color:#f8eee1;background:#282829;border:1px solid #785a44;border-radius:9px;padding:10px;min-height:42px}
+label{font-size:12px;color:#cbbba8}.wrap{border:1px solid #81563c;border-radius:13px;overflow:hidden;background:#9f806b;position:relative}
+svg{display:block;width:100%;height:auto;aspect-ratio:16/9}#art{pointer-events:none}
+.titlebar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-left:4px solid #d9704e;padding:8px 12px;background:#21201e}
+.pill{border:1px solid #916344;border-radius:20px;color:#ffd0a0;font-size:11px;padding:5px 9px}
+.stat{flex:1;min-width:160px;border:1px solid #604c3c;background:#1c1c1b;border-radius:10px;padding:11px;display:grid;gap:4px}
+.stat b{font-size:18px}.stat span{font-size:11px;color:#cab39c}
+#scrub{flex:1;width:100%;accent-color:#e99465}
+#result{font-size:13px;border-left:3px solid #c78d50;padding:8px 12px;background:#23201a}
+footer{font-size:12px;color:#a8a7a4}
+@media(max-width:600px){svg{aspect-ratio:4/3}.toolbar select{flex:1;min-width:130px}}
+</style><link rel="stylesheet" href="./hit-visual.css"></head>
+<body><main><div class="titlebar"><div><h1>HIT // SOLO MOVEMENT LAB</h1><p>Independent fighter movement · 60 Hz clean-room replays</p></div><span class="pill">DIAGNOSTIC, NOT BIOMECHANICAL APPROVAL</span></div>
+<div class="toolbar"><label>Fighter <select id="fighter"><option value="blue">BLUE · KUNG FU</option><option value="red">RED · BOXING</option></select></label>
+<label>Movement <select id="scenario"></select></label>
+<button id="play">PAUSE</button><button id="start">RESTART</button>
+</div>
+<div class="wrap"><svg id="scene" viewBox="0 0 960 540" role="img" aria-label="Independent fighter motion replay with visible limb bend and a stationary world grid">
+<image id="art" href="./hit-fuji.svg" width="960" height="540" preserveAspectRatio="xMidYMid slice"/>
+<path d="M0 417 L960 417 M0 470 L960 470 M0 520 L960 520 M140 400 L60 540 M360 400 L315 540 M600 400 L645 540 M820 400 L900 540" stroke="#d6cbb1" stroke-width="2" opacity=".25"/>
+<ellipse id="shadow" cx="450" cy="426" rx="38" ry="10" fill="#121417" opacity=".32"/>
+<g id="fighterInk" stroke="#2b6fd6" fill="#2b6fd6" stroke-linecap="round" stroke-linejoin="round">
+<line id="spine1" stroke-width="12"/><line id="spine2" stroke-width="12"/><circle id="head" r="22"/>
+<line id="armL1" stroke-width="12"/><line id="armL2" stroke-width="11"/><line id="armR1" stroke-width="12"/><line id="armR2" stroke-width="11"/>
+<line id="legL1" stroke-width="14"/><line id="legL2" stroke-width="13"/><line id="legR1" stroke-width="14"/><line id="legR2" stroke-width="13"/>
+</g>
+<g fill="#261e19" font-size="15" font-family="system-ui"><text x="16" y="30" id="label">BLUE · IDLE</text><text x="16" y="51" font-size="11">ENGINE SNAPSHOTS · FIXED-LENGTH PRESENTATION RIG</text></g>
+</svg></div>
+<div class="toolbar"><label for="scrub">Frame <output id="frame">0</output></label><input type="range" id="scrub" min="0" max="120" step="1" value="0"/></div>
+<div class="stats">
+<div class="stat"><span>MAX BONE ERROR</span><b id="bone">—</b></div>
+<div class="stat"><span>MAX WORLD JOINT STEP</span><b id="joint">—</b></div>
+<div class="stat"><span>MAX GROUNDED FOOT SLIDE</span><b id="slide">—</b></div>
+<div class="stat"><span>ROOT TRAVEL</span><b id="travel">—</b></div>
+</div>
+<div id="result">Loading replay…</div>
+<p>Review one fighter at a time. Use the timeline to inspect transitions and skating. A solid limb length result does not prove natural movement: planted feet, joint velocity, balance, and camera consistency must pass separately.</p>
+<footer><a href="./index.html">Playable combat</a> · <a href="./review.html">Combat replay station</a> · <a href="./review-lite.html">Compatibility replay</a> · <a href="./HIT-VISUAL-STANDARD.md">Visual standard</a></footer>
+</main><script type="module">
+import {INDEPENDENT_MOTION_SCENARIOS,recordSoloMotion,measureSoloMotion} from './src/movement-qualification.mjs';
+const $=id=>document.getElementById(id),scene=$('scene'),ns='http://www.w3.org/2000/svg';
+for(const id of INDEPENDENT_MOTION_SCENARIOS){const o=document.createElement('option');o.value=id;o.textContent=id.toUpperCase();$('scenario').append(o)}
+let replay=null,metrics=null,playing=true,tick=0,last=0,acc=0;
+const line=(id,a,b)=>{const el=$(id);el.setAttribute('x1',a[0]);el.setAttribute('y1',a[1]);el.setAttribute('x2',b[0]);el.setAttribute('y2',b[1])};
+const point=(f,p)=>{
+ const yaw=Math.atan2(f.facing.x,f.facing.z),s=Math.sin(yaw),c=Math.cos(yaw);
+ const x=f.position.x+p[0]*c+p[2]*s,z=f.position.z-p[0]*s+p[2]*c;
+ // Fixed side-stage camera: world X maps to screen horizontally, Z provides subtle depth.
+ return [480+x*51+z*13,418-p[1]*150+z*9];
+};
+function render(){
+ const e=replay.frames[tick],rig=e.rig,f=e.fighter;
+ const hip=point(f,rig.pelvis),chest=point(f,rig.chest),neck=point(f,rig.neck),head=point(f,rig.head);
+ line('spine1',hip,chest);line('spine2',chest,neck);
+ $('head').setAttribute('cx',head[0]);$('head').setAttribute('cy',head[1]);
+ for(const [i,a] of rig.arms.entries()){line(i===0?'armL1':'armR1',point(f,a.shoulder),point(f,a.elbow));line(i===0?'armL2':'armR2',point(f,a.elbow),point(f,a.hand))}
+ for(const [i,l] of rig.legs.entries()){line(i===0?'legL1':'legR1',point(f,l.hip),point(f,l.knee));line(i===0?'legL2':'legR2',point(f,l.knee),point(f,l.foot))}
+ const root=point(f,[0,0,0]);$('shadow').setAttribute('cx',root[0]);$('shadow').setAttribute('cy',root[1]);
+ $('fighterInk').setAttribute('stroke',f.id==='blue'?'#2b6fd6':'#d6452b');
+ $('fighterInk').setAttribute('fill',f.id==='blue'?'#2b6fd6':'#d6452b');
+ $('label').textContent=f.id.toUpperCase()+' · '+replay.scenarioId.toUpperCase()+' · FRAME '+e.tick;
+ $('frame').textContent=tick+'/'+(replay.frames.length-1);$('scrub').value=tick;
+}
+function load(){
+ replay=recordSoloMotion($('fighter').value,$('scenario').value);
+ metrics=measureSoloMotion(replay);tick=0;acc=0;
+ $('scrub').max=replay.frames.length-1;
+ const mm=v=>(v*1000).toFixed(1)+' mm';
+ $('bone').textContent=mm(metrics.maxBoneErrorMeters);
+ $('joint').textContent=mm(metrics.maxJointStepMeters);
+ $('slide').textContent=mm(metrics.maxGroundedFootSlideMeters);
+ $('travel').textContent=metrics.horizontalTravelMeters.toFixed(2)+' m';
+ const skating=metrics.maxGroundedFootSlideMeters>.012;
+ $('result').textContent=(skating?'NEEDS WORK: grounded foot skating exceeds 12 mm/frame. ':'GROUND CONTACT: preliminary numerical threshold met. ')+
+ 'All observed measurements are calculated from the clean-room simulator and procedural rig, not captured from motion actors. Visual review remains required.';
+ render();
+}
+$('fighter').onchange=load;$('scenario').onchange=load;
+$('scrub').oninput=e=>{tick=+e.target.value;playing=false;$('play').textContent='PLAY';render()};
+$('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'PAUSE':'PLAY'};
+$('start').onclick=()=>{tick=0;acc=0;render()};
+function frame(ms){
+ if(playing){const dt=Math.min(.08,(ms-last)/1000||0);acc+=dt;while(acc>=1/60){tick=(tick+1)%replay.frames.length;acc-=1/60}render()}
+ last=ms;requestAnimationFrame(frame);
+}
+load();requestAnimationFrame(frame);
+</script></body></html>
