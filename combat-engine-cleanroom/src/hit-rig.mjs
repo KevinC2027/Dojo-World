@@ -43,7 +43,7 @@ export function solveTwoBone(root,target,a,b,pole){
   return {joint:add(add(root,mul(u,along)),mul(bend,height)),end};
 }
 const strikeSide={palm:1,straight:-1,frontKick:1,jab:-1,cross:1,hook:-1};
-export function fighterRig(f,m,clock=0){
+export function fighterRig(f,m,clock=0,footTargets=null){
   const blue=f.id==='blue',action=f.action,pr=frameProgress(f,m);
   const speed=Math.hypot(f.velocity?.x||0,f.velocity?.z||0);
   const gait=Math.sin(clock*6.5)*C(speed/3.2,0,1);
@@ -89,6 +89,7 @@ export function fighterRig(f,m,clock=0){
       const phase=gait*side;
       ankle=[ankle[0],ankle[1]+Math.max(0,phase)*.13,ankle[2]+phase*.20];
     }
+    if(footTargets&&!attack&&!f.guarding&&footTargets[side])ankle=footTargets[side].point.slice();
     if(kick&&side===strike){
       const neutral=foot(side,blue);
       const chamber=[side*.22,.55,.27];
