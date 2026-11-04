@@ -156,8 +156,8 @@ test('expired buffered attack does not launch after recovery', () => {
 
 test('a hit interrupts and clears the defender recovery buffer', () => {
   const w = new CombatWorld({ startingGap: 1.3 });
-  w.step({ blue: { attack: 'frontKick' } });
-  for (let i = 0; i < 16; i++) w.step();
+  w.step({ blue: { attack: 'frontKick' }, red: { guard: true } });
+  for (let i = 0; i < 16; i++) w.step({ red: { guard: true } });
   assert.equal(w.fighters.blue.action.phase, 'recovery');
   w.step({ blue: { attack: 'palm' }, red: { attack: 'jab' } });
   assert.equal(w.fighters.blue.bufferedAttack.name, 'palm');
