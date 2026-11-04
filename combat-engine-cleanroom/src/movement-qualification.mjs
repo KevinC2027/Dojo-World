@@ -1,0 +1,70 @@
+/** Independent-fighter motion qualification, using real CombatWorld snapshots.
+ * Engineering diagnostics, NOT proof of biomechanical naturalness.
+ */
+import {CombatWorld,TICK_RATE} from './engine.mjs';
+import {fighterRig,RIG_LENGTHS} from './hit-rig.mjs';
+const D=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
+const finite=v=>Array.isArray(v)&&v.every(Number.isFinite);
+const jointPoints=rig=>[rig.pelvis,rig.chest,rig.neck,rig.head,
+  ...rig.arms.flatMap(a=>[a.shoulder,a.elbow,a.hand]),
+  ...rig.legs.flatMap(l=>[l.hip,l.knee,l.foot])];
+const toWorld=(fighter,point)=>{
+  const yaw=Math.atan2(fighter.facing.x,fighter.facing.z),s=Math.sin(yaw),c=Math.cos(yaw);
+  return [fighter.position.x+point[0]*c+point[2]*s,point[1],
+    fighter.position.z-point[0]*s+point[2]*c];
+};
+const STATIC={x:0,z:0};
+const sequences={
+  idle:{frames:90,vector:t=>STATIC},
+  forward:{frames:120,vector:t=>({x:1,z:0})},
+  backward:{frames:120,vector:t=>({x:-1,z:0})},
+  lateral:{frames:120,vector:t=>({x:0,z:1})},
+  reverse:{frames:160,vector:t=>t<80?{x:1,z:0}:{x:-1,z:0}},
+  stop:{frames:160,vector:t=>t<80?{x:1,z:0}:STATIC},
+  guard:{frames:90,vector:t=>STATIC,guard:true}
+};
+export const INDEPENDENT_MOTION_SCENARIOS=Object.freeze(Object.keys(sequences));
+export function recordSoloMotion(fighterId,scenarioId){
+  if(!['blue','red'].includes(fighterId))throw new RangeError('Unknown fighter');
+  const scenario=sequences[scenarioId];
+  if(!scenario)throw new RangeError('Unknown solo motion scenario');
+  const world=new CombatWorld({startingGap:6});
+  const frames=[];
+  for(let t=0;t<=scenario.frames;t++){
+    if(t>0)world.step({[fighterId]:{move:scenario.vector(t-1),guard:!!scenario.guard}});
+    const snapshot=world.snapshot(),fighter=snapshot.fighters[fighterId];
+    const rig=fighterRig(fighter,null,snapshot.timeSeconds);
+    frames.push({tick:snapshot.tick,fighter:structuredClone(fighter),rig});
+  }
+  return {fighterId,scenarioId,rateHz:TICK_RATE,frames};
+}
+export function measureSoloMotion(replay){
+  const errors=[],lengthErrors=[],jointSteps=[],footSlides=[],footPenetrations=[];
+  let horizontalTravel=0,groundedSamples=0;
+  for(let i=0;i<replay.frames.length;i++){
+    const {fighter,rig}=replay.frames[i],points=jointPoints(rig);
+    if(points.some(p=>!finite(p)))errors.push({tick:i,reason:'nonfinite_joint'});
+    for(const a of rig.arms){lengthErrors.push(Math.abs(D(a.shoulder,a.elbow)-RIG_LENGTHS.upperArm),Math.abs(D(a.elbow,a.hand)-RIG_LENGTHS.forearm))}
+    for(const l of rig.legs){lengthErrors.push(Math.abs(D(l.hip,l.knee)-RIG_LENGTHS.thigh),Math.abs(D(l.knee,l.foot)-RIG_LENGTHS.shin));if(l.foot[1]<-.002)footPenetrations.push({tick:i,side:l.side,height:l.foot[1]})}
+    if(!i)continue;
+    const prev=replay.frames[i-1];
+    horizontalTravel+=Math.hypot(fighter.position.x-prev.fighter.position.x,fighter.position.z-prev.fighter.position.z);
+    const jp=jointPoints(prev.rig);
+    jointSteps.push(Math.max(...points.map((p,k)=>D(toWorld(fighter,p),toWorld(prev.fighter,jp[k])))));
+    for(const l of rig.legs){
+      const prevFoot=prev.rig.legs.find(a=>a.side===l.side).foot;
+      if(l.foot[1]<=.045&&prevFoot[1]<=.045){
+        groundedSamples++;
+        footSlides.push(D(toWorld(fighter,l.foot),toWorld(prev.fighter,prevFoot)));
+      }
+    }
+  }
+  const max=items=>items.length?Math.max(...items):0;
+  return {fighter:replay.fighterId,scenario:replay.scenarioId,ticks:replay.frames.length,
+    horizontalTravelMeters:horizontalTravel,maxBoneErrorMeters:max(lengthErrors),
+    maxJointStepMeters:max(jointSteps),maxGroundedFootSlideMeters:max(footSlides),
+    groundedSamples,footPenetrations:footPenetrations.length,errors};
+}
+export function auditIndependentMotion(){
+  return ['blue','red'].flatMap(id=>INDEPENDENT_MOTION_SCENARIOS.map(s=>measureSoloMotion(recordSoloMotion(id,s))));
+}
