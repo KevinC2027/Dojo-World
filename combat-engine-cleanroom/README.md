@@ -1,4 +1,4 @@
-# Dojo World — Clean-room Combat Engine v0.2
+# Dojo World — Clean-room Combat Engine v0.3
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
 
@@ -23,7 +23,7 @@ Run `npm run demo` for an example duel.
 
 ## Not implemented yet
 
-This is a headless rules core, not a playable 3D game: no skeletal animation, camera, controller UI, limb-level collision, actual vertical physics, grapples, throws, network play, Unreal integration, sound or visuals. Facing now turns at a bounded 270 degrees/second; directional guard covers a 130-degree frontal arc. Limb-level collisions remain to be implemented. Internal condition thresholds are preliminary gameplay parameters, not a real biomechanical model.
+This is a headless rules core, not a playable 3D game: no skeletal animation, camera, controller UI, limb-level collision, actual vertical physics, grapples, throws, network play, Unreal integration, sound or visuals. Facing turns at a bounded 270 degrees/second; directional guard covers a 130-degree frontal arc. Recovery attack buffering is limited to eight ticks. Limb-level collisions remain to be implemented. Internal condition thresholds are preliminary gameplay parameters, not a real biomechanical model.
 
 ## Clean-room development principles
 
@@ -35,9 +35,12 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 
 ## Next priority
 
-Implement buffered attack input; then expand the basic move roster, realistic exchanges, and animation-to-contact contracts before special moves.
+Implement stable animation-to-contact contracts and broaden basic move roster; then test realistic exchanges and grounded support before special moves.
 
 ## Changelog
+
+2026-11-04: v0.3 introduced a deterministic single-slot, eight-tick recovery attack buffer. Inputs during startup and active phases do not queue; valid recovery presses can launch on the first free tick if not expired, interrupted, or guarded. Hit stun and KO clear the queue. Added four regression tests (16 engine tests total). GitHub CI status must be verified separately; these new tests are not yet claimed passing.
+
 
 2026-11-04: v0.2 added capped angular turning and directional guarding; added three targeted regression tests (12 total). GitHub CI execution must be checked separately.
 
