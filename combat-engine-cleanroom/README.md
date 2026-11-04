@@ -166,3 +166,9 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Added `test/foot-support.test.mjs` with five focused tests for centered support, unsupported weight shift, determinism, invalid inputs, and coincident feet.
 - This is **diagnostic geometry only**: it is not wired into movement, attack permissions, animations, foot placement, vertical physics, or damage. A line-segment model is a preliminary approximation, not a complete support polygon or biomechanical validation.
 - Run `npm test` and confirm GitHub Actions before treating the increment as verified.
+
+## v0.18 bounded foot-support tracking (2026-11-04)
+
+- Added `src/foot-support-state.mjs`: pure deterministic tracking of two world-space planted feet relative to a moving center of mass, with bounded single-foot repositioning per fixed tick and a left-foot tie-break.
+- Added four regression tests in `test/foot-support-state.test.mjs` for stationary planting, bounded displacement, deterministic replay, and invalid input.
+- This is a **diagnostic-only** support tracker, not yet wired into `CombatWorld` state or rendering. It does not constrain combat velocity, resolve momentum, or implement actual skeletal foot IK. Test execution and CI for this increment require independent verification.
