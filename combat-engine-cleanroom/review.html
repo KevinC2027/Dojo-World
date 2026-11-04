@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0a1321">
-<title>Dojo World · Clean-room 3D Combat Preview</title>
+<meta name="theme-color" content="#121416">
+<title>HIT // Dojo World — Combat Review</title>
 <style>
 :root{color-scheme:dark;--bg:#09121e;--muted:#a7b8c9;--edge:#2b4660;--blue:#5db9ff;--red:#ff717c}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:#f3f7ff}
@@ -58,9 +58,9 @@ p.helper{font-size:12px;line-height:1.5;color:var(--muted);margin:0}
 #reviewMessage{font-size:12px;color:#a9dcd1;min-height:17px}
 button.review-selected{outline:2px solid #c2e8ff;background:#316084}
 @media(max-width:520px){.review-panel{padding:10px}.review-row button{font-size:11px;min-width:66px}}
-</style></head>
+</style><link rel="stylesheet" href="./hit-visual.css"></head>
 <body><main>
-<header><div><h1>DOJO WORLD</h1><small>Clean-room combat · REVIEW STATION · deterministic scenarios</small></div><div class="tag" id="simstatus">SIMULATION BOOTING</div></header>
+<header><div><h1>HIT // DOJO WORLD</h1><small>Clean-room combat · REVIEW STATION · deterministic scenarios</small></div><div class="tag" id="simstatus">SIMULATION BOOTING</div></header>
 <div class="score"><div class="fighter blue"><b>BLUE · KUNG FU</b><span id="blueState">Ready</span></div><div class="mid">VS</div><div class="fighter red"><b>RED · BOXING</b><span id="redState">Ready</span></div></div>
 <div class="arena" id="arena">
 <div id="fallback" role="img" aria-label="Blue and red fighters standing in a training ring">
@@ -118,13 +118,13 @@ button.review-selected{outline:2px solid #c2e8ff;background:#316084}
  <a class="review-link" href="./index.html">Open normal practice mode</a>
 </section>
 <div id="status">Checking browser compatibility…</div>
-<p class="helper" style="display:none">Mobile: tap attacks, hold arrows to move, hold Guard to block. Desktop: arrows/WASD, J = palm, K = straight, L = kick, Shift = guard. Drag the arena to rotate the camera. Auto mode starts an exchange by default. No health bars, no legacy source, no external graphics dependencies.</p>
+<p class="helper" style="display:none">Mobile: tap attacks, hold arrows to move, hold Guard to block. Desktop: arrows/WASD, J = palm, K = straight, L = kick, Shift = guard. Drag the arena to rotate the camera. Auto mode starts an exchange by default. No health bars or legacy combat code. Shared HIT Fuji environment and blue/red silhouettes. The clean-room engine remains authoritative; character motion is schematic, not validated IK.</p>
 </main>
 <script type="module">
 import { CombatWorld, MOVESETS, TICK_RATE } from './src/engine.mjs';
 import { REVIEW_SCENARIOS, buildReviewReplay, frameAt, reviewPacket } from './src/review.mjs';
 const $=id=>document.getElementById(id);
-const canvas=$('stage'), arena=$('arena'), ctx=canvas.getContext('webgl',{alpha:false,antialias:true,powerPreference:'low-power'})||canvas.getContext('experimental-webgl');
+const canvas=$('stage'), arena=$('arena'), ctx=canvas.getContext('webgl',{alpha:true,antialias:true,powerPreference:'low-power'})||canvas.getContext('experimental-webgl');
 const fallback=$('fallback'), error=$('error'), simstatus=$('simstatus'), status=$('status');
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)), mix=(a,b,t)=>a+(b-a)*t;
 function fail(message){error.style.display='block';error.textContent='Renderer: '+message;fallback.style.display='grid';canvas.style.display='none';simstatus.textContent='FALLBACK VIEW';}
@@ -137,7 +137,7 @@ const vert='attribute vec3 aPos; attribute vec3 aNorm; uniform mat4 uMVP; unifor
 const frag='precision mediump float; varying vec3 vNormal; varying vec3 vWorld; uniform vec3 uColor; void main(){vec3 n=normalize(vNormal);float l=max(0.0,dot(n,normalize(vec3(-0.5,1.0,0.9)))); float tint=0.32+0.68*l;float fog=clamp(1.0-length(vWorld.xz)*0.025,0.73,1.0); gl_FragColor=vec4(uColor*tint*fog,1.0);}';
 function shader(type,code){const s=ctx.createShader(type);ctx.shaderSource(s,code);ctx.compileShader(s);if(!ctx.getShaderParameter(s,ctx.COMPILE_STATUS))throw Error(ctx.getShaderInfoLog(s));return s}
 const p=ctx.createProgram();ctx.attachShader(p,shader(ctx.VERTEX_SHADER,vert));ctx.attachShader(p,shader(ctx.FRAGMENT_SHADER,frag));ctx.linkProgram(p);if(!ctx.getProgramParameter(p,ctx.LINK_STATUS))throw Error(ctx.getProgramInfoLog(p));
-ctx.useProgram(p);ctx.enable(ctx.DEPTH_TEST);ctx.depthFunc(ctx.LEQUAL);ctx.clearColor(.035,.065,.11,1);
+ctx.useProgram(p);ctx.enable(ctx.DEPTH_TEST);ctx.depthFunc(ctx.LEQUAL);ctx.clearColor(0,0,0,0);
 const aPos=ctx.getAttribLocation(p,'aPos'),aNorm=ctx.getAttribLocation(p,'aNorm'),uMVP=ctx.getUniformLocation(p,'uMVP'),uModel=ctx.getUniformLocation(p,'uModel'),uColor=ctx.getUniformLocation(p,'uColor');
 const matMul=(a,b)=>{const out=new Float32Array(16);for(let c=0;c<4;c++)for(let r=0;r<4;r++){let x=0;for(let k=0;k<4;k++)x+=a[k*4+r]*b[c*4+k];out[c*4+r]=x}return out;};
 function perspective(fovy,asp,near,far){const f=1/Math.tan(fovy/2),o=new Float32Array(16);o[0]=f/asp;o[5]=f;o[10]=(far+near)/(near-far);o[11]=-1;o[14]=2*far*near/(near-far);return o;}
@@ -162,35 +162,62 @@ function cubeAt(pos,scale,color){draw(cube,model(pos,scale),color)}
 function orb(pos,scale,color){draw(sphere,model(pos,scale),color)}
 function segment(a,b,radius,color){const d=sub(b,a),len=Math.hypot(...d);if(len<.001)return;const y=norm(d),reference=Math.abs(y[1])>.92?[1,0,0]:[0,1,0],x=norm(cross(reference,y)),z=norm(cross(x,y));const mid=a.map((v,i)=>(v+b[i])*.5);draw(sphere,model(mid,[radius,len*.54,radius], [x,y,z]),color)}
 function local(f,v){const angle=Math.atan2(f.facing.x,f.facing.z),s=Math.sin(angle),c=Math.cos(angle);return [f.position.x+v[0]*c+v[2]*s,v[1],f.position.z-v[0]*s+v[2]*c]}
-const palette={blue:{main:[.17,.53,.95],dark:[.055,.22,.48],light:[.58,.79,1]},red:{main:[.91,.20,.27],dark:[.38,.07,.15],light:[1,.57,.57]}};
+const palette={blue:{main:[.17,.44,.84],dark:[.17,.44,.84],light:[.17,.44,.84]},red:{main:[.84,.27,.17],dark:[.84,.27,.17],light:[.84,.27,.17]}};
 function drawFighter(f,clock){
- const pal=palette[f.id], moving=Math.hypot(f.velocity.x,f.velocity.z),walk=clock*7.5,step=Math.sin(walk)*clamp(moving/3.2,0,1)*.22;
- const attack=f.action,m=attack?MOVESETS[f.id][attack.name]:null;
- let reach=0;if(attack){if(attack.phase==='startup')reach=.12*(1-attack.framesLeft/m.startup);else if(attack.phase==='active')reach=1;else reach=clamp(attack.framesLeft/m.recovery,0,1)}
- const struck=f.stunFrames>0, lean=(struck?-.15:0)+(reach*.07);const bob=.02*Math.abs(Math.sin(walk))*clamp(moving,0,1);
- const tr=([x,y,z])=>local(f,[x,y+bob,z+lean]);
- const p=tr([0,.96,0]),sternum=tr([0,1.35,.02]),neck=tr([0,1.59,.01]),head=tr([0,1.78,.035]);
- // Feet, lower legs and knees. Pelvis remains at support height.
- for(const side of [-1,1]){const gait=step*side,hip=tr([.17*side,.96,0]),knee=tr([.2*side,.53,gait*.6]),foot=tr([.22*side,.105,-gait]);
-  let kneeFinal=knee,footFinal=foot;
-  if(f.id==='blue'&&attack?.name==='frontKick'&&side===1){kneeFinal=tr([.18*side,.72,.42*reach]);footFinal=tr([.19*side,.48,1.05*reach]);}
-  segment(hip,kneeFinal,.117,pal.dark);segment(kneeFinal,footFinal,.095,pal.main);orb(kneeFinal,[.12,.12,.12],pal.main);orb(footFinal,[.16,.085,.24],pal.dark);
- }
- segment(p,sternum,.27,pal.main);orb(p,[.31,.19,.22],pal.dark);orb(sternum,[.35,.30,.23],pal.main);segment(sternum,neck,.12,pal.dark);
- orb(head,[.175,.205,.165],pal.light);orb(tr([0,1.80,.175]),[.095,.066,.025],pal.dark);
- for(const side of [-1,1]){
-  const shoulder=tr([side*.31,1.48,0]),elbow0=[side*.43,1.21,.16],hand0=[side*.29,1.4,.42];
-  let e=elbow0.slice(),h=hand0.slice();const strikingArm=(f.id==='red'&&attack?.name==='jab')? -1:1;
-  if(attack && attack.name!=='frontKick' && side===strikingArm){
-    const hook=attack.name==='hook';
-    e=[side*(hook?.40:.33),1.38, mix(.14,.60,reach)];
-    h=[side*(hook?.08:.18),1.43, mix(.4,hook?.88:1.23,reach)];
+  // HIT visual contract: solid faceless 3D stick silhouettes. Pose is driven by
+  // CURRENT CLEAN-ROOM STATE; these are presentation approximations, not IK.
+  const ink=f.id==='blue'?[.17,.44,.84]:[.84,.27,.17];
+  const move=f.action ? MOVESETS[f.id][f.action.name] : null;
+  const action=f.action, speed=Math.hypot(f.velocity.x,f.velocity.z);
+  const gait=Math.sin(clock*7)*clamp(speed/3.2,0,1);
+  const blueStyle=f.id==='blue',guard=f.guarding;
+  const recoil=f.stunFrames>0?-.10:0;
+  let extension=0;
+  if(action&&move){
+    const phase=action.phase;
+    if(phase==='startup') extension=1-clamp(action.framesLeft/move.startup,0,1);
+    else if(phase==='active') extension=1;
+    else extension=clamp(action.framesLeft/move.recovery,0,1);
+    extension=extension*extension*(3-2*extension);
   }
-  if(f.guarding){e=[side*.38,1.37,.19];h=[side*.19,1.61,.40]}
-  const elbow=tr(e),hand=tr(h);
-  segment(shoulder,elbow,.105,pal.dark);segment(elbow,hand,.09,pal.main);orb(elbow,[.10,.10,.10],pal.main);orb(hand,[.115,.115,.13],pal.light);
- }
- if(reach>.8){orb(tr([.0,1.42,1.28]),[.055,.055,.055],[1,.89,.45])}
+  const tr=(x,y,z)=>local(f,[x,y,z+recoil]);
+  const pelvis=tr(0,blueStyle?.79:.96,0);
+  const chest=tr(0,blueStyle?1.29:1.43,0);
+  const neck=tr(0,blueStyle?1.52:1.62,0);
+  const head=tr(0,blueStyle?1.75:1.85,0);
+  // Consistent radii: all limbs read as solid untextured silhouettes.
+  segment(pelvis,chest,.09,ink);
+  segment(chest,neck,.085,ink);
+  orb(head,[.165,.165,.165],ink);
+  const kick=action?.name?.toLowerCase().includes('kick');
+  for(const side of [-1,1]){
+    const lead=side===1;
+    const hip=tr(side*.13,blueStyle?.79:.96,0);
+    const stride=(lead?-gait:gait)*.18;
+    let knee=tr(side*.18,blueStyle?.43:.52,stride*.5);
+    let foot=tr(side*.23,.08, (blueStyle?(lead?.32:-.35):lead?.14:-.15)+stride);
+    if(kick&&lead){
+      knee=tr(side*.17,.70,.26+.23*extension);
+      foot=tr(side*.22,.16+.72*extension,.24+1.00*extension);
+    }
+    segment(hip,knee,.075,ink);
+    segment(knee,foot,.075,ink);
+    orb(foot,[.12,.074,.15],ink);
+    const shoulder=tr(side*.18,blueStyle?1.38:1.55,0);
+    let elbow=tr(side*.28,blueStyle?1.23:1.38,lead?.19:-.06);
+    let hand=tr(side*.24,blueStyle?1.34:1.54,lead?.40:.21);
+    const striker=blueStyle?lead:(action?.name==='jab'?!lead:lead);
+    if(guard){
+      elbow=tr(side*.24,blueStyle?1.22:1.47,.08);
+      hand=tr(side*.20,blueStyle?1.46:1.67,.27);
+    }else if(action&&!kick&&striker){
+      elbow=tr(side*.23,blueStyle?1.31:1.43,.22+.33*extension);
+      hand=tr(side*.22,blueStyle?1.38:1.54,.40+.65*extension);
+    }
+    segment(shoulder,elbow,.075,ink);
+    segment(elbow,hand,.075,ink);
+    orb(hand,[.08,.08,.08],ink);
+  }
 }
 let world=new CombatWorld({startingGap:2.7}),auto=true,clock=0,turn=0,dragX=0,pressAttack=null,lastEvent='',eventTimer=0;
 
@@ -319,13 +346,13 @@ function render(){
  const a=canvas.width/canvas.height;const distance=(a<1?8.1:6.6);
  const eye=[Math.sin(turn)*distance*.8,3.4,Math.cos(turn)*distance];
  vp=matMul(perspective(Math.PI/3.4,a,.08,120),lookAt(eye,[0,.83,0],[0,1,0]));
- cubeAt([0,-.12,0],[11,.19,6.6],[.11,.20,.29]);
- for(let i=-5;i<=5;i++)cubeAt([i,0,0],[.018,.012,6.5],[.21,.33,.43]);
- for(let z=-3;z<=3;z++)cubeAt([0,0,z],[10.8,.014,.018],[.21,.33,.43]);
- for(let x of [-4.8,4.8])cubeAt([x,.07,0],[.065,.14,6],[.22,.40,.56]);
- for(let z of [-2.95,2.95])cubeAt([0,.07,z],[9.6,.14,.065],[.22,.40,.56]);
+ cubeAt([0,-.12,0],[11,.19,6.6],[.34,.30,.27]);
+ for(let i=-5;i<=5;i++)cubeAt([i,0,0],[.018,.012,6.5],[.47,.42,.35]);
+ for(let z=-3;z<=3;z++)cubeAt([0,0,z],[10.8,.014,.018],[.47,.42,.35]);
+ for(let x of [-4.8,4.8])cubeAt([x,.07,0],[.065,.14,6],[.48,.36,.27]);
+ for(let z of [-2.95,2.95])cubeAt([0,.07,z],[9.6,.14,.065],[.48,.36,.27]);
  // Marker on center floor.
- cubeAt([0,.014,0],[.09,.01,.95],[.60,.55,.28]);
+ cubeAt([0,.014,0],[.09,.01,.95],[.62,.51,.34]);
  drawFighter(world.fighters.blue,reviewMode?world.tick/TICK_RATE:clock);drawFighter(world.fighters.red,reviewMode?world.tick/TICK_RATE:clock);
 }
 function fighterLabel(id){const f=world.fighters[id],s=f.knockedOut?'KNOCKOUT':f.stunFrames>0?'REELING':f.guarding?'GUARDING':f.action?f.action.name.toUpperCase()+' · '+f.action.phase.toUpperCase():'IN STANCE';return s+' · '+Math.round(f.stamina)+' stamina'}
