@@ -1,4 +1,4 @@
-# Dojo World — Clean-room Combat Engine v0.9
+# Dojo World — Clean-room Combat Engine v0.10
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
 
@@ -11,7 +11,7 @@ A separate Review Station is now committed on the **development branch only**:
 - `test/review.test.mjs` and `test/review-lite.test.mjs` — deterministic fixtures, parser/static UI contracts and feedback provenance.
 - `REVIEW-STATION.md` — Cloudflare hosting guide and acceptance gates.
 
-**No gameplay authority has changed:** engine remains v0.7 and contact damage is still range based. These review files have been committed but the new tests, mobile browser operation, and public deployment are **not yet verified**. No Replit is used and the release branch was not modified.
+**No gameplay authority has changed:** damage remains range/facing based and contact damage is still range based. These review files have been committed but the new tests, mobile browser operation, and public deployment are **not yet verified**. No Replit is used and the release branch was not modified.
 
 ## Run
 
@@ -46,7 +46,7 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 
 ## Next priority
 
-Wire the moving-defender capsule geometry into the shadow collision probe using previous/current fighter positions, then inspect mismatches and add articulated limb/support pose continuity tests before making 3D collision authoritative. Preserve current hit/trade tests and phase continuity.
+Run the complete regression suite, then inspect range-proxy versus moving-torso shadow mismatches in deterministic replays. Add anatomical limb and foot-support continuity before promoting collision to hit authority.
 
 ## v0.5 geometry increment
 
@@ -59,6 +59,14 @@ Wire the moving-defender capsule geometry into the shadow collision probe using 
 - Added `sweptSphereCapsuleFirstImpact` in `src/sweep.mjs`, which determines the earliest swept-sphere entry into a stationary defender capsule by deterministic 48-iteration bisection before the closest-approach fraction. Returns entry fraction, contact center, contact point, normal and initial-overlap flag.
 - Added four focused tests for first-entry timing, initial overlap, misses/determinism, and tangency in `test/sweep.test.mjs`.
 - **Important:** The geometry is still independent of authoritative combat hits. Moving defender capsules, anatomical strike trajectories, limb IK and phase-transition continuity are not implemented. These tests must be executed before claiming passing status.
+
+## v0.10 moving-torso shadow integration
+
+- Updated `src/collision-probe.mjs` to evaluate a procedural strike endpoint from the previous attacker pose to the current pose against a torso capsule translated from the previous defender pose to the current pose. Uses `movingSphereCapsuleFirstImpact` and preserves deterministic first-entry fraction, point, and normal.
+- Updated `src/engine.mjs` to capture both fighters' tick-start position and facing before movement and footprint separation, and pass these to shadow collision telemetry. Only resolved range-proxy hit/block events receive the diagnostic; **damage, guarding, and trade authority are unchanged**.
+- Updated `test/collision-probe.test.mjs` expectations and added two focused regressions for moving-defender contact and deterministic moving-fighter replay.
+- Geometry assumes rigid torso translation and simplified limb endpoints. It does not account for joint articulation, posture, angular capsule motion, or validated biomechanics. The moving probe is not authoritative and only runs for events already accepted by range/facing rules.
+- Tests/CI require verification; do not infer passing from commit success.
 
 ## v0.9 moving-defender collision geometry
 
@@ -83,6 +91,9 @@ Wire the moving-defender capsule geometry into the shadow collision probe using 
 - Tests were committed but must be executed before reporting passing results. The GitHub workflow lives outside the permitted edit directory and was only inspected, not changed.
 
 ## Changelog
+
+2026-11-04: v0.10 integrated moving-defender relative sweeps into the non-authoritative hit/block diagnostic, with tick-start pose capture and two additional regression cases. No change to combat outcomes.
+
 
 2026-11-04: v0.9 introduced isolated relative-motion first-contact geometry for a rigidly translating defender capsule, with six locally passing focused tests; no change to hit authority.
 
