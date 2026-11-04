@@ -1,4 +1,5 @@
 import { contactTelemetry } from './contact.mjs';
+import { strikeContactProbe } from './collision-probe.mjs';
 /**
  * Dojo World combat clean-room — version 0.1.
  * Fresh implementation. No dependency on previous project source.
@@ -200,11 +201,17 @@ export class CombatWorld {
       });
       const frontDot = attacker.facing.x * toward.x + attacker.facing.z * toward.z;
       if (d <= move.range + RADIUS && d >= RADIUS * 2 - EPS && frontDot >= 0.65) {
-        contacts.push({ attacker, defender, move, moveName: attacker.action.name });
+        contacts.push({
+          attacker, defender, move, moveName: attacker.action.name,
+          collisionProbe: strikeContactProbe(
+            attacker, defender, attacker.action.name,
+            move.active - attacker.action.framesLeft, move.active
+          )
+        });
         attacker.action.connected = true;
       }
     }
-    for (const { attacker, defender, move, moveName } of contacts) {
+    for (const { attacker, defender, move, moveName, collisionProbe } of contacts) {
       const incoming = norm({ x: attacker.position.x - defender.position.x, z: attacker.position.z - defender.position.z });
       const guarded = defender.guarding && defender.stamina >= MIN_GUARD_STAMINA &&
         dot(defender.facing, incoming) >= GUARD_CONE_COS;
@@ -225,7 +232,8 @@ export class CombatWorld {
         tick: this.tick, type: guarded ? 'blocked' : 'hit', attacker: attacker.id,
         defender: defender.id, move: moveName, target: move.target,
         strain: Number(strain.toFixed(3)),
-        contact: contactTelemetry(attacker, defender, moveName, move.target)
+        contact: contactTelemetry(attacker, defender, moveName, move.target),
+        collisionProbe
       });
       if (defender.condition.headStrain >= KO_HEAD_STRAIN ||
           defender.condition.bodyStrain >= KO_BODY_STRAIN) {
