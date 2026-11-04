@@ -1,4 +1,4 @@
-# Dojo World — Clean-room Combat Engine v0.8
+# Dojo World — Clean-room Combat Engine v0.9
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
 
@@ -46,7 +46,7 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 
 ## Next priority
 
-Verify and inspect collision-probe mismatches in replay, then introduce moving-defender relative sweeps and reliable articulated limb poses before making 3D collision authoritative. Preserve current hit/trade tests and phase continuity.
+Wire the moving-defender capsule geometry into the shadow collision probe using previous/current fighter positions, then inspect mismatches and add articulated limb/support pose continuity tests before making 3D collision authoritative. Preserve current hit/trade tests and phase continuity.
 
 ## v0.5 geometry increment
 
@@ -59,6 +59,13 @@ Verify and inspect collision-probe mismatches in replay, then introduce moving-d
 - Added `sweptSphereCapsuleFirstImpact` in `src/sweep.mjs`, which determines the earliest swept-sphere entry into a stationary defender capsule by deterministic 48-iteration bisection before the closest-approach fraction. Returns entry fraction, contact center, contact point, normal and initial-overlap flag.
 - Added four focused tests for first-entry timing, initial overlap, misses/determinism, and tangency in `test/sweep.test.mjs`.
 - **Important:** The geometry is still independent of authoritative combat hits. Moving defender capsules, anatomical strike trajectories, limb IK and phase-transition continuity are not implemented. These tests must be executed before claiming passing status.
+
+## v0.9 moving-defender collision geometry
+
+- Added `src/moving-capsule.mjs` implementing deterministic first-entry contact between a moving sphere and a defender capsule undergoing **rigid translation** during one fixed simulation tick. Relative motion prevents false misses when a defender moves into a strike and false hits when both move at the same speed.
+- Added `test/moving-capsule.test.mjs` with six focused tests: stationary-capsule entry, moving-defender crossing, same-velocity miss, initial overlap, determinism, and invalid/nonrigid motion.
+- The new geometry was independently executed on local Node 22 with **6/6 focused tests passing** before commit. The complete repository suite and GitHub CI still require verification.
+- **Not yet integrated into engine damage or shadow contact events.** Existing v0.8 range/facing hit authority and stationary diagnostic probe are unchanged. Capsule articulation, joint motion, foot support, and network authority remain unimplemented.
 
 ## v0.8 3D collision shadow telemetry
 
@@ -76,6 +83,8 @@ Verify and inspect collision-probe mismatches in replay, then introduce moving-d
 - Tests were committed but must be executed before reporting passing results. The GitHub workflow lives outside the permitted edit directory and was only inspected, not changed.
 
 ## Changelog
+
+2026-11-04: v0.9 introduced isolated relative-motion first-contact geometry for a rigidly translating defender capsule, with six locally passing focused tests; no change to hit authority.
 
 2026-11-04: v0.8 added per-active-tick swept 3D collision shadow telemetry to resolved hit/block events, plus five targeted tests; authoritative damage still uses range/facing proxy.
 
