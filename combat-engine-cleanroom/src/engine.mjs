@@ -1,3 +1,4 @@
+import { contactTelemetry } from './contact.mjs';
 /**
  * Dojo World combat clean-room — version 0.1.
  * Fresh implementation. No dependency on previous project source.
@@ -223,7 +224,8 @@ export class CombatWorld {
       events.push({
         tick: this.tick, type: guarded ? 'blocked' : 'hit', attacker: attacker.id,
         defender: defender.id, move: moveName, target: move.target,
-        strain: Number(strain.toFixed(3))
+        strain: Number(strain.toFixed(3)),
+        contact: contactTelemetry(attacker, defender, moveName, move.target)
       });
       if (defender.condition.headStrain >= KO_HEAD_STRAIN ||
           defender.condition.bodyStrain >= KO_BODY_STRAIN) {
