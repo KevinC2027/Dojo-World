@@ -17,6 +17,7 @@ const STAMINA_REGEN_PER_SEC = 9;
 const KO_HEAD_STRAIN = 95;
 const KO_BODY_STRAIN = 120;
 const MIN_GUARD_STAMINA = 3;
+const ATTACK_BUFFER_TICKS = 8; // One queued press, valid for eight fixed steps.
 const MAX_TURN_RADIANS_PER_TICK = Math.PI * 1.5 / TICK_RATE; // 270 degrees/second
 const GUARD_CONE_COS = Math.cos(Math.PI * 65 / 180); // +/-65 degrees from facing
 
@@ -65,6 +66,7 @@ const createFighter = (id, x) => ({
   knockedOut: false,
   stunFrames: 0,
   action: null,
+  bufferedAttack: null,
   guarding: false
 });
 
@@ -117,20 +119,37 @@ export class CombatWorld {
     for (const fighter of [blue, red]) {
       const input = inputs[fighter.id];
       if (fighter.stunFrames > 0) fighter.stunFrames--;
+      // Buffer only during recovery. An invalid attack never replaces a valid queued press.
+      // The queue is intentionally discarded on stun/KO, and cannot bypass guarding.
+      if (!active(fighter)) fighter.bufferedAttack = null;
+      if (fighter.bufferedAttack && this.tick > fighter.bufferedAttack.expiresAt) {
+        fighter.bufferedAttack = null;
+      }
+      if (fighter.action?.phase === 'recovery' && input.attack !== undefined &&
+          Object.hasOwn(MOVESETS[fighter.id], input.attack)) {
+        fighter.bufferedAttack = {
+          name: input.attack, expiresAt: this.tick + ATTACK_BUFFER_TICKS - 1
+        };
+        events.push({ tick: this.tick, type: 'attack_buffered', fighter: fighter.id, move: input.attack });
+      }
       fighter.guarding = active(fighter) && !fighter.action && !!input.guard &&
         fighter.stamina >= MIN_GUARD_STAMINA;
 
-      if (active(fighter) && !fighter.guarding && !fighter.action && input.attack !== undefined) {
-        const move = MOVESETS[fighter.id][input.attack];
+      const queued = fighter.bufferedAttack?.name;
+      const requested = input.attack !== undefined ? input.attack : queued;
+      if (active(fighter) && !fighter.guarding && !fighter.action && requested !== undefined) {
+        const move = Object.hasOwn(MOVESETS[fighter.id], requested)
+          ? MOVESETS[fighter.id][requested] : null;
         if (move && fighter.stamina >= move.cost) {
           fighter.stamina -= move.cost;
+          fighter.bufferedAttack = null;
           fighter.action = {
-            name: input.attack,
+            name: requested,
             phase: 'startup',
             framesLeft: move.startup,
             connected: false
           };
-          events.push({ tick: this.tick, type: 'attack_started', fighter: fighter.id, move: input.attack });
+          events.push({ tick: this.tick, type: 'attack_started', fighter: fighter.id, move: requested });
         }
       }
       const direction = norm(input.move ?? { x: 0, z: 0 });
@@ -195,6 +214,7 @@ export class CombatWorld {
       else {
         defender.stunFrames = Math.max(defender.stunFrames, move.stun);
         defender.action = null; // Contact can interrupt recovery/startup; trade already collected.
+        defender.bufferedAttack = null; // An interrupted combo must not auto-fire after stun.
       }
       const impulse = (guarded ? 0.22 : 1) * move.push / defender.massKg * 75;
       const away = norm({ x: defender.position.x - attacker.position.x, z: defender.position.z - attacker.position.z });
@@ -209,6 +229,7 @@ export class CombatWorld {
           defender.condition.bodyStrain >= KO_BODY_STRAIN) {
         defender.knockedOut = true;
         defender.action = null;
+        defender.bufferedAttack = null;
         defender.guarding = false;
         events.push({ tick: this.tick, type: 'knockout', fighter: defender.id });
       }
