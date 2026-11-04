@@ -1,0 +1,227 @@
+/**
+ * Dojo World combat clean-room — version 0.1.
+ * Fresh implementation. No dependency on previous project source.
+ *
+ * Units: horizontal meters (x,z), seconds, 60 fixed simulation ticks/sec.
+ * Vertical/ragdoll dynamics and rendering are explicitly NOT implemented yet.
+ */
+export const TICK_RATE = 60;
+const DT = 1 / TICK_RATE;
+const EPS = 1e-9;
+const RADIUS = 0.42;
+const WALK_SPEED = 3.2;
+const GUARD_SPEED_SCALE = 0.42;
+const ATTACK_SPEED_SCALE = 0.18;
+const ACCELERATION = 25;
+const STAMINA_REGEN_PER_SEC = 9;
+const KO_HEAD_STRAIN = 95;
+const KO_BODY_STRAIN = 120;
+const MIN_GUARD_STAMINA = 3;
+
+const defineMove = (startup, active, recovery, range, cost, impact, target, stun, push) =>
+  Object.freeze({ startup, active, recovery, range, cost, impact, target, stun, push });
+
+// New action definitions. Frame timing is authoritative; rendering follows state.
+export const MOVESETS = Object.freeze({
+  blue: Object.freeze({
+    palm: defineMove(7, 3, 12, 1.18, 8, 13, 'head', 11, 0.85),
+    straight: defineMove(5, 2, 13, 1.30, 7, 11, 'head', 8, 0.62),
+    frontKick: defineMove(12, 4, 17, 1.72, 15, 21, 'body', 16, 1.4)
+  }),
+  red: Object.freeze({
+    jab: defineMove(4, 2, 10, 1.25, 6, 9, 'head', 7, 0.52),
+    cross: defineMove(9, 3, 18, 1.38, 13, 19, 'head', 15, 1.2),
+    hook: defineMove(11, 3, 19, 1.06, 14, 22, 'head', 16, 1.0)
+  })
+});
+
+const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+const norm = (v) => {
+  const length = Math.hypot(v.x, v.z);
+  return length < EPS ? { x: 0, z: 0 } : { x: v.x / length, z: v.z / length };
+};
+const dist = (a, b) => Math.hypot(a.position.x - b.position.x, a.position.z - b.position.z);
+const active = (f) => !f.knockedOut && f.stunFrames === 0;
+
+const createFighter = (id, x) => ({
+  id,
+  massKg: id === 'blue' ? 78 : 85,
+  position: { x, y: 0, z: 0 },
+  velocity: { x: 0, z: 0 },
+  facing: { x: id === 'blue' ? 1 : -1, z: 0 },
+  stamina: 100,
+  condition: { headStrain: 0, bodyStrain: 0 },
+  knockedOut: false,
+  stunFrames: 0,
+  action: null,
+  guarding: false
+});
+
+const assertInput = (input) => {
+  if (input === undefined || input === null) return {};
+  if (typeof input !== 'object' || Array.isArray(input)) throw new TypeError('Input must be an object');
+  if (input.move !== undefined &&
+    (!Number.isFinite(input.move?.x) || !Number.isFinite(input.move?.z))) {
+    throw new TypeError('Movement needs finite x and z components');
+  }
+  return input;
+};
+
+export class CombatWorld {
+  constructor({ startingGap = 1.5 } = {}) {
+    if (!Number.isFinite(startingGap) || startingGap < RADIUS * 2) {
+      throw new RangeError('startingGap must be finite and >= 0.84 meters');
+    }
+    this.tick = 0;
+    this.finished = false;
+    this.winner = null;
+    this.fighters = {
+      blue: createFighter('blue', -startingGap / 2),
+      red: createFighter('red', startingGap / 2)
+    };
+  }
+
+  snapshot() {
+    return structuredClone({
+      tick: this.tick,
+      timeSeconds: this.tick * DT,
+      finished: this.finished,
+      winner: this.winner,
+      fighters: this.fighters
+    });
+  }
+
+  /** A single deterministic fixed-step frame. Press attack in one frame to request it. */
+  step(frame = {}) {
+    if (this.finished) return [];
+    const inputs = {
+      blue: assertInput(frame.blue),
+      red: assertInput(frame.red)
+    };
+    const events = [];
+    this.tick += 1;
+    const blue = this.fighters.blue;
+    const red = this.fighters.red;
+
+    for (const fighter of [blue, red]) {
+      const input = inputs[fighter.id];
+      if (fighter.stunFrames > 0) fighter.stunFrames--;
+      fighter.guarding = active(fighter) && !fighter.action && !!input.guard &&
+        fighter.stamina >= MIN_GUARD_STAMINA;
+
+      if (active(fighter) && !fighter.guarding && !fighter.action && input.attack !== undefined) {
+        const move = MOVESETS[fighter.id][input.attack];
+        if (move && fighter.stamina >= move.cost) {
+          fighter.stamina -= move.cost;
+          fighter.action = {
+            name: input.attack,
+            phase: 'startup',
+            framesLeft: move.startup,
+            connected: false
+          };
+          events.push({ tick: this.tick, type: 'attack_started', fighter: fighter.id, move: input.attack });
+        }
+      }
+      const direction = norm(input.move ?? { x: 0, z: 0 });
+      const speedFactor = fighter.knockedOut || fighter.stunFrames > 0 ? 0 :
+        fighter.action ? ATTACK_SPEED_SCALE : fighter.guarding ? GUARD_SPEED_SCALE : 1;
+      const target = {
+        x: direction.x * WALK_SPEED * speedFactor,
+        z: direction.z * WALK_SPEED * speedFactor
+      };
+      const dv = ACCELERATION * DT;
+      for (const axis of ['x', 'z']) {
+        fighter.velocity[axis] += clamp(target[axis] - fighter.velocity[axis], -dv, dv);
+        fighter.position[axis] += fighter.velocity[axis] * DT;
+      }
+      fighter.stamina = clamp(fighter.stamina + STAMINA_REGEN_PER_SEC * DT, 0, 100);
+    }
+
+    // Deterministic 2D capsule-footprint separation; no interpenetrating fighters.
+    const difference = { x: red.position.x - blue.position.x, z: red.position.z - blue.position.z };
+    const gap = Math.hypot(difference.x, difference.z);
+    if (gap < RADIUS * 2) {
+      const n = gap < EPS ? { x: 1, z: 0 } : { x: difference.x / gap, z: difference.z / gap };
+      const correction = (RADIUS * 2 - gap) * 0.5;
+      blue.position.x -= n.x * correction;
+      blue.position.z -= n.z * correction;
+      red.position.x += n.x * correction;
+      red.position.z += n.z * correction;
+    }
+
+    // Facing is continuously updated in the horizontal plane, not snapped to a sprite pose.
+    for (const [self, other] of [[blue, red], [red, blue]]) {
+      self.facing = norm({
+        x: other.position.x - self.position.x,
+        z: other.position.z - self.position.z
+      });
+    }
+
+    // Collect all contacts BEFORE applying damage: simultaneous hits can trade fairly.
+    const contacts = [];
+    for (const [attacker, defender] of [[blue, red], [red, blue]]) {
+      if (!attacker.action || attacker.action.phase !== 'active' || attacker.action.connected) continue;
+      const move = MOVESETS[attacker.id][attacker.action.name];
+      const d = dist(attacker, defender);
+      const toward = norm({
+        x: defender.position.x - attacker.position.x,
+        z: defender.position.z - attacker.position.z
+      });
+      const frontDot = attacker.facing.x * toward.x + attacker.facing.z * toward.z;
+      if (d <= move.range + RADIUS && d >= RADIUS * 2 - EPS && frontDot >= 0.65) {
+        contacts.push({ attacker, defender, move, moveName: attacker.action.name });
+        attacker.action.connected = true;
+      }
+    }
+    for (const { attacker, defender, move, moveName } of contacts) {
+      const guarded = defender.guarding && defender.stamina >= MIN_GUARD_STAMINA;
+      const strain = guarded ? move.impact * 0.12 : move.impact;
+      const conditionKey = move.target === 'head' ? 'headStrain' : 'bodyStrain';
+      defender.condition[conditionKey] += strain;
+      if (guarded) defender.stamina = clamp(defender.stamina - move.impact * 1.0, 0, 100);
+      else {
+        defender.stunFrames = Math.max(defender.stunFrames, move.stun);
+        defender.action = null; // Contact can interrupt recovery/startup; trade already collected.
+      }
+      const impulse = (guarded ? 0.22 : 1) * move.push / defender.massKg * 75;
+      const away = norm({ x: defender.position.x - attacker.position.x, z: defender.position.z - attacker.position.z });
+      defender.velocity.x += away.x * impulse;
+      defender.velocity.z += away.z * impulse;
+      events.push({
+        tick: this.tick, type: guarded ? 'blocked' : 'hit', attacker: attacker.id,
+        defender: defender.id, move: moveName, target: move.target,
+        strain: Number(strain.toFixed(3))
+      });
+      if (defender.condition.headStrain >= KO_HEAD_STRAIN ||
+          defender.condition.bodyStrain >= KO_BODY_STRAIN) {
+        defender.knockedOut = true;
+        defender.action = null;
+        defender.guarding = false;
+        events.push({ tick: this.tick, type: 'knockout', fighter: defender.id });
+      }
+    }
+
+    // State advance after contact resolution; every phase consumes exact frame counts.
+    for (const fighter of [blue, red]) {
+      const state = fighter.action;
+      if (!state) continue;
+      state.framesLeft--;
+      if (state.framesLeft > 0) continue;
+      const move = MOVESETS[fighter.id][state.name];
+      if (state.phase === 'startup') {
+        state.phase = 'active'; state.framesLeft = move.active;
+      } else if (state.phase === 'active') {
+        state.phase = 'recovery'; state.framesLeft = move.recovery;
+      } else {
+        fighter.action = null;
+        events.push({ tick: this.tick, type: 'attack_finished', fighter: fighter.id });
+      }
+    }
+    if (blue.knockedOut || red.knockedOut) {
+      this.finished = true;
+      this.winner = blue.knockedOut && red.knockedOut ? 'draw' : blue.knockedOut ? 'red' : 'blue';
+      events.push({ tick: this.tick, type: 'match_finished', winner: this.winner });
+    }
+    return events;
+  }
+}
