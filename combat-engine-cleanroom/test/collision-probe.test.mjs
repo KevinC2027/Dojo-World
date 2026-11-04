@@ -11,7 +11,7 @@ test('3D collision probe is deterministic and does not mutate fighter state', ()
   const two = strikeContactProbe(a,b,'palm',1,3);
   assert.deepEqual(one,two);
   assert.deepEqual(world.snapshot(),before);
-  assert.equal(one.model,'stationary_torso_sweep_diagnostic_v1');
+  assert.equal(one.model,'moving_torso_sweep_diagnostic_v2');
   assert.equal(one.limb,'right_hand');
   assert.equal(typeof one.intersected,'boolean');
 });
@@ -43,7 +43,7 @@ test('authoritative contact events include a deterministic shadow collision prob
   const hits=events.filter(e=>e.type==='hit');
   assert.equal(hits.length,1);
   const probe=hits[0].collisionProbe;
-  assert.equal(probe.model,'stationary_torso_sweep_diagnostic_v1');
+  assert.equal(probe.model,'moving_torso_sweep_diagnostic_v2');
   assert.equal(probe.activeFrameCount,MOVESETS.blue.palm.active);
   assert.equal(typeof probe.intersected,'boolean');
   assert.equal(hits[0].contact.model,'range_proxy_v1');
@@ -64,4 +64,40 @@ test('shadow collision probe leaves deterministic replay and combat outcome unch
   assert.equal(r.events.filter(e=>e.type==='blocked').length,1);
   assert.equal(r.events.filter(e=>e.type==='hit').length,0);
   assert.ok(r.events.find(e=>e.type==='blocked').collisionProbe);
+});
+
+test('moving defender enters a stationary strike path in shadow geometry', () => {
+  const world=new CombatWorld({startingGap:3.5});
+  const a=world.fighters.blue,b=world.fighters.red;
+  a.position={x:0,y:0,z:0};
+  b.position={x:2.5,y:0,z:0};
+  const prior={
+    attacker:{position:{x:0,y:0,z:0},facing:{x:1,z:0}},
+    defender:{position:{x:-0.5,y:0,z:0},facing:{x:-1,z:0}}
+  };
+  const one=strikeContactProbe(a,b,'palm',1,3,prior);
+  const two=strikeContactProbe(a,b,'palm',1,3,prior);
+  assert.deepEqual(one,two);
+  assert.equal(one.previousPoseProvided,true);
+  assert.equal(one.model,'moving_torso_sweep_diagnostic_v2');
+  assert.equal(one.intersected,true);
+});
+
+test('tick-start pose capture preserves deterministic event diagnostics', () => {
+  function replay(){
+    const world=new CombatWorld({startingGap:1.3});
+    const events=[];
+    for(let i=0;i<36;i++)events.push(...world.step({
+      blue:i===0?{attack:'palm',move:{x:1,z:0}}:{move:{x:1,z:0}},
+      red:{move:{x:-1,z:0}}
+    }));
+    return {events,state:world.snapshot()};
+  }
+  const first=replay(),second=replay();
+  assert.deepEqual(first,second);
+  const event=first.events.find(e=>e.type==='hit'||e.type==='blocked');
+  assert.ok(event);
+  assert.equal(event.collisionProbe.model,'moving_torso_sweep_diagnostic_v2');
+  assert.equal(event.collisionProbe.previousPoseProvided,true);
+  assert.equal(event.contact.model,'range_proxy_v1');
 });
