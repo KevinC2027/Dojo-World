@@ -178,3 +178,35 @@ test('guard prevents a queued attack from firing while held', () => {
   assert.equal(w.fighters.blue.guarding, true);
   assert.equal(w.fighters.blue.action, null);
 });
+
+test('contact telemetry records finite 3D world-space point, normal and limb', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const events = [ ...w.step({ blue: { attack: 'palm' } }) ];
+  for (let i = 0; i < 10; i++) events.push(...w.step());
+  const hit = events.find(e => e.type === 'hit');
+  assert.ok(hit);
+  assert.equal(hit.contact.model, 'range_proxy_v1');
+  assert.equal(hit.contact.limb, 'right_hand');
+  assert.ok(hit.contact.point.y > 1);
+  assert.ok(Object.values(hit.contact.point).every(Number.isFinite));
+  assert.ok(Object.values(hit.contact.normal).every(Number.isFinite));
+  assert.ok(hit.contact.normal.x < 0);
+});
+
+test('blocked contacts also expose 3D telemetry without changing guard outcome', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const events = [ ...w.step({ red: { attack: 'cross' }, blue: { guard: true } }) ];
+  for (let i = 0; i < 14; i++) events.push(...w.step({ blue: { guard: true } }));
+  const blocked = events.find(e => e.type === 'blocked');
+  assert.ok(blocked);
+  assert.equal(blocked.contact.limb, 'right_hand');
+  assert.equal(blocked.contact.model, 'range_proxy_v1');
+  assert.ok(blocked.contact.point.y > 1);
+});
+
+test('contact telemetry is deterministic across equivalent simulations', () => {
+  const a = new CombatWorld({ startingGap: 1.3 });
+  const b = new CombatWorld({ startingGap: 1.3 });
+  const inputs = [{ blue: { attack: 'frontKick' } }, ...Array.from({ length: 18 }, () => ({}))];
+  assert.deepEqual(inputs.flatMap(input => a.step(input)), inputs.flatMap(input => b.step(input)));
+});
