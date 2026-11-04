@@ -159,3 +159,10 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Added `test/rejected-attack-instances.test.mjs` with four tests for unique-attack counts, deterministic replay, input nonmutation, and invalid/mismatched identity.
 - This is diagnostic only: range/facing still authorizes hits and damage. The audit cannot identify missed intersections that do not produce a `shadow_contact_rejected` event; unique IDs are match-scoped, not global network identifiers.
 - Previous v0.15 commit `76eb637c` had a successful GitHub Actions push run `41901891838`. v0.16 tests and CI require separate confirmation. Next: grounded foot-support state and consecutive-attack balance invariants.
+
+## v0.17 planar foot-support diagnostic (2026-11-04)
+
+- Added `src/foot-support.mjs` with a pure deterministic projected-center-of-mass test against the segment connecting planted feet, including finite tolerance and degenerate stance handling.
+- Added `test/foot-support.test.mjs` with five focused tests for centered support, unsupported weight shift, determinism, invalid inputs, and coincident feet.
+- This is **diagnostic geometry only**: it is not wired into movement, attack permissions, animations, foot placement, vertical physics, or damage. A line-segment model is a preliminary approximation, not a complete support polygon or biomechanical validation.
+- Run `npm test` and confirm GitHub Actions before treating the increment as verified.
