@@ -63,3 +63,51 @@ export function sweptSphereCapsule(previous,current,strikeRadius,capsuleStart,ca
     normal
   };
 }
+
+
+/**
+ * Find the FIRST entry into the expanded capsule, not just closest approach.
+ * Distance to a convex capsule along a linear segment is convex, so if the
+ * closest-approach sample intersects, bisection on [0, closestFraction] finds
+ * the entry boundary. A sweep starting inside has entryFraction === 0.
+ *
+ * The capsule is stationary for this fixed tick. Moving defenders require a
+ * future relative-motion extension; this does not solve skeletal trajectories.
+ */
+export function sweptSphereCapsuleFirstImpact(previous,current,strikeRadius,capsuleStart,capsuleEnd,capsuleRadius) {
+  const closest = sweptSphereCapsule(previous,current,strikeRadius,capsuleStart,capsuleEnd,capsuleRadius);
+  if (!closest) return null;
+  const motion = sub(current,previous);
+  const radius = strikeRadius + capsuleRadius;
+  const sample = t => {
+    const center = add(previous,mul(motion,t));
+    const nearest = closestSegments(center,center,capsuleStart,capsuleEnd);
+    return { center, nearest };
+  };
+  const start = sample(0);
+  let entryFraction = 0;
+  if (start.nearest.distance > radius) {
+    let low = 0, high = closest.sweepFraction;
+    // The closest point must be inside the expanded capsule.
+    // A fixed iteration count preserves deterministic replay.
+    for (let i=0;i<48;i++) {
+      const mid = (low+high)*0.5;
+      if (sample(mid).nearest.distance <= radius) high = mid;
+      else low = mid;
+    }
+    entryFraction = high;
+  }
+  const impact = sample(entryFraction);
+  const delta = sub(impact.center,impact.nearest.pointB);
+  const d = length(delta);
+  const fallback = length(motion)>EPS ? mul(motion,-1/length(motion)) : {x:1,y:0,z:0};
+  const normal = d>EPS ? mul(delta,1/d) : fallback;
+  return {
+    ...closest,
+    firstImpactFraction: entryFraction,
+    firstImpactCenter: impact.center,
+    firstImpactPoint: add(impact.nearest.pointB,mul(normal,capsuleRadius)),
+    firstImpactNormal: normal,
+    startsOverlapping: start.nearest.distance <= radius
+  };
+}
