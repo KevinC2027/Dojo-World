@@ -240,7 +240,10 @@ export class CombatWorld {
         defender: defender.id, move: moveName, target: move.target,
         strain: Number(strain.toFixed(3)),
         contact: contactTelemetry(attacker, defender, moveName, move.target),
-        collisionProbe
+        collisionProbe,
+        // Diagnostic only: a range-authorized hit with no swept 3D contact
+        // is an explicit discrepancy, never an implicit authoritative miss.
+        contactDiscrepancy: collisionProbe.intersected ? null : 'range_hit_without_3d_intersection'
       });
       if (defender.condition.headStrain >= KO_HEAD_STRAIN ||
           defender.condition.bodyStrain >= KO_BODY_STRAIN) {
