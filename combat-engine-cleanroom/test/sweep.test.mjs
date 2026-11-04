@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { closestSegments, sweptSphereCapsule } from '../src/sweep.mjs';
+import { closestSegments, sweptSphereCapsule, sweptSphereCapsuleFirstImpact } from '../src/sweep.mjs';
 const v=(x,y,z)=>({x,y,z});
 const torsoA=v(0,0.8,0),torsoB=v(0,1.7,0);
 
@@ -32,4 +32,32 @@ test('invalid coordinates and radii are rejected',()=>{
 test('identical geometry produces identical deterministic output',()=>{
   const args=[v(-2,1.3,0.1),v(2,1.3,0.1),0.11,torsoA,torsoB,0.3];
   assert.deepEqual(sweptSphereCapsule(...args),sweptSphereCapsule(...args));
+});
+
+
+test('first impact is entry boundary, earlier than closest approach',()=>{
+  const hit=sweptSphereCapsuleFirstImpact(v(-2,1.2,0),v(2,1.2,0),0.1,torsoA,torsoB,0.3);
+  assert.ok(hit);
+  assert.ok(Math.abs(hit.firstImpactFraction-0.4)<1e-9);
+  assert.ok(hit.firstImpactFraction<hit.sweepFraction);
+  assert.ok(Math.abs(hit.firstImpactCenter.x+0.4)<1e-9);
+  assert.equal(hit.startsOverlapping,false);
+});
+test('first impact is tick start when striking sphere begins inside',()=>{
+  const hit=sweptSphereCapsuleFirstImpact(v(0.1,1.2,0),v(2,1.2,0),0.1,torsoA,torsoB,0.3);
+  assert.ok(hit);
+  assert.equal(hit.firstImpactFraction,0);
+  assert.equal(hit.startsOverlapping,true);
+});
+test('first impact misses above head and remains deterministic',()=>{
+  const args=[v(-2,2.5,0),v(2,2.5,0),0.1,torsoA,torsoB,0.3];
+  assert.equal(sweptSphereCapsuleFirstImpact(...args),null);
+  const valid=[v(-2,1.2,0.1),v(2,1.2,0.1),0.1,torsoA,torsoB,0.3];
+  assert.deepEqual(sweptSphereCapsuleFirstImpact(...valid),sweptSphereCapsuleFirstImpact(...valid));
+});
+test('tangent first impact is finite and at closest approach',()=>{
+  const hit=sweptSphereCapsuleFirstImpact(v(-2,1.2,0.4),v(2,1.2,0.4),0.1,torsoA,torsoB,0.3);
+  assert.ok(hit);
+  assert.ok(Math.abs(hit.firstImpactFraction-0.5)<1e-8);
+  assert.ok(Object.values(hit.firstImpactPoint).every(Number.isFinite));
 });
