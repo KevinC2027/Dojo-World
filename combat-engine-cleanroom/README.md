@@ -152,3 +152,10 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Added `test/attack-instance.test.mjs` for replay determinism, monotonic ID assignment, and event-to-start correlation.
 - IDs are scoped to one CombatWorld instance and are **not** cross-match network identifiers. Damage remains range/facing authoritative; 3D probes are observational only.
 - Tests and GitHub Actions push CI must be verified independently. Next: aggregate rejected-contact observations by attack ID, then build grounded foot-support continuity tests.
+
+## v0.16 unique rejected attack audit (2026-11-04)
+
+- Added `src/rejected-attack-instances.mjs`: pure deterministic grouping of `shadow_contact_rejected` observations by world-scoped `attackInstanceId`. Repeated ticks for one attack count once; duplicate observations on the same tick are deduplicated.
+- Added `test/rejected-attack-instances.test.mjs` with four tests for unique-attack counts, deterministic replay, input nonmutation, and invalid/mismatched identity.
+- This is diagnostic only: range/facing still authorizes hits and damage. The audit cannot identify missed intersections that do not produce a `shadow_contact_rejected` event; unique IDs are match-scoped, not global network identifiers.
+- Previous v0.15 commit `76eb637c` had a successful GitHub Actions push run `41901891838`. v0.16 tests and CI require separate confirmation. Next: grounded foot-support state and consecutive-attack balance invariants.
