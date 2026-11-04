@@ -3,6 +3,7 @@
  */
 import {CombatWorld,TICK_RATE} from './engine.mjs';
 import {fighterRig,RIG_LENGTHS} from './hit-rig.mjs';
+import {FootPlantTracker} from './foot-plant-render.mjs';
 const D=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
 const finite=v=>Array.isArray(v)&&v.every(Number.isFinite);
 const jointPoints=rig=>[rig.pelvis,rig.chest,rig.neck,rig.head,
@@ -30,11 +31,13 @@ export function recordSoloMotion(fighterId,scenarioId){
   if(!scenario)throw new RangeError('Unknown solo motion scenario');
   const world=new CombatWorld({startingGap:30});
   const frames=[];
+  const tracker=new FootPlantTracker();
   for(let t=0;t<=scenario.frames;t++){
     if(t>0)world.step({[fighterId]:{move:scenario.vector(t-1),guard:!!scenario.guard}});
     const snapshot=world.snapshot(),fighter=snapshot.fighters[fighterId];
-    const rig=fighterRig(fighter,null,snapshot.timeSeconds);
-    frames.push({tick:snapshot.tick,fighter:structuredClone(fighter),rig});
+    const footTargets=tracker.update(fighter,snapshot.tick);
+    const rig=fighterRig(fighter,null,snapshot.timeSeconds,footTargets);
+    frames.push({tick:snapshot.tick,fighter:structuredClone(fighter),rig,footTargets:structuredClone(footTargets)});
   }
   return {fighterId,scenarioId,rateHz:TICK_RATE,frames};
 }
