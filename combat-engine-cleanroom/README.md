@@ -137,3 +137,10 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - The active attack loop now evaluates moving 3D shadow contact even when the existing range/facing proxy rejects a hit. It emits `shadow_contact_rejected` only when geometry intersects despite proxy rejection; it never applies damage or marks the attack connected.
 - Exchange audits now count `rejectedShadowIntersections` and record these discrepancies separately from proxy-authorized contacts. Multiple active ticks can report the same rejected strike; this is a per-tick observation, not a count of unique strikes.
 - Added regression tests for audit classification and deterministic non-authoritative replay. Test suite and push CI require independent verification.
+
+## v0.14 rejected-contact streak diagnostics (2026-11-04)
+
+- Added `src/rejected-contact-streaks.mjs` to summarize consecutive per-tick `shadow_contact_rejected` observations by attacker, defender and move. Repeated observations in one tick count once, and gaps start new streaks.
+- Added `test/rejected-contact-streaks.test.mjs` with three focused regression cases for consecutive observations, independent fighter/move grouping, nonmutation, determinism, and invalid ordering.
+- Streaks are **not guaranteed to equal unique attacks**: attack instance IDs are not yet available. The helper is diagnostic-only and does not affect hits, guarding, stamina, damage, or network state.
+- Tests and push CI have not been verified as passing. Next: execute full suite and introduce stable attack instance IDs to measure unique rejected contacts.
