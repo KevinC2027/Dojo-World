@@ -144,3 +144,11 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Added `test/rejected-contact-streaks.test.mjs` with three focused regression cases for consecutive observations, independent fighter/move grouping, nonmutation, determinism, and invalid ordering.
 - Streaks are **not guaranteed to equal unique attacks**: attack instance IDs are not yet available. The helper is diagnostic-only and does not affect hits, guarding, stamina, damage, or network state.
 - Tests and push CI have not been verified as passing. Next: execute full suite and introduce stable attack instance IDs to measure unique rejected contacts.
+
+## v0.15 deterministic attack instance identity (2026-11-04)
+
+- Each successfully started attack receives a world-scoped, monotonically increasing integer `instanceId`, included in the action state and snapshot via `nextAttackInstanceId`. Buffered presses do not consume an ID until an attack actually starts.
+- `attack_started`, `attack_finished`, `hit`, `blocked`, and `shadow_contact_rejected` events expose `attackInstanceId`. This permits downstream diagnostics to distinguish separate attempts of the same move and associate per-tick observations with the initiating action.
+- Added `test/attack-instance.test.mjs` for replay determinism, monotonic ID assignment, and event-to-start correlation.
+- IDs are scoped to one CombatWorld instance and are **not** cross-match network identifiers. Damage remains range/facing authoritative; 3D probes are observational only.
+- Tests and GitHub Actions push CI must be verified independently. Next: aggregate rejected-contact observations by attack ID, then build grounded foot-support continuity tests.
