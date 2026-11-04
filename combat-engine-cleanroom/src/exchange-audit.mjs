@@ -13,10 +13,22 @@ export function summarizeContactDiscrepancies(events) {
     shadowIntersections: 0,
     proxyOnlyContacts: 0,
     unclassifiedContacts: 0,
+    rejectedShadowIntersections: 0,
     byMove: {},
     discrepancies: []
   };
   for (const event of events) {
+    if (event?.type === 'shadow_contact_rejected') {
+      if (event.collisionProbe?.intersected === true) {
+        summary.rejectedShadowIntersections++;
+        summary.discrepancies.push({
+          tick: event.tick, attacker: event.attacker, defender: event.defender,
+          move: event.move, outcome: 'rejected',
+          reason: '3d_intersection_without_range_authority'
+        });
+      }
+      continue;
+    }
     if (!event || (event.type !== 'hit' && event.type !== 'blocked')) continue;
     summary.resolvedContacts++;
     if (event.type === 'hit') summary.hits++;
