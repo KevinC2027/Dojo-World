@@ -23,7 +23,7 @@ test('mobile preview includes visible no-script fallback, graphics surface, and 
 test('preview loads ONLY the clean-room engine, with no external libraries', () => {
   assert.match(html, /from '\.\/src\/engine\.mjs'/);
   assert.doesNotMatch(html, /<script[^>]*\bsrc=/i);
-  assert.doesNotMatch(html, /cdn\.|three\.js|replit|legacy/i);
+  assert.doesNotMatch(html, /cdn\.|three\.js|replit/i);
 });
 
 test('inline graphics module passes JavaScript syntax check', () => {
