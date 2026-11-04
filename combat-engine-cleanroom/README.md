@@ -1,4 +1,4 @@
-# Dojo World — Clean-room Combat Engine v0.4
+# Dojo World — Clean-room Combat Engine v0.5
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
 
@@ -35,9 +35,17 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 
 ## Next priority
 
-Replace the range proxy with limb-swept 3D collision against defender hit volumes, with continuous contact and stable phase boundaries; then broaden the move roster and test grounded exchanges.
+Connect the new swept sphere/capsule geometry to authored per-tick hand and foot trajectories and defender hit volumes; gate hit authority on verified limb intersection, then test contact continuity across phase boundaries.
+
+## v0.5 geometry increment
+
+- Added pure deterministic 3D swept-sphere vs capsule geometry in `src/sweep.mjs`, using finite segment closest-point calculations. It detects a fast strike passing through a body capsule even when both sampled endpoints miss, and handles tangent, miss and degenerate cases.
+- Added six regression tests in `test/sweep.test.mjs`. This geometry is **not wired to authoritative hit resolution yet**: the engine still uses `range_proxy_v1` for hits and blocks. `sweepFraction` is the fraction of closest approach, **not** first time of impact. No animation or biomechanics have been validated.
+- New tests and CI require independent execution verification.
 
 ## Changelog
+
+2026-11-04: v0.5 added isolated swept-sphere/capsule contact geometry and six focused tests without changing hit authority or existing gameplay.
 
 2026-11-04: v0.4 added `src/contact.mjs` for deterministic 3D range-proxy contact telemetry on hit and block events (striking limb, world-space surface point, normal, and separation). Three new tests target geometry, guarding, and replay. This does not claim skeletal collision or validated biomechanics; CI and tests require independent verification.
 
