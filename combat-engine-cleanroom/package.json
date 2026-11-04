@@ -1,0 +1,14 @@
+{
+  "name": "dojo-world-combat-cleanroom",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Clean-room deterministic 1v1 combat rules core",
+  "scripts": {
+    "test": "node --test",
+    "demo": "node examples/duel.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
