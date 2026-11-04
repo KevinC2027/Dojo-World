@@ -1,4 +1,4 @@
-# Dojo World — Clean-room Combat Engine v0.6
+# Dojo World — Clean-room Combat Engine v0.7
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
 
@@ -35,7 +35,7 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 
 ## Next priority
 
-Connect the swept sphere/capsule first-impact geometry to authored per-tick hand and foot trajectories and defender hit volumes; gate hit authority on verified limb intersection, then test contact continuity across phase boundaries.
+Connect the new procedural per-tick 3D strike trajectories to authoritative hit resolution, replacing the range-only gate. First preserve current hit/trade tests and phase continuity; then add moving defender capsules and realistic articulated joints.
 
 ## v0.5 geometry increment
 
@@ -49,7 +49,17 @@ Connect the swept sphere/capsule first-impact geometry to authored per-tick hand
 - Added four focused tests for first-entry timing, initial overlap, misses/determinism, and tangency in `test/sweep.test.mjs`.
 - **Important:** The geometry is still independent of authoritative combat hits. Moving defender capsules, anatomical strike trajectories, limb IK and phase-transition continuity are not implemented. These tests must be executed before claiming passing status.
 
+## v0.7 procedural trajectory increment
+
+- Added `src/trajectory.mjs` with deterministic 3D world-space striking endpoint paths for Blue palm, straight and front kick, plus Red jab, cross and hook. Each move specifies striking limb and radius; trajectories rotate with the fighter's facing, translate with their world position, and use a smooth extend-and-return curve with matching endpoints at active-phase boundaries.
+- Added `strikeTickSweep` to expose consecutive per-frame endpoint geometry and a nominal defender torso capsule, ready for `sweptSphereCapsuleFirstImpact`. Six new regression tests cover finite/deterministic poses, boundary continuity, world rotation, hit/miss geometry, and invalid inputs.
+- **Not yet authoritative:** existing `engine.mjs` hit resolution remains the range-based proxy. These are procedural endpoint approximations, not skeletal IK or validated biomechanics. A stationary torso is assumed for each tick; true moving-defender relative sweeps and animation blending remain open.
+- Tests were committed but must be executed before reporting passing results. The GitHub workflow lives outside the permitted edit directory and was only inspected, not changed.
+
 ## Changelog
+
+2026-11-04: v0.7 added six deterministic 3D strike endpoint paths and six regression tests; collision geometry can now consume per-tick paths, but authoritative hit resolution is unchanged.
+
 
 2026-11-04: v0.6 added deterministic first-entry time and contact geometry for swept sphere/capsule intersection (four new regression tests). Hit authority remains unchanged.
 
