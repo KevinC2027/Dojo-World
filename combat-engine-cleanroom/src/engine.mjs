@@ -117,6 +117,12 @@ export class CombatWorld {
     this.tick += 1;
     const blue = this.fighters.blue;
     const red = this.fighters.red;
+    // Capture tick-start geometry before movement, separation, and facing changes.
+    // Shadow collision must use the same tick boundary on both fighters.
+    const previousPose = {
+      blue: { position: { ...blue.position }, facing: { ...blue.facing } },
+      red: { position: { ...red.position }, facing: { ...red.facing } }
+    };
 
     for (const fighter of [blue, red]) {
       const input = inputs[fighter.id];
@@ -205,7 +211,8 @@ export class CombatWorld {
           attacker, defender, move, moveName: attacker.action.name,
           collisionProbe: strikeContactProbe(
             attacker, defender, attacker.action.name,
-            move.active - attacker.action.framesLeft, move.active
+            move.active - attacker.action.framesLeft, move.active,
+            { attacker: previousPose[attacker.id], defender: previousPose[defender.id] }
           )
         });
         attacker.action.connected = true;
