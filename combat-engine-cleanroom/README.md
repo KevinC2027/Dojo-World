@@ -131,3 +131,9 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 2026-11-04: v0.2 added capped angular turning and directional guarding; added three targeted regression tests (12 total). GitHub CI execution must be checked separately.
 
 2026-11-04: Created fresh v0.1 combat rules engine, six moves, fixed-timestep movement, guard, hits and KO. Local Node 22 test suite: 9/9 passed.
+
+## v0.13 rejected shadow-contact observations (2026-11-04)
+
+- The active attack loop now evaluates moving 3D shadow contact even when the existing range/facing proxy rejects a hit. It emits `shadow_contact_rejected` only when geometry intersects despite proxy rejection; it never applies damage or marks the attack connected.
+- Exchange audits now count `rejectedShadowIntersections` and record these discrepancies separately from proxy-authorized contacts. Multiple active ticks can report the same rejected strike; this is a per-tick observation, not a count of unique strikes.
+- Added regression tests for audit classification and deterministic non-authoritative replay. Test suite and push CI require independent verification.
