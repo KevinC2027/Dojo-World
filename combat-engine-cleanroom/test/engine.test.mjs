@@ -131,13 +131,12 @@ test('recovery input buffer executes on the first free tick without skipping rec
   // The straight completes its startup and active frames, then enters recovery.
   for (let i = 0; i < 6; i++) events.push(...w.step());
   assert.equal(w.fighters.blue.action.phase, 'recovery');
+  // Queue within eight ticks of the end of the straight's recovery.
+  for (let i = 0; i < 6; i++) events.push(...w.step());
   events.push(...w.step({ blue: { attack: 'palm' } }));
   assert.equal(w.fighters.blue.bufferedAttack.name, 'palm');
   assert.equal(w.fighters.blue.action.name, 'straight');
-  // Refresh the buffer near the end of recovery so it survives until the fighter is free.
-  for (let i = 0; i < 7; i++) events.push(...w.step());
-  events.push(...w.step({ blue: { attack: 'palm' } }));
-  for (let i = 0; i < 7; i++) events.push(...w.step());
+  for (let i = 0; i < 6; i++) events.push(...w.step());
   assert.equal(w.fighters.blue.action, null);
   events.push(...w.step());
   assert.equal(w.fighters.blue.action.name, 'palm');
