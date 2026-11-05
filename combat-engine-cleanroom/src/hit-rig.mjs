@@ -96,7 +96,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
       const contact=[side*.24,.88,.78];
       ankle=mix(mix(neutral,chamber,load),contact,extend);
     }
-    const kneePole=[side*.20,.02,.95];
+    const kneePole=[side*.32,.38,.58];
     const leg=solveTwoBone(hip,constrain(hip,ankle,RIG_LENGTHS.thigh+RIG_LENGTHS.shin-.002),
       RIG_LENGTHS.thigh,RIG_LENGTHS.shin,kneePole);
     legs.push({side,hip,knee:leg.joint,foot:leg.end});
