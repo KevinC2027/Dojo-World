@@ -38,7 +38,11 @@ export class FootPlantTracker {
       const destination=[f.position.x+dir[0]*(anticipation+.20)+lateral[0]*lateralOffset,
         f.position.z+dir[1]*(anticipation+.24)+lateral[1]*lateralOffset];
       if(dist(leg.plant,destination)>.20){
-        leg.swing={start:leg.plant.slice(),end:destination,begin:tick,duration:10};
+        // Bound the stride from the actual planted ankle, not just the moving root.
+        // Abrupt reverse/stop inputs must not request an unreachable swing endpoint.
+        const delta=dist(leg.plant,destination),maxStride=.42;
+        const bounded=delta>maxStride?lerp(leg.plant,destination,maxStride/delta):destination;
+        leg.swing={start:leg.plant.slice(),end:bounded,begin:tick,duration:10};
         this.swingSide=-side;this.lastStart=tick;
       }
     }
