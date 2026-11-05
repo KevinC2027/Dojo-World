@@ -40,7 +40,11 @@ export class FootPlantTracker {
     // Six ticks for unguarded 3.2m/s movement; ten for guarded shuffle.
     // Existing swings retain their launch duration and endpoint.
     if(moving&&!active&&tick-this.lastStart>=swingTicks){
-      const side=this.swingSide,leg=this.feet[side],dir=this.lastDir;
+      // Prioritize the leg which is beyond its comfortable support reach.
+      // Keep the alternating preference when neither leg is substantially behind.
+      const distToRoot=side=>dist(this.feet[side].plant,[f.position.x,f.position.z]);
+      const side=distToRoot(this.swingSide)>distToRoot(-this.swingSide)+.02
+        ?this.swingSide:-this.swingSide,leg=this.feet[side],dir=this.lastDir;
       const lateral=[-dir[1],dir[0]],lateralOffset=side*.20;
       const anticipation=clamp(speed*.12,.08,.4);
       const destination=[f.position.x+dir[0]*(anticipation+.15)+lateral[0]*lateralOffset,
