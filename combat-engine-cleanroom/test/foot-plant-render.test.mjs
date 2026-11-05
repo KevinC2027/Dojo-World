@@ -94,3 +94,26 @@ test('swing liftoff is position-continuous and planted support stays fixed',()=>
   assert.ok(liftoffs>=3,'exercise multiple liftoffs');
  }
 });
+
+test('symmetric stance follows alternating preference, while a lagging foot overrides it',()=>{
+ const tracker=new FootPlantTracker();
+ const f=fighter('blue',0,0);
+ tracker.update(f,0);
+ // Symmetric root distances must use the preferred side, not its opposite.
+ tracker.swingSide=1;
+ tracker.feet[-1].plant=[-.24,0];
+ tracker.feet[1].plant=[.24,0];
+ f.velocity={x:3,z:0};
+ const first=tracker.update(f,1);
+ assert.equal(first[1].planted,false,'preferred foot starts first');
+ assert.equal(first[-1].planted,true);
+ // A strongly lagging opposite foot must override the alternating preference.
+ const next=new FootPlantTracker();
+ next.update(fighter('blue',0,0),0);
+ next.swingSide=1;
+ next.feet[-1].plant=[-1.1,0];
+ next.feet[1].plant=[.24,0];
+ const second=next.update(f,1);
+ assert.equal(second[-1].planted,false,'lagging foot gets priority');
+ assert.equal(second[1].planted,true);
+});
