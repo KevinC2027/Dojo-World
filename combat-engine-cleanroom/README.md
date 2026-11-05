@@ -263,3 +263,10 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Prediction uses existing per-tick speed and braking history; in-flight swing start/end/duration and world-space support anchors remain unchanged. CombatWorld movement, collision and damage authority are untouched.
 - Added a focused Blue/Red regression in `test/foot-plant-render.test.mjs`. The new test and complete `npm test` suite **have not been executed in this update**; CI and fresh 24-scenario metrics are not yet verified.
 - This is a limited gait-planning correction, **not** evidence of natural walking or stable dynamic balance. Preserve the 24-case gate and require actual-engine browser video plus creator approval before moveset expansion.
+
+
+## Footstep planning syntax repair and touchdown regression (2026-11-05)
+
+- Repaired a source defect in `src/foot-plant-render.mjs`: literal `\\n` escape text had been inserted into a `//` comment, accidentally commenting out `braking`, `predictedSpeed` and `anticipation` declarations. Subsequent footstep planning could reference an undefined `anticipation` and throw at runtime. Restored actual source line breaks and live braking calculation.
+- Corrected the existing projected-reach test expectation: when moving toward +X, the -X trailing foot must be selected even if the previous alternating preference points to the other leg. Preserved the separate Blue/Red touchdown projection regression.
+- This repairs a runtime regression rather than demonstrating improved biomechanics. The clean-room GitHub connector confirmed the edits, but Node/npm test execution, current CI and 24-scenario qualification remain **unverified**. No actual-engine browser recording was produced. The user-approval movement gate remains closed.
