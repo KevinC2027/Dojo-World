@@ -49,7 +49,8 @@ export function recordSoloMotion(fighterId,scenarioId){
 }
 export function measureSoloMotion(replay){
   const errors=[],lengthErrors=[],jointSteps=[],footSlides=[],footPenetrations=[],plantTargetErrors=[];
-  let horizontalTravel=0,groundedSamples=0;
+  let horizontalTravel=0,groundedSamples=0,supportTransfers=0;
+  const swingAnkleSteps=[],plantedAnkleSteps=[];
   let worstJointStep={meters:0,tick:0,joint:null};
   for(let i=0;i<replay.frames.length;i++){
     const {fighter,rig}=replay.frames[i],points=jointPoints(rig);
@@ -59,6 +60,15 @@ export function measureSoloMotion(replay){
     if(!i)continue;
     const prev=replay.frames[i-1];
     horizontalTravel+=Math.hypot(fighter.position.x-prev.fighter.position.x,fighter.position.z-prev.fighter.position.z);
+    for(const leg of rig.legs){
+      const priorLeg=prev.rig.legs.find(l=>l.side===leg.side);
+      const ankleStep=D(toWorld(fighter,leg.foot),toWorld(prev.fighter,priorLeg.foot));
+      if(replay.frames[i].footTargets?.[leg.side]?.planted && prev.footTargets?.[leg.side]?.planted)
+        plantedAnkleSteps.push(ankleStep);
+      else swingAnkleSteps.push(ankleStep);
+      if(!prev.footTargets?.[leg.side]?.planted && replay.frames[i].footTargets?.[leg.side]?.planted)
+        supportTransfers++;
+    }
     const jp=jointPoints(prev.rig);
     const steps=points.map((p,k)=>D(toWorld(fighter,p),toWorld(prev.fighter,jp[k])));
     jointSteps.push(Math.max(...steps));
@@ -75,7 +85,9 @@ export function measureSoloMotion(replay){
   return {fighter:replay.fighterId,scenario:replay.scenarioId,ticks:replay.frames.length,
     horizontalTravelMeters:horizontalTravel,maxBoneErrorMeters:max(lengthErrors),
     maxJointStepMeters:max(jointSteps),worstJointStep,maxGroundedFootSlideMeters:max(footSlides),
-    groundedSamples,maxPlantTargetErrorMeters:max(plantTargetErrors),footPenetrations:footPenetrations.length,errors};
+    groundedSamples,maxPlantTargetErrorMeters:max(plantTargetErrors),footPenetrations:footPenetrations.length,
+    supportTransfers,maxSwingAnkleStepMeters:max(swingAnkleSteps),
+    maxPlantedAnkleStepMeters:max(plantedAnkleSteps),errors};
 }
 export function auditIndependentMotion(){
   return ['blue','red'].flatMap(id=>INDEPENDENT_MOTION_SCENARIOS.map(s=>measureSoloMotion(recordSoloMotion(id,s))));
