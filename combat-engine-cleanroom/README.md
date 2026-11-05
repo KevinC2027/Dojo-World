@@ -213,3 +213,9 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Added a focused two-fighter regression in `test/foot-plant-render.test.mjs` verifying longer guarded shuffle anticipation, six- versus ten-tick swing durations, and stride caps.
 - This is a **presentation foot-placement change**, not authoritative locomotion braking or a physical balance solver. The 24-case full-body and dynamic-support audits must be rerun; no improved COM support or naturalness is claimed without execution.
 - Keep the solo movement / full-body visual approval gate closed. Do not expand movesets, alter the Fuji stage, or publish the release branch based on this change.
+
+## Solo gait: guard/reverse mid-swing regression (2026-11-05)
+
+- Added `test/guard-reverse-touchdown.test.mjs` for Blue and Red. It reverses root motion and enables guard while one foot is airborne, asserting that the existing swing keeps its launch tick and touchdown target, the other foot remains planted, targets remain finite, and repeated same-tick rendering is idempotent.
+- This is a **test-only** increment: no CombatWorld authority, moves, graphics, release branch, or landing solver changed. It does not establish natural balance or human visual approval.
+- Verify the complete Node suite and branch CI after the test commit. The 24-case static COM support screen remains previously reported as 6/24; no new full-body measurement or actual-browser video is claimed by this regression.
