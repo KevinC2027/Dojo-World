@@ -55,15 +55,17 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   const load=attack?(pr.phase==='startup'?pr.u:pr.phase==='active'?1:1-pr.u):0;
   const extend=sm(flow);
   const twist=(strike===-1?-.12:.12)*load;
+  // Presentation-level linked pelvis, spine and shoulder response to support.
+  const sway=attack?0:(footTargets?.bodySway||0)*.055;
   const recoil=f.stunFrames>0?-.09:0;
-  const pelvis=[twist*.14,blue?.84:.96,recoil-.045*load];
-  const chest=[twist*.42,blue?1.31:1.46,recoil+.025*load];
-  const neck=[twist*.45,blue?1.51:1.66,recoil];
-  const head=[twist*.40,blue?1.75:1.89,recoil];
+  const pelvis=[twist*.14+sway,blue?.84:.96,recoil-.045*load];
+  const chest=[twist*.42+sway*.7,blue?1.31:1.46,recoil+.025*load];
+  const neck=[twist*.45+sway*.45,blue?1.51:1.66,recoil];
+  const head=[twist*.40+sway*.4,blue?1.75:1.89,recoil];
   const arms=[],legs=[];
   for(const side of [-1,1]){
     const shoulder=anchorArm(side,blue,twist);
-    shoulder[0]+=twist*.40;
+    shoulder[0]+=twist*.40+sway*.7;
     let wrist=hand(side,blue);
     if(!attack)wrist=mix(wrist,[side*.18,blue?1.51:1.71,.31],footTargets?.guardWeight??(f.guarding?1:0));
     if(attack&&side===strike&&!kick){
@@ -83,6 +85,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
       RIG_LENGTHS.upperArm,RIG_LENGTHS.forearm,elbowPole);
     arms.push({side,shoulder,elbow:arm.joint,hand:arm.end});
     const hip=anchorLeg(side,blue,pelvis[2]);
+    hip[0]+=sway;
     let ankle=foot(side,blue);
     const stepping=(!attack&&speed>.25);
     if(stepping){
