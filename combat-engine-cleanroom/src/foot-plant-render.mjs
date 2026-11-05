@@ -32,7 +32,7 @@ export class FootPlantTracker {
     this.gaitMode=!moving?'stance':footwork?'footwork':'run';
     // Carries a cosmetic locomotion weight across transitions without
     // altering the authoritative engine position or mid-swing endpoint.
-    this.gaitBlend+=clamp((footwork?0:1)-this.gaitBlend,-.15,.15);
+    this.gaitBlend+=clamp((!moving?0:footwork?0:1)-this.gaitBlend,-.15,.15);
     const swingTicks=footwork?10:6;
     const strideCap=footwork?.52:.95;
     if(moving)this.lastDir=[vx/speed,vz/speed];
