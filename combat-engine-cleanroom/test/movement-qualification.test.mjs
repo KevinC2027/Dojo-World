@@ -56,3 +56,14 @@ test('worst moving joint is labeled with its exact reproducible frame',()=>{
     assert.deepEqual(worst,measureSoloMotion(recordSoloMotion(id,scenario)).worstJointStep);
   }
 });
+
+test('speed-matched gait prevents accumulating planted-foot reach debt',()=>{
+  for(const id of ['blue','red'])
+    for(const scenario of ['forward','backward','lateral','reverse','stop']){
+      const report=measureSoloMotion(recordSoloMotion(id,scenario));
+      assert.ok(report.maxPlantTargetErrorMeters<.10,
+        id+':'+scenario+' planted foot escaped IK reach by '+report.maxPlantTargetErrorMeters+' m');
+      assert.equal(report.footPenetrations,0);
+      assert.ok(report.maxBoneErrorMeters<1e-8);
+    }
+});
