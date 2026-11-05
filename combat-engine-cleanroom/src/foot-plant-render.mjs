@@ -64,7 +64,11 @@ export class FootPlantTracker {
       }
     }
     // Carry a small lateral weight-transfer signal through step boundaries.
-    const support=this.feet[-1].swing?1:this.feet[1].swing?-1:0;
+    const gaitSupport=this.feet[-1].swing?1:this.feet[1].swing?-1:0;
+    // A front kick removes the striking foot from ground support. Transfer
+    // body weight toward the non-kicking leg only AFTER it can actually plant.
+    const groundedKickSupport=f.action?.name==='frontKick'&&!this.feet[-1].swing;
+    const support=groundedKickSupport?-1:gaitSupport;
     this.bodySway+=(support-this.bodySway)*.28;
     for(const leg of Object.values(this.feet)){
       if(!leg.swing)continue;
@@ -100,7 +104,11 @@ export class FootPlantTracker {
         const s=leg.swing,u=clamp((this.lastTick-s.begin)/s.duration,0,1);
         xy=lerp(s.start,s.end,smooth(u));raise=.14*Math.sin(Math.PI*u);planted=false;
       }
-      targets[side]={point:toLocal(f,xy,.035+raise),planted,world:xy.slice()};
+      // The visual strike leg is airborne even if its stored neutral
+      // footprint remains world-anchored for smooth recovery.
+      const airborneKick=side===1&&f.action?.name==='frontKick';
+      targets[side]={point:toLocal(f,xy,.035+raise),
+        planted:planted&&!airborneKick,world:xy.slice()};
     }
     targets.guardWeight=this.guardWeight;
     targets.bodySway=this.bodySway;
