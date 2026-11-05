@@ -60,17 +60,26 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   const recoil=f.stunFrames>0?-.09:0;
   // Elevation comes from the gait contact state, not a per-knee pose correction.
   const postureLift=!attack?(footTargets?.postureLift||0):0;
-  const pelvis=[twist*.14+sway,(blue?.84:.96)+postureLift,recoil-.045*load];
-  const chest=[twist*.42+sway*.7,(blue?1.31:1.46)+postureLift,recoil+.025*load];
-  const neck=[twist*.45+sway*.45,(blue?1.51:1.66)+postureLift,recoil];
-  const head=[twist*.40+sway*.4,(blue?1.75:1.89)+postureLift,recoil];
+  // The upper body participates in each step: subtle forward lean and arm
+  // counter-swing derived from the SAME planted/swing-foot gait state.
+  const forwardSpeed=(f.velocity?.x||0)*(f.facing?.x||0)+(f.velocity?.z||0)*(f.facing?.z||0);
+  const forwardLean=!attack?C(forwardSpeed/3.2,-1,1)*(footTargets?.gaitBlend||0)*.038:0;
+  const stanceContrast=footTargets?C((footTargets[1]?.point[2]-footTargets[-1]?.point[2])*.9,-1,1):0;
+  const freeArms=1-(footTargets?.guardWeight??(f.guarding?1:0));
+  const armCounterSwing=!attack?stanceContrast*C(speed/3.2,0,1)*freeArms*.11:0;
+  const pelvis=[twist*.14+sway,(blue?.84:.96)+postureLift,recoil-.045*load-forwardLean*.12];
+  const chest=[twist*.42+sway*.7,(blue?1.31:1.46)+postureLift,recoil+.025*load+forwardLean*.65];
+  const neck=[twist*.45+sway*.45,(blue?1.51:1.66)+postureLift,recoil+forwardLean*.83];
+  const head=[twist*.40+sway*.4,(blue?1.75:1.89)+postureLift,recoil+forwardLean*.70];
   const arms=[],legs=[];
   for(const side of [-1,1]){
     const shoulder=anchorArm(side,blue,twist);
     shoulder[0]+=twist*.40+sway*.7;
     shoulder[1]+=postureLift;
+    shoulder[2]+=forwardLean*.65;
     let wrist=hand(side,blue);
     wrist[1]+=postureLift;
+    wrist[2]+=forwardLean*.55-side*armCounterSwing;
     if(!attack)wrist=mix(wrist,[side*.18,(blue?1.51:1.71)+postureLift,.31],footTargets?.guardWeight??(f.guarding?1:0));
     if(attack&&side===strike&&!kick){
       // Chamber draws fist back before extension; hook wraps horizontally, not telescopically.
@@ -91,6 +100,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
     const hip=anchorLeg(side,blue,pelvis[2]);
     hip[0]+=sway;
     hip[1]+=postureLift;
+    hip[2]+=-forwardLean*.12;
     let ankle=foot(side,blue);
     const stepping=(!attack&&speed>.25);
     if(stepping){
