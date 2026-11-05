@@ -71,3 +71,26 @@ test('reverse and guard transitions keep each swing destination within bounded s
   }
  }
 });
+
+test('swing liftoff is position-continuous and planted support stays fixed',()=>{
+ for(const id of ['blue','red']){
+  const tracker=new FootPlantTracker();
+  let previous=tracker.update(fighter(id,0,0),0);
+  let liftoffs=0;
+  for(let tick=1;tick<=140;tick++){
+   const f=fighter(id,tick,3);
+   const current=tracker.update(f,tick);
+   for(const side of [-1,1]){
+    if(previous[side].planted&&!current[side].planted){
+     liftoffs++;
+     assert.ok(D(previous[side].world,current[side].world)<1e-10,'no jump at swing start');
+     assert.ok(Math.abs(current[side].point[1]-.035)<1e-10,'no vertical lift on first swing frame');
+    }
+    if(previous[side].planted&&current[side].planted)
+     assert.ok(D(previous[side].world,current[side].world)<1e-10,'support stays planted');
+   }
+   previous=current;
+  }
+  assert.ok(liftoffs>=3,'exercise multiple liftoffs');
+ }
+});
