@@ -13,7 +13,7 @@ function toLocal(f,w,y){const {c,s}=ROT(f.facing),dx=w[0]-f.position.x,dz=w[1]-f
 const foot=(side,blue)=>[side*.24,.035,side===1?(blue?.35:.19):(blue?-.28:-.17)];
 export class FootPlantTracker {
   constructor(){this.reset()}
-  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1];this.guardWeight=0;this.bodySway=0;this.gaitMode='stance';this.gaitBlend=0}
+  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1];this.guardWeight=0;this.bodySway=0;this.gaitMode='stance';this.gaitBlend=0;this.postureLift=0}
   update(f,tick){
     if(!Number.isInteger(tick)||tick<0)throw new TypeError('Expected integer engine tick');
     if(!f?.position||!f?.facing)throw new TypeError('Fighter with root and facing required');
@@ -21,6 +21,8 @@ export class FootPlantTracker {
       this.reset();this.id=f.id;this.feet={};
       for(const side of [-1,1])this.feet[side]={plant:toWorld(f,foot(side,f.id==='blue')),swing:null};
       this.lastTick=tick-1;
+      // Start in an extended stance so the first visible frame is not crouched.
+      this.postureLift=f.id==='blue'?.11:.055;
     }
     // Idempotent when render() is called repeatedly for the same simulation frame.
     if(tick===this.lastTick)return this.result(f);
@@ -66,6 +68,25 @@ export class FootPlantTracker {
       const sw=leg.swing,u=clamp((tick-sw.begin)/sw.duration,0,1);
       if(u>=1){leg.plant=sw.end.slice();leg.swing=null}
     }
+    // Coordinate standing height with leg reach, rather than solving each
+    // knee independently. Every torso and shoulder landmark uses this same lift.
+    // Existing planted-foot targets are world-locked; never lengthen a segment
+    // to obtain a straighter leg.
+    const fdata=this.result(f);
+    let bound=f.id==='blue'?.11:.055;
+    const baseHeight=f.id==='blue'?.84:.96;
+    for(const side of [-1,1]){
+      if(!fdata[side].planted)continue;
+      const p=fdata[side].point,hipX=side*.14+this.bodySway*.055;
+      const dx=p[0]-hipX,dz=p[2];
+      const limit=p[1]+Math.sqrt(Math.max(0,1.001*1.001-dx*dx-dz*dz))-baseHeight;
+      bound=Math.min(bound,limit);
+    }
+    const ideal=clamp(bound,-.10,.12);
+    const smoothed=this.postureLift+clamp(ideal-this.postureLift,-.018,.012);
+    // Reach takes precedence over easing; raise only when a supporting leg
+    // can reach the floor, lowering the entire skeleton otherwise.
+    this.postureLift=Math.min(smoothed,ideal);
     return this.result(f);
   }
   result(f){
@@ -82,6 +103,7 @@ export class FootPlantTracker {
     targets.bodySway=this.bodySway;
     targets.gaitMode=this.gaitMode;
     targets.gaitBlend=this.gaitBlend;
+    targets.postureLift=this.postureLift;
     return targets;
   }
 }
