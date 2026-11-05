@@ -1,0 +1,51 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {FootPlantTracker} from '../src/foot-plant-render.mjs';
+const D=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
+function fighter(id='blue',tick=0,speed=0){
+ return {id,position:{x:tick*speed/60,y:0,z:0},velocity:{x:speed,z:0},
+  facing:{x:1,z:0},action:null,guarding:false,knockedOut:false};
+}
+test('standing still keeps both foot plant targets locked',()=>{
+ const t=new FootPlantTracker(),first=t.update(fighter('blue',0,0),0);
+ for(let i=1;i<100;i++){
+  const n=t.update(fighter('blue',i,0),i);
+  for(const side of [-1,1]){assert.equal(n[side].planted,true);assert.deepEqual(n[side].world,first[side].world)}
+ }
+});
+test('moving forward alternates independent swing and world-locked support',()=>{
+ const t=new FootPlantTracker();let prev=t.update(fighter('blue',0,0),0),swingCount=0,alternations=0,lastSwing=null;
+ for(let i=1;i<=150;i++){
+  const now=t.update(fighter('blue',i,3.2),i);
+  const airborne=[-1,1].filter(side=>!now[side].planted);
+  assert.ok(airborne.length<=1,'one foot must support during ordinary walk');
+  if(airborne.length){
+   swingCount++;
+   if(airborne[0]!==lastSwing){if(lastSwing!==null)alternations++;lastSwing=airborne[0]}
+  }
+  for(const side of [-1,1])if(now[side].planted&&prev[side].planted)
+   assert.ok(D(now[side].world,prev[side].world)<1e-10,'support foot must not skate');
+  prev=now;
+ }
+ assert.ok(swingCount>20);assert.ok(alternations>2);
+});
+test('repeated render at identical engine tick never advances a step',()=>{
+ const t=new FootPlantTracker();
+ for(let i=0;i<20;i++)t.update(fighter('red',i,2.5),i);
+ const f=fighter('red',19,2.5),a=t.update(f,19),b=t.update(f,19);
+ assert.deepEqual(a,b);
+});
+test('reverse and abrupt stop do not create nonfinite positions',()=>{
+ const t=new FootPlantTracker();
+ for(let i=0;i<=180;i++){
+  const speed=i<75?3.2:i<135?-3.2:0;
+  const f=fighter('blue',0,speed);f.position.x=i<75?i*3.2/60:i<135?(150-i)*3.2/60:15*3.2/60;
+  const r=t.update(f,i);
+  for(const side of [-1,1]){assert.ok(r[side].point.every(Number.isFinite));assert.ok(r[side].world.every(Number.isFinite))}
+ }
+});
+test('tracker is deterministic and resets when the simulation restarts',()=>{
+ const a=new FootPlantTracker(),b=new FootPlantTracker();
+ for(let i=0;i<60;i++)assert.deepEqual(a.update(fighter('blue',i,3),i),b.update(fighter('blue',i,3),i));
+ assert.deepEqual(a.update(fighter('blue',0,0),0),new FootPlantTracker().update(fighter('blue',0,0),0));
+});
