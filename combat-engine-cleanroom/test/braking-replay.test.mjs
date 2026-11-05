@@ -28,3 +28,14 @@ test('missing support stays unknown rather than falsely passing',()=>{
   assert.equal(a.samples[0].outsideContactRadius,null);
   assert.equal(a.unknownSupportFrames,1);
 });
+
+test('aggregate braking gap uses support segment, not nearest individual ankle',()=>{
+  const replay=recordSoloMotion('blue','idle');
+  const audit=auditBrakingReplay(replay);
+  const known=audit.samples.filter(s=>s.outsideSupportSegmentRadius!==null);
+  assert.ok(known.length>0);
+  assert.equal(audit.maxProjectedGapMeters,Math.max(...known.map(s=>s.outsideSupportSegmentRadius)));
+  assert.ok(known.every(s=>s.outsideSupportSegmentRadius<=s.outsideContactRadius+1e-12));
+  assert.deepEqual(audit.worstFrame,known.reduce((a,b)=>
+    b.outsideSupportSegmentRadius>a.outsideSupportSegmentRadius?b:a));
+});
