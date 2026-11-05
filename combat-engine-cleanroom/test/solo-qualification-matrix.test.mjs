@@ -11,6 +11,9 @@ test('24 clean-room movement reports retain diagnostic provenance',()=>{
   assert.ok(Number.isFinite(row.jointStepMeters));
   assert.ok(Number.isFinite(row.plantedTargetErrorMeters));
   assert.ok(Number.isFinite(row.captureDistanceMeters));
+  assert.ok(Number.isInteger(row.supportTransfers)&&row.supportTransfers>=0);
+  assert.ok(Number.isFinite(row.swingAnkleStepMeters));
+  assert.ok(Number.isFinite(row.plantedAnkleStepMeters));
   assert.equal(typeof row.geometryPass,'boolean');
   assert.equal(typeof row.continuityPass,'boolean');
   assert.equal(typeof row.staticSupportPass,'boolean');
