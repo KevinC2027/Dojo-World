@@ -270,3 +270,9 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Repaired a source defect in `src/foot-plant-render.mjs`: literal `\\n` escape text had been inserted into a `//` comment, accidentally commenting out `braking`, `predictedSpeed` and `anticipation` declarations. Subsequent footstep planning could reference an undefined `anticipation` and throw at runtime. Restored actual source line breaks and live braking calculation.
 - Corrected the existing projected-reach test expectation: when moving toward +X, the -X trailing foot must be selected even if the previous alternating preference points to the other leg. Preserved the separate Blue/Red touchdown projection regression.
 - This repairs a runtime regression rather than demonstrating improved biomechanics. The clean-room GitHub connector confirmed the edits, but Node/npm test execution, current CI and 24-scenario qualification remain **unverified**. No actual-engine browser recording was produced. The user-approval movement gate remains closed.
+
+## Touchdown-tick pelvis support handoff (2026-11-05)
+
+- Presentation foot planner now completes swing touchdown **before** computing lateral pelvis support sway. Previously a foot could be marked planted on a frame while the torso still received the previous airborne-foot support target for one extra tick.
+- Added a two-fighter touchdown regression verifying planted feet and same-tick sway relaxation, while keeping the existing .28-per-tick smoothing bound. No authoritative CombatWorld rules, damage, foot targets, or HIT visual assets were changed.
+- GitHub writes confirmed; **full Node suite, fresh 24-case support audit, browser playback, and actual-engine recording remain unverified** for this increment. This does not establish biomechanical approval.
