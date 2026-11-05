@@ -205,3 +205,11 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Fixed a reversed preference comparison in `src/foot-plant-render.mjs`: when both feet have similar root reach, select the alternating preferred swing foot; only override that preference when the opposite foot is more than 0.02 m farther from the root.
 - Added a regression for symmetric stance preference and a strongly lagging opposite foot. This is a presentation foot planner correction; CombatWorld movement authority and all attack rules remain unchanged.
 - Full 24-case movement/full-body screening, `npm test`, CI and browser capture must be rerun. Existing moving COM support failures and user visual approval gate remain open. No new moves or deployment.
+
+
+## Solo gait touchdown planning — 2026-11-04
+
+- In `src/foot-plant-render.mjs`, swing-foot destination look-ahead now uses the current gait's swing duration (`speed * swingTicks / 60`) rather than a fixed 0.12-second prediction. The existing 0.08–0.40 m anticipation clamp and 0.52 m guarded / 0.95 m fast stride caps remain.
+- Added a focused two-fighter regression in `test/foot-plant-render.test.mjs` verifying longer guarded shuffle anticipation, six- versus ten-tick swing durations, and stride caps.
+- This is a **presentation foot-placement change**, not authoritative locomotion braking or a physical balance solver. The 24-case full-body and dynamic-support audits must be rerun; no improved COM support or naturalness is claimed without execution.
+- Keep the solo movement / full-body visual approval gate closed. Do not expand movesets, alter the Fuji stage, or publish the release branch based on this change.
