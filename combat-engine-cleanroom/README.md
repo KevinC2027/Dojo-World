@@ -192,3 +192,10 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - `src/foot-plant-render.mjs` now limits each new swing destination to 0.42 m from that foot's actual planted world-space position, rather than allowing a large root-relative target after a reverse or stop. The other foot remains world-locked during the swing; engine rules and movement authority are unchanged.
 - `test/foot-plant-render.test.mjs` adds Blue/Red reverse, stop and guard-transition checks for bounded stride, finite targets and no planted-target drift.
 - This is a targeted **presentation-footstep constraint**, not proof that joints move naturally. The full 14-case qualification and browser footage must be rerun; max joint displacement may still exceed 0.20 m/tick. No moveset expansion or deployment.
+
+
+## Solo movement: zero-displacement swing liftoff (2026-11-04)
+
+- The shared `FootPlantTracker` now starts each swing at phase zero on its first tick, rather than immediately advancing to 10% of the trajectory. This removes a discrete world-space foot-position and lift jump at the planted-to-swing boundary; the bounded 0.42 m stride remains unchanged.
+- Added a Blue/Red regression test asserting exact position continuity and zero added lift at swing onset while the other foot stays planted.
+- This does **not** establish overall IK reach, joint continuity, guard exit, or natural movement. Re-run all 14 actual-engine cases and capture browser playback before creator approval. No movesets or gameplay authority changed.
