@@ -15,16 +15,19 @@ function launch(previousSpeed){
 }
 test('decelerating root requests a shorter future swing than steady speed',()=>{
   const steady=launch(1.5),braking=launch(3);
-  assert.ok(steady.feet[1].swing);
-  assert.ok(braking.feet[1].swing);
-  assert.ok(braking.feet[1].swing.end[0]<steady.feet[1].swing.end[0]);
+  const steadySwing=Object.values(steady.feet).find(leg=>leg.swing)?.swing;
+  const brakingSwing=Object.values(braking.feet).find(leg=>leg.swing)?.swing;
+  assert.ok(steadySwing&&brakingSwing);
+  assert.ok(brakingSwing.end[0]<steadySwing.end[0]);
 });
 test('braking does not retarget an already airborne foot',()=>{
   const tracker=launch(1.5);
-  const landing=tracker.feet[1].swing.end.slice();
+  const airborne=Object.values(tracker.feet).find(leg=>leg.swing);
+  assert.ok(airborne);
+  const landing=airborne.swing.end.slice();
   tracker.update(fighter(0.5),2);
-  assert.deepEqual(tracker.feet[1].swing.end,landing);
-  assert.equal(tracker.feet[1].swing.begin,1);
+  assert.deepEqual(airborne.swing.end,landing);
+  assert.equal(airborne.swing.begin,1);
 });
 test('same-tick replay is idempotent and does not change speed history',()=>{
   const tracker=launch(3);
