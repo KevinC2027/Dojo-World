@@ -24,6 +24,7 @@ footer{font-size:12px;color:#a8a7a4}
 <image id="art" href="./hit-fuji.svg" width="960" height="540" preserveAspectRatio="xMidYMid slice"/>
 <path d="M0 417 L960 417 M0 470 L960 470 M0 520 L960 520 M140 400 L60 540 M360 400 L315 540 M600 400 L645 540 M820 400 L900 540" stroke="#d6cbb1" stroke-width="2" opacity=".25"/>
 <ellipse id="shadow" cx="450" cy="426" rx="38" ry="10" fill="#121417" opacity=".32"/>
+<g id="balanceOverlay" fill="none" stroke-width="3"><line id="supportLine" stroke="#29e0a2" stroke-dasharray="9 6"/><circle id="comMarker" r="9" stroke="#ffd165" fill="#201510"/><circle id="plantA" r="6" stroke="#29e0a2"/><circle id="plantB" r="6" stroke="#29e0a2"/></g>
 <g id="fighterInk" stroke="#2b6fd6" fill="#2b6fd6" stroke-linecap="round" stroke-linejoin="round">
 <line id="spine1" stroke-width="12"/><line id="spine2" stroke-width="12"/><circle id="head" r="22"/>
 <line id="armL1" stroke-width="12"/><line id="armL2" stroke-width="11"/><line id="armR1" stroke-width="12"/><line id="armR2" stroke-width="11"/>
@@ -37,15 +38,18 @@ footer{font-size:12px;color:#a8a7a4}
 <div class="stat"><span>MAX WORLD JOINT STEP</span><b id="joint">—</b></div>
 <div class="stat"><span>MAX GROUNDED FOOT SLIDE</span><b id="slide">—</b></div>
 <div class="stat"><span>ROOT TRAVEL</span><b id="travel">—</b></div>
+<div class="stat"><span>MAX COM-SUPPORT OFFSET</span><b id="support">—</b></div>
+<div class="stat"><span>MAX PLANTED FOOT REACH ERROR</span><b id="reach">—</b></div>
 </div>
 <div id="result">Loading replay…</div>
 <p>Review one fighter at a time. Use the timeline to inspect transitions and skating. A solid limb length result does not prove natural movement: planted feet, joint velocity, balance, and camera consistency must pass separately.</p>
 <footer><a href="./index.html">Playable combat</a> · <a href="./review.html">Combat replay station</a> · <a href="./review-lite.html">Compatibility replay</a> · <a href="./HIT-VISUAL-STANDARD.md">Visual standard</a></footer>
 </main><script type="module">
 import {INDEPENDENT_MOTION_SCENARIOS,recordSoloMotion,measureSoloMotion} from './src/movement-qualification.mjs';
+import {auditFullBodyReplay,measureFullBodyFrame} from './src/full-body-qualification.mjs';
 const $=id=>document.getElementById(id),scene=$('scene'),ns='http://www.w3.org/2000/svg';
 for(const id of INDEPENDENT_MOTION_SCENARIOS){const o=document.createElement('option');o.value=id;o.textContent=id.toUpperCase();$('scenario').append(o)}
-let replay=null,metrics=null,playing=true,tick=0,last=0,acc=0;
+let replay=null,metrics=null,whole=null,playing=true,tick=0,last=0,acc=0;
 const line=(id,a,b)=>{const el=$(id);el.setAttribute('x1',a[0]);el.setAttribute('y1',a[1]);el.setAttribute('x2',b[0]);el.setAttribute('y2',b[1])};
 const point=(f,p)=>{
  const yaw=Math.atan2(f.facing.x,f.facing.z),s=Math.sin(yaw),c=Math.cos(yaw);
@@ -61,7 +65,13 @@ function render(){
  $('head').setAttribute('cx',head[0]);$('head').setAttribute('cy',head[1]);
  for(const [i,a] of rig.arms.entries()){line(i===0?'armL1':'armR1',point(f,a.shoulder),point(f,a.elbow));line(i===0?'armL2':'armR2',point(f,a.elbow),point(f,a.hand))}
  for(const [i,l] of rig.legs.entries()){line(i===0?'legL1':'legR1',point(f,l.hip),point(f,l.knee));line(i===0?'legL2':'legR2',point(f,l.knee),point(f,l.foot))}
- const root=point(f,[0,0,0]);$('shadow').setAttribute('cx',root[0]);$('shadow').setAttribute('cy',root[1]);
+ const body=measureFullBodyFrame(e),com=point(f,body.comLocal);
+ $('comMarker').setAttribute('cx',com[0]);$('comMarker').setAttribute('cy',com[1]);
+ $('comMarker').setAttribute('stroke',body.supportDistance!==null&&body.supportDistance>.14?'#ff554d':'#ffd165');
+ const plants=rig.legs.filter(l=>e.footTargets[l.side]?.planted).map(l=>point(f,l.foot));
+ for(const [idx,id] of ['plantA','plantB'].entries()){const el=$(id),p=plants[idx];el.style.display=p?'':'none';if(p){el.setAttribute('cx',p[0]);el.setAttribute('cy',p[1])}}
+ const sl=$('supportLine');sl.style.display=plants.length===2?'':'none';if(plants.length===2)line('supportLine',plants[0],plants[1]);
+  const root=point(f,[0,0,0]);$('shadow').setAttribute('cx',root[0]);$('shadow').setAttribute('cy',root[1]);
  $('fighterInk').setAttribute('stroke',f.id==='blue'?'#2b6fd6':'#d6452b');
  $('fighterInk').setAttribute('fill',f.id==='blue'?'#2b6fd6':'#d6452b');
  $('label').textContent=f.id.toUpperCase()+' · '+replay.scenarioId.toUpperCase()+' · FRAME '+e.tick;
@@ -69,15 +79,17 @@ function render(){
 }
 function load(){
  replay=recordSoloMotion($('fighter').value,$('scenario').value);
- metrics=measureSoloMotion(replay);tick=0;acc=0;
+ metrics=measureSoloMotion(replay);whole=auditFullBodyReplay(replay);tick=0;acc=0;
  $('scrub').max=replay.frames.length-1;
  const mm=v=>(v*1000).toFixed(1)+' mm';
  $('bone').textContent=mm(metrics.maxBoneErrorMeters);
  $('joint').textContent=mm(metrics.maxJointStepMeters);
  $('slide').textContent=mm(metrics.maxGroundedFootSlideMeters);
  $('travel').textContent=metrics.horizontalTravelMeters.toFixed(2)+' m';
+ $('support').textContent=whole.max.supportDistance.toFixed(2)+' m';
+ $('reach').textContent=metrics.maxPlantTargetErrorMeters.toFixed(2)+' m';
  const skating=metrics.maxGroundedFootSlideMeters>.012;
- $('result').textContent=(skating?'NEEDS WORK: grounded foot skating exceeds 12 mm/frame. ':'GROUND CONTACT: preliminary numerical threshold met. ')+
+ $('result').textContent=(whole.passed?'WHOLE-BODY SCREEN PASSED (visual validation still required). ':'FULL-BODY GATE FAILED: center-of-mass support and/or continuity requires correction. ')+(skating?'Grounded foot skating exceeds 12 mm/frame. ':'')+
  'All observed measurements are calculated from the clean-room simulator and procedural rig, not captured from motion actors. Visual review remains required.';
  render();
 }
