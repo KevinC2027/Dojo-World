@@ -48,7 +48,7 @@ export class FootPlantTracker {
     }
     for(const leg of Object.values(this.feet)){
       if(!leg.swing)continue;
-      const sw=leg.swing,u=clamp((tick-sw.begin+1)/sw.duration,0,1);
+      const sw=leg.swing,u=clamp((tick-sw.begin)/sw.duration,0,1);
       if(u>=1){leg.plant=sw.end.slice();leg.swing=null}
     }
     return this.result(f);
@@ -58,7 +58,7 @@ export class FootPlantTracker {
     for(const side of [-1,1]){
       const leg=this.feet[side];let xy=leg.plant,raise=0,planted=true;
       if(leg.swing){
-        const s=leg.swing,u=clamp((this.lastTick-s.begin+1)/s.duration,0,1);
+        const s=leg.swing,u=clamp((this.lastTick-s.begin)/s.duration,0,1);
         xy=lerp(s.start,s.end,smooth(u));raise=.14*Math.sin(Math.PI*u);planted=false;
       }
       targets[side]={point:toLocal(f,xy,.035+raise),planted,world:xy.slice()};
