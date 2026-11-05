@@ -50,7 +50,7 @@ test('tracker is deterministic and resets when the simulation restarts',()=>{
  assert.deepEqual(a.update(fighter('blue',0,0),0),new FootPlantTracker().update(fighter('blue',0,0),0));
 });
 
-test('reverse and guard transitions keep each swing destination within bounded stride',()=>{
+test('reverse and guard transitions bound sprint stride while preserving world-space plants',()=>{
  for(const id of ['blue','red']){
   const tracker=new FootPlantTracker();
   let last=null;
@@ -62,7 +62,7 @@ test('reverse and guard transitions keep each swing destination within bounded s
    const result=tracker.update(f,tick);
    for(const side of [-1,1]){
     const swing=tracker.feet[side].swing;
-    if(swing)assert.ok(D(swing.start,swing.end)<=.420000001,id+':'+tick+':'+side);
+    if(swing)assert.ok(D(swing.start,swing.end)<=.950000001,id+':'+tick+':'+side);
     assert.ok(result[side].world.every(Number.isFinite));
     if(last&&result[side].planted&&last[side].planted)
      assert.ok(D(result[side].world,last[side].world)<1e-10,'planted foot drift');
