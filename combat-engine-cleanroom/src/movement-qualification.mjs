@@ -23,7 +23,8 @@ const sequences={
   lateral:{frames:120,vector:t=>({x:0,z:1})},
   reverse:{frames:160,vector:t=>t<80?{x:1,z:0}:{x:-1,z:0}},
   stop:{frames:160,vector:t=>t<80?{x:1,z:0}:STATIC},
-  guard:{frames:90,vector:t=>STATIC,guard:true}
+  guard:{frames:90,vector:t=>STATIC,guard:true},
+  guardRelease:{frames:120,vector:t=>STATIC,guard:t=>t<55}
 };
 export const INDEPENDENT_MOTION_SCENARIOS=Object.freeze(Object.keys(sequences));
 export function recordSoloMotion(fighterId,scenarioId){
@@ -34,7 +35,7 @@ export function recordSoloMotion(fighterId,scenarioId){
   const frames=[];
   const tracker=new FootPlantTracker();
   for(let t=0;t<=scenario.frames;t++){
-    if(t>0)world.step({[fighterId]:{move:scenario.vector(t-1),guard:!!scenario.guard}});
+    if(t>0)world.step({[fighterId]:{move:scenario.vector(t-1),guard:typeof scenario.guard==='function'?scenario.guard(t-1):!!scenario.guard}});
     const snapshot=world.snapshot(),fighter=snapshot.fighters[fighterId];
     const footTargets=tracker.update(fighter,snapshot.tick);
     const rig=fighterRig(fighter,null,snapshot.timeSeconds,footTargets);
