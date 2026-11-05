@@ -276,3 +276,11 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Presentation foot planner now completes swing touchdown **before** computing lateral pelvis support sway. Previously a foot could be marked planted on a frame while the torso still received the previous airborne-foot support target for one extra tick.
 - Added a two-fighter touchdown regression verifying planted feet and same-tick sway relaxation, while keeping the existing .28-per-tick smoothing bound. No authoritative CombatWorld rules, damage, foot targets, or HIT visual assets were changed.
 - GitHub writes confirmed; **full Node suite, fresh 24-case support audit, browser playback, and actual-engine recording remain unverified** for this increment. This does not establish biomechanical approval.
+
+## Three-priority movement increment (2026-11-05)
+
+1. **Repeatable qualification:** added `src/solo-qualification-matrix.mjs` to compute a JSON 24-scenario report from actual `CombatWorld` snapshots and shared rig, combining bone/IK/foot/joint diagnostics, approximate static COM support, and approximate velocity-aware capture-point support. Run `node src/solo-qualification-matrix.mjs > solo-qualification.json` from `combat-engine-cleanroom/`. The report explicitly marks visual approval unverified; static support is not a complete dynamic-balance test.
+2. **Regression coverage:** added `test/solo-qualification-matrix.test.mjs` to check scenario completeness and diagnostic provenance, plus a braking foot-target regression in `test/foot-plant-render.test.mjs`.
+3. **Braking placement:** `src/foot-plant-render.mjs` no longer forces 0.08 m of extra future anticipation when measured speed is decreasing. This shortens newly planned steps while retaining in-flight swing endpoints, planted world anchors, fixed bone geometry, and authoritative gameplay velocity.
+
+**Verification status:** GitHub commits confirmed. GitHub Actions did not return a verified run for the preceding commit; local full `npm test`, 24-case numeric output, and actual browser footage have **not** been executed or captured in this update. A direct repository clone attempt from the execution environment failed DNS resolution. No claims of movement acceptance or numerical improvements. No deployment or release-branch edits.
