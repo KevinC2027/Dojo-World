@@ -75,6 +75,14 @@ export class FootPlantTracker {
         this.swingSide=-side;this.lastStart=tick;
       }
     }
+    // Resolve touchdown before computing the support side. Otherwise the
+    // pelvis receives one extra tick of airborne-leg weight transfer after
+    // that leg has planted, producing a gait-to-stance handoff discrepancy.
+    for(const leg of Object.values(this.feet)){
+      if(!leg.swing)continue;
+      const sw=leg.swing,u=clamp((tick-sw.begin)/sw.duration,0,1);
+      if(u>=1){leg.plant=sw.end.slice();leg.swing=null}
+    }
     // Carry a small lateral weight-transfer signal through step boundaries.
     const gaitSupport=this.feet[-1].swing?1:this.feet[1].swing?-1:0;
     // A front kick removes the striking foot from ground support. Transfer
@@ -82,11 +90,6 @@ export class FootPlantTracker {
     const groundedKickSupport=f.action?.name==='frontKick'&&!this.feet[-1].swing;
     const support=groundedKickSupport?-1:gaitSupport;
     this.bodySway+=(support-this.bodySway)*.28;
-    for(const leg of Object.values(this.feet)){
-      if(!leg.swing)continue;
-      const sw=leg.swing,u=clamp((tick-sw.begin)/sw.duration,0,1);
-      if(u>=1){leg.plant=sw.end.slice();leg.swing=null}
-    }
     // Coordinate standing height with leg reach, rather than solving each
     // knee independently. Every torso and shoulder landmark uses this same lift.
     // Existing planted-foot targets are world-locked; never lengthen a segment
