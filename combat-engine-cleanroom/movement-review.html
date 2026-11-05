@@ -40,16 +40,19 @@ footer{font-size:12px;color:#a8a7a4}
 <div class="stat"><span>ROOT TRAVEL</span><b id="travel">—</b></div>
 <div class="stat"><span>MAX COM-SUPPORT OFFSET</span><b id="support">—</b></div>
 <div class="stat"><span>MAX PLANTED FOOT REACH ERROR</span><b id="reach">—</b></div>
+<div class="stat"><span>MAX CURRENT CAPTURE-POINT GAP</span><b id="capture">—</b></div>
+<div class="stat"><span>MAX FUTURE-LANDING CAPTURE GAP</span><b id="anticipated">—</b></div>
 </div>
 <div id="result">Loading replay…</div>
-<p>Review one fighter at a time. Use the timeline to inspect transitions and skating. A solid limb length result does not prove natural movement: planted feet, joint velocity, balance, and camera consistency must pass separately.</p>
+<p>Review one fighter at a time. Use the timeline to inspect transitions and skating. A solid limb length result does not prove natural movement. Current and anticipated capture-point errors approximate momentum and foot landing; they are not physical validation or evidence of safe balance.</p>
 <footer><a href="./index.html">Playable combat</a> · <a href="./review.html">Combat replay station</a> · <a href="./review-lite.html">Compatibility replay</a> · <a href="./HIT-VISUAL-STANDARD.md">Visual standard</a></footer>
 </main><script type="module">
 import {INDEPENDENT_MOTION_SCENARIOS,recordSoloMotion,measureSoloMotion} from './src/movement-qualification.mjs';
 import {auditFullBodyReplay,measureFullBodyFrame} from './src/full-body-qualification.mjs';
+import {measureDynamicSupport} from './src/dynamic-support.mjs';
 const $=id=>document.getElementById(id),scene=$('scene'),ns='http://www.w3.org/2000/svg';
 for(const id of INDEPENDENT_MOTION_SCENARIOS){const o=document.createElement('option');o.value=id;o.textContent=id.toUpperCase();$('scenario').append(o)}
-let replay=null,metrics=null,whole=null,playing=true,tick=0,last=0,acc=0;
+let replay=null,metrics=null,whole=null,dynamic=null,playing=true,tick=0,last=0,acc=0;
 const line=(id,a,b)=>{const el=$(id);el.setAttribute('x1',a[0]);el.setAttribute('y1',a[1]);el.setAttribute('x2',b[0]);el.setAttribute('y2',b[1])};
 const point=(f,p)=>{
  const yaw=Math.atan2(f.facing.x,f.facing.z),s=Math.sin(yaw),c=Math.cos(yaw);
@@ -80,7 +83,7 @@ function render(){
 }
 function load(){
  replay=recordSoloMotion($('fighter').value,$('scenario').value);
- metrics=measureSoloMotion(replay);whole=auditFullBodyReplay(replay);tick=0;acc=0;
+ metrics=measureSoloMotion(replay);whole=auditFullBodyReplay(replay);dynamic=measureDynamicSupport(replay);tick=0;acc=0;
  $('scrub').max=replay.frames.length-1;
  const mm=v=>(v*1000).toFixed(1)+' mm';
  $('bone').textContent=mm(metrics.maxBoneErrorMeters);
@@ -89,6 +92,8 @@ function load(){
  $('travel').textContent=metrics.horizontalTravelMeters.toFixed(2)+' m';
  $('support').textContent=whole.max.supportDistance.toFixed(2)+' m';
  $('reach').textContent=metrics.maxPlantTargetErrorMeters.toFixed(2)+' m';
+ $('capture').textContent=dynamic.maxCurrentCaptureErrorMeters.toFixed(2)+' m';
+ $('anticipated').textContent=dynamic.maxAnticipatedCaptureErrorMeters.toFixed(2)+' m';
  const skating=metrics.maxGroundedFootSlideMeters>.012;
  $('result').textContent=(whole.passed?'WHOLE-BODY SCREEN PASSED (visual validation still required). ':'FULL-BODY GATE FAILED: center-of-mass support and/or continuity requires correction. ')+(skating?'Grounded foot skating exceeds 12 mm/frame. ':'')+
  'All observed measurements are calculated from the clean-room simulator and procedural rig, not captured from motion actors. Visual review remains required.';
