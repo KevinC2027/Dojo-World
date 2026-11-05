@@ -59,14 +59,14 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   const sway=attack?0:(footTargets?.bodySway||0)*.055;
   const recoil=f.stunFrames>0?-.09:0;
   // Elevation comes from the gait contact state, not a per-knee pose correction.
-  const postureLift=!attack?(footTargets?.postureLift||0):0;
+  const postureLift=footTargets?.postureLift||0;
   // The upper body participates in each step: subtle forward lean and arm
   // counter-swing derived from the SAME planted/swing-foot gait state.
   const forwardSpeed=(f.velocity?.x||0)*(f.facing?.x||0)+(f.velocity?.z||0)*(f.facing?.z||0);
-  const forwardLean=!attack?C(forwardSpeed/3.2,-1,1)*(footTargets?.gaitBlend||0)*.038:0;
+  const forwardLean=C(forwardSpeed/3.2,-1,1)*(footTargets?.gaitBlend||0)*.038;
   const stanceContrast=footTargets?C((footTargets[1]?.point[2]-footTargets[-1]?.point[2])*.9,-1,1):0;
   const freeArms=1-(footTargets?.guardWeight??(f.guarding?1:0));
-  const armCounterSwing=!attack?stanceContrast*C(speed/3.2,0,1)*freeArms*.11:0;
+  const armCounterSwing=stanceContrast*C(speed/3.2,0,1)*freeArms*.11;
   const pelvis=[twist*.14+sway,(blue?.84:.96)+postureLift,recoil-.045*load-forwardLean*.12];
   const chest=[twist*.42+sway*.7,(blue?1.31:1.46)+postureLift,recoil+.025*load+forwardLean*.65];
   const neck=[twist*.45+sway*.45,(blue?1.51:1.66)+postureLift,recoil+forwardLean*.83];
@@ -83,15 +83,18 @@ export function fighterRig(f,m,clock=0,footTargets=null){
     if(!attack)wrist=mix(wrist,[side*.18,(blue?1.51:1.71)+postureLift,.31],footTargets?.guardWeight??(f.guarding?1:0));
     if(attack&&side===strike&&!kick){
       // Chamber draws fist back before extension; hook wraps horizontally, not telescopically.
-      const base=hand(side,blue);
+      // Startup inherits the exact stance wrist, including arm counter-swing.
+      const base=wrist.slice();
       const chamber=action.name==='hook'?[side*.48,1.53,-.10]:
         [side*.27,blue?1.41:1.61,-.10];
       const contact=action.name==='hook'?[side*.09,1.51,.66]:
         [side*.20,blue?1.48:1.64,.75];
+      chamber[1]+=postureLift;
+      contact[1]+=postureLift;
       const loaded=mix(base,chamber,load);
       wrist=mix(loaded,contact,extend);
     }else if(attack&&side!==strike&&!kick){
-      wrist=mix(wrist,[side*.19,blue?1.56:1.71,.28],load);
+      wrist=mix(wrist,[side*.19,(blue?1.56:1.71)+postureLift,.28+forwardLean*.55],load);
     }
     const elbowPole=[side*.95,blue?-.14:-.04,-.20];
     const arm=solveTwoBone(shoulder,constrain(shoulder,wrist,RIG_LENGTHS.upperArm+RIG_LENGTHS.forearm-.002),
@@ -107,9 +110,11 @@ export function fighterRig(f,m,clock=0,footTargets=null){
       const phase=gait*side;
       ankle=[ankle[0],ankle[1]+Math.max(0,phase)*.13,ankle[2]+phase*.20];
     }
-    if(footTargets&&!attack&&footTargets[side])ankle=footTargets[side].point.slice();
+    // Inherit BOTH contact anchors across action startup/recovery. A punch
+    // must not teleport either foot to an unrelated neutral animation pose.
+    if(footTargets?.[side])ankle=footTargets[side].point.slice();
     if(kick&&side===strike){
-      const neutral=foot(side,blue);
+      const neutral=footTargets?.[side]?.point?.slice()||foot(side,blue);
       const chamber=[side*.22,.55,.27];
       const contact=[side*.24,.88,.78];
       ankle=mix(mix(neutral,chamber,load),contact,extend);
