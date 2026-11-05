@@ -178,3 +178,10 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - `src/movement-qualification.mjs` now measures `maxPlantTargetErrorMeters`: the maximum horizontal world-space separation between each planted foot's target and the actual IK-solved ankle. This detects planted-foot targets that the fixed-length leg cannot reach, even when measured ankle-to-ankle slide is small.
 - `test/movement-qualification.test.mjs` adds deterministic finite-value coverage across all 14 independent Blue/Red solo scenarios.
 - This is a **measurement improvement, not a biomechanical fix or qualification pass**. No movement authority, visuals, movesets or combat outcomes changed. Inspect this metric together with grounded slide, joint displacement and footage before creator approval. CI and local execution must be independently verified.
+
+
+## Solo movement diagnostic: worst-joint localization (2026-11-04)
+
+- `measureSoloMotion()` now reports `worstJointStep: {meters,tick,joint}` alongside its existing maximum world-space joint displacement. The joint label identifies the exact body point and simulation frame for targeted continuity repair.
+- The regression test checks all fourteen actual-engine solo replays for labeled maxima and deterministic reproduction.
+- This is **measurement only**, not a biomechanical correction. Five previously reported scenarios exceeded the 0.20 m/tick screening threshold; rerun all fourteen to determine current results. Guard entry/exit, planted-foot IK under turns and actual browser video remain unqualified. No move-set expansion until visual approval.
