@@ -284,3 +284,15 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 3. **Braking placement:** `src/foot-plant-render.mjs` no longer forces 0.08 m of extra future anticipation when measured speed is decreasing. This shortens newly planned steps while retaining in-flight swing endpoints, planted world anchors, fixed bone geometry, and authoritative gameplay velocity.
 
 **Verification status:** GitHub commits confirmed. GitHub Actions did not return a verified run for the preceding commit; local full `npm test`, 24-case numeric output, and actual browser footage have **not** been executed or captured in this update. A direct repository clone attempt from the execution environment failed DNS resolution. No claims of movement acceptance or numerical improvements. No deployment or release-branch edits.
+
+## Source-driven V8 qualification execution (2026-11-05)
+
+The 24-case qualification runner was **executed** against source retrieved from the clean-room development branch in an isolated JavaScript V8 harness. The harness reconstructed local ES module imports and provided a JSON-based `structuredClone` substitute. This is NOT a complete native Node `npm test` run, GitHub Actions result, or browser/visual validation.
+
+- 24/24 scenario reports generated; 24/24 geometry screens passed (finite bone lengths, floor penetration and planted-target reach), and 24/24 dynamic-support reports were finite.
+- 14/24 joint continuity screens met the provisional <=0.20 m/tick screening threshold; 10 fast-locomotion scenarios exceeded it.
+- Static COM/support screening passed 6/24 (stationary/guard cases); 18 moving cases remain flagged. Static support distance alone is not proof of dynamic instability.
+- Worst joint step: Blue reverse, right foot, tick 102, 0.22947 m/tick. Worst reported planted-target error across scenarios remained near floating-point precision.
+- Tested **uncommitted** alternate fast-gait swing durations of 7, 8, 9, and 10 ticks in the same harness: 8 ticks improved the provisional continuity screen to 23/24 but left Red backward at 0.23321 m/tick; 9/10 ticks introduced substantial planted-target reach failures. No duration change was committed because it did not satisfy all gates.
+
+**Outstanding:** native Node test suite, browser actual-engine capture, creator visual approval and full moving-body support. No moveset expansion or deployment.
