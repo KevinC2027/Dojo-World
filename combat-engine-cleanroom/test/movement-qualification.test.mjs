@@ -90,3 +90,12 @@ test('guarded retreat, lateral shuffle and stop preserve floor and reach',()=>{
    assert.ok(report.maxBoneErrorMeters<1e-8);
   }
 });
+
+test('support-reach-aware stepping bounds actual rendered ankle error in all 24 fixtures',()=>{
+ for(const id of ['blue','red'])for(const scenario of INDEPENDENT_MOTION_SCENARIOS){
+  const report=measureSoloMotion(recordSoloMotion(id,scenario));
+  assert.ok(report.maxPlantTargetErrorMeters<.05,id+':'+scenario+' reach error '+report.maxPlantTargetErrorMeters);
+  assert.equal(report.errors.length,0);
+  assert.equal(report.footPenetrations,0);
+ }
+});
