@@ -30,7 +30,7 @@ footer{font-size:12px;color:#a8a7a4}
 <line id="armL1" stroke-width="12"/><line id="armL2" stroke-width="11"/><line id="armR1" stroke-width="12"/><line id="armR2" stroke-width="11"/>
 <line id="legL1" stroke-width="14"/><line id="legL2" stroke-width="13"/><line id="legR1" stroke-width="14"/><line id="legR2" stroke-width="13"/>
 </g>
-<g fill="#261e19" font-size="15" font-family="system-ui"><text x="16" y="30" id="label">BLUE · IDLE</text><text x="16" y="51" font-size="11">ENGINE SNAPSHOTS · FIXED-LENGTH PRESENTATION RIG</text></g>
+<g fill="#261e19" font-size="15" font-family="system-ui"><text x="16" y="30" id="label">BLUE · IDLE</text><text x="16" y="51" font-size="11" id="modeLabel">ENGINE SNAPSHOTS · FIXED-LENGTH PRESENTATION RIG</text></g>
 </svg></div>
 <div class="toolbar"><label for="scrub">Frame <output id="frame">0</output></label><input type="range" id="scrub" min="0" max="120" step="1" value="0"/></div>
 <div class="stats">
@@ -75,6 +75,7 @@ function render(){
  $('fighterInk').setAttribute('stroke',f.id==='blue'?'#2b6fd6':'#d6452b');
  $('fighterInk').setAttribute('fill',f.id==='blue'?'#2b6fd6':'#d6452b');
  $('label').textContent=f.id.toUpperCase()+' · '+replay.scenarioId.toUpperCase()+' · FRAME '+e.tick;
+ $('modeLabel').textContent='GAIT: '+e.footTargets.gaitMode.toUpperCase()+' · PLANTED FEET: '+rig.legs.filter(l=>e.footTargets[l.side]?.planted).length+' · FIXED-LENGTH IK';
  $('frame').textContent=tick+'/'+(replay.frames.length-1);$('scrub').value=tick;
 }
 function load(){
