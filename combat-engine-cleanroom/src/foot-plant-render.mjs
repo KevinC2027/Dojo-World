@@ -44,8 +44,17 @@ export class FootPlantTracker {
     if(moving&&!active&&tick-this.lastStart>=swingTicks){
       // Prioritize the leg which is beyond its comfortable support reach.
       // Keep the alternating preference when neither leg is substantially behind.
-      const distToRoot=side=>dist(this.feet[side].plant,[f.position.x,f.position.z]);
-      const side=distToRoot(-this.swingSide)>distToRoot(this.swingSide)+.02
+      // Choose support transfer using where the pelvis will be at touchdown.
+      // Current-root distance alone can select the wrong leg during a reversal:
+      // the soon-to-be trailing foot then stays planted until it is out of reach.
+      // This is presentation planning only; it never changes CombatWorld motion.
+      const brakingRate=Math.max(0,this.previousSpeed-speed);
+      const projectedSpeed=Math.max(0,speed-brakingRate*swingTicks);
+      const projection=(speed+projectedSpeed)*.5*swingTicks/60;
+      const futureRoot=[f.position.x+this.lastDir[0]*projection,
+        f.position.z+this.lastDir[1]*projection];
+      const projectedReach=side=>dist(this.feet[side].plant,futureRoot);
+      const side=projectedReach(-this.swingSide)>projectedReach(this.swingSide)+.02
         ?-this.swingSide:this.swingSide,leg=this.feet[side],dir=this.lastDir;
       const lateral=[-dir[1],dir[0]],lateralOffset=side*.20;
       // Aim toward the root's estimated position at touchdown, rather than
