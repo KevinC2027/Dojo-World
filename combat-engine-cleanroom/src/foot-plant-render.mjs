@@ -48,7 +48,10 @@ export class FootPlantTracker {
       const side=distToRoot(-this.swingSide)>distToRoot(this.swingSide)+.02
         ?-this.swingSide:this.swingSide,leg=this.feet[side],dir=this.lastDir;
       const lateral=[-dir[1],dir[0]],lateralOffset=side*.20;
-      const anticipation=clamp(speed*.12,.08,.4);
+      // Aim toward the root's estimated position at touchdown, rather than
+      // using a fixed look-ahead time for both sprint and guarded shuffle.
+      // The stride cap below still bounds the reachable target.
+      const anticipation=clamp(speed*swingTicks/60,.08,.4);
       const destination=[f.position.x+dir[0]*(anticipation+.15)+lateral[0]*lateralOffset,
         f.position.z+dir[1]*(anticipation+.15)+lateral[1]*lateralOffset];
       if(dist(leg.plant,destination)>.20){
