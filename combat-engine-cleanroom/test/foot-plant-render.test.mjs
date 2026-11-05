@@ -95,7 +95,7 @@ test('swing liftoff is position-continuous and planted support stays fixed',()=>
  }
 });
 
-test('symmetric stance follows alternating preference, while a lagging foot overrides it',()=>{
+test('projected travel selects trailing foot, including when it overrides alternation',()=>{
  const tracker=new FootPlantTracker();
  const f=fighter('blue',0,0);
  tracker.update(f,0);
