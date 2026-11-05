@@ -65,7 +65,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
     const shoulder=anchorArm(side,blue,twist);
     shoulder[0]+=twist*.40;
     let wrist=hand(side,blue);
-    if(f.guarding&&!attack)wrist=[side*.18,blue?1.51:1.71,.31];
+    if(f.guarding&&!attack)wrist=mix(wrist,[side*.18,blue?1.51:1.71,.31],footTargets?.guardWeight??1);
     if(attack&&side===strike&&!kick){
       // Chamber draws fist back before extension; hook wraps horizontally, not telescopically.
       const base=hand(side,blue);
