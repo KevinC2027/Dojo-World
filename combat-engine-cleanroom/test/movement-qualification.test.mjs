@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {recordSoloMotion,measureSoloMotion,auditIndependentMotion,INDEPENDENT_MOTION_SCENARIOS} from '../src/movement-qualification.mjs';
-test('14 independent deterministic 60Hz motion demonstrations exist',()=>{
+test('16 independent deterministic 60Hz motion demonstrations exist',()=>{
   const reports=auditIndependentMotion();
-  assert.equal(reports.length,14);
-  assert.equal(INDEPENDENT_MOTION_SCENARIOS.length,7);
-  assert.equal(new Set(reports.map(r=>r.fighter+':'+r.scenario)).size,14);
+  assert.equal(reports.length,16);
+  assert.equal(INDEPENDENT_MOTION_SCENARIOS.length,8);
+  assert.equal(new Set(reports.map(r=>r.fighter+':'+r.scenario)).size,16);
   for(const r of reports){assert.ok(r.ticks>=91);assert.equal(r.errors.length,0);assert.equal(r.footPenetrations,0);assert.ok(r.maxBoneErrorMeters<1e-8)}
 });
 test('replays are deterministic for both characters and all scenarios',()=>{
