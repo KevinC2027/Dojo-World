@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {recordSoloMotion,measureSoloMotion,auditIndependentMotion,INDEPENDENT_MOTION_SCENARIOS} from '../src/movement-qualification.mjs';
-test('16 independent deterministic 60Hz motion demonstrations exist',()=>{
+test('18 independent deterministic 60Hz motion demonstrations exist',()=>{
   const reports=auditIndependentMotion();
-  assert.equal(reports.length,16);
-  assert.equal(INDEPENDENT_MOTION_SCENARIOS.length,8);
-  assert.equal(new Set(reports.map(r=>r.fighter+':'+r.scenario)).size,16);
+  assert.equal(reports.length,18);
+  assert.equal(INDEPENDENT_MOTION_SCENARIOS.length,9);
+  assert.equal(new Set(reports.map(r=>r.fighter+':'+r.scenario)).size,18);
   for(const r of reports){assert.ok(r.ticks>=91);assert.equal(r.errors.length,0);assert.equal(r.footPenetrations,0);assert.ok(r.maxBoneErrorMeters<1e-8)}
 });
 test('replays are deterministic for both characters and all scenarios',()=>{
@@ -66,4 +66,16 @@ test('speed-matched gait prevents accumulating planted-foot reach debt',()=>{
       assert.equal(report.footPenetrations,0);
       assert.ok(report.maxBoneErrorMeters<1e-8);
     }
+});
+
+test('guarded footwork remains distinct from fast gait and has reachable planted ankles',()=>{
+  for(const id of ['blue','red']){
+    const replay=recordSoloMotion(id,'guardAdvance');
+    const report=measureSoloMotion(replay);
+    assert.equal(replay.frames.at(-1).footTargets.gaitMode,'footwork');
+    assert.ok(report.horizontalTravelMeters>1);
+    assert.ok(report.maxPlantTargetErrorMeters<.02,id+' footwork target escaped leg reach');
+    assert.ok(report.maxJointStepMeters<.12,id+' footwork joint jumped');
+    assert.equal(report.footPenetrations,0);
+  }
 });
