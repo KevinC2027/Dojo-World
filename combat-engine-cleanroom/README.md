@@ -226,3 +226,11 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Added `test/braking-support.test.mjs`: five regression groups covering zero speed, signed reverse/lateral/guarded velocity, braking strength, absent contacts and invalid input.
 - **Diagnostic only**: the model does not alter authoritative movement, render poses, foot landing targets, COM estimation or balance. A point-contact proximity check is not a support polygon or a physics validation. The deceleration is a test parameter, not a measured engine value.
 - The 24-case full-body screen remains blocked (last measured static support 6/24); this addition does not justify moveset expansion. Re-run full suite/CI, then connect measured engine deceleration and foot landing history to the diagnostic before comparing real browser recordings.
+
+## Real-engine braking replay diagnostic (2026-11-05)
+
+- Added `src/braking-replay.mjs`, which consumes `recordSoloMotion()` CombatWorld snapshots and actual tracked planted foot coordinates to calculate projected stopping distance and nearest planted support contact. It does not invent support contacts when both feet are airborne.
+- Added `test/braking-replay.test.mjs`: deterministic Blue/Red idle/forward/reverse/stop/guardAdvance replay checks, stationary stopping checks, and missing-support handling.
+- **Diagnostic only:** no movement, damage, visual pose, authoritative hit or foot-plant behavior changed. Projected stop is a constant-deceleration estimate, not a human balance solver. The 24-case qualification gate and creator visual approval remain mandatory.
+- New tests and complete Node suite require execution/CI confirmation. No actual-engine browser video was captured in this increment; do not infer improved biomechanics.
+- To reproduce: from `combat-engine-cleanroom/`, run `node --test test/braking-replay.test.mjs` then `npm test`; load `movement-review.html` in a local server and compare Blue/Red forward, reverse and stop at normal speed against HIT Fuji visual standard.
