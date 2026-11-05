@@ -137,3 +137,23 @@ test('guarded shuffle plans farther ahead over its longer touchdown interval',()
   assert.ok(D(normalSwing.start,normalSwing.end)<=.950000001);
  }
 });
+
+
+test('touchdown projection selects future trailing foot instead of current farthest foot',()=>{
+ for(const id of ['blue','red']){
+  const tracker=new FootPlantTracker();
+  const f=fighter(id,0,0);
+  tracker.update(f,0);
+  // Left is currently farther from the root, but lies ahead of travel.
+  // Right is close now and becomes the lagging support at touchdown.
+  tracker.swingSide=-1;
+  tracker.feet[-1].plant=[.22,0];
+  tracker.feet[1].plant=[-.08,0];
+  const moving=fighter(id,0,3.2);
+  const result=tracker.update(moving,1);
+  assert.equal(result[1].planted,false,'future trailing foot should swing');
+  assert.equal(result[-1].planted,true,'forward support remains anchored');
+  assert.deepEqual(result[-1].world,[.22,0]);
+  assert.ok(Math.hypot(...tracker.feet[1].swing.end.map((v,i)=>v-tracker.feet[1].swing.start[i]))<=.950000001);
+ }
+});
