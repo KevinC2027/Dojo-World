@@ -99,14 +99,14 @@ test('projected travel selects trailing foot, including when it overrides altern
  const tracker=new FootPlantTracker();
  const f=fighter('blue',0,0);
  tracker.update(f,0);
- // Symmetric root distances must use the preferred side, not its opposite.
+ // Future touchdown reach overrides alternation when one foot will trail.
  tracker.swingSide=1;
  tracker.feet[-1].plant=[-.24,0];
  tracker.feet[1].plant=[.24,0];
  f.velocity={x:3,z:0};
  const first=tracker.update(f,1);
- assert.equal(first[1].planted,false,'preferred foot starts first');
- assert.equal(first[-1].planted,true);
+ assert.equal(first[-1].planted,false,'projected trailing foot starts first');
+ assert.equal(first[1].planted,true);
  // A strongly lagging opposite foot must override the alternating preference.
  const next=new FootPlantTracker();
  next.update(fighter('blue',0,0),0);
