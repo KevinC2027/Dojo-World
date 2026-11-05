@@ -13,7 +13,7 @@ function toLocal(f,w,y){const {c,s}=ROT(f.facing),dx=w[0]-f.position.x,dz=w[1]-f
 const foot=(side,blue)=>[side*.24,.035,side===1?(blue?.35:.19):(blue?-.28:-.17)];
 export class FootPlantTracker {
   constructor(){this.reset()}
-  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1];this.guardWeight=0;this.bodySway=0}
+  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1];this.guardWeight=0;this.bodySway=0;this.gaitMode='stance';this.gaitBlend=0}
   update(f,tick){
     if(!Number.isInteger(tick)||tick<0)throw new TypeError('Expected integer engine tick');
     if(!f?.position||!f?.facing)throw new TypeError('Fighter with root and facing required');
@@ -27,11 +27,19 @@ export class FootPlantTracker {
     this.lastTick=tick;
     this.guardWeight=clamp(this.guardWeight+(f.guarding?.2:-.2),0,1);
     const vx=f.velocity?.x||0,vz=f.velocity?.z||0,speed=Math.hypot(vx,vz);
-    const moving=speed>.24&&!f.action&&!f.guarding&&!f.knockedOut;
+    const moving=speed>.24&&!f.action&&!f.knockedOut;
+    const footwork=moving&&f.guarding;
+    this.gaitMode=!moving?'stance':footwork?'footwork':'run';
+    // Carries a cosmetic locomotion weight across transitions without
+    // altering the authoritative engine position or mid-swing endpoint.
+    this.gaitBlend+=clamp((footwork?0:1)-this.gaitBlend,-.15,.15);
+    const swingTicks=footwork?10:6;
+    const strideCap=footwork?.52:.95;
     if(moving)this.lastDir=[vx/speed,vz/speed];
     const active=Object.values(this.feet).some(leg=>leg.swing);
-    // 6-frame swing at the current 3.2m/s locomotion cap. The landing\n    // target follows root velocity and the 0.95m max stride permits\n    // each leg to catch up during its 12-tick cycle. Short swing peaks\n    // are a remaining visual/velocity defect, not approved natural gait.\n    // One swinging foot at a time: the other is a world-locked support.
-    if(moving&&!active&&tick-this.lastStart>=6){
+    // Six ticks for unguarded 3.2m/s movement; ten for guarded shuffle.
+    // Existing swings retain their launch duration and endpoint.
+    if(moving&&!active&&tick-this.lastStart>=swingTicks){
       const side=this.swingSide,leg=this.feet[side],dir=this.lastDir;
       const lateral=[-dir[1],dir[0]],lateralOffset=side*.20;
       const anticipation=clamp(speed*.12,.08,.4);
@@ -40,9 +48,9 @@ export class FootPlantTracker {
       if(dist(leg.plant,destination)>.20){
         // Bound the stride from the actual planted ankle, not just the moving root.
         // Abrupt reverse/stop inputs must not request an unreachable swing endpoint.
-        const delta=dist(leg.plant,destination),maxStride=.95;
+        const delta=dist(leg.plant,destination),maxStride=strideCap;
         const bounded=delta>maxStride?lerp(leg.plant,destination,maxStride/delta):destination;
-        leg.swing={start:leg.plant.slice(),end:bounded,begin:tick,duration:6};
+        leg.swing={start:leg.plant.slice(),end:bounded,begin:tick,duration:swingTicks};
         this.swingSide=-side;this.lastStart=tick;
       }
     }
@@ -68,6 +76,8 @@ export class FootPlantTracker {
     }
     targets.guardWeight=this.guardWeight;
     targets.bodySway=this.bodySway;
+    targets.gaitMode=this.gaitMode;
+    targets.gaitBlend=this.gaitBlend;
     return targets;
   }
 }
