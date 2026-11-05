@@ -33,8 +33,8 @@ export class FootPlantTracker {
     if(moving&&!active&&tick-this.lastStart>=10){
       const side=this.swingSide,leg=this.feet[side],dir=this.lastDir;
       const lateral=[-dir[1],dir[0]],lateralOffset=side*.20;
-      const anticipation=clamp(speed*.10,.10,.32);
-      const destination=[f.position.x+dir[0]*(anticipation+.24)+lateral[0]*lateralOffset,
+      const anticipation=clamp(speed*.08,.08,.26);
+      const destination=[f.position.x+dir[0]*(anticipation+.20)+lateral[0]*lateralOffset,
         f.position.z+dir[1]*(anticipation+.24)+lateral[1]*lateralOffset];
       if(dist(leg.plant,destination)>.20){
         leg.swing={start:leg.plant.slice(),end:destination,begin:tick,duration:10};
