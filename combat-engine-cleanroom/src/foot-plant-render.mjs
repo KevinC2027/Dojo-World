@@ -35,11 +35,16 @@ export class FootPlantTracker {
     // Carries a cosmetic locomotion weight across transitions without
     // altering the authoritative engine position or mid-swing endpoint.
     this.gaitBlend+=clamp((!moving?0:footwork?0:1)-this.gaitBlend,-.15,.15);
-    const swingTicks=footwork?10:6;
-    const strideCap=footwork?.52:.95;
+    // Give fast forward/backward motion a little more swing time. Sideways
+    // travel uses a shorter step so the other leg does not overreach while
+    // carrying the body across the stance. Never retime an in-flight step.
+    const alignment=speed>0?Math.abs((vx*f.facing.x+vz*f.facing.z)/speed):1;
+    const lateralMotion=alignment<.5;
+    const swingTicks=footwork?10:(speed>2&&!lateralMotion?7:6);
+    const strideCap=footwork?.52:(lateralMotion?.76:.90);
     if(moving)this.lastDir=[vx/speed,vz/speed];
     const active=Object.values(this.feet).some(leg=>leg.swing);
-    // Six ticks for unguarded 3.2m/s movement; ten for guarded shuffle.
+    // Six or seven ticks for unguarded movement; ten for guarded shuffle.
     // Existing swings retain their launch duration and endpoint.
     if(moving&&!active&&tick-this.lastStart>=swingTicks){
       // Prioritize the leg which is beyond its comfortable support reach.
@@ -56,7 +61,9 @@ export class FootPlantTracker {
       const projectedReach=side=>dist(this.feet[side].plant,futureRoot);
       const side=projectedReach(-this.swingSide)>projectedReach(this.swingSide)+.02
         ?-this.swingSide:this.swingSide,leg=this.feet[side],dir=this.lastDir;
-      const lateral=[-dir[1],dir[0]],lateralOffset=side*.20;
+      // Keep each foot on its anatomical side of the fighter. The travel
+      // direction can reverse or become lateral without swapping left/right.
+      const rotation=ROT(f.facing),lateral=[rotation.c,-rotation.s],lateralOffset=side*.20;
       // Aim toward the root's estimated position at touchdown, rather than
       // using a fixed look-ahead time for both sprint and guarded shuffle.
       // The stride cap below still bounds the reachable target.
@@ -95,20 +102,55 @@ export class FootPlantTracker {
     // Existing planted-foot targets are world-locked; never lengthen a segment
     // to obtain a straighter leg.
     const fdata=this.result(f);
-    let bound=f.id==='blue'?.11:.055;
+    const preferred=f.id==='blue'?(moving?.17:.11):.055;
+    let bound=Infinity,landingBound=Infinity,futureSupportBound=Infinity;
     const baseHeight=f.id==='blue'?.84:.96;
     for(const side of [-1,1]){
+      const sw=this.feet[side].swing;
+      if(sw&&!(side===1&&f.action?.name==='frontKick')){
+        // Begin adapting the whole body's height before touchdown. Forecast
+        // the existing endpoint using observed deceleration, without moving
+        // either the planted foot or an in-flight landing target.
+        const remaining=Math.max(0,sw.begin+sw.duration-tick);
+        const deceleration=Math.max(0,this.previousSpeed-speed);
+        let travel=0;
+        for(let k=1;k<=remaining;k++)travel+=Math.max(0,speed-deceleration*k)/60;
+        const future={facing:f.facing,position:{
+          x:f.position.x+this.lastDir[0]*travel,
+          z:f.position.z+this.lastDir[1]*travel}};
+        const p=toLocal(future,sw.end,.035),hipX=side*.14+this.bodySway*.055;
+        const dx=p[0]-hipX,dz=p[2];
+        const limit=p[1]+Math.sqrt(Math.max(0,1.001*1.001-dx*dx-dz*dz))-baseHeight;
+        landingBound=Math.min(landingBound,limit);
+      }
       if(!fdata[side].planted)continue;
       const p=fdata[side].point,hipX=side*.14+this.bodySway*.055;
       const dx=p[0]-hipX,dz=p[2];
       const limit=p[1]+Math.sqrt(Math.max(0,1.001*1.001-dx*dx-dz*dz))-baseHeight;
       bound=Math.min(bound,limit);
+      const otherSwing=this.feet[-side].swing;
+      if(moving&&otherSwing){
+        // Prepare for the planted leg's expected reach over the next few
+        // ticks, so the torso does not have to drop abruptly as the root
+        // travels past that foot. Contact itself remains world-anchored.
+        const horizon=Math.min(5,otherSwing.begin+otherSwing.duration-tick);
+        const deceleration=Math.max(0,this.previousSpeed-speed);
+        let travel=0;
+        for(let k=1;k<=horizon;k++)travel+=Math.max(0,speed-deceleration*k)/60;
+        const future={facing:f.facing,position:{
+          x:f.position.x+this.lastDir[0]*travel,
+          z:f.position.z+this.lastDir[1]*travel}};
+        const next=toLocal(future,fdata[side].world,.035);
+        const ddx=next[0]-hipX,ddz=next[2];
+        const nextLimit=next[1]+Math.sqrt(Math.max(0,1.001*1.001-ddx*ddx-ddz*ddz))-baseHeight;
+        futureSupportBound=Math.min(futureSupportBound,nextLimit);
+      }
     }
-    const ideal=clamp(bound,-.10,.12);
+    const ideal=clamp(Math.min(preferred,bound,landingBound,futureSupportBound),-.10,.20);
     const smoothed=this.postureLift+clamp(ideal-this.postureLift,-.018,.012);
-    // Reach takes precedence over easing; raise only when a supporting leg
-    // can reach the floor, lowering the entire skeleton otherwise.
-    this.postureLift=Math.min(smoothed,ideal);
+    // Smooth the preferred posture through movement/attack transitions, but
+    // immediately obey a supporting leg's actual reach limit when necessary.
+    this.postureLift=Math.min(smoothed,bound);
     this.previousSpeed=speed;
     return this.result(f);
   }

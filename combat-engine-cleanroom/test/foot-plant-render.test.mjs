@@ -123,13 +123,15 @@ test('guarded shuffle respects its shorter stride cap despite longer touchdown i
   const normal=new FootPlantTracker(),guarded=new FootPlantTracker();
   const initial=fighter(id,0,0);
   normal.update(initial,0);guarded.update(initial,0);
-  const run=fighter(id,0,1.5),shuffle=fighter(id,0,1.5);
+  // Exercise the actual cap: at 1.5 m/s Red's normal target is already
+  // shorter than the guarded cap, so comparing endpoints there is invalid.
+  const run=fighter(id,0,3.2),shuffle=fighter(id,0,3.2);
   shuffle.guarding=true;
   normal.update(run,1);guarded.update(shuffle,1);
   const normalSwing=Object.values(normal.feet).find(l=>l.swing)?.swing;
   const guardSwing=Object.values(guarded.feet).find(l=>l.swing)?.swing;
   assert.ok(normalSwing&&guardSwing,'both modes must initiate a swing');
-  assert.equal(normalSwing.duration,6);
+  assert.equal(normalSwing.duration,7);
   assert.equal(guardSwing.duration,10);
   assert.ok(guardSwing.end[0]<normalSwing.end[0],
     'guarded step must remain shorter when its stride cap is reached');
