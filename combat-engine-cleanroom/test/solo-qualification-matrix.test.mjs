@@ -12,5 +12,7 @@ test('24 clean-room movement reports retain diagnostic provenance',()=>{
   assert.ok(Number.isFinite(row.captureDistanceMeters));
   assert.equal(typeof row.geometryPass,'boolean');
   assert.equal(typeof row.continuityPass,'boolean');
+  assert.equal(typeof row.staticSupportPass,'boolean');
+  assert.equal(typeof row.fullBodyDiagnosticPass,'boolean');
  }
 });
