@@ -181,3 +181,24 @@ test('pelvis support sway begins settling on the exact touchdown tick',()=>{
     'pelvis handoff must remain bounded');
  }
 });
+
+test('braking removes minimum anticipation without changing planted support',()=>{
+ for(const id of ['blue','red']){
+  const steady=new FootPlantTracker(),braking=new FootPlantTracker();
+  const initial=fighter(id,0,0);
+  steady.update(initial,0);braking.update(initial,0);
+  // Same current root, direction and speed; only inherited speed differs.
+  braking.previousSpeed=3.2;
+  const current=fighter(id,0,1);
+  steady.update(current,1);braking.update(current,1);
+  const a=Object.values(steady.feet).find(l=>l.swing)?.swing;
+  const b=Object.values(braking.feet).find(l=>l.swing)?.swing;
+  assert.ok(a&&b,'both planners launch a step');
+  assert.ok(b.end[0]<a.end[0]-.05,'braking foot lands nearer');
+  assert.equal(a.duration,b.duration);
+  for(const side of [-1,1]){
+   assert.ok(steady.feet[side].plant.every(Number.isFinite));
+   assert.ok(braking.feet[side].plant.every(Number.isFinite));
+  }
+ }
+});
