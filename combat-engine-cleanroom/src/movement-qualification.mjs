@@ -6,6 +6,7 @@ import {fighterRig,RIG_LENGTHS} from './hit-rig.mjs';
 import {FootPlantTracker} from './foot-plant-render.mjs';
 const D=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
 const finite=v=>Array.isArray(v)&&v.every(Number.isFinite);
+export const JOINT_LABELS=Object.freeze(['pelvis','chest','neck','head','leftShoulder','leftElbow','leftHand','rightShoulder','rightElbow','rightHand','leftHip','leftKnee','leftFoot','rightHip','rightKnee','rightFoot']);
 const jointPoints=rig=>[rig.pelvis,rig.chest,rig.neck,rig.head,
   ...rig.arms.flatMap(a=>[a.shoulder,a.elbow,a.hand]),
   ...rig.legs.flatMap(l=>[l.hip,l.knee,l.foot])];
@@ -44,6 +45,7 @@ export function recordSoloMotion(fighterId,scenarioId){
 export function measureSoloMotion(replay){
   const errors=[],lengthErrors=[],jointSteps=[],footSlides=[],footPenetrations=[],plantTargetErrors=[];
   let horizontalTravel=0,groundedSamples=0;
+  let worstJointStep={meters:0,tick:0,joint:null};
   for(let i=0;i<replay.frames.length;i++){
     const {fighter,rig}=replay.frames[i],points=jointPoints(rig);
     if(points.some(p=>!finite(p)))errors.push({tick:i,reason:'nonfinite_joint'});
@@ -53,7 +55,9 @@ export function measureSoloMotion(replay){
     const prev=replay.frames[i-1];
     horizontalTravel+=Math.hypot(fighter.position.x-prev.fighter.position.x,fighter.position.z-prev.fighter.position.z);
     const jp=jointPoints(prev.rig);
-    jointSteps.push(Math.max(...points.map((p,k)=>D(toWorld(fighter,p),toWorld(prev.fighter,jp[k])))));
+    const steps=points.map((p,k)=>D(toWorld(fighter,p),toWorld(prev.fighter,jp[k])));
+    jointSteps.push(Math.max(...steps));
+    steps.forEach((meters,k)=>{if(meters>worstJointStep.meters)worstJointStep={meters,tick:i,joint:JOINT_LABELS[k]};});
     for(const l of rig.legs){
       const prevFoot=prev.rig.legs.find(a=>a.side===l.side).foot;
       if(l.foot[1]<=.045&&prevFoot[1]<=.045){
@@ -65,7 +69,7 @@ export function measureSoloMotion(replay){
   const max=items=>items.length?Math.max(...items):0;
   return {fighter:replay.fighterId,scenario:replay.scenarioId,ticks:replay.frames.length,
     horizontalTravelMeters:horizontalTravel,maxBoneErrorMeters:max(lengthErrors),
-    maxJointStepMeters:max(jointSteps),maxGroundedFootSlideMeters:max(footSlides),
+    maxJointStepMeters:max(jointSteps),worstJointStep,maxGroundedFootSlideMeters:max(footSlides),
     groundedSamples,maxPlantTargetErrorMeters:max(plantTargetErrors),footPenetrations:footPenetrations.length,errors};
 }
 export function auditIndependentMotion(){
