@@ -157,3 +157,27 @@ test('touchdown projection selects future trailing foot instead of current farth
   assert.ok(Math.hypot(...tracker.feet[1].swing.end.map((v,i)=>v-tracker.feet[1].swing.start[i]))<=.950000001);
  }
 });
+
+test('pelvis support sway begins settling on the exact touchdown tick',()=>{
+ for(const id of ['blue','red']){
+  const tracker=new FootPlantTracker();
+  tracker.update(fighter(id,0,0),0);
+  const launch=tracker.update(fighter(id,1,1.5),1);
+  const side=[-1,1].find(s=>!launch[s].planted);
+  assert.notEqual(side,undefined,'step launched');
+  const sw=tracker.feet[side].swing;
+  assert.ok(sw,'swing exists');
+  // Freeze the authoritative root for a controlled landing while allowing
+  // the already airborne presentation foot to finish its original swing.
+  for(let tick=2;tick<sw.begin+sw.duration;tick++)
+   tracker.update(fighter(id,1,0),tick);
+  const before=tracker.bodySway;
+  const landed=tracker.update(fighter(id,1,0),sw.begin+sw.duration);
+  assert.equal(landed[side].planted,true);
+  assert.equal(landed[-side].planted,true);
+  assert.ok(Math.abs(landed.bodySway)<Math.abs(before),
+    'pelvis sway must relax on touchdown, not one tick later');
+  assert.ok(Math.abs(landed.bodySway-before)<=.28+1e-10,
+    'pelvis handoff must remain bounded');
+ }
+});
