@@ -43,3 +43,16 @@ test('planted world-space foot targets expose IK reach mismatch deterministicall
     assert.equal(a.maxPlantTargetErrorMeters,b.maxPlantTargetErrorMeters);
   }
 });
+
+test('worst moving joint is labeled with its exact reproducible frame',()=>{
+  for(const id of ['blue','red'])for(const scenario of INDEPENDENT_MOTION_SCENARIOS){
+    const replay=recordSoloMotion(id,scenario);
+    const report=measureSoloMotion(replay);
+    const worst=report.worstJointStep;
+    assert.ok(Number.isFinite(worst.meters));
+    assert.equal(worst.meters,report.maxJointStepMeters);
+    assert.ok(worst.tick>=0&&worst.tick<replay.frames.length);
+    if(worst.meters>0)assert.match(worst.joint,/^(pelvis|chest|neck|head|(left|right)(Shoulder|Elbow|Hand|Hip|Knee|Foot))$/);
+    assert.deepEqual(worst,measureSoloMotion(recordSoloMotion(id,scenario)).worstJointStep);
+  }
+});
