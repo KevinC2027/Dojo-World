@@ -117,3 +117,23 @@ test('symmetric stance follows alternating preference, while a lagging foot over
  assert.equal(second[-1].planted,false,'lagging foot gets priority');
  assert.equal(second[1].planted,true);
 });
+
+test('guarded shuffle plans farther ahead over its longer touchdown interval',()=>{
+ for(const id of ['blue','red']){
+  const normal=new FootPlantTracker(),guarded=new FootPlantTracker();
+  const initial=fighter(id,0,0);
+  normal.update(initial,0);guarded.update(initial,0);
+  const run=fighter(id,0,1.5),shuffle=fighter(id,0,1.5);
+  shuffle.guarding=true;
+  normal.update(run,1);guarded.update(shuffle,1);
+  const normalSwing=Object.values(normal.feet).find(l=>l.swing)?.swing;
+  const guardSwing=Object.values(guarded.feet).find(l=>l.swing)?.swing;
+  assert.ok(normalSwing&&guardSwing,'both modes must initiate a swing');
+  assert.equal(normalSwing.duration,6);
+  assert.equal(guardSwing.duration,10);
+  assert.ok(guardSwing.end[0]>normalSwing.end[0]+.05,
+    'longer guarded step predicts farther root travel before touchdown');
+  assert.ok(D(guardSwing.start,guardSwing.end)<=.520000001);
+  assert.ok(D(normalSwing.start,normalSwing.end)<=.950000001);
+ }
+});
