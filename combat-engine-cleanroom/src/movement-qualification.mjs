@@ -24,7 +24,8 @@ const sequences={
   reverse:{frames:160,vector:t=>t<80?{x:1,z:0}:{x:-1,z:0}},
   stop:{frames:160,vector:t=>t<80?{x:1,z:0}:STATIC},
   guard:{frames:90,vector:t=>STATIC,guard:true},
-  guardRelease:{frames:120,vector:t=>STATIC,guard:t=>t<55}
+  guardRelease:{frames:120,vector:t=>STATIC,guard:t=>t<55},
+  guardAdvance:{frames:120,vector:t=>({x:1,z:0}),guard:true}
 };
 export const INDEPENDENT_MOTION_SCENARIOS=Object.freeze(Object.keys(sequences));
 export function recordSoloMotion(fighterId,scenarioId){
