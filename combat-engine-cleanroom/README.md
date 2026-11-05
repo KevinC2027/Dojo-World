@@ -255,3 +255,11 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Presentation-only `FootPlantTracker` now carries previous root speed between ticks and shortens **new** swing lookahead when root speed is dropping. Existing airborne foot endpoints, 6/10-tick gait durations, bone lengths, and authoritative `CombatWorld` movement remain unchanged.
 - Added `test/braking-foot-anticipation.test.mjs` to screen shorter braking landings, no midair retargeting, same-tick determinism, and immutable fighter snapshots.
 - This is a small foot-planning increment, **not** proof of balanced walking. The 24-case COM/support qualification and actual browser recording must be rerun. New tests and CI are unverified until executed. Moveset expansion remains blocked pending full-body approval.
+
+
+## Projected touchdown support selection (2026-11-05)
+
+- Presentation footstep planning now chooses the swing leg using each planted ankle's distance from the **predicted root at touchdown**, rather than the current root. This targets a reversal/fast-travel failure where the presently farther foot is actually ahead of travel and the other foot becomes the trailing support.
+- Prediction uses existing per-tick speed and braking history; in-flight swing start/end/duration and world-space support anchors remain unchanged. CombatWorld movement, collision and damage authority are untouched.
+- Added a focused Blue/Red regression in `test/foot-plant-render.test.mjs`. The new test and complete `npm test` suite **have not been executed in this update**; CI and fresh 24-scenario metrics are not yet verified.
+- This is a limited gait-planning correction, **not** evidence of natural walking or stable dynamic balance. Preserve the 24-case gate and require actual-engine browser video plus creator approval before moveset expansion.
