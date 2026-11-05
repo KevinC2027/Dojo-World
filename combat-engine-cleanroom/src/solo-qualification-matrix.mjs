@@ -1,4 +1,6 @@
 /** Reproducible 24-scenario movement diagnostic; screening only, not visual approval. */
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
 import {recordSoloMotion,measureSoloMotion,INDEPENDENT_MOTION_SCENARIOS} from './movement-qualification.mjs';
 import {auditFullBodyReplay} from './full-body-qualification.mjs';
 import {measureDynamicSupport} from './dynamic-support.mjs';
@@ -31,7 +33,7 @@ export function buildSoloQualificationMatrix(){
   }
   return rows;
 }
-if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
+if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
   const rows=buildSoloQualificationMatrix();
   console.log(JSON.stringify({count:rows.length,rows},null,2));
 }
