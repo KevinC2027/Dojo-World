@@ -172,3 +172,9 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Added `src/foot-support-state.mjs`: pure deterministic tracking of two world-space planted feet relative to a moving center of mass, with bounded single-foot repositioning per fixed tick and a left-foot tie-break.
 - Added four regression tests in `test/foot-support-state.test.mjs` for stationary planting, bounded displacement, deterministic replay, and invalid input.
 - This is a **diagnostic-only** support tracker, not yet wired into `CombatWorld` state or rendering. It does not constrain combat velocity, resolve momentum, or implement actual skeletal foot IK. Test execution and CI for this increment require independent verification.
+
+## Solo movement qualification — planted-foot IK reach telemetry (2026-11-04)
+
+- `src/movement-qualification.mjs` now measures `maxPlantTargetErrorMeters`: the maximum horizontal world-space separation between each planted foot's target and the actual IK-solved ankle. This detects planted-foot targets that the fixed-length leg cannot reach, even when measured ankle-to-ankle slide is small.
+- `test/movement-qualification.test.mjs` adds deterministic finite-value coverage across all 14 independent Blue/Red solo scenarios.
+- This is a **measurement improvement, not a biomechanical fix or qualification pass**. No movement authority, visuals, movesets or combat outcomes changed. Inspect this metric together with grounded slide, joint displacement and footage before creator approval. CI and local execution must be independently verified.
