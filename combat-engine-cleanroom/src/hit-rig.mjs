@@ -59,7 +59,11 @@ export function solveTwoBone(root,target,a,b,pole){
 const strikeSide={palm:1,straight:-1,frontKick:1,jab:-1,cross:1,hook:-1};
 export function fighterRig(f,m,clock=0,footTargets=null){
   const blue=f.id==='blue',action=f.action,pr=frameProgress(f,m);
-  const speed=Math.hypot(f.velocity?.x||0,f.velocity?.z||0);
+  // Match the foot tracker when a replay sample contains invalid velocity.
+  // This is presentation-only and does not mutate the engine snapshot.
+  const vx=Number.isFinite(f.velocity?.x)?f.velocity.x:0;
+  const vz=Number.isFinite(f.velocity?.z)?f.velocity.z:0;
+  const speed=Math.hypot(vx,vz);
   const gait=Math.sin(clock*6.5)*C(speed/3.2,0,1);
   const strike=action?strikeSide[action.name]:undefined;
   const kick=action?.name==='frontKick';
@@ -77,7 +81,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   const postureLift=footTargets?.postureLift||0;
   // The upper body participates in each step: subtle forward lean and arm
   // counter-swing derived from the SAME planted/swing-foot gait state.
-  const forwardSpeed=(f.velocity?.x||0)*(f.facing?.x||0)+(f.velocity?.z||0)*(f.facing?.z||0);
+  const forwardSpeed=vx*(f.facing?.x||0)+vz*(f.facing?.z||0);
   const forwardLean=C(forwardSpeed/3.2,-1,1)*(footTargets?.gaitBlend||0)*.038;
   const stanceContrast=footTargets?C((footTargets[1]?.point[2]-footTargets[-1]?.point[2])*.9,-1,1):0;
   const freeArms=1-(footTargets?.guardWeight??(f.guarding?1:0));
