@@ -74,6 +74,7 @@ p.helper{font-size:12px;line-height:1.5;color:var(--muted);margin:0}
 <script type="module">
 import { CombatWorld, MOVESETS, TICK_RATE } from './src/engine.mjs';
 import { fighterRig } from './src/hit-rig.mjs';
+import { FootPlantTracker } from './src/foot-plant-render.mjs';
 const $=id=>document.getElementById(id);
 const canvas=$('stage'), arena=$('arena'), ctx=canvas.getContext('webgl',{alpha:true,antialias:true,powerPreference:'low-power'})||canvas.getContext('experimental-webgl');
 const fallback=$('fallback'), error=$('error'), simstatus=$('simstatus'), status=$('status');
@@ -114,9 +115,11 @@ function orb(pos,scale,color){draw(sphere,model(pos,scale),color)}
 function segment(a,b,radius,color){const d=sub(b,a),len=Math.hypot(...d);if(len<.001)return;const y=norm(d),reference=Math.abs(y[1])>.92?[1,0,0]:[0,1,0],x=norm(cross(reference,y)),z=norm(cross(x,y));const mid=a.map((v,i)=>(v+b[i])*.5);draw(sphere,model(mid,[radius,len*.54,radius], [x,y,z]),color)}
 function local(f,v){const angle=Math.atan2(f.facing.x,f.facing.z),s=Math.sin(angle),c=Math.cos(angle);return [f.position.x+v[0]*c+v[2]*s,v[1],f.position.z-v[0]*s+v[2]*c]}
 const palette={blue:{main:[.17,.44,.84],dark:[.17,.44,.84],light:[.17,.44,.84]},red:{main:[.84,.27,.17],dark:[.84,.27,.17],light:[.84,.27,.17]}};
+const footTrackers={blue:new FootPlantTracker(),red:new FootPlantTracker()};
 function drawFighter(f,clock){
   const ink=f.id==='blue'?[.17,.44,.84]:[.84,.27,.17];
-  const rig=fighterRig(f,f.action?MOVESETS[f.id][f.action.name]:null,clock);
+  const targets=footTrackers[f.id].update(f,world.tick);
+  const rig=fighterRig(f,f.action?MOVESETS[f.id][f.action.name]:null,clock,targets);
   const tr=v=>local(f,v);
   const bone=(a,b,r)=>segment(tr(a),tr(b),r,ink);
   bone(rig.pelvis,rig.chest,.09);
