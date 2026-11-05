@@ -15,7 +15,9 @@ const len=a=>Math.hypot(...a);
 const normalize=a=>mul(a,1/(len(a)||1));
 const mix=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
 const foot=(side,blue)=>[side*.24,.035,side===1?(blue?.35:.19):(blue?-.28:-.17)];
-const hand=(side,blue)=>[side*(blue?.29:.22),blue?1.43:1.62,side===1?.29:.17];
+// Lower the free hand targets so walking arms do not fold against the shoulders.
+// The fixed-length 3D solver and all strike envelopes still apply.
+const hand=(side,blue)=>[side*(blue?.29:.22),blue?1.20:1.39,side===1?.29:.17];
 const anchorArm=(side,blue,rotation)=>[side*.22,blue?1.42:1.57,side*.08+rotation*.045];
 const anchorLeg=(side,blue,shift)=>[side*.14,blue?.84:.96,shift];
 /**
@@ -99,7 +101,9 @@ export function fighterRig(f,m,clock=0,footTargets=null){
     let wrist=hand(side,blue);
     wrist[1]+=postureLift;
     wrist[2]+=forwardLean*.55-side*armCounterSwing;
-    if(!attack)wrist=mix(wrist,[side*.18,(blue?1.51:1.71)+postureLift,.31],footTargets?.guardWeight??(f.guarding?1:0));
+    // Retain the tracker's fading guard pose when an attack starts, so the
+    // guard-to-startup seam inherits the last solved stance instead of snapping.
+    wrist=mix(wrist,[side*.18,(blue?1.51:1.71)+postureLift,.31],footTargets?.guardWeight??(f.guarding?1:0));
     if(attack&&side===strike&&!kick){
       // Chamber draws fist back before extension; hook wraps horizontally, not telescopically.
       // Startup inherits the exact stance wrist, including arm counter-swing.
