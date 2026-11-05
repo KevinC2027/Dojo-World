@@ -16,10 +16,10 @@ export function auditBrakingReplay(replay,{deceleration=6,contactRadius=.12}={})
     });
     return {tick,plantedFeet:contacts.length,...result};
   });
-  const known=samples.filter(s=>s.outsideContactRadius!==null);
+  const known=samples.filter(s=>s.outsideSupportSegmentRadius!==null);
   return {fighter:replay.fighterId,scenario:replay.scenarioId,frames:samples.length,
     unknownSupportFrames:samples.length-known.length,
-    maxProjectedGapMeters:known.length?Math.max(...known.map(s=>s.outsideContactRadius)):null,
-    worstFrame:known.length?known.reduce((a,b)=>b.outsideContactRadius>a.outsideContactRadius?b:a):null,
+    maxProjectedGapMeters:known.length?Math.max(...known.map(s=>s.outsideSupportSegmentRadius)):null,
+    worstFrame:known.length?known.reduce((a,b)=>b.outsideSupportSegmentRadius>a.outsideSupportSegmentRadius?b:a):null,
     samples};
 }
