@@ -28,7 +28,11 @@ export class FootPlantTracker {
     if(tick===this.lastTick)return this.result(f);
     this.lastTick=tick;
     this.guardWeight=clamp(this.guardWeight+(f.guarding?.2:-.2),0,1);
-    const vx=f.velocity?.x||0,vz=f.velocity?.z||0,speed=Math.hypot(vx,vz);
+    // Network interpolation and replay data can briefly contain invalid velocity samples.
+    // Keep presentation foot planning finite; never modify authoritative motion.
+    const vx=Number.isFinite(f.velocity?.x)?f.velocity.x:0;
+    const vz=Number.isFinite(f.velocity?.z)?f.velocity.z:0;
+    const speed=Math.hypot(vx,vz);
     const moving=speed>.24&&!f.action&&!f.knockedOut;
     const footwork=moving&&f.guarding;
     this.gaitMode=!moving?'stance':footwork?'footwork':'run';
