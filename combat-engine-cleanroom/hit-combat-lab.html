@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HIT // DOJO WORLD — Combat Lab</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,Arial,sans-serif;background:#101315;color:#f4e6d5}*{box-sizing:border-box}body{margin:0}
+header{padding:18px max(18px,4vw);border-bottom:1px solid #77543d;background:#191b1d;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+h1{margin:0;font-size:clamp(20px,3vw,31px);letter-spacing:.06em}small,.muted{color:#b9a797}main{max-width:1400px;margin:auto;padding:18px;display:grid;gap:16px}
+nav,.controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center}button,a.tab{font:inherit;color:#f4e6d5;background:#302c29;border:1px solid #936647;border-radius:8px;padding:10px 14px;cursor:pointer;text-decoration:none}button:hover,a.tab:hover{background:#503b30}button:disabled{opacity:.5;cursor:not-allowed}.primary{background:#9c5134}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}.stage{background:#161819;border:1px solid #74523b;border-radius:12px;overflow:hidden}iframe{width:100%;height:min(78vh,780px);border:0;background:#191b1d}
+aside{background:#1d2022;border:1px solid #594738;border-radius:12px;padding:16px;display:grid;gap:13px;align-content:start}h2{font-size:16px;margin:0;color:#e5aa7e}p{line-height:1.55;margin:0}code{overflow-wrap:anywhere;color:#f2bb91}
+#preview{max-width:100%;border-radius:8px}#status{padding:10px;background:#29231f;border-radius:8px}label{display:grid;gap:6px;font-size:13px}input{background:#101315;color:white;border:1px solid #85654b;border-radius:7px;padding:9px;width:100%}
+@media(max-width:850px){.layout{grid-template-columns:1fr}iframe{height:65vh}}
+</style></head><body>
+<header><div><h1>HIT // DOJO WORLD</h1><small>COMBAT LAB · ACTUAL CLEAN-ROOM ENGINE REVIEW</small></div><div class="muted">Fuji visual standard · development build only</div></header>
+<main>
+<nav aria-label="Review modes"><button data-page="movement-review.html">Solo movement</button><button data-page="index.html">Playable combat</button><button data-page="review.html">Combat replay</button><button data-page="review-lite.html">Review lite</button></nav>
+<div class="layout"><section class="stage"><iframe id="lab" title="Clean-room engine test" src="./movement-review.html" allow="display-capture"></iframe></section>
+<aside><h2>RECORD REAL BUILD</h2><p>Record the actual browser test surface, not a simulated video. Browser permission is required.</p>
+<label>Commit / version <input id="commit" placeholder="Paste verified Git commit SHA"></label>
+<div class="controls"><button class="primary" id="record">Start recording</button><button id="stop" disabled>Stop & save</button></div>
+<div id="status" role="status">Ready. Choose a mode, then start recording.</div>
+<video id="preview" controls playsinline hidden></video>
+<a id="download" hidden>Download recording</a>
+<h2>REVIEW CHECKLIST</h2><p>Inspect Blue and Red separately: idle, forward, backward, lateral, reverse, stop, guard, guard release, and guarded footwork. Look for knee straightening, stable planted feet, elbow orientation, COM support, and joint continuity.</p>
+<p class="muted">Visual approval is not automatic. Preserve Fuji, blossoms, reflective floor and fighter color identities. No health bars.</p>
+<p class="muted">Recordings are saved locally in your browser. This page does not upload or send videos to ChatGPT automatically.</p>
+</aside></div>
+</main>
+<script>
+const lab=document.getElementById('lab'),status=document.getElementById('status'),start=document.getElementById('record'),stop=document.getElementById('stop'),preview=document.getElementById('preview'),download=document.getElementById('download');
+let recorder=null,stream=null,parts=[],url=null;
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{lab.src='./'+b.dataset.page;status.textContent='Loaded '+b.dataset.page+' — live clean-room page.'}));
+start.addEventListener('click',async()=>{
+ if(!navigator.mediaDevices?.getDisplayMedia||!window.MediaRecorder){status.textContent='Screen recording unsupported here. Use your operating system screen recorder.';return;}
+ try{
+  stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:30},audio:false});
+  const mime=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'].find(t=>MediaRecorder.isTypeSupported(t))||'';
+  parts=[];recorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
+  recorder.ondataavailable=e=>{if(e.data.size)parts.push(e.data)};
+  recorder.onstop=()=>{
+   const blob=new Blob(parts,{type:recorder.mimeType||'video/webm'});
+   if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(blob);
+   preview.src=url;preview.hidden=false;download.href=url;download.hidden=false;
+   const sha=document.getElementById('commit').value.trim().replace(/[^a-zA-Z0-9_-]/g,'').slice(0,40)||'unverified';
+   download.download='HIT-actual-engine-'+sha+'-'+new Date().toISOString().replace(/[:.]/g,'-')+'.webm';
+   download.textContent='Download actual-engine recording';
+   status.textContent='Recording finished. Review and download the WebM file.';
+   stream?.getTracks().forEach(t=>t.stop());start.disabled=false;stop.disabled=true;
+  };
+  stream.getVideoTracks()[0].addEventListener('ended',()=>{if(recorder?.state==='recording')recorder.stop()});
+  recorder.start(1000);start.disabled=true;stop.disabled=false;
+  status.textContent='Recording. Select this browser tab in the share picker, then play the test.';
+ }catch(e){status.textContent='Recording not started: '+e.message;start.disabled=false;stop.disabled=true;}
+});
+stop.addEventListener('click',()=>{if(recorder?.state==='recording')recorder.stop()});
+</script></body></html>
