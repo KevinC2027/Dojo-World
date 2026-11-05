@@ -30,19 +30,19 @@ export class FootPlantTracker {
     const moving=speed>.24&&!f.action&&!f.guarding&&!f.knockedOut;
     if(moving)this.lastDir=[vx/speed,vz/speed];
     const active=Object.values(this.feet).some(leg=>leg.swing);
-    // One swinging foot at a time: other foot is a world-locked support.
-    if(moving&&!active&&tick-this.lastStart>=8){
+    // 6-frame swing at the current 3.2m/s locomotion cap. The landing\n    // target follows root velocity and the 0.95m max stride permits\n    // each leg to catch up during its 12-tick cycle. Short swing peaks\n    // are a remaining visual/velocity defect, not approved natural gait.\n    // One swinging foot at a time: the other is a world-locked support.
+    if(moving&&!active&&tick-this.lastStart>=6){
       const side=this.swingSide,leg=this.feet[side],dir=this.lastDir;
       const lateral=[-dir[1],dir[0]],lateralOffset=side*.20;
-      const anticipation=clamp(speed*.13,.10,.43);
-      const destination=[f.position.x+dir[0]*(anticipation+.30)+lateral[0]*lateralOffset,
-        f.position.z+dir[1]*(anticipation+.30)+lateral[1]*lateralOffset];
+      const anticipation=clamp(speed*.12,.08,.4);
+      const destination=[f.position.x+dir[0]*(anticipation+.15)+lateral[0]*lateralOffset,
+        f.position.z+dir[1]*(anticipation+.15)+lateral[1]*lateralOffset];
       if(dist(leg.plant,destination)>.20){
         // Bound the stride from the actual planted ankle, not just the moving root.
         // Abrupt reverse/stop inputs must not request an unreachable swing endpoint.
-        const delta=dist(leg.plant,destination),maxStride=.65;
+        const delta=dist(leg.plant,destination),maxStride=.95;
         const bounded=delta>maxStride?lerp(leg.plant,destination,maxStride/delta):destination;
-        leg.swing={start:leg.plant.slice(),end:bounded,begin:tick,duration:8};
+        leg.swing={start:leg.plant.slice(),end:bounded,begin:tick,duration:6};
         this.swingSide=-side;this.lastStart=tick;
       }
     }
