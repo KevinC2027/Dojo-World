@@ -51,7 +51,8 @@ const point=(f,p)=>{
  const yaw=Math.atan2(f.facing.x,f.facing.z),s=Math.sin(yaw),c=Math.cos(yaw);
  const x=f.position.x+p[0]*c+p[2]*s,z=f.position.z-p[0]*s+p[2]*c;
  // Fixed side-stage camera: world X maps to screen horizontally, Z provides subtle depth.
- return [480+x*51+z*13,418-p[1]*150+z*9];
+ const origin=replay.frames[0].fighter.position;
+ return [480+(x-origin.x)*51+(z-origin.z)*13,418-p[1]*150+(z-origin.z)*9];
 };
 function render(){
  const e=replay.frames[tick],rig=e.rig,f=e.fighter;
