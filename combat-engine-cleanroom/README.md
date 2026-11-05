@@ -234,3 +234,9 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - **Diagnostic only:** no movement, damage, visual pose, authoritative hit or foot-plant behavior changed. Projected stop is a constant-deceleration estimate, not a human balance solver. The 24-case qualification gate and creator visual approval remain mandatory.
 - New tests and complete Node suite require execution/CI confirmation. No actual-engine browser video was captured in this increment; do not infer improved biomechanics.
 - To reproduce: from `combat-engine-cleanroom/`, run `node --test test/braking-replay.test.mjs` then `npm test`; load `movement-review.html` in a local server and compare Blue/Red forward, reverse and stop at normal speed against HIT Fuji visual standard.
+
+## 2026-11-05 — projected braking support segment diagnostic
+
+- `src/braking-support.mjs` now reports `supportSegmentDistance` and `outsideSupportSegmentRadius` for the projected stop position relative to the segment between two planted foot contacts. This avoids treating a position between both feet as unsupported merely because it is far from either ankle. Existing nearest-contact fields are preserved for comparison.
+- `test/braking-support-segment.test.mjs` covers between-feet support, clamped segment endpoints, absent/one-foot contacts, degenerate contacts, and determinism. Four focused tests passed in an isolated local Node 22 harness before commit; the complete repository suite and CI are not claimed passing.
+- This is **diagnostic only**. It does not change locomotion, braking, foot planning, hit outcomes, or rendering. A static two-foot segment is not a dynamic balance or biomechanical proof. The 24-case movement gate and actual browser video remain pending; no moveset expansion or release deployment.
