@@ -42,13 +42,13 @@ export function recordSoloMotion(fighterId,scenarioId){
   return {fighterId,scenarioId,rateHz:TICK_RATE,frames};
 }
 export function measureSoloMotion(replay){
-  const errors=[],lengthErrors=[],jointSteps=[],footSlides=[],footPenetrations=[];
+  const errors=[],lengthErrors=[],jointSteps=[],footSlides=[],footPenetrations=[],plantTargetErrors=[];
   let horizontalTravel=0,groundedSamples=0;
   for(let i=0;i<replay.frames.length;i++){
     const {fighter,rig}=replay.frames[i],points=jointPoints(rig);
     if(points.some(p=>!finite(p)))errors.push({tick:i,reason:'nonfinite_joint'});
     for(const a of rig.arms){lengthErrors.push(Math.abs(D(a.shoulder,a.elbow)-RIG_LENGTHS.upperArm),Math.abs(D(a.elbow,a.hand)-RIG_LENGTHS.forearm))}
-    for(const l of rig.legs){lengthErrors.push(Math.abs(D(l.hip,l.knee)-RIG_LENGTHS.thigh),Math.abs(D(l.knee,l.foot)-RIG_LENGTHS.shin));if(l.foot[1]<-.002)footPenetrations.push({tick:i,side:l.side,height:l.foot[1]})}
+    for(const l of rig.legs){lengthErrors.push(Math.abs(D(l.hip,l.knee)-RIG_LENGTHS.thigh),Math.abs(D(l.knee,l.foot)-RIG_LENGTHS.shin));if(l.foot[1]<-.002)footPenetrations.push({tick:i,side:l.side,height:l.foot[1]});const target=replay.frames[i].footTargets?.[l.side];if(target?.planted){const actual=toWorld(fighter,l.foot);plantTargetErrors.push(Math.hypot(actual[0]-target.world[0],actual[2]-target.world[1]));}}
     if(!i)continue;
     const prev=replay.frames[i-1];
     horizontalTravel+=Math.hypot(fighter.position.x-prev.fighter.position.x,fighter.position.z-prev.fighter.position.z);
@@ -66,7 +66,7 @@ export function measureSoloMotion(replay){
   return {fighter:replay.fighterId,scenario:replay.scenarioId,ticks:replay.frames.length,
     horizontalTravelMeters:horizontalTravel,maxBoneErrorMeters:max(lengthErrors),
     maxJointStepMeters:max(jointSteps),maxGroundedFootSlideMeters:max(footSlides),
-    groundedSamples,footPenetrations:footPenetrations.length,errors};
+    groundedSamples,maxPlantTargetErrorMeters:max(plantTargetErrors),footPenetrations:footPenetrations.length,errors};
 }
 export function auditIndependentMotion(){
   return ['blue','red'].flatMap(id=>INDEPENDENT_MOTION_SCENARIOS.map(s=>measureSoloMotion(recordSoloMotion(id,s))));
