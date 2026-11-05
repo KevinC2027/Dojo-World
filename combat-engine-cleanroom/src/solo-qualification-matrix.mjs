@@ -15,7 +15,8 @@ export function buildSoloQualificationMatrix(){
     const continuityPass=motion.maxJointStepMeters<=.2;
     // Static COM is only a diagnostic: moving humans can be dynamically stable
     // outside a static foot segment. Do not convert this to visual approval.
-    rows.push({fighter,scenario,geometryPass,continuityPass,staticSupportPass:full.passed,
+    rows.push({fighter,scenario,geometryPass,continuityPass,staticSupportPass:!(full.counts.unsupported_com||full.counts.no_planted_foot),
+      fullBodyDiagnosticPass:full.passed,
       boneErrorMeters:motion.maxBoneErrorMeters,
       plantedTargetErrorMeters:motion.maxPlantTargetErrorMeters,
       jointStepMeters:motion.maxJointStepMeters,
