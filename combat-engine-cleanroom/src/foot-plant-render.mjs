@@ -13,7 +13,7 @@ function toLocal(f,w,y){const {c,s}=ROT(f.facing),dx=w[0]-f.position.x,dz=w[1]-f
 const foot=(side,blue)=>[side*.24,.035,side===1?(blue?.35:.19):(blue?-.28:-.17)];
 export class FootPlantTracker {
   constructor(){this.reset()}
-  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1];this.guardWeight=0}
+  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1];this.guardWeight=0;this.bodySway=0}
   update(f,tick){
     if(!Number.isInteger(tick)||tick<0)throw new TypeError('Expected integer engine tick');
     if(!f?.position||!f?.facing)throw new TypeError('Fighter with root and facing required');
@@ -46,6 +46,9 @@ export class FootPlantTracker {
         this.swingSide=-side;this.lastStart=tick;
       }
     }
+    // Carry a small lateral weight-transfer signal through step boundaries.
+    const support=this.feet[-1].swing?1:this.feet[1].swing?-1:0;
+    this.bodySway+=(support-this.bodySway)*.28;
     for(const leg of Object.values(this.feet)){
       if(!leg.swing)continue;
       const sw=leg.swing,u=clamp((tick-sw.begin)/sw.duration,0,1);
@@ -64,6 +67,7 @@ export class FootPlantTracker {
       targets[side]={point:toLocal(f,xy,.035+raise),planted,world:xy.slice()};
     }
     targets.guardWeight=this.guardWeight;
+    targets.bodySway=this.bodySway;
     return targets;
   }
 }
