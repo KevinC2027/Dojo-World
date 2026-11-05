@@ -322,3 +322,9 @@ Added `test/gait-reversal-regression.test.mjs` to check two clean-room presentat
 ## 2026-11-05 — Facing-aware footwork and support continuity
 
 The clean-room presentation tracker now keeps longitudinal steps on the correct anatomical side, adjusts fast gait timing by movement direction, and prepares whole-body posture for estimated planted and landing reach without retargeting in-flight feet. See `MOVEMENT-FACING-SUPPORT-REPORT-2026-11-05.md` for the executed 160-test suite, 24-case matrix, extended support checks, source-rendered video distinction, remaining 18 static-support flags, and visual-approval/deployment gates.
+
+## 2026-11-05 — Nonfinite velocity isolation in visual footwork
+
+`src/foot-plant-render.mjs` now sanitizes nonfinite interpolated velocity components before calculating gait direction, speed, landing anticipation, and reach-aware torso height. This is a **presentation-only** safeguard for malformed or transient replay/network samples: it does not change authoritative `CombatWorld` movement or collision. Added `test/gait-nonfinite-velocity.test.mjs` for Blue/Red with positive/negative infinity, NaN, and recovery to finite movement; checks foot endpoints, world anchors, direction and posture remain finite.
+
+**Verification:** Development-branch GitHub commits confirmed with `[skip ci]` prefixes. The new test and full native Node suite were **not executed in this cycle**, and no new 24-case metrics or browser capture were produced. The last *documented executed* suite remains 160/160, joint-step 24/24 and static support 6/24 from `MOVEMENT-FACING-SUPPORT-REPORT-2026-11-05.md` (prior revision). These numbers do not validate the new change. Run `node --test test/gait-nonfinite-velocity.test.mjs`, `npm test`, and `node src/solo-qualification-matrix.mjs` on the current head before promotion. Creator approval and actual updated-build footage remain outstanding; do not deploy automatically.
