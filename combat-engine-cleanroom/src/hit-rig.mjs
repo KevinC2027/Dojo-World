@@ -89,7 +89,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
       const phase=gait*side;
       ankle=[ankle[0],ankle[1]+Math.max(0,phase)*.13,ankle[2]+phase*.20];
     }
-    if(footTargets&&!attack&&!f.guarding&&footTargets[side])ankle=footTargets[side].point.slice();
+    if(footTargets&&!attack&&footTargets[side])ankle=footTargets[side].point.slice();
     if(kick&&side===strike){
       const neutral=foot(side,blue);
       const chamber=[side*.22,.55,.27];
