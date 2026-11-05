@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {recordSoloMotion,measureSoloMotion,auditIndependentMotion,INDEPENDENT_MOTION_SCENARIOS} from '../src/movement-qualification.mjs';
-test('18 independent deterministic 60Hz motion demonstrations exist',()=>{
+test('24 independent deterministic 60Hz motion demonstrations exist',()=>{
   const reports=auditIndependentMotion();
-  assert.equal(reports.length,18);
-  assert.equal(INDEPENDENT_MOTION_SCENARIOS.length,9);
-  assert.equal(new Set(reports.map(r=>r.fighter+':'+r.scenario)).size,18);
+  assert.equal(reports.length,24);
+  assert.equal(INDEPENDENT_MOTION_SCENARIOS.length,12);
+  assert.equal(new Set(reports.map(r=>r.fighter+':'+r.scenario)).size,24);
   for(const r of reports){assert.ok(r.ticks>=91);assert.equal(r.errors.length,0);assert.equal(r.footPenetrations,0);assert.ok(r.maxBoneErrorMeters<1e-8)}
 });
 test('replays are deterministic for both characters and all scenarios',()=>{
@@ -77,5 +77,16 @@ test('guarded footwork remains distinct from fast gait and has reachable planted
     assert.ok(report.maxPlantTargetErrorMeters<.02,id+' footwork target escaped leg reach');
     assert.ok(report.maxJointStepMeters<.12,id+' footwork joint jumped');
     assert.equal(report.footPenetrations,0);
+  }
+});
+
+test('guarded retreat, lateral shuffle and stop preserve floor and reach',()=>{
+ for(const id of ['blue','red'])
+  for(const scenario of ['guardRetreat','guardLateral','guardStop']){
+   const replay=recordSoloMotion(id,scenario),report=measureSoloMotion(replay);
+   assert.ok(report.maxPlantTargetErrorMeters<.03,id+':'+scenario+':reach');
+   assert.ok(report.maxJointStepMeters<.15,id+':'+scenario+':joint');
+   assert.equal(report.footPenetrations,0);
+   assert.ok(report.maxBoneErrorMeters<1e-8);
   }
 });
