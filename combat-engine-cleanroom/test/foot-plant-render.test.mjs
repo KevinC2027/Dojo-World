@@ -118,7 +118,7 @@ test('projected travel selects trailing foot, including when it overrides altern
  assert.equal(second[1].planted,true);
 });
 
-test('guarded shuffle plans farther ahead over its longer touchdown interval',()=>{
+test('guarded shuffle respects its shorter stride cap despite longer touchdown interval',()=>{
  for(const id of ['blue','red']){
   const normal=new FootPlantTracker(),guarded=new FootPlantTracker();
   const initial=fighter(id,0,0);
@@ -131,8 +131,8 @@ test('guarded shuffle plans farther ahead over its longer touchdown interval',()
   assert.ok(normalSwing&&guardSwing,'both modes must initiate a swing');
   assert.equal(normalSwing.duration,6);
   assert.equal(guardSwing.duration,10);
-  assert.ok(guardSwing.end[0]>normalSwing.end[0]+.05,
-    'longer guarded step predicts farther root travel before touchdown');
+  assert.ok(guardSwing.end[0]<normalSwing.end[0],
+    'guarded step must remain shorter when its stride cap is reached');
   assert.ok(D(guardSwing.start,guardSwing.end)<=.520000001);
   assert.ok(D(normalSwing.start,normalSwing.end)<=.950000001);
  }
