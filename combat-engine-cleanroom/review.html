@@ -124,6 +124,7 @@ button.review-selected{outline:2px solid #c2e8ff;background:#316084}
 <script type="module">
 import { CombatWorld, MOVESETS, TICK_RATE } from './src/engine.mjs';
 import { fighterRig } from './src/hit-rig.mjs';
+import { FootPlantTracker } from './src/foot-plant-render.mjs';
 import { REVIEW_SCENARIOS, buildReviewReplay, frameAt, reviewPacket } from './src/review.mjs';
 const $=id=>document.getElementById(id);
 const canvas=$('stage'), arena=$('arena'), ctx=canvas.getContext('webgl',{alpha:true,antialias:true,powerPreference:'low-power'})||canvas.getContext('experimental-webgl');
@@ -167,7 +168,10 @@ function local(f,v){const angle=Math.atan2(f.facing.x,f.facing.z),s=Math.sin(ang
 const palette={blue:{main:[.17,.44,.84],dark:[.17,.44,.84],light:[.17,.44,.84]},red:{main:[.84,.27,.17],dark:[.84,.27,.17],light:[.84,.27,.17]}};
 function drawFighter(f,clock){
   const ink=f.id==='blue'?[.17,.44,.84]:[.84,.27,.17];
-  const rig=fighterRig(f,f.action?MOVESETS[f.id][f.action.name]:null,clock);
+  const tracker=new FootPlantTracker();
+  let targets;
+  for(const frame of review.frames){targets=tracker.update(frame.snapshot.fighters[f.id],frame.tick);if(frame.tick>=reviewTick)break}
+  const rig=fighterRig(f,f.action?MOVESETS[f.id][f.action.name]:null,clock,targets);
   const tr=v=>local(f,v);
   const bone=(a,b,r)=>segment(tr(a),tr(b),r,ink);
   bone(rig.pelvis,rig.chest,.09);
