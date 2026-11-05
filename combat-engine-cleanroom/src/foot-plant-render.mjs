@@ -63,7 +63,7 @@ export class FootPlantTracker {
       // Shorten newly planned steps under braking; retain any in-flight target.
       const braking=Math.max(0,this.previousSpeed-speed);
       const predictedSpeed=Math.max(0,speed-braking*swingTicks);
-      const anticipation=clamp(predictedSpeed*swingTicks/60,.08,.4);
+      const anticipation=clamp(predictedSpeed*swingTicks/60,braking>0?0:.08,.4);
       const destination=[f.position.x+dir[0]*(anticipation+.15)+lateral[0]*lateralOffset,
         f.position.z+dir[1]*(anticipation+.15)+lateral[1]*lateralOffset];
       if(dist(leg.plant,destination)>.20){
