@@ -249,3 +249,9 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - This is an **evidence/qualification increment**, not a movement correction. Static COM and braking projections are approximate, and neither can certify realistic dynamic balance. No moveset expansion or visual approval is implied.
 - Run `node --input-type=module -e "import {auditSoloGate} from './src/solo-gate-audit.mjs'; console.log(JSON.stringify(auditSoloGate(),null,2))"` from this directory to print all 24 results. Run `npm test` for regression coverage. Actual browser capture should use `movement-review.html` served from this directory and compare with `HIT-VISUAL-STANDARD.md`.
 - Preserve the 14 original scenarios as a subset of the expanded 24. Any failing scenario blocks creator approval. No release branch changes or automatic deployments.
+
+## 2026-11-05 braking-aware footstep anticipation
+
+- Presentation-only `FootPlantTracker` now carries previous root speed between ticks and shortens **new** swing lookahead when root speed is dropping. Existing airborne foot endpoints, 6/10-tick gait durations, bone lengths, and authoritative `CombatWorld` movement remain unchanged.
+- Added `test/braking-foot-anticipation.test.mjs` to screen shorter braking landings, no midair retargeting, same-tick determinism, and immutable fighter snapshots.
+- This is a small foot-planning increment, **not** proof of balanced walking. The 24-case COM/support qualification and actual browser recording must be rerun. New tests and CI are unverified until executed. Moveset expansion remains blocked pending full-body approval.
