@@ -33,3 +33,13 @@ test('motion qualification does not claim grounded feet are correct before evide
     assert.ok(Number.isFinite(r.maxGroundedFootSlideMeters));
   }
 });
+
+test('planted world-space foot targets expose IK reach mismatch deterministically',()=>{
+  for(const id of ['blue','red'])for(const scenario of INDEPENDENT_MOTION_SCENARIOS){
+    const replay=recordSoloMotion(id,scenario);
+    const a=measureSoloMotion(replay),b=measureSoloMotion(replay);
+    assert.ok(Number.isFinite(a.maxPlantTargetErrorMeters),`${id}:${scenario}`);
+    assert.ok(a.maxPlantTargetErrorMeters>=0);
+    assert.equal(a.maxPlantTargetErrorMeters,b.maxPlantTargetErrorMeters);
+  }
+});
