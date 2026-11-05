@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {recordSoloMotion,INDEPENDENT_MOTION_SCENARIOS} from '../src/movement-qualification.mjs';
 import {auditFullBodyReplay,measureFullBodyFrame,poseCenterOfMass} from '../src/full-body-qualification.mjs';
 
-test('full-body audit covers all sixteen independent movement fixtures deterministically',()=>{
+test('full-body audit covers all eighteen independent movement fixtures deterministically',()=>{
  const names=['blue','red'].flatMap(id=>INDEPENDENT_MOTION_SCENARIOS.map(name=>[id,name]));
- assert.equal(names.length,16);
+ assert.equal(names.length,18);
  for(const [id,name] of names){
   const replay=recordSoloMotion(id,name);
   const a=auditFullBodyReplay(replay),b=auditFullBodyReplay(replay);
