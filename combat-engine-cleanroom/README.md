@@ -219,3 +219,10 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - Added `test/guard-reverse-touchdown.test.mjs` for Blue and Red. It reverses root motion and enables guard while one foot is airborne, asserting that the existing swing keeps its launch tick and touchdown target, the other foot remains planted, targets remain finite, and repeated same-tick rendering is idempotent.
 - This is a **test-only** increment: no CombatWorld authority, moves, graphics, release branch, or landing solver changed. It does not establish natural balance or human visual approval.
 - Verify the complete Node suite and branch CI after the test commit. The 24-case static COM support screen remains previously reported as 6/24; no new full-body measurement or actual-browser video is claimed by this regression.
+
+## Braking support diagnostic (2026-11-05)
+
+- Added `src/braking-support.mjs`: a pure, deterministic world-space stopping projection using current planar velocity and a configurable constant deceleration, reporting projected stop, stopping distance and nearest planted-contact distance.
+- Added `test/braking-support.test.mjs`: five regression groups covering zero speed, signed reverse/lateral/guarded velocity, braking strength, absent contacts and invalid input.
+- **Diagnostic only**: the model does not alter authoritative movement, render poses, foot landing targets, COM estimation or balance. A point-contact proximity check is not a support polygon or a physics validation. The deceleration is a test parameter, not a measured engine value.
+- The 24-case full-body screen remains blocked (last measured static support 6/24); this addition does not justify moveset expansion. Re-run full suite/CI, then connect measured engine deceleration and foot landing history to the diagnostic before comparing real browser recordings.
