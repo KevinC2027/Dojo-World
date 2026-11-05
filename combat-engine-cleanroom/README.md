@@ -242,3 +242,10 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - This is **diagnostic only**. It does not change locomotion, braking, foot planning, hit outcomes, or rendering. A static two-foot segment is not a dynamic balance or biomechanical proof. The 24-case movement gate and actual browser video remain pending; no moveset expansion or release deployment.
 
 2026-11-05: Corrected `auditBrakingReplay` aggregate `maxProjectedGapMeters` and `worstFrame` to use the planted-foot support segment rather than nearest-ankle distance. Added regression for aggregate consistency. Diagnostic only; no locomotion, combat outcomes or visuals changed. Tests and CI pending independent execution; 24-case movement approval remains blocked.
+
+## 2026-11-05 — 24-case solo full-body gate aggregation
+
+- Added `src/solo-gate-audit.mjs` and `test/solo-gate-audit.test.mjs`. The audit executes both fighters across all twelve independent movement scenarios using real `CombatWorld` snapshots and the shared clean-room rig. It combines planted IK reach, bone lengths, floor penetration, static COM support, body continuity and projected braking into a per-case pass/fail report.
+- This is an **evidence/qualification increment**, not a movement correction. Static COM and braking projections are approximate, and neither can certify realistic dynamic balance. No moveset expansion or visual approval is implied.
+- Run `node --input-type=module -e "import {auditSoloGate} from './src/solo-gate-audit.mjs'; console.log(JSON.stringify(auditSoloGate(),null,2))"` from this directory to print all 24 results. Run `npm test` for regression coverage. Actual browser capture should use `movement-review.html` served from this directory and compare with `HIT-VISUAL-STANDARD.md`.
+- Preserve the 14 original scenarios as a subset of the expanded 24. Any failing scenario blocks creator approval. No release branch changes or automatic deployments.
