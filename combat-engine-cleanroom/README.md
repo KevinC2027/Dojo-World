@@ -185,3 +185,10 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - `measureSoloMotion()` now reports `worstJointStep: {meters,tick,joint}` alongside its existing maximum world-space joint displacement. The joint label identifies the exact body point and simulation frame for targeted continuity repair.
 - The regression test checks all fourteen actual-engine solo replays for labeled maxima and deterministic reproduction.
 - This is **measurement only**, not a biomechanical correction. Five previously reported scenarios exceeded the 0.20 m/tick screening threshold; rerun all fourteen to determine current results. Guard entry/exit, planted-foot IK under turns and actual browser video remain unqualified. No move-set expansion until visual approval.
+
+
+## Solo movement: bounded swing stride (2026-11-04)
+
+- `src/foot-plant-render.mjs` now limits each new swing destination to 0.42 m from that foot's actual planted world-space position, rather than allowing a large root-relative target after a reverse or stop. The other foot remains world-locked during the swing; engine rules and movement authority are unchanged.
+- `test/foot-plant-render.test.mjs` adds Blue/Red reverse, stop and guard-transition checks for bounded stride, finite targets and no planted-target drift.
+- This is a targeted **presentation-footstep constraint**, not proof that joints move naturally. The full 14-case qualification and browser footage must be rerun; max joint displacement may still exceed 0.20 m/tick. No moveset expansion or deployment.
