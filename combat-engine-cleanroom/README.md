@@ -296,3 +296,7 @@ The 24-case qualification runner was **executed** against source retrieved from 
 - Tested **uncommitted** alternate fast-gait swing durations of 7, 8, 9, and 10 ticks in the same harness: 8 ticks improved the provisional continuity screen to 23/24 but left Red backward at 0.23321 m/tick; 9/10 ticks introduced substantial planted-target reach failures. No duration change was committed because it did not satisfy all gates.
 
 **Outstanding:** native Node test suite, browser actual-engine capture, creator visual approval and full moving-body support. No moveset expansion or deployment.
+
+## Diagnostic labeling correction (2026-11-05)
+
+The JSON matrix now distinguishes `staticSupportPass` (only planted-contact and approximate COM support checks) from `fullBodyDiagnosticPass` (all full-body flags, including head/COM jumps). Previously the static support label directly mirrored the full-body aggregate, which could misclassify the cause of failure. Added type checks for both. Native npm suite, browser recording, and GitHub CI are still unverified; no approval is inferred.
