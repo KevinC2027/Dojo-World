@@ -58,16 +58,20 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   // Presentation-level linked pelvis, spine and shoulder response to support.
   const sway=attack?0:(footTargets?.bodySway||0)*.055;
   const recoil=f.stunFrames>0?-.09:0;
-  const pelvis=[twist*.14+sway,blue?.84:.96,recoil-.045*load];
-  const chest=[twist*.42+sway*.7,blue?1.31:1.46,recoil+.025*load];
-  const neck=[twist*.45+sway*.45,blue?1.51:1.66,recoil];
-  const head=[twist*.40+sway*.4,blue?1.75:1.89,recoil];
+  // Elevation comes from the gait contact state, not a per-knee pose correction.
+  const postureLift=!attack?(footTargets?.postureLift||0):0;
+  const pelvis=[twist*.14+sway,(blue?.84:.96)+postureLift,recoil-.045*load];
+  const chest=[twist*.42+sway*.7,(blue?1.31:1.46)+postureLift,recoil+.025*load];
+  const neck=[twist*.45+sway*.45,(blue?1.51:1.66)+postureLift,recoil];
+  const head=[twist*.40+sway*.4,(blue?1.75:1.89)+postureLift,recoil];
   const arms=[],legs=[];
   for(const side of [-1,1]){
     const shoulder=anchorArm(side,blue,twist);
     shoulder[0]+=twist*.40+sway*.7;
+    shoulder[1]+=postureLift;
     let wrist=hand(side,blue);
-    if(!attack)wrist=mix(wrist,[side*.18,blue?1.51:1.71,.31],footTargets?.guardWeight??(f.guarding?1:0));
+    wrist[1]+=postureLift;
+    if(!attack)wrist=mix(wrist,[side*.18,(blue?1.51:1.71)+postureLift,.31],footTargets?.guardWeight??(f.guarding?1:0));
     if(attack&&side===strike&&!kick){
       // Chamber draws fist back before extension; hook wraps horizontally, not telescopically.
       const base=hand(side,blue);
@@ -86,6 +90,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
     arms.push({side,shoulder,elbow:arm.joint,hand:arm.end});
     const hip=anchorLeg(side,blue,pelvis[2]);
     hip[0]+=sway;
+    hip[1]+=postureLift;
     let ankle=foot(side,blue);
     const stepping=(!attack&&speed>.25);
     if(stepping){
