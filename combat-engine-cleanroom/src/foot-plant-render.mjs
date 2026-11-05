@@ -13,7 +13,7 @@ function toLocal(f,w,y){const {c,s}=ROT(f.facing),dx=w[0]-f.position.x,dz=w[1]-f
 const foot=(side,blue)=>[side*.24,.035,side===1?(blue?.35:.19):(blue?-.28:-.17)];
 export class FootPlantTracker {
   constructor(){this.reset()}
-  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1];this.guardWeight=0;this.bodySway=0;this.gaitMode='stance';this.gaitBlend=0;this.postureLift=0}
+  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1];this.guardWeight=0;this.bodySway=0;this.gaitMode='stance';this.gaitBlend=0;this.postureLift=0;this.previousSpeed=0}
   update(f,tick){
     if(!Number.isInteger(tick)||tick<0)throw new TypeError('Expected integer engine tick');
     if(!f?.position||!f?.facing)throw new TypeError('Fighter with root and facing required');
@@ -51,7 +51,7 @@ export class FootPlantTracker {
       // Aim toward the root's estimated position at touchdown, rather than
       // using a fixed look-ahead time for both sprint and guarded shuffle.
       // The stride cap below still bounds the reachable target.
-      const anticipation=clamp(speed*swingTicks/60,.08,.4);
+      // When decelerating, shorten the next foot placement rather than chasing\n      // the previous full-speed projection. Preserve any in-flight swing.\n      const braking=Math.max(0,this.previousSpeed-speed);\n      const predictedSpeed=Math.max(0,speed-braking*swingTicks);\n      const anticipation=clamp(predictedSpeed*swingTicks/60,.08,.4);
       const destination=[f.position.x+dir[0]*(anticipation+.15)+lateral[0]*lateralOffset,
         f.position.z+dir[1]*(anticipation+.15)+lateral[1]*lateralOffset];
       if(dist(leg.plant,destination)>.20){
@@ -94,6 +94,7 @@ export class FootPlantTracker {
     // Reach takes precedence over easing; raise only when a supporting leg
     // can reach the floor, lowering the entire skeleton otherwise.
     this.postureLift=Math.min(smoothed,ideal);
+    this.previousSpeed=speed;
     return this.result(f);
   }
   result(f){
