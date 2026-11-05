@@ -13,7 +13,7 @@ function toLocal(f,w,y){const {c,s}=ROT(f.facing),dx=w[0]-f.position.x,dz=w[1]-f
 const foot=(side,blue)=>[side*.24,.035,side===1?(blue?.35:.19):(blue?-.28:-.17)];
 export class FootPlantTracker {
   constructor(){this.reset()}
-  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1]}
+  reset(){this.id=null;this.lastTick=null;this.feet=null;this.swingSide=1;this.lastStart=-1e9;this.lastDir=[0,1];this.guardWeight=0}
   update(f,tick){
     if(!Number.isInteger(tick)||tick<0)throw new TypeError('Expected integer engine tick');
     if(!f?.position||!f?.facing)throw new TypeError('Fighter with root and facing required');
@@ -25,6 +25,7 @@ export class FootPlantTracker {
     // Idempotent when render() is called repeatedly for the same simulation frame.
     if(tick===this.lastTick)return this.result(f);
     this.lastTick=tick;
+    this.guardWeight=clamp(this.guardWeight+(f.guarding?.2:-.2),0,1);
     const vx=f.velocity?.x||0,vz=f.velocity?.z||0,speed=Math.hypot(vx,vz);
     const moving=speed>.24&&!f.action&&!f.guarding&&!f.knockedOut;
     if(moving)this.lastDir=[vx/speed,vz/speed];
@@ -58,6 +59,7 @@ export class FootPlantTracker {
       }
       targets[side]={point:toLocal(f,xy,.035+raise),planted,world:xy.slice()};
     }
+    targets.guardWeight=this.guardWeight;
     return targets;
   }
 }
