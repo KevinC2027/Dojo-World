@@ -18,11 +18,25 @@ const foot=(side,blue)=>[side*.24,.035,side===1?(blue?.35:.19):(blue?-.28:-.17)]
 const hand=(side,blue)=>[side*(blue?.29:.22),blue?1.43:1.62,side===1?.29:.17];
 const anchorArm=(side,blue,rotation)=>[side*.22,blue?1.42:1.57,side*.08+rotation*.045];
 const anchorLeg=(side,blue,shift)=>[side*.14,blue?.84:.96,shift];
+/**
+ * Presentation-only C1 strike envelopes. Contact reaches its endpoint on the
+ * final authoritative active tick, but the arm starts to accelerate during
+ * startup. No combat timing, damage or collision rule is changed.
+ */
 const frameProgress=(f,m)=>{
-  if(!f.action||!m)return {phase:'idle',u:0};
+  if(!f.action||!m)return {phase:'idle',u:0,windup:0,thrust:0,retract:0};
   const a=f.action;
   const duration=a.phase==='startup'?m.startup:a.phase==='active'?m.active:m.recovery;
-  return {phase:a.phase,u:sm(1-C(a.framesLeft/Math.max(1,duration),0,1))};
+  const elapsed=a.phase==='startup'?m.startup-a.framesLeft:
+    a.phase==='active'?m.startup+m.active-a.framesLeft:
+    m.startup+m.active+m.recovery-a.framesLeft;
+  const chamberTick=Math.max(1,Math.round(m.startup*.38));
+  const contactTick=Math.max(chamberTick+2,m.startup+m.active-1);
+  const returnTick=contactTick+Math.max(3,Math.round(m.recovery*.75));
+  return {phase:a.phase,u:sm(1-C(a.framesLeft/Math.max(1,duration),0,1)),
+    windup:sm(elapsed/chamberTick),
+    thrust:sm((elapsed-chamberTick)/(contactTick-chamberTick)),
+    retract:sm((elapsed-contactTick)/(returnTick-contactTick))};
 };
 function constrain(origin,target,max){
   const delta=sub(target,origin),d=len(delta);
@@ -50,13 +64,14 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   const strike=action?strikeSide[action.name]:undefined;
   const kick=action?.name==='frontKick';
   const attack=!!(action&&m);
-  const flow=pr.phase==='startup'?0:pr.phase==='active'?pr.u:pr.phase==='recovery'?1-pr.u:0;
-  // In startup the whole body loads; in active the strike extends; in recovery it returns.
-  const load=attack?(pr.phase==='startup'?pr.u:pr.phase==='active'?1:1-pr.u):0;
-  const extend=sm(flow);
+  // Share continuous anticipation, contact and recovery envelopes across the
+  // limbs and trunk. Avoid hard resets at the startup/active/recovery seams.
+  const load=attack?pr.windup*(1-pr.retract):0;
+  const extend=attack?pr.thrust:0;
+  const retract=attack?pr.retract:0;
   const twist=(strike===-1?-.12:.12)*load;
   // Presentation-level linked pelvis, spine and shoulder response to support.
-  const sway=attack?0:(footTargets?.bodySway||0)*.055;
+  const sway=(footTargets?.bodySway||0)*.055;
   const recoil=f.stunFrames>0?-.09:0;
   // Elevation comes from the gait contact state, not a per-knee pose correction.
   const postureLift=footTargets?.postureLift||0;
@@ -85,14 +100,16 @@ export function fighterRig(f,m,clock=0,footTargets=null){
       // Chamber draws fist back before extension; hook wraps horizontally, not telescopically.
       // Startup inherits the exact stance wrist, including arm counter-swing.
       const base=wrist.slice();
-      const chamber=action.name==='hook'?[side*.48,1.53,-.10]:
-        [side*.27,blue?1.41:1.61,-.10];
-      const contact=action.name==='hook'?[side*.09,1.51,.66]:
-        [side*.20,blue?1.48:1.64,.75];
-      chamber[1]+=postureLift;
+      // The hand must never chamber directly on the shoulder; that forces
+      // a fully folded elbow and unstable IK bend-direction changes.
+      const chamber=action.name==='hook'?[side*.37,1.55,.23]:
+        [side*.25,(blue?1.40:1.58)+postureLift,.34];
+      const contact=action.name==='hook'?[side*.09,1.51,.60]:
+        [side*.20,blue?1.48:1.64,.68];
+      if(action.name==='hook')chamber[1]+=postureLift;
       contact[1]+=postureLift;
-      const loaded=mix(base,chamber,load);
-      wrist=mix(loaded,contact,extend);
+      const loaded=mix(base,chamber,pr.windup);
+      wrist=mix(mix(loaded,contact,extend),base,retract);
     }else if(attack&&side!==strike&&!kick){
       wrist=mix(wrist,[side*.19,(blue?1.56:1.71)+postureLift,.28+forwardLean*.55],load);
     }
@@ -117,7 +134,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
       const neutral=footTargets?.[side]?.point?.slice()||foot(side,blue);
       const chamber=[side*.22,.55,.27];
       const contact=[side*.24,.88,.78];
-      ankle=mix(mix(neutral,chamber,load),contact,extend);
+      ankle=mix(mix(mix(neutral,chamber,pr.windup),contact,extend),neutral,retract);
     }
     const kneePole=[side*.32,.38,.58];
     const leg=solveTwoBone(hip,constrain(hip,ankle,RIG_LENGTHS.thigh+RIG_LENGTHS.shin-.002),
