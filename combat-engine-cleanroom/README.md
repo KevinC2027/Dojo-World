@@ -300,3 +300,7 @@ The 24-case qualification runner was **executed** against source retrieved from 
 ## Diagnostic labeling correction (2026-11-05)
 
 The JSON matrix now distinguishes `staticSupportPass` (only planted-contact and approximate COM support checks) from `fullBodyDiagnosticPass` (all full-body flags, including head/COM jumps). Previously the static support label directly mirrored the full-body aggregate, which could misclassify the cause of failure. Added type checks for both. Native npm suite, browser recording, and GitHub CI are still unverified; no approval is inferred.
+
+## Native CLI verification repair (2026-11-05)
+
+Fixed `src/solo-qualification-matrix.mjs` direct-execution detection to compare normalized absolute file URLs, so `node src/solo-qualification-matrix.mjs` from the project root emits JSON instead of silently doing nothing. Added a Node `spawnSync` smoke test checking the command's exit status and 24-row output. GitHub commits verified; the smoke test and full native suite still require an actual Node runner. No browser footage or creator visual approval was obtained.
