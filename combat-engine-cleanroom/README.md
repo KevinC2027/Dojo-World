@@ -199,3 +199,9 @@ Run the complete regression suite, then inspect range-proxy versus moving-torso 
 - The shared `FootPlantTracker` now starts each swing at phase zero on its first tick, rather than immediately advancing to 10% of the trajectory. This removes a discrete world-space foot-position and lift jump at the planted-to-swing boundary; the bounded 0.42 m stride remains unchanged.
 - Added a Blue/Red regression test asserting exact position continuity and zero added lift at swing onset while the other foot stays planted.
 - This does **not** establish overall IK reach, joint continuity, guard exit, or natural movement. Re-run all 14 actual-engine cases and capture browser playback before creator approval. No movesets or gameplay authority changed.
+
+## Gait foot-choice correction (2026-11-04)
+
+- Fixed a reversed preference comparison in `src/foot-plant-render.mjs`: when both feet have similar root reach, select the alternating preferred swing foot; only override that preference when the opposite foot is more than 0.02 m farther from the root.
+- Added a regression for symmetric stance preference and a strongly lagging opposite foot. This is a presentation foot planner correction; CombatWorld movement authority and all attack rules remain unchanged.
+- Full 24-case movement/full-body screening, `npm test`, CI and browser capture must be rerun. Existing moving COM support failures and user visual approval gate remain open. No new moves or deployment.
