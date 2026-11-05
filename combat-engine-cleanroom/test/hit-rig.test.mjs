@@ -46,8 +46,11 @@ test('stationary support foot remains planted throughout the front kick',()=>{
 test('strike phases create chamber and contact rather than translating unbending arms',()=>{
   const m=moves.red.cross;
   const startup=fighterRig(fighter('red','cross','startup',m.startup),m);
-  const chamber=fighterRig(fighter('red','cross','startup',0),m);
-  const contact=fighterRig(fighter('red','cross','active',0),m);
+  // The presentation chamber is intentionally early in startup so
+  // the striking arm can accelerate into the active hit window smoothly.
+  const chamberTick=Math.max(1,Math.round(m.startup*.38));
+  const chamber=fighterRig(fighter('red','cross','startup',m.startup-chamberTick),m);
+  const contact=fighterRig(fighter('red','cross','active',1),m);
   const u=rig=>rig.arms.find(a=>a.side===1);
   assert.ok(dist(u(startup).hand,u(chamber).hand)>.05);
   assert.ok(dist(u(chamber).hand,u(contact).hand)>.1);
