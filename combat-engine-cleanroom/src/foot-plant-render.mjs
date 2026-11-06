@@ -58,7 +58,14 @@ export class FootPlantTracker {
       // the soon-to-be trailing foot then stays planted until it is out of reach.
       // This is presentation planning only; it never changes CombatWorld motion.
       const brakingRate=Math.max(0,this.previousSpeed-speed);
-      const projectedSpeed=Math.max(0,speed-brakingRate*swingTicks);
+      // Forecast only longitudinal speed gain for a newly launched step.
+      // Sideways reach still uses the established timing; an in-flight
+      // foot keeps its original target, including during braking/reversal.
+      const acceleration=lateralMotion?0:Math.max(0,speed-this.previousSpeed);
+      // Presentation prediction mirrors the current engine speed limits.
+      const speedCeiling=footwork?1.344:3.2;
+      const projectedSpeed=brakingRate>0?Math.max(0,speed-brakingRate*swingTicks):
+        Math.min(speedCeiling,speed+acceleration*swingTicks);
       const projection=(speed+projectedSpeed)*.5*swingTicks/60;
       const futureRoot=[f.position.x+this.lastDir[0]*projection,
         f.position.z+this.lastDir[1]*projection];
@@ -75,8 +82,10 @@ export class FootPlantTracker {
       // The stride cap below still bounds the reachable target.
       // Shorten newly planned steps under braking; retain any in-flight target.
       const braking=Math.max(0,this.previousSpeed-speed);
-      const predictedSpeed=Math.max(0,speed-braking*swingTicks);
-      const anticipation=clamp(predictedSpeed*swingTicks/60,braking>0?0:.08,.4);
+      const predictedSpeed=braking>0?Math.max(0,speed-braking*swingTicks):
+        Math.min(speedCeiling,speed+acceleration*swingTicks);
+      const plannedSpeed=braking>0?predictedSpeed:(speed+predictedSpeed)*.5;
+      const anticipation=clamp(plannedSpeed*swingTicks/60,braking>0?0:.08,.4);
       const destination=[f.position.x+dir[0]*(anticipation+.15)+lateral[0]*lateralOffset,
         f.position.z+dir[1]*(anticipation+.15)+lateral[1]*lateralOffset];
       if(dist(leg.plant,destination)>.20){

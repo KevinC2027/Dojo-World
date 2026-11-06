@@ -87,3 +87,17 @@ test('launching feet remain on their locked ground targets without torso height 
   }
   assert.ok(launches>=200,'must exercise repeated real gait launches');
 });
+
+test('first accelerating forward and backward steps use both feet for each fighter',()=>{
+  for(const id of ['blue','red'])for(const scenario of ['forward','backward']){
+    const frames=recordSoloMotion(id,scenario).frames;
+    const launches=[];
+    for(let i=1;i<frames.length&&launches.length<2;i++)for(const side of [-1,1]){
+      const previous=frames[i-1].footTargets[side],current=frames[i].footTargets[side];
+      if(previous.planted&&!current.planted)launches.push({tick:frames[i].tick,side});
+    }
+    assert.equal(launches.length,2,`${id}:${scenario} needs two steps`);
+    assert.notEqual(launches[0].side,launches[1].side,
+      `${id}:${scenario} repeated the takeoff foot while accelerating`);
+  }
+});
