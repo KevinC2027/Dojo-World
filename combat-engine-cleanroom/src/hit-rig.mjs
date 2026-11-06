@@ -4,7 +4,7 @@
  * No legacy pose source; deterministic pose from clean-room CombatWorld snapshots.
  * Not authoritative collision or biomechanics.
  */
-export const RIG_LENGTHS=Object.freeze({upperArm:.38,forearm:.36,thigh:.53,shin:.48});
+export const RIG_LENGTHS=Object.freeze({upperArm:.42,forearm:.40,thigh:.53,shin:.48});
 const C=(v,a,b)=>Math.max(a,Math.min(b,v));
 const sm=t=>{const v=C(t,0,1);return v*v*(3-2*v)};
 const add=(a,b)=>a.map((v,i)=>v+b[i]);
@@ -15,9 +15,11 @@ const len=a=>Math.hypot(...a);
 const normalize=a=>mul(a,1/(len(a)||1));
 const mix=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
 const foot=(side,blue)=>[side*.24,.035,side===1?(blue?.35:.19):(blue?-.28:-.17)];
-// Lower the free hand targets so walking arms do not fold against the shoulders.
-// The fixed-length 3D solver and all strike envelopes still apply.
-const hand=(side,blue)=>[side*(blue?.29:.22),blue?1.20:1.39,side===1?.29:.17];
+// Rest wrist hangs just below the hip (v1 arm fix, Kev-accepted baseline):
+// the overnight lowering (1.20/1.39) addressed the same shoulder-fold, less
+// far; the hip hang subsumes it and keeps the median arm span well above
+// the 0.275 m regression threshold.
+const hand=(side,blue)=>[side*(blue?.26:.24),blue?.75:.85,.08];
 const anchorArm=(side,blue,rotation)=>[side*.22,blue?1.42:1.57,side*.08+rotation*.045];
 const anchorLeg=(side,blue,shift)=>[side*.14,blue?.84:.96,shift];
 /**
@@ -32,12 +34,12 @@ const frameProgress=(f,m)=>{
   const elapsed=a.phase==='startup'?m.startup-a.framesLeft:
     a.phase==='active'?m.startup+m.active-a.framesLeft:
     m.startup+m.active+m.recovery-a.framesLeft;
-  const chamberTick=Math.max(1,Math.round(m.startup*.38));
+  const chamberTick=Math.max(1,Math.round(m.startup*.8));
   const contactTick=Math.max(chamberTick+2,m.startup+m.active-1);
   const returnTick=contactTick+Math.max(3,Math.round(m.recovery*.75));
   return {phase:a.phase,u:sm(1-C(a.framesLeft/Math.max(1,duration),0,1)),
-    windup:sm(elapsed/chamberTick),
-    thrust:sm((elapsed-chamberTick)/(contactTick-chamberTick)),
+    windup:C(elapsed/chamberTick,0,1),
+    thrust:C((elapsed-chamberTick)/(contactTick-chamberTick),0,1),
     retract:sm((elapsed-contactTick)/(returnTick-contactTick))};
 };
 function constrain(origin,target,max){
@@ -66,7 +68,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   const vx=Number.isFinite(f.velocity?.x)?f.velocity.x:0;
   const vz=Number.isFinite(f.velocity?.z)?f.velocity.z:0;
   const speed=Math.hypot(vx,vz);
-  const gait=Math.sin(clock*6.5)*C(speed/3.2,0,1);
+  const gait=Math.sin(clock*6.5)*C(speed/1.4,0,1);
   const strike=action?strikeSide[action.name]:undefined;
   const kick=action?.name==='frontKick';
   const attack=!!(action&&m);
@@ -84,10 +86,10 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   // The upper body participates in each step: subtle forward lean and arm
   // counter-swing derived from the SAME planted/swing-foot gait state.
   const forwardSpeed=vx*(f.facing?.x||0)+vz*(f.facing?.z||0);
-  const forwardLean=C(forwardSpeed/3.2,-1,1)*(footTargets?.gaitBlend||0)*.038;
+  const forwardLean=C(forwardSpeed/1.4,-1,1)*(footTargets?.gaitBlend||0)*.038;
   const stanceContrast=footTargets?C((footTargets[1]?.point[2]-footTargets[-1]?.point[2])*.9,-1,1):0;
   const freeArms=1-(footTargets?.guardWeight??(f.guarding?1:0));
-  const armCounterSwing=stanceContrast*C(speed/3.2,0,1)*freeArms*.11;
+  const armCounterSwing=stanceContrast*C(speed/1.4,0,1)*freeArms*.11;
   const pelvis=[twist*.14+sway,(blue?.84:.96)+postureLift,recoil-.045*load-forwardLean*.12];
   const chest=[twist*.42+sway*.7,(blue?1.31:1.46)+postureLift,recoil+.025*load+forwardLean*.65];
   const neck=[twist*.45+sway*.45,(blue?1.51:1.66)+postureLift,recoil+forwardLean*.83];
@@ -119,9 +121,9 @@ export function fighterRig(f,m,clock=0,footTargets=null){
       const loaded=mix(base,chamber,pr.windup);
       wrist=mix(mix(loaded,contact,extend),base,retract);
     }else if(attack&&side!==strike&&!kick){
-      wrist=mix(wrist,[side*.19,(blue?1.56:1.71)+postureLift,.28+forwardLean*.55],load);
+      wrist=mix(wrist,[side*.19,(blue?1.30:1.45)+postureLift,.28+forwardLean*.55],load);
     }
-    const elbowPole=[side*.95,blue?-.14:-.04,-.20];
+    const elbowPole=[side*.35,blue?-.85:-.75,-.20];
     const arm=solveTwoBone(shoulder,constrain(shoulder,wrist,RIG_LENGTHS.upperArm+RIG_LENGTHS.forearm-.002),
       RIG_LENGTHS.upperArm,RIG_LENGTHS.forearm,elbowPole);
     arms.push({side,shoulder,elbow:arm.joint,hand:arm.end});

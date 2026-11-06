@@ -11,7 +11,7 @@ export const TICK_RATE = 60;
 const DT = 1 / TICK_RATE;
 const EPS = 1e-9;
 const RADIUS = 0.42;
-const WALK_SPEED = 3.2;
+const WALK_SPEED = 1.4; // realistic walking speed (was 3.2 m/s, a run)
 const GUARD_SPEED_SCALE = 0.42;
 const ATTACK_SPEED_SCALE = 0.18;
 const ACCELERATION = 25;
@@ -34,7 +34,7 @@ export const MOVESETS = Object.freeze({
     frontKick: defineMove(12, 4, 17, 1.72, 15, 21, 'body', 16, 1.4)
   }),
   red: Object.freeze({
-    jab: defineMove(4, 2, 10, 1.25, 6, 9, 'head', 7, 0.52),
+    jab: defineMove(7, 2, 10, 1.25, 6, 9, 'head', 7, 0.52),
     cross: defineMove(9, 3, 18, 1.38, 13, 19, 'head', 15, 1.2),
     hook: defineMove(11, 3, 19, 1.06, 14, 22, 'head', 16, 1.0)
   })

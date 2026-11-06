@@ -28,8 +28,8 @@ export const REVIEW_SCENARIOS = Object.freeze([
   Object.freeze({
     id: 'simultaneous-trade',
     name: 'Simultaneous trade',
-    description: 'Blue straight and Red jab overlap during active frames',
-    startingGap: 1.25,
+    description: 'Blue palm and Red jab overlap during active frames',
+    startingGap: 1.15,
     frames: 80
   }),
   Object.freeze({
@@ -52,8 +52,11 @@ function scenarioInputs(id, zeroBasedStep) {
     if (zeroBasedStep <= 25) blue.guard = true;
   }
   if (id === 'simultaneous-trade') {
-    if (zeroBasedStep === 0) blue.attack = 'straight';
-    if (zeroBasedStep === 1) red.attack = 'jab';
+    // Was straight-vs-jab one frame apart; the jab's startup went 4 -> 7
+    // ticks for hand continuity. Both launch together now: a reactive jab no
+    // longer overlaps the straight, and a palm launched a frame earlier stuns
+    // Red before the jab's first active tick.
+    if (zeroBasedStep === 0) { blue.attack = 'palm'; red.attack = 'jab'; }
   }
   if (id === 'range-miss' && zeroBasedStep === 0) blue.attack = 'palm';
   return { blue, red };
