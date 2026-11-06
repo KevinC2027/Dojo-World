@@ -34,7 +34,7 @@ const planeDistance=(p,a,b)=>{
 const angle=(a,b)=>{const d=a.reduce((s,v,i)=>s+v*b[i],0);return Math.acos(Math.max(-1,Math.min(1,d/(Math.hypot(...a)*Math.hypot(...b)||1))))};
 export function measureFullBodyFrame(frame){
   const {rig,fighter,footTargets}=frame,comLocal=poseCenterOfMass(rig),comWorld=toWorld3(fighter,comLocal);
-  const feet=rig.legs.filter(l=>footTargets?.[l.side]?.planted)
+  const feet=rig.legs.filter(l=>footTargets?.[l.side]?.groundedContact??footTargets?.[l.side]?.planted)
     .map(l=>toWorld3(fighter,l.foot));
   const supportDistance=feet.length?planeDistance(comWorld,feet[0],feet[1]):null;
   const spineA=diff(rig.chest,rig.pelvis),spineB=diff(rig.neck,rig.chest),
@@ -65,7 +65,7 @@ export function auditFullBodyReplay(replay,{supportTolerance=.14,jointTickLimit=
       if(!worstSupport||f.supportDistance>worstSupport.meters){
         const sample=replay.frames[i];
         worstSupport={tick:sample.tick,meters:f.supportDistance,
-          plantedSides:sample.rig.legs.filter(l=>sample.footTargets?.[l.side]?.planted).map(l=>l.side),
+          plantedSides:sample.rig.legs.filter(l=>sample.footTargets?.[l.side]?.groundedContact??sample.footTargets?.[l.side]?.planted).map(l=>l.side),
           gaitMode:sample.footTargets?.gaitMode??null};
       }
       max.supportDistance=Math.max(max.supportDistance,f.supportDistance);

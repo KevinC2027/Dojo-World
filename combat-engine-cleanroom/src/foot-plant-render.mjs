@@ -169,8 +169,12 @@ export class FootPlantTracker {
       // The visual strike leg is airborne even if its stored neutral
       // footprint remains world-anchored for smooth recovery.
       const airborneKick=side===1&&f.action?.name==='frontKick';
+      // At the exact launch tick the foot is still at the world-locked
+      // takeoff point and floor height, even though the swing has been scheduled.
+      // Keep 'planted' as the operational stance state; report contact separately.
+      const groundedContact=!airborneKick&&(planted||(leg.swing&&this.lastTick===leg.swing.begin));
       targets[side]={point:toLocal(f,xy,.035+raise),
-        planted:planted&&!airborneKick,world:xy.slice()};
+        planted:planted&&!airborneKick,groundedContact:!!groundedContact,world:xy.slice()};
     }
     targets.guardWeight=this.guardWeight;
     targets.bodySway=this.bodySway;

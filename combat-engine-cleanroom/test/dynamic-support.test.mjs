@@ -41,3 +41,12 @@ test('invalid balance diagnostic parameters are rejected',()=>{
  assert.throws(()=>measureDynamicSupport(f,{g:0}),RangeError);
  assert.throws(()=>measureDynamicSupport(f,{landingHorizonTicks:-1}),RangeError);
 });
+
+test('launch-frame support includes the foot still touching the floor',()=>{
+ for(const id of ['blue','red']){
+  const replay=recordSoloMotion(id,'forward');
+  const result=measureDynamicSupport(replay);
+  assert.equal(result.rows[1].plantedContacts,2);
+  assert.equal(result.rows[2].plantedContacts,1);
+ }
+});

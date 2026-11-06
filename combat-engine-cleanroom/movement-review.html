@@ -71,14 +71,14 @@ function render(){
  const body=measureFullBodyFrame(e),com=point(f,body.comLocal);
  $('comMarker').setAttribute('cx',com[0]);$('comMarker').setAttribute('cy',com[1]);
  $('comMarker').setAttribute('stroke',body.supportDistance!==null&&body.supportDistance>.14?'#ff554d':'#ffd165');
- const plants=rig.legs.filter(l=>e.footTargets[l.side]?.planted).map(l=>point(f,l.foot));
+ const plants=rig.legs.filter(l=>e.footTargets[l.side]?.groundedContact??e.footTargets[l.side]?.planted).map(l=>point(f,l.foot));
  for(const [idx,id] of ['plantA','plantB'].entries()){const el=$(id),p=plants[idx];el.style.display=p?'':'none';if(p){el.setAttribute('cx',p[0]);el.setAttribute('cy',p[1])}}
  const sl=$('supportLine');sl.style.display=plants.length===2?'':'none';if(plants.length===2)line('supportLine',plants[0],plants[1]);
   const root=point(f,[0,0,0]);$('shadow').setAttribute('cx',root[0]);$('shadow').setAttribute('cy',root[1]);
  $('fighterInk').setAttribute('stroke',f.id==='blue'?'#2b6fd6':'#d6452b');
  $('fighterInk').setAttribute('fill',f.id==='blue'?'#2b6fd6':'#d6452b');
  $('label').textContent=f.id.toUpperCase()+' · '+replay.scenarioId.toUpperCase()+' · FRAME '+e.tick;
- $('modeLabel').textContent='GAIT: '+e.footTargets.gaitMode.toUpperCase()+' · PLANTED FEET: '+rig.legs.filter(l=>e.footTargets[l.side]?.planted).length+' · FIXED-LENGTH IK';
+ $('modeLabel').textContent='GAIT: '+e.footTargets.gaitMode.toUpperCase()+' · GROUND CONTACTS: '+rig.legs.filter(l=>e.footTargets[l.side]?.groundedContact??e.footTargets[l.side]?.planted).length+' · FIXED-LENGTH IK';
  $('frame').textContent=tick+'/'+(replay.frames.length-1);$('scrub').value=tick;
 }
 function load(){

@@ -34,18 +34,18 @@ export function measureDynamicSupport(replay,{g=9.81,landingHorizonTicks=9}={}){
   const speedZ=(next.comWorld[2]-previous.comWorld[2])/(i===0||i===base.length-1?dt:2*dt);
   const omega=Math.sqrt(g/Math.max(.25,current.comWorld[1]));
   const cp=[current.comWorld[0]+speedX/omega,current.comWorld[2]+speedZ/omega];
-  const support=frame.rig.legs.filter(l=>frame.footTargets?.[l.side]?.planted).map(l=>{
+  const support=frame.rig.legs.filter(l=>(frame.footTargets?.[l.side]?.groundedContact??frame.footTargets?.[l.side]?.planted)).map(l=>{
     const p=frame.footTargets[l.side].world;
     return [p[0],p[1]];
   });
-  const landing=frame.rig.legs.filter(l=>!frame.footTargets?.[l.side]?.planted)
+  const landing=frame.rig.legs.filter(l=>!(frame.footTargets?.[l.side]?.groundedContact??frame.footTargets?.[l.side]?.planted))
     .map(l=>frame.footTargets[l.side].world.slice());
   const currentDistance=supportDistance(cp,support);
   // A future touchdown counts only if it actually occurs within the horizon.
   // Track the same side through the next N recorded frames.
   const arriving=[];
   for(const leg of frame.rig.legs){
-    if(frame.footTargets[leg.side]?.planted)continue;
+    if(frame.footTargets[leg.side]?.groundedContact??frame.footTargets[leg.side]?.planted)continue;
     let touchdown=null;
     const end=Math.min(replay.frames.length-1,i+landingHorizonTicks);
     for(let k=i+1;k<=end;k++)if(replay.frames[k].footTargets[leg.side]?.planted){

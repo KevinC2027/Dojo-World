@@ -71,7 +71,23 @@ test('worst support sample identifies the actual frame and planted sides for bot
   const actual=measureFullBodyFrame(frame);
   assert.equal(worst.meters,actual.supportDistance);
   assert.equal(worst.meters,report.max.supportDistance);
-  assert.deepEqual(worst.plantedSides,frame.rig.legs.filter(l=>frame.footTargets[l.side].planted).map(l=>l.side));
+  assert.deepEqual(worst.plantedSides,frame.rig.legs.filter(l=>frame.footTargets[l.side].groundedContact??frame.footTargets[l.side].planted).map(l=>l.side));
   assert.equal(worst.gaitMode,frame.footTargets.gaitMode);
+ }
+});
+
+test('takeoff contact is retained on the launch frame and removed after the foot lifts',()=>{
+ for(const id of ['blue','red']){
+  const frames=recordSoloMotion(id,'forward').frames;
+  const launch=frames[1],next=frames[2];
+  const swing=launch.rig.legs.find(l=>!launch.footTargets[l.side].planted);
+  assert.ok(swing,`${id} must schedule a step`);
+  assert.equal(launch.footTargets[swing.side].groundedContact,true);
+  assert.equal(launch.footTargets[swing.side].point[1],.035);
+  assert.deepEqual(launch.footTargets[swing.side].world,frames[0].footTargets[swing.side].world);
+  assert.equal(measureFullBodyFrame(launch).plantedFeet,2);
+  assert.equal(next.footTargets[swing.side].groundedContact,false);
+  assert.ok(next.footTargets[swing.side].point[1]>.035);
+  assert.equal(measureFullBodyFrame(next).plantedFeet,1);
  }
 });
