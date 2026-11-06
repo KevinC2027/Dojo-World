@@ -69,3 +69,21 @@ test('whole-body height changes remain bounded through stop, reverse and sideste
     }
   }
 });
+
+test('launching feet remain on their locked ground targets without torso height snaps',()=>{
+  let launches=0;
+  for(const id of ['blue','red'])for(const scenario of ['forward','backward','lateral','reverse','stop','guardAdvance','guardRetreat','guardLateral','guardStop']){
+    const frames=recordSoloMotion(id,scenario).frames;
+    for(const f of frames)for(const leg of f.rig.legs){
+      const target=f.footTargets[leg.side];
+      if(target.groundedContact&&!target.planted){
+        launches++;
+        assert.ok(Math.abs(leg.foot[1]-target.point[1])<1e-8,
+          `${id}:${scenario}:${f.tick}:${leg.side} launch ankle rose above the target`);
+        assert.ok(Math.hypot(...leg.foot.map((v,i)=>v-target.point[i]))<1e-8,
+          `${id}:${scenario}:${f.tick}:${leg.side} launch foot escaped its locked target`);
+      }
+    }
+  }
+  assert.ok(launches>=200,'must exercise repeated real gait launches');
+});

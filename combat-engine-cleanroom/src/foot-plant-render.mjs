@@ -127,17 +127,21 @@ export class FootPlantTracker {
         const limit=p[1]+Math.sqrt(Math.max(0,1.001*1.001-dx*dx-dz*dz))-baseHeight;
         landingBound=Math.min(landingBound,limit);
       }
-      if(!fdata[side].planted)continue;
+      // A scheduled swing is still load-bearing on its exact launch tick.
+      // Include that world-locked ankle when limiting full-body height.
+      if(!fdata[side].groundedContact)continue;
       const p=fdata[side].point,hipX=side*.14+this.bodySway*.055;
       const dx=p[0]-hipX,dz=p[2];
       const limit=p[1]+Math.sqrt(Math.max(0,1.001*1.001-dx*dx-dz*dz))-baseHeight;
       bound=Math.min(bound,limit);
       const otherSwing=this.feet[-side].swing;
-      if(moving&&otherSwing){
+      if(moving){
         // Prepare for the planted leg's expected reach over the next few
         // ticks, so the torso does not have to drop abruptly as the root
         // travels past that foot. Contact itself remains world-anchored.
-        const horizon=Math.min(5,otherSwing.begin+otherSwing.duration-tick);
+        // At double-support boundaries anticipate the next tick too, so the
+        // body starts lowering before a just-planted foot is selected to swing.
+        const horizon=otherSwing?Math.min(5,otherSwing.begin+otherSwing.duration-tick):1;
         const deceleration=Math.max(0,this.previousSpeed-speed);
         let travel=0;
         for(let k=1;k<=horizon;k++)travel+=Math.max(0,speed-deceleration*k)/60;
