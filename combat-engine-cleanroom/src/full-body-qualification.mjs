@@ -57,10 +57,17 @@ export function auditFullBodyReplay(replay,{supportTolerance=.14,jointTickLimit=
   if(!replay?.frames?.length)throw new TypeError('Replay frames required');
   const frames=replay.frames.map(measureFullBodyFrame);
   const flags=[],max={supportDistance:0,spineAngle:0,headStep:0,comStep:0};
+  let worstSupport=null;
   for(let i=0;i<frames.length;i++){
     const f=frames[i];
     if(!f.finite)flags.push({tick:i,code:'nonfinite'});
     if(f.plantedFeet&&f.supportDistance!==null){
+      if(!worstSupport||f.supportDistance>worstSupport.meters){
+        const sample=replay.frames[i];
+        worstSupport={tick:sample.tick,meters:f.supportDistance,
+          plantedSides:sample.rig.legs.filter(l=>sample.footTargets?.[l.side]?.planted).map(l=>l.side),
+          gaitMode:sample.footTargets?.gaitMode??null};
+      }
       max.supportDistance=Math.max(max.supportDistance,f.supportDistance);
       if(f.supportDistance>supportTolerance)
         flags.push({tick:i,code:'unsupported_com',meters:f.supportDistance});
@@ -77,5 +84,5 @@ export function auditFullBodyReplay(replay,{supportTolerance=.14,jointTickLimit=
   }
   const counts=Object.fromEntries([...new Set(flags.map(f=>f.code))].map(code=>[code,flags.filter(f=>f.code===code).length]));
   return {fighter:replay.fighterId,scenario:replay.scenarioId,frames:frames.length,
-    max,counts,flagged:flags.length,firstFlags:flags.slice(0,12),passed:flags.length===0};
+    max,worstSupport,counts,flagged:flags.length,firstFlags:flags.slice(0,12),passed:flags.length===0};
 }

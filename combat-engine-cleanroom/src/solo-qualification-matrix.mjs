@@ -29,6 +29,7 @@ export function buildSoloQualificationMatrix(){
       plantedAnkleStepMeters:motion.maxPlantedAnkleStepMeters,
       penetrationCount:motion.footPenetrations,
       staticSupportDistanceMeters:full.max.supportDistance,
+      worstStaticSupport:full.worstSupport,
       captureDistanceMeters:dynamic.maxCurrentCaptureErrorMeters,
       anticipatedCaptureDistanceMeters:dynamic.maxAnticipatedCaptureErrorMeters,
       dynamicFinite:dynamic.finite,

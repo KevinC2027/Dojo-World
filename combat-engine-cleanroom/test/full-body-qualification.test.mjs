@@ -60,3 +60,18 @@ test('guard release does not cause a single-frame hand teleport',()=>{
   assert.ok(maxStep<.09,'guard release hand motion should be blended, not hard-switched');
  }
 });
+
+test('worst support sample identifies the actual frame and planted sides for both fighters',()=>{
+ for(const id of ['blue','red'])for(const scenario of INDEPENDENT_MOTION_SCENARIOS){
+  const replay=recordSoloMotion(id,scenario),report=auditFullBodyReplay(replay);
+  const worst=report.worstSupport;
+  assert.ok(worst,`${id}:${scenario} lacks grounded samples`);
+  const frame=replay.frames.find(f=>f.tick===worst.tick);
+  assert.ok(frame);
+  const actual=measureFullBodyFrame(frame);
+  assert.equal(worst.meters,actual.supportDistance);
+  assert.equal(worst.meters,report.max.supportDistance);
+  assert.deepEqual(worst.plantedSides,frame.rig.legs.filter(l=>frame.footTargets[l.side].planted).map(l=>l.side));
+  assert.equal(worst.gaitMode,frame.footTargets.gaitMode);
+ }
+});
