@@ -53,12 +53,15 @@ test('guard absorbs most strain but costs stamina', () => {
 });
 
 test('simultaneous valid active frames allow trades', () => {
-  const w = new CombatWorld({ startingGap: 1.25 });
-  // Blue straight becomes active on tick 5, Red jab on tick 5 if launched one frame later.
+  const w = new CombatWorld({ startingGap: 1.15 });
+  // Blue palm and Red jab both become active on tick 8 when launched together.
+  // (Was straight-vs-jab one frame apart; the jab's startup went 4 -> 7 ticks
+  // for hand continuity, so a reactive jab no longer overlaps the straight's
+  // ticks 6-7 — and a palm launched a frame earlier lands first and stuns Red
+  // before the jab's first active tick. Same-tick launch keeps the trade.)
   let events = [];
-  events.push(...w.step({ blue: { attack: 'straight' } }));
-  events.push(...w.step({ red: { attack: 'jab' } }));
-  events.push(...stepN(w, 5));
+  events.push(...w.step({ blue: { attack: 'palm' }, red: { attack: 'jab' } }));
+  events.push(...stepN(w, 10));
   assert.equal(events.filter(x => x.type === 'hit').length, 2);
   assert.ok(w.fighters.blue.condition.headStrain > 0);
   assert.ok(w.fighters.red.condition.headStrain > 0);

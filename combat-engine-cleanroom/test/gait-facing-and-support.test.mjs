@@ -32,8 +32,12 @@ test('ten-second fast and guarded footwork retains reachable planted feet',()=>{
     }
     const m=measureSoloMotion({fighterId:id,scenarioId:'extendedFootwork',frames});
     const name=`${id}:guard=${guard}:move=${move.x},${move.z}`;
-    assert.ok(m.horizontalTravelMeters>10,name+' did not exercise travel');
-    assert.ok(m.supportTransfers>40,name+' did not exercise support transfer');
+    // Exercise bounds follow the realistic-stride cadence (1.4 m/s walk,
+    // 0.42 guard speed scale), not the old 3.2 m/s shuffle: unguarded
+    // covers ~14 m in 10 s at ~2.5 steps/s; guarded covers ~5.9 m
+    // (0.588 m/s) with 10-tick footwork swings.
+    assert.ok(m.horizontalTravelMeters>(guard?5:10),name+' did not exercise travel');
+    assert.ok(m.supportTransfers>(guard?30:20),name+' did not exercise support transfer');
     assert.ok(m.maxPlantedAnkleStepMeters<.012,name+' planted ankle slid');
     assert.ok(m.maxPlantTargetErrorMeters<.05,name+' planted target out of reach');
     assert.ok(m.maxBoneErrorMeters<1e-8,name+' bone length changed');
@@ -42,20 +46,53 @@ test('ten-second fast and guarded footwork retains reachable planted feet',()=>{
 });
 
 test('changing direction during a step preserves its target and support anchor',()=>{
+  // The mid-swing re-aim (knee-straightening work, Nov 5) deliberately moves
+  // an UNREACHABLE endpoint toward the forecast touchdown root, rate-limited
+  // to 0.05 m/tick so the foot curves instead of snapping. A 90-degree turn
+  // strands the launch target, so the endpoint moves — but the swing is never
+  // restarted, the support foot never teleports, and each tick's move stays
+  // within the re-aim rate limit. That is what this test now asserts.
   for(const id of ['blue','red']){
     const tracker=new FootPlantTracker();
     const fighter={id,position:{x:0,y:0,z:0},velocity:{x:0,z:0},
       facing:{x:1,z:0},guarding:false,action:null,knockedOut:false};
     tracker.update(fighter,0);
-    fighter.velocity={x:3.2,z:0};
-    const first=tracker.update(fighter,1),side=[-1,1].find(s=>!first[s].planted);
+    // Walk at a steady 1.4 m/s: the launch gate holds a swing until speed
+    // settles, so a one-tick 0 -> 3.2 jump launches nothing by design.
+    fighter.position.x+=1.4/60;fighter.velocity={x:1.4,z:0};
+    tracker.update(fighter,1);
+    fighter.position.x+=1.4/60;
+    const first=tracker.update(fighter,2),side=[-1,1].find(s=>!first[s].planted);
     assert.notEqual(side,undefined);
-    const launch=structuredClone(tracker.feet[side].swing),anchor=first[-side].world;
-    fighter.position.z+=3.2/60;fighter.velocity={x:0,z:3.2};
-    const next=tracker.update(fighter,2);
-    assert.deepEqual(tracker.feet[side].swing,launch);
+    const launch=structuredClone(tracker.feet[side].swing),anchor=first[-side].world.slice();
+    // 90-degree turn mid-swing.
+    fighter.position.z+=1.4/60;fighter.velocity={x:0,z:1.4};
+    const next=tracker.update(fighter,3);
+    assert.equal(tracker.feet[side].swing.begin,launch.begin,'turn must not restart the swing');
+    assert.equal(tracker.feet[side].swing.duration,launch.duration,'in-flight duration is inherited');
+    const moved=Math.hypot(tracker.feet[side].swing.end[0]-launch.end[0],
+      tracker.feet[side].swing.end[1]-launch.end[1]);
+    assert.ok(moved<=.05+1e-9,`re-aim moves the endpoint at most 0.05 m/tick, moved ${moved}`);
     assert.equal(next[-side].planted,true);
     assert.deepEqual(next[-side].world,anchor);
+    // Run the swing to touchdown: it is never restarted, the endpoint never
+    // jumps, and the foot lands within leg reach of the root.
+    let prevEnd=tracker.feet[side].swing.end.slice();
+    for(let tick=4;tick<=40;tick++){
+      fighter.position.z+=1.4/60;
+      const frame=tracker.update(fighter,tick);
+      const sw=tracker.feet[side].swing;
+      if(!sw)break;
+      assert.equal(sw.begin,launch.begin,'turn must not restart the swing');
+      const step=Math.hypot(sw.end[0]-prevEnd[0],sw.end[1]-prevEnd[1]);
+      assert.ok(step<=.05+1e-9,`endpoint step ${step} exceeds the 0.05 m/tick re-aim limit`);
+      prevEnd=sw.end.slice();
+      assert.ok(frame[side].point.every(Number.isFinite));
+    }
+    assert.equal(tracker.feet[side].swing,null,'swing must reach touchdown');
+    const landed=tracker.feet[side].plant;
+    assert.ok(Math.hypot(landed[0]-fighter.position.x,landed[1]-fighter.position.z)<1.0,
+      'landing must stay within leg reach of the root');
   }
 });
 
@@ -85,7 +122,11 @@ test('launching feet remain on their locked ground targets without torso height 
       }
     }
   }
-  assert.ok(launches>=200,'must exercise repeated real gait launches');
+  // Cadence-dependent floor: the realistic 24-tick stride launches ~5x per
+  // 121-frame scenario (~112 across the matrix), where the old 7-tick
+  // shuffle launched ~3x as often. 50 still guards against a vacuous pass
+  // (no launches exercised) without encoding the old cadence.
+  assert.ok(launches>=50,'must exercise repeated real gait launches');
 });
 
 test('first accelerating forward and backward steps use both feet for each fighter',()=>{

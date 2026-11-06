@@ -6,15 +6,21 @@ const fighter=(speed)=>({
   id:'blue',position:{x:0,z:0},facing:{x:0,z:1},
   velocity:{x:speed,z:0},guarding:false,action:null,knockedOut:false
 });
-function launch(previousSpeed){
+function launch(previousSpeed,speed=1.5){
   const tracker=new FootPlantTracker();
   tracker.update(fighter(0),0);
   tracker.previousSpeed=previousSpeed;
-  tracker.update(fighter(1.5),1);
+  tracker.update(fighter(speed),1);
   return tracker;
 }
 test('decelerating root requests a shorter future swing than steady speed',()=>{
-  const steady=launch(1.5),braking=launch(3);
+  // Deceleration is gradual here (1.54 -> 1.5 m/s in one tick). The tracker
+  // holds a new swing until speed settles (per-tick change < 0.05 m/s), so a
+  // one-tick 3 -> 1.5 m/s jump launches nothing at tick 1 by design — that
+  // old fixture assumed the 3.2 m/s cadence's immediate launch. A gentle
+  // brake is how the engine actually decelerates, and it is the live path
+  // for the braking forecast below.
+  const steady=launch(1.5),braking=launch(1.54);
   const steadySwing=Object.values(steady.feet).find(leg=>leg.swing)?.swing;
   const brakingSwing=Object.values(braking.feet).find(leg=>leg.swing)?.swing;
   assert.ok(steadySwing&&brakingSwing);
