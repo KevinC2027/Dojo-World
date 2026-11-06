@@ -67,7 +67,9 @@ export class FootPlantTracker {
         ?-this.swingSide:this.swingSide,leg=this.feet[side],dir=this.lastDir;
       // Keep each foot on its anatomical side of the fighter. The travel
       // direction can reverse or become lateral without swapping left/right.
-      const rotation=ROT(f.facing),lateral=[rotation.c,-rotation.s],lateralOffset=side*.20;
+      // A modestly narrower Red landing lane reduces measured support offset
+      // without moving an already planted foot or retargeting an in-flight step.
+      const rotation=ROT(f.facing),lateral=[rotation.c,-rotation.s],lateralOffset=side*(f.id==='red'?.18:.20);
       // Aim toward the root's estimated position at touchdown, rather than
       // using a fixed look-ahead time for both sprint and guarded shuffle.
       // The stride cap below still bounds the reachable target.
