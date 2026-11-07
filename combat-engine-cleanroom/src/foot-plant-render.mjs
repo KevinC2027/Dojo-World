@@ -71,23 +71,29 @@ export class FootPlantTracker {
     const stepLength=lateralMotion?.45:.55;
     const swingTicks=footwork?10:Math.max(8,Math.min(40,Math.round(stepLength/Math.max(cadenceSpeed,.3)*60)));
     const strideCap=footwork?.52:(lateralMotion?.65:.75);
-    // Average root speed over the next swingTicks ticks. The engine gains a
-    // fixed amount per tick, so it reaches the ceiling in a few ticks and
-    // cruises the rest — the linear (speed+predicted)/2 average understates
-    // the travel by ~0.11 m during the ramp (measured: a second-step landing
-    // 0.04 m ahead of the root at touchdown instead of v1's 0.27 m, so the
-    // plant went 0.52 m stale by the next handoff and the leg-reach bound
-    // sank the pelvis to 0.88 with 63 deg stance flex). At cruise
-    // (acceleration 0) this reduces to the current speed; lateral keeps
-    // acceleration 0 by design, so lateral is unaffected.
-    const avgSpeedOverSwing=()=>{
+    // Average root speed over the next `horizon` ticks (default the full
+    // swing). The engine gains a fixed amount per tick, so it reaches the
+    // ceiling in a few ticks and cruises the rest — the linear
+    // (speed+predicted)/2 average understates the travel by ~0.11 m during
+    // the ramp (measured: a second-step landing 0.04 m ahead of the root at
+    // touchdown instead of v1's 0.27 m, so the plant went 0.52 m stale by
+    // the next handoff and the leg-reach bound sank the pelvis to 0.88 with
+    // 63 deg stance flex). At cruise (acceleration 0) this reduces to the
+    // current speed; lateral keeps acceleration 0 by design, so lateral is
+    // unaffected. The re-aim below passes the remaining ticks so its
+    // futureRoot uses the same ramp-aware travel instead of the
+    // instantaneous speed, which underestimated ramp travel and fired
+    // spuriously on the first step of a walk from rest (distFR 0.66 at
+    // tick 1, dragging the endpoint 0.05 m back and landing the first step
+    // at 0.20 m instead of 0.30 m).
+    const avgSpeedOverSwing=(horizon=swingTicks)=>{
       if(acceleration<=0)return speed;
       if(speed>=speedCeiling)return speedCeiling;
       const rawN=Math.ceil((speedCeiling-speed)/acceleration);
-      if(rawN>swingTicks)return speed+acceleration*(swingTicks+1)/2;
+      if(rawN>horizon)return speed+acceleration*(horizon+1)/2;
       const n=rawN;
       const ramp=(n-1)*speed+acceleration*(n-1)*n/2;
-      return (ramp+(swingTicks-n+1)*speedCeiling)/swingTicks;
+      return (ramp+(horizon-n+1)*speedCeiling)/horizon;
     };
     if(moving)this.lastDir=[vx/speed,vz/speed];
     const active=Object.values(this.feet).some(leg=>leg.swing);
@@ -245,7 +251,33 @@ export class FootPlantTracker {
         const latDest=(destination[0]-f.position.x)*lateral[0]+(destination[1]-f.position.z)*lateral[1];
         bounded=[f.position.x+fwd[0]*along+lateral[0]*latDest,
           f.position.z+fwd[1]*along+lateral[1]*latDest];
-        leg.swing={start:leg.plant.slice(),end:bounded,begin:tick,duration:swingTicks};
+        // A stride-cap clip shortens the step: the launch aim is pulled
+        // back, but the swing still runs its full nominal duration, so
+        // the root travels the full ~0.53 m past the clipped landing and
+        // the foot lands almost under the body (measured: the restart's
+        // first backward step lands 0.07 m behind the root, knee 71 deg,
+        // pelvis 0.85 m — the lead leg never extends; the stale stance
+        // foot is also left 0.49 m behind, which is what drags the pelvis
+        // down). Shorten THIS swing so the root travels less and the
+        // standard 0.30 m landing offset is preserved: duration =
+        // (clipped aim - 0.30) / forecastSpeed. First launch after a full
+        // stop ONLY (firstLaunch): in steady walking and in the
+        // braking/reversal/guard-change fixtures the cap clips too, but
+        // there the nominal duration is the intended behaviour and the
+        // tests assert it — shortening those swings moved their touchdown
+        // ticks (5 failures, reverted by this restriction). Longitudinal,
+        // non-braking first launches only (braking already shortens the
+        // aim by design); never lengthen a swing, never below the
+        // 8-tick floor. In steady walking the cap never binds, so this
+        // changes nothing there.
+        let swingDuration=swingTicks;
+        if(delta>maxStride&&firstLaunch&&!lateralMotion&&braking===0){
+          const alongTravel=(bounded[0]-f.position.x)*dir[0]+(bounded[1]-f.position.z)*dir[1];
+          if(alongTravel>.30){
+            swingDuration=clamp(Math.round((alongTravel-.30)/Math.max(forecastSpeed,.3)*60),8,swingTicks);
+          }
+        }
+        leg.swing={start:leg.plant.slice(),end:bounded,begin:tick,duration:swingDuration};
         if(toeOffEmergency){
           const other=this.feet[-side].swing;
           if(other&&other.begin+other.duration-tick>8)other.duration=tick-other.begin+8;
@@ -279,7 +311,12 @@ export class FootPlantTracker {
       const leg=this.feet[side],sw=leg.swing;
       if(!sw)continue;
       const remaining=Math.max(0,sw.begin+sw.duration-tick);
-      const travel=speed*remaining/60;
+      // Ramp-aware travel over the remaining ticks (see avgSpeedOverSwing):
+      // the instantaneous speed underestimates how far the root will get
+      // during a ramp, so the old futureRoot fired the re-aim spuriously on
+      // a first step from rest. At cruise or while braking this reduces
+      // exactly to speed*remaining/60, so steady walking is unchanged.
+      const travel=avgSpeedOverSwing(remaining)*remaining/60;
       const futureRoot=[f.position.x+this.lastDir[0]*travel,
         f.position.z+this.lastDir[1]*travel];
       const alongTravel=(sw.end[0]-f.position.x)*this.lastDir[0]+(sw.end[1]-f.position.z)*this.lastDir[1];
