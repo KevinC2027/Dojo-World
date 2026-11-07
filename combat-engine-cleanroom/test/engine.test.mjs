@@ -35,6 +35,106 @@ test('blue palm has startup, makes exactly one contact then recovers', () => {
   assert.equal(w.fighters.red.condition.headStrain, MOVESETS.blue.palm.impact);
 });
 
+test('blue hook has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ blue: { attack: 'hook' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.red.condition.headStrain, MOVESETS.blue.hook.impact);
+});
+
+test('red uppercut has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ red: { attack: 'uppercut' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.blue.condition.headStrain, MOVESETS.red.uppercut.impact);
+});
+
+test('red leadUppercut has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ red: { attack: 'leadUppercut' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.blue.condition.headStrain, MOVESETS.red.leadUppercut.impact);
+});
+
+test('red overhand has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ red: { attack: 'overhand' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.blue.condition.headStrain, MOVESETS.red.overhand.impact);
+});
+
+test('blue roundhouse has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ blue: { attack: 'roundhouse' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.red.condition.bodyStrain, MOVESETS.blue.roundhouse.impact);
+});
+
+test('red frontKick has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ red: { attack: 'frontKick' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.blue.condition.bodyStrain, MOVESETS.red.frontKick.impact);
+});
+
+test('guard blocks the new hand strikes', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  let events = [];
+  events.push(...w.step({ blue: { attack: 'hook' }, red: { guard: true } }));
+  events.push(...stepN(w, 14, { red: { guard: true } }));
+  assert.equal(events.filter(x => x.type === 'blocked').length, 1);
+  assert.equal(events.filter(x => x.type === 'hit').length, 0);
+  assert.ok(w.fighters.red.condition.headStrain < 3);
+});
+
+test('guard blocks the lead uppercut', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  let events = [];
+  events.push(...w.step({ red: { attack: 'leadUppercut' }, blue: { guard: true } }));
+  events.push(...stepN(w, 15, { blue: { guard: true } }));
+  assert.equal(events.filter(x => x.type === 'blocked').length, 1);
+  assert.equal(events.filter(x => x.type === 'hit').length, 0);
+  assert.ok(w.fighters.blue.condition.headStrain < 3);
+});
+
+test('guard blocks the overhand', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  let events = [];
+  events.push(...w.step({ red: { attack: 'overhand' }, blue: { guard: true } }));
+  events.push(...stepN(w, 17, { blue: { guard: true } }));
+  assert.equal(events.filter(x => x.type === 'blocked').length, 1);
+  assert.equal(events.filter(x => x.type === 'hit').length, 0);
+  assert.ok(w.fighters.blue.condition.headStrain < 3);
+});
+
+test('guard blocks the new kicks', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  let events = [];
+  events.push(...w.step({ blue: { attack: 'roundhouse' }, red: { guard: true } }));
+  events.push(...stepN(w, 18, { red: { guard: true } }));
+  assert.equal(events.filter(x => x.type === 'blocked').length, 1);
+  assert.equal(events.filter(x => x.type === 'hit').length, 0);
+  assert.ok(w.fighters.red.condition.bodyStrain < 3);
+});
+
 test('attack out of range cannot connect', () => {
   const w = new CombatWorld({ startingGap: 9 });
   const events = attackThenResolve(w, 'red', 'cross');

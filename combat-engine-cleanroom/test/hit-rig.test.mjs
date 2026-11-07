@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {fighterRig,solveTwoBone,RIG_LENGTHS} from '../src/hit-rig.mjs';
 const dist=(a,b)=>Math.hypot(...a.map((x,i)=>x-b[i]));
 const moves={
-  blue:{palm:{startup:7,active:3,recovery:12},straight:{startup:5,active:2,recovery:13},frontKick:{startup:12,active:4,recovery:17}},
-  red:{jab:{startup:4,active:2,recovery:10},cross:{startup:9,active:3,recovery:18},hook:{startup:11,active:3,recovery:19}}
+  blue:{palm:{startup:7,active:3,recovery:12},straight:{startup:5,active:2,recovery:13},hook:{startup:10,active:3,recovery:16},frontKick:{startup:12,active:4,recovery:17},roundhouse:{startup:13,active:4,recovery:18}},
+  red:{jab:{startup:4,active:2,recovery:10},cross:{startup:9,active:3,recovery:18},hook:{startup:11,active:3,recovery:19},uppercut:{startup:12,active:3,recovery:20},leadUppercut:{startup:10,active:3,recovery:17},overhand:{startup:12,active:3,recovery:21},frontKick:{startup:11,active:4,recovery:16}}
 };
 function fighter(id,move,phase,framesLeft){
   return {id,velocity:{x:0,z:0},stunFrames:0,guarding:false,
@@ -32,16 +32,18 @@ test('neutral, guard and every strike phase maintain constant segment lengths',(
       }
   }
 });
-test('stationary support foot remains planted throughout the front kick',()=>{
-  const m=moves.blue.frontKick;
-  const base=fighterRig(fighter('blue'),null);
+test('stationary support foot remains planted throughout every kick',()=>{
+ for(const [id,move] of [['blue','frontKick'],['blue','roundhouse'],['red','frontKick']]){
+  const m=moves[id][move];
+  const base=fighterRig(fighter(id),null);
   const initial=base.legs.find(l=>l.side===-1).foot;
   for(const phase of ['startup','active','recovery'])
     for(let i=0;i<=m[phase];i++){
-      const rig=fighterRig(fighter('blue','frontKick',phase,m[phase]-i),m,i/60);
+      const rig=fighterRig(fighter(id,move,phase,m[phase]-i),m,i/60);
       const foot=rig.legs.find(l=>l.side===-1).foot;
-      assert.ok(dist(foot,initial)<1e-10,'support ankle must stay fixed during isolated kick');
+      assert.ok(dist(foot,initial)<1e-10,id+':'+move+' support ankle must stay fixed during isolated kick');
     }
+ }
 });
 test('strike phases create chamber and contact rather than translating unbending arms',()=>{
   const m=moves.red.cross;

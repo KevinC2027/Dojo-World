@@ -8,8 +8,8 @@ const fighter=(x=0,forward=1)=>({
 });
 const defender=x=>({position:{x,y:0,z:0}});
 
-test('all six moves have deterministic finite endpoints and limb labels',()=>{
-  for(const name of ['palm','straight','frontKick','jab','cross','hook']){
+test('all ten strikes have deterministic finite endpoints and limb labels',()=>{
+  for(const name of ['palm','straight','frontKick','roundhouse','jab','cross','hook','uppercut','leadUppercut','overhand']){
     const a=strikeEndpoint(fighter(),name,.5);
     assert.ok(Object.values(a).every(Number.isFinite));
     assert.deepEqual(a,strikeEndpoint(fighter(),name,.5));
@@ -18,7 +18,7 @@ test('all six moves have deterministic finite endpoints and limb labels',()=>{
 });
 
 test('endpoint is continuous at active-phase boundaries and returns to guard',()=>{
-  for(const name of ['palm','straight','frontKick','jab','cross','hook']){
+  for(const name of ['palm','straight','frontKick','roundhouse','jab','cross','hook','uppercut','leadUppercut','overhand']){
     const f=fighter();
     assert.deepEqual(strikeEndpoint(f,name,0),strikeEndpoint(f,name,1));
     const before=strikeEndpoint(f,name,.001),start=strikeEndpoint(f,name,0);
