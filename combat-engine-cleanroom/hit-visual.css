@@ -1,0 +1,25 @@
+/* HIT Visual Standard 01 — single art direction for playable preview and review surfaces.
+   Decorative only. Never changes engine/combat authority. */
+:root{--bg:#0c0e10;--muted:#b9ada0;--edge:#665447;--blue:#2b6fd6;--red:#d6452b}
+html,body{background:radial-gradient(ellipse at 65% -15%,#362218 0,#0c0e10 55%);color:#f7eddd}
+main{max-width:1180px}
+header{background:#161718;border-left:4px solid #de7950;padding:10px 13px;border-bottom:1px solid #65503f}
+h1{color:#f4e9d9;font-weight:950;letter-spacing:.08em}
+h1::first-letter{color:#e87552}
+small,.sub,p.helper{color:#c7b8a7}
+.tag{border-color:#8e6246;color:#f4c38b;background:#2c211b}
+.fighter,.group,.review-panel{background:#1a1c1d;border-color:#58493d}
+.fighter.blue b{color:#72a8fd}.fighter.red b{color:#ff8464}
+.mid{color:#dbb080}
+button{background:#3b302a;border-color:#81644e;color:#f6ebdc}
+button:active,button.held{background:#b35c3f}
+button[data-attack]{background:#584033;border-color:#ae724b}
+button[data-hold="guard"]{background:#4b4938;border-color:#a69a5e}
+#status{color:#e5c69c}
+#notice{background:#161616dc;border-color:#9b6b4a;color:#f1d6b4}
+.arena{background:#d8a982 url('./hit-fuji.svg') center /cover no-repeat;border:1px solid #a3744e}
+.arena::after{content:"HIT // DOJO WORLD · GOLDEN-HOUR FIELD STAGE";position:absolute;bottom:7px;right:10px;pointer-events:none;color:#ebcaa0d0;background:#1118;padding:3px 6px;font:700 9px system-ui;letter-spacing:.11em;z-index:3}
+#stage{z-index:1}
+#fallback{z-index:2;background:#12182177}
+.review-panel select,.review-panel input,.review-panel textarea{background:#231f1c;color:#f3e7d8;border-color:#775941}
+@media(max-width:520px){.arena::after{font-size:8px;max-width:60%;text-align:right}}

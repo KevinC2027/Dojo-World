@@ -1,6 +1,17 @@
-# Dojo World — Clean-room Combat Engine v0.2
+# Dojo World — Clean-room Combat Engine v0.10
 
 This is an entirely new implementation. No source or implementation from the previous Dojo World project has been read, imported, copied, or reused. The original code remains unchanged on main. This work is isolated in the cleanroom/combat-engine-v1 branch, combat-engine-cleanroom/ directory.
+
+## Review Station alpha (2026-11-04)
+
+A separate Review Station is now committed on the **development branch only**:
+- `review.html` — fixed-scenario 3D replay with frame-by-frame scrubbing, playback speed, and copyable feedback.
+- `review-lite.html` — SVG compatibility replay without WebGL, as a fallback for mobile devices.
+- `src/review.mjs` — deterministically records actual engine steps for palm contact, guarded cross, simultaneous trade, and range miss.
+- `test/review.test.mjs` and `test/review-lite.test.mjs` — deterministic fixtures, parser/static UI contracts and feedback provenance.
+- `REVIEW-STATION.md` — Cloudflare hosting guide and acceptance gates.
+
+**No gameplay authority has changed:** damage remains range/facing based and contact damage is still range based. These review files have been committed but the new tests, mobile browser operation, and public deployment are **not yet verified**. No Replit is used and the release branch was not modified.
 
 ## Run
 
@@ -23,7 +34,7 @@ Run `npm run demo` for an example duel.
 
 ## Not implemented yet
 
-This is a headless rules core, not a playable 3D game: no skeletal animation, camera, controller UI, limb-level collision, actual vertical physics, grapples, throws, network play, Unreal integration, sound or visuals. Facing now turns at a bounded 270 degrees/second; directional guard covers a 130-degree frontal arc. Limb-level collisions remain to be implemented. Internal condition thresholds are preliminary gameplay parameters, not a real biomechanical model.
+This is a headless rules core, not a playable 3D game: no skeletal animation, camera, controller UI, limb-level collision, actual vertical physics, grapples, throws, network play, Unreal integration, sound or visuals. Facing turns at a bounded 270 degrees/second; directional guard covers a 130-degree frontal arc. Recovery attack buffering is limited to eight ticks. Resolved hit and block events now expose a deterministic world-space 3D contact proxy (nominal head/body height, defender surface point, normal, and striking limb label). This is not actual limb-level collision, IK, or joint geometry; range and facing remain authoritative until skeletal collision is implemented. Internal condition thresholds are preliminary gameplay parameters, not a real biomechanical model.
 
 ## Clean-room development principles
 
@@ -33,12 +44,291 @@ This is a headless rules core, not a playable 3D game: no skeletal animation, ca
 4. Every hourly increment identifies specific source changes, test results, remaining failures, and next scope.
 5. Do not merge legacy combat implementations into this engine.
 
+## v0.11 diagnostic discrepancy increment (2026-11-04)
+
+- Every range-authorized hit or block event now reports `contactDiscrepancy`: `null` when the moving 3D swept-sphere/torso capsule intersects, or `range_hit_without_3d_intersection` when the authoritative range proxy says contact but the shadow geometry disagrees.
+- Added `test/contact-discrepancy.test.mjs` with three regression tests covering multiple attack types, guarding, deterministic replay, and long-range non-contact.
+- **No damage, guard, timing, stamina, knockback, or KO authority changes.** This is a targeted observable mismatch signal, not a switch to skeletal hit detection. The diagnostic does not yet count missed 3D contacts when the range proxy denies an attack.
+- Tests are committed but require execution verification; GitHub push CI status must be confirmed independently.
+
+## v0.12 deterministic exchange audit (2026-11-04)
+
+- Added `src/exchange-audit.mjs`: pure deterministic aggregation of resolved hit/block events into counts by attacker and move, shadow 3D intersections, range-only contacts, and missing/unclassified telemetry.
+- Added `test/exchange-audit.test.mjs` with three tests for counts/nonmutation, actual engine replay determinism, and missing probe handling.
+- This report observes **only range-authorized events**. It cannot detect geometry-only intersections rejected by range/facing rules, and it does not change hit authority, damage, movement, or guarding.
+- Tests and GitHub Actions results require independent verification; no passing status is implied by committing.
+
 ## Next priority
 
-Implement buffered attack input; then expand the basic move roster, realistic exchanges, and animation-to-contact contracts before special moves.
+Run the complete regression suite, then inspect range-proxy versus moving-torso shadow mismatches in deterministic replays. Add anatomical limb and foot-support continuity before promoting collision to hit authority.
+
+## v0.5 geometry increment
+
+- Added pure deterministic 3D swept-sphere vs capsule geometry in `src/sweep.mjs`, using finite segment closest-point calculations. It detects a fast strike passing through a body capsule even when both sampled endpoints miss, and handles tangent, miss and degenerate cases.
+- Added six regression tests in `test/sweep.test.mjs`. This geometry is **not wired to authoritative hit resolution yet**: the engine still uses `range_proxy_v1` for hits and blocks. `sweepFraction` is the fraction of closest approach, **not** first time of impact. No animation or biomechanics have been validated.
+- New tests and CI require independent execution verification.
+
+## v0.6 first-entry geometry increment
+
+- Added `sweptSphereCapsuleFirstImpact` in `src/sweep.mjs`, which determines the earliest swept-sphere entry into a stationary defender capsule by deterministic 48-iteration bisection before the closest-approach fraction. Returns entry fraction, contact center, contact point, normal and initial-overlap flag.
+- Added four focused tests for first-entry timing, initial overlap, misses/determinism, and tangency in `test/sweep.test.mjs`.
+- **Important:** The geometry is still independent of authoritative combat hits. Moving defender capsules, anatomical strike trajectories, limb IK and phase-transition continuity are not implemented. These tests must be executed before claiming passing status.
+
+## v0.10 moving-torso shadow integration
+
+- Updated `src/collision-probe.mjs` to evaluate a procedural strike endpoint from the previous attacker pose to the current pose against a torso capsule translated from the previous defender pose to the current pose. Uses `movingSphereCapsuleFirstImpact` and preserves deterministic first-entry fraction, point, and normal.
+- Updated `src/engine.mjs` to capture both fighters' tick-start position and facing before movement and footprint separation, and pass these to shadow collision telemetry. Only resolved range-proxy hit/block events receive the diagnostic; **damage, guarding, and trade authority are unchanged**.
+- Updated `test/collision-probe.test.mjs` expectations and added two focused regressions for moving-defender contact and deterministic moving-fighter replay.
+- Geometry assumes rigid torso translation and simplified limb endpoints. It does not account for joint articulation, posture, angular capsule motion, or validated biomechanics. The moving probe is not authoritative and only runs for events already accepted by range/facing rules.
+- Tests/CI require verification; do not infer passing from commit success.
+
+## v0.9 moving-defender collision geometry
+
+- Added `src/moving-capsule.mjs` implementing deterministic first-entry contact between a moving sphere and a defender capsule undergoing **rigid translation** during one fixed simulation tick. Relative motion prevents false misses when a defender moves into a strike and false hits when both move at the same speed.
+- Added `test/moving-capsule.test.mjs` with six focused tests: stationary-capsule entry, moving-defender crossing, same-velocity miss, initial overlap, determinism, and invalid/nonrigid motion.
+- The new geometry was independently executed on local Node 22 with **6/6 focused tests passing** before commit. The complete repository suite and GitHub CI still require verification.
+- **Not yet integrated into engine damage or shadow contact events.** Existing v0.8 range/facing hit authority and stationary diagnostic probe are unchanged. Capsule articulation, joint motion, foot support, and network authority remain unimplemented.
+
+## v0.8 3D collision shadow telemetry
+
+- Added `src/collision-probe.mjs`, evaluating the current attack's active-frame hand/foot sweep against a stationary defender torso capsule with deterministic first-entry geometry.
+- `src/engine.mjs` now attaches `collisionProbe` to every resolved hit/block event. It identifies the limb, active frame, whether the 3D sweep intersected, and first-impact geometry when available. This makes disagreements between range-proxy damage and visible limb contact inspectable.
+- Added `test/collision-probe.test.mjs` with five tests covering deterministic replay, non-mutation, range miss, invalid active frames, and event attachment.
+- **No hit authority changed:** the range/facing gate still determines damage, guarding, and simultaneous trades. The 3D probe is deliberately diagnostic-only. It samples a stationary defender capsule at each tick and is not a validated articulated limb/body collision model.
+- Test results and CI are **not confirmed** until the full Node test suite runs. The release branch and Cloudflare deployment remain unchanged.
+
+## v0.7 procedural trajectory increment
+
+- Added `src/trajectory.mjs` with deterministic 3D world-space striking endpoint paths for Blue palm, straight and front kick, plus Red jab, cross and hook. Each move specifies striking limb and radius; trajectories rotate with the fighter's facing, translate with their world position, and use a smooth extend-and-return curve with matching endpoints at active-phase boundaries.
+- Added `strikeTickSweep` to expose consecutive per-frame endpoint geometry and a nominal defender torso capsule, ready for `sweptSphereCapsuleFirstImpact`. Six new regression tests cover finite/deterministic poses, boundary continuity, world rotation, hit/miss geometry, and invalid inputs.
+- **Not yet authoritative:** existing `engine.mjs` hit resolution remains the range-based proxy. These are procedural endpoint approximations, not skeletal IK or validated biomechanics. A stationary torso is assumed for each tick; true moving-defender relative sweeps and animation blending remain open.
+- Tests were committed but must be executed before reporting passing results. The GitHub workflow lives outside the permitted edit directory and was only inspected, not changed.
 
 ## Changelog
+
+2026-11-04: v0.10 integrated moving-defender relative sweeps into the non-authoritative hit/block diagnostic, with tick-start pose capture and two additional regression cases. No change to combat outcomes.
+
+
+2026-11-04: v0.9 introduced isolated relative-motion first-contact geometry for a rigidly translating defender capsule, with six locally passing focused tests; no change to hit authority.
+
+2026-11-04: v0.8 added per-active-tick swept 3D collision shadow telemetry to resolved hit/block events, plus five targeted tests; authoritative damage still uses range/facing proxy.
+
+2026-11-04: Review Station alpha committed separately from the gameplay engine. Four replay scenarios, frame scrubbers, 3D and SVG viewers, and structured reviewer packets; mobile and CI unverified.
+
+2026-11-04: v0.7 added six deterministic 3D strike endpoint paths and six regression tests; collision geometry can now consume per-tick paths, but authoritative hit resolution is unchanged.
+
+
+2026-11-04: v0.6 added deterministic first-entry time and contact geometry for swept sphere/capsule intersection (four new regression tests). Hit authority remains unchanged.
+
+
+2026-11-04: v0.5 added isolated swept-sphere/capsule contact geometry and six focused tests without changing hit authority or existing gameplay.
+
+2026-11-04: v0.4 added `src/contact.mjs` for deterministic 3D range-proxy contact telemetry on hit and block events (striking limb, world-space surface point, normal, and separation). Three new tests target geometry, guarding, and replay. This does not claim skeletal collision or validated biomechanics; CI and tests require independent verification.
+
+2026-11-04: v0.3 introduced a deterministic single-slot, eight-tick recovery attack buffer. Inputs during startup and active phases do not queue; valid recovery presses can launch on the first free tick if not expired, interrupted, or guarded. Hit stun and KO clear the queue. Added four regression tests (16 engine tests total). GitHub CI status must be verified separately; these new tests are not yet claimed passing.
+
 
 2026-11-04: v0.2 added capped angular turning and directional guarding; added three targeted regression tests (12 total). GitHub CI execution must be checked separately.
 
 2026-11-04: Created fresh v0.1 combat rules engine, six moves, fixed-timestep movement, guard, hits and KO. Local Node 22 test suite: 9/9 passed.
+
+## v0.13 rejected shadow-contact observations (2026-11-04)
+
+- The active attack loop now evaluates moving 3D shadow contact even when the existing range/facing proxy rejects a hit. It emits `shadow_contact_rejected` only when geometry intersects despite proxy rejection; it never applies damage or marks the attack connected.
+- Exchange audits now count `rejectedShadowIntersections` and record these discrepancies separately from proxy-authorized contacts. Multiple active ticks can report the same rejected strike; this is a per-tick observation, not a count of unique strikes.
+- Added regression tests for audit classification and deterministic non-authoritative replay. Test suite and push CI require independent verification.
+
+## v0.14 rejected-contact streak diagnostics (2026-11-04)
+
+- Added `src/rejected-contact-streaks.mjs` to summarize consecutive per-tick `shadow_contact_rejected` observations by attacker, defender and move. Repeated observations in one tick count once, and gaps start new streaks.
+- Added `test/rejected-contact-streaks.test.mjs` with three focused regression cases for consecutive observations, independent fighter/move grouping, nonmutation, determinism, and invalid ordering.
+- Streaks are **not guaranteed to equal unique attacks**: attack instance IDs are not yet available. The helper is diagnostic-only and does not affect hits, guarding, stamina, damage, or network state.
+- Tests and push CI have not been verified as passing. Next: execute full suite and introduce stable attack instance IDs to measure unique rejected contacts.
+
+## v0.15 deterministic attack instance identity (2026-11-04)
+
+- Each successfully started attack receives a world-scoped, monotonically increasing integer `instanceId`, included in the action state and snapshot via `nextAttackInstanceId`. Buffered presses do not consume an ID until an attack actually starts.
+- `attack_started`, `attack_finished`, `hit`, `blocked`, and `shadow_contact_rejected` events expose `attackInstanceId`. This permits downstream diagnostics to distinguish separate attempts of the same move and associate per-tick observations with the initiating action.
+- Added `test/attack-instance.test.mjs` for replay determinism, monotonic ID assignment, and event-to-start correlation.
+- IDs are scoped to one CombatWorld instance and are **not** cross-match network identifiers. Damage remains range/facing authoritative; 3D probes are observational only.
+- Tests and GitHub Actions push CI must be verified independently. Next: aggregate rejected-contact observations by attack ID, then build grounded foot-support continuity tests.
+
+## v0.16 unique rejected attack audit (2026-11-04)
+
+- Added `src/rejected-attack-instances.mjs`: pure deterministic grouping of `shadow_contact_rejected` observations by world-scoped `attackInstanceId`. Repeated ticks for one attack count once; duplicate observations on the same tick are deduplicated.
+- Added `test/rejected-attack-instances.test.mjs` with four tests for unique-attack counts, deterministic replay, input nonmutation, and invalid/mismatched identity.
+- This is diagnostic only: range/facing still authorizes hits and damage. The audit cannot identify missed intersections that do not produce a `shadow_contact_rejected` event; unique IDs are match-scoped, not global network identifiers.
+- Previous v0.15 commit `76eb637c` had a successful GitHub Actions push run `41901891838`. v0.16 tests and CI require separate confirmation. Next: grounded foot-support state and consecutive-attack balance invariants.
+
+## v0.17 planar foot-support diagnostic (2026-11-04)
+
+- Added `src/foot-support.mjs` with a pure deterministic projected-center-of-mass test against the segment connecting planted feet, including finite tolerance and degenerate stance handling.
+- Added `test/foot-support.test.mjs` with five focused tests for centered support, unsupported weight shift, determinism, invalid inputs, and coincident feet.
+- This is **diagnostic geometry only**: it is not wired into movement, attack permissions, animations, foot placement, vertical physics, or damage. A line-segment model is a preliminary approximation, not a complete support polygon or biomechanical validation.
+- Run `npm test` and confirm GitHub Actions before treating the increment as verified.
+
+## v0.18 bounded foot-support tracking (2026-11-04)
+
+- Added `src/foot-support-state.mjs`: pure deterministic tracking of two world-space planted feet relative to a moving center of mass, with bounded single-foot repositioning per fixed tick and a left-foot tie-break.
+- Added four regression tests in `test/foot-support-state.test.mjs` for stationary planting, bounded displacement, deterministic replay, and invalid input.
+- This is a **diagnostic-only** support tracker, not yet wired into `CombatWorld` state or rendering. It does not constrain combat velocity, resolve momentum, or implement actual skeletal foot IK. Test execution and CI for this increment require independent verification.
+
+## Solo movement qualification — planted-foot IK reach telemetry (2026-11-04)
+
+- `src/movement-qualification.mjs` now measures `maxPlantTargetErrorMeters`: the maximum horizontal world-space separation between each planted foot's target and the actual IK-solved ankle. This detects planted-foot targets that the fixed-length leg cannot reach, even when measured ankle-to-ankle slide is small.
+- `test/movement-qualification.test.mjs` adds deterministic finite-value coverage across all 14 independent Blue/Red solo scenarios.
+- This is a **measurement improvement, not a biomechanical fix or qualification pass**. No movement authority, visuals, movesets or combat outcomes changed. Inspect this metric together with grounded slide, joint displacement and footage before creator approval. CI and local execution must be independently verified.
+
+
+## Solo movement diagnostic: worst-joint localization (2026-11-04)
+
+- `measureSoloMotion()` now reports `worstJointStep: {meters,tick,joint}` alongside its existing maximum world-space joint displacement. The joint label identifies the exact body point and simulation frame for targeted continuity repair.
+- The regression test checks all fourteen actual-engine solo replays for labeled maxima and deterministic reproduction.
+- This is **measurement only**, not a biomechanical correction. Five previously reported scenarios exceeded the 0.20 m/tick screening threshold; rerun all fourteen to determine current results. Guard entry/exit, planted-foot IK under turns and actual browser video remain unqualified. No move-set expansion until visual approval.
+
+
+## Solo movement: bounded swing stride (2026-11-04)
+
+- `src/foot-plant-render.mjs` now limits each new swing destination to 0.42 m from that foot's actual planted world-space position, rather than allowing a large root-relative target after a reverse or stop. The other foot remains world-locked during the swing; engine rules and movement authority are unchanged.
+- `test/foot-plant-render.test.mjs` adds Blue/Red reverse, stop and guard-transition checks for bounded stride, finite targets and no planted-target drift.
+- This is a targeted **presentation-footstep constraint**, not proof that joints move naturally. The full 14-case qualification and browser footage must be rerun; max joint displacement may still exceed 0.20 m/tick. No moveset expansion or deployment.
+
+
+## Solo movement: zero-displacement swing liftoff (2026-11-04)
+
+- The shared `FootPlantTracker` now starts each swing at phase zero on its first tick, rather than immediately advancing to 10% of the trajectory. This removes a discrete world-space foot-position and lift jump at the planted-to-swing boundary; the bounded 0.42 m stride remains unchanged.
+- Added a Blue/Red regression test asserting exact position continuity and zero added lift at swing onset while the other foot stays planted.
+- This does **not** establish overall IK reach, joint continuity, guard exit, or natural movement. Re-run all 14 actual-engine cases and capture browser playback before creator approval. No movesets or gameplay authority changed.
+
+## Gait foot-choice correction (2026-11-04)
+
+- Fixed a reversed preference comparison in `src/foot-plant-render.mjs`: when both feet have similar root reach, select the alternating preferred swing foot; only override that preference when the opposite foot is more than 0.02 m farther from the root.
+- Added a regression for symmetric stance preference and a strongly lagging opposite foot. This is a presentation foot planner correction; CombatWorld movement authority and all attack rules remain unchanged.
+- Full 24-case movement/full-body screening, `npm test`, CI and browser capture must be rerun. Existing moving COM support failures and user visual approval gate remain open. No new moves or deployment.
+
+
+## Solo gait touchdown planning — 2026-11-04
+
+- In `src/foot-plant-render.mjs`, swing-foot destination look-ahead now uses the current gait's swing duration (`speed * swingTicks / 60`) rather than a fixed 0.12-second prediction. The existing 0.08–0.40 m anticipation clamp and 0.52 m guarded / 0.95 m fast stride caps remain.
+- Added a focused two-fighter regression in `test/foot-plant-render.test.mjs` verifying longer guarded shuffle anticipation, six- versus ten-tick swing durations, and stride caps.
+- This is a **presentation foot-placement change**, not authoritative locomotion braking or a physical balance solver. The 24-case full-body and dynamic-support audits must be rerun; no improved COM support or naturalness is claimed without execution.
+- Keep the solo movement / full-body visual approval gate closed. Do not expand movesets, alter the Fuji stage, or publish the release branch based on this change.
+
+## Solo gait: guard/reverse mid-swing regression (2026-11-05)
+
+- Added `test/guard-reverse-touchdown.test.mjs` for Blue and Red. It reverses root motion and enables guard while one foot is airborne, asserting that the existing swing keeps its launch tick and touchdown target, the other foot remains planted, targets remain finite, and repeated same-tick rendering is idempotent.
+- This is a **test-only** increment: no CombatWorld authority, moves, graphics, release branch, or landing solver changed. It does not establish natural balance or human visual approval.
+- Verify the complete Node suite and branch CI after the test commit. The 24-case static COM support screen remains previously reported as 6/24; no new full-body measurement or actual-browser video is claimed by this regression.
+
+## Braking support diagnostic (2026-11-05)
+
+- Added `src/braking-support.mjs`: a pure, deterministic world-space stopping projection using current planar velocity and a configurable constant deceleration, reporting projected stop, stopping distance and nearest planted-contact distance.
+- Added `test/braking-support.test.mjs`: five regression groups covering zero speed, signed reverse/lateral/guarded velocity, braking strength, absent contacts and invalid input.
+- **Diagnostic only**: the model does not alter authoritative movement, render poses, foot landing targets, COM estimation or balance. A point-contact proximity check is not a support polygon or a physics validation. The deceleration is a test parameter, not a measured engine value.
+- The 24-case full-body screen remains blocked (last measured static support 6/24); this addition does not justify moveset expansion. Re-run full suite/CI, then connect measured engine deceleration and foot landing history to the diagnostic before comparing real browser recordings.
+
+## Real-engine braking replay diagnostic (2026-11-05)
+
+- Added `src/braking-replay.mjs`, which consumes `recordSoloMotion()` CombatWorld snapshots and actual tracked planted foot coordinates to calculate projected stopping distance and nearest planted support contact. It does not invent support contacts when both feet are airborne.
+- Added `test/braking-replay.test.mjs`: deterministic Blue/Red idle/forward/reverse/stop/guardAdvance replay checks, stationary stopping checks, and missing-support handling.
+- **Diagnostic only:** no movement, damage, visual pose, authoritative hit or foot-plant behavior changed. Projected stop is a constant-deceleration estimate, not a human balance solver. The 24-case qualification gate and creator visual approval remain mandatory.
+- New tests and complete Node suite require execution/CI confirmation. No actual-engine browser video was captured in this increment; do not infer improved biomechanics.
+- To reproduce: from `combat-engine-cleanroom/`, run `node --test test/braking-replay.test.mjs` then `npm test`; load `movement-review.html` in a local server and compare Blue/Red forward, reverse and stop at normal speed against HIT Fuji visual standard.
+
+## 2026-11-05 — projected braking support segment diagnostic
+
+- `src/braking-support.mjs` now reports `supportSegmentDistance` and `outsideSupportSegmentRadius` for the projected stop position relative to the segment between two planted foot contacts. This avoids treating a position between both feet as unsupported merely because it is far from either ankle. Existing nearest-contact fields are preserved for comparison.
+- `test/braking-support-segment.test.mjs` covers between-feet support, clamped segment endpoints, absent/one-foot contacts, degenerate contacts, and determinism. Four focused tests passed in an isolated local Node 22 harness before commit; the complete repository suite and CI are not claimed passing.
+- This is **diagnostic only**. It does not change locomotion, braking, foot planning, hit outcomes, or rendering. A static two-foot segment is not a dynamic balance or biomechanical proof. The 24-case movement gate and actual browser video remain pending; no moveset expansion or release deployment.
+
+2026-11-05: Corrected `auditBrakingReplay` aggregate `maxProjectedGapMeters` and `worstFrame` to use the planted-foot support segment rather than nearest-ankle distance. Added regression for aggregate consistency. Diagnostic only; no locomotion, combat outcomes or visuals changed. Tests and CI pending independent execution; 24-case movement approval remains blocked.
+
+## 2026-11-05 — 24-case solo full-body gate aggregation
+
+- Added `src/solo-gate-audit.mjs` and `test/solo-gate-audit.test.mjs`. The audit executes both fighters across all twelve independent movement scenarios using real `CombatWorld` snapshots and the shared clean-room rig. It combines planted IK reach, bone lengths, floor penetration, static COM support, body continuity and projected braking into a per-case pass/fail report.
+- This is an **evidence/qualification increment**, not a movement correction. Static COM and braking projections are approximate, and neither can certify realistic dynamic balance. No moveset expansion or visual approval is implied.
+- Run `node --input-type=module -e "import {auditSoloGate} from './src/solo-gate-audit.mjs'; console.log(JSON.stringify(auditSoloGate(),null,2))"` from this directory to print all 24 results. Run `npm test` for regression coverage. Actual browser capture should use `movement-review.html` served from this directory and compare with `HIT-VISUAL-STANDARD.md`.
+- Preserve the 14 original scenarios as a subset of the expanded 24. Any failing scenario blocks creator approval. No release branch changes or automatic deployments.
+
+## 2026-11-05 braking-aware footstep anticipation
+
+- Presentation-only `FootPlantTracker` now carries previous root speed between ticks and shortens **new** swing lookahead when root speed is dropping. Existing airborne foot endpoints, 6/10-tick gait durations, bone lengths, and authoritative `CombatWorld` movement remain unchanged.
+- Added `test/braking-foot-anticipation.test.mjs` to screen shorter braking landings, no midair retargeting, same-tick determinism, and immutable fighter snapshots.
+- This is a small foot-planning increment, **not** proof of balanced walking. The 24-case COM/support qualification and actual browser recording must be rerun. New tests and CI are unverified until executed. Moveset expansion remains blocked pending full-body approval.
+
+
+## Projected touchdown support selection (2026-11-05)
+
+- Presentation footstep planning now chooses the swing leg using each planted ankle's distance from the **predicted root at touchdown**, rather than the current root. This targets a reversal/fast-travel failure where the presently farther foot is actually ahead of travel and the other foot becomes the trailing support.
+- Prediction uses existing per-tick speed and braking history; in-flight swing start/end/duration and world-space support anchors remain unchanged. CombatWorld movement, collision and damage authority are untouched.
+- Added a focused Blue/Red regression in `test/foot-plant-render.test.mjs`. The new test and complete `npm test` suite **have not been executed in this update**; CI and fresh 24-scenario metrics are not yet verified.
+- This is a limited gait-planning correction, **not** evidence of natural walking or stable dynamic balance. Preserve the 24-case gate and require actual-engine browser video plus creator approval before moveset expansion.
+
+
+## Footstep planning syntax repair and touchdown regression (2026-11-05)
+
+- Repaired a source defect in `src/foot-plant-render.mjs`: literal `\\n` escape text had been inserted into a `//` comment, accidentally commenting out `braking`, `predictedSpeed` and `anticipation` declarations. Subsequent footstep planning could reference an undefined `anticipation` and throw at runtime. Restored actual source line breaks and live braking calculation.
+- Corrected the existing projected-reach test expectation: when moving toward +X, the -X trailing foot must be selected even if the previous alternating preference points to the other leg. Preserved the separate Blue/Red touchdown projection regression.
+- This repairs a runtime regression rather than demonstrating improved biomechanics. The clean-room GitHub connector confirmed the edits, but Node/npm test execution, current CI and 24-scenario qualification remain **unverified**. No actual-engine browser recording was produced. The user-approval movement gate remains closed.
+
+## Touchdown-tick pelvis support handoff (2026-11-05)
+
+- Presentation foot planner now completes swing touchdown **before** computing lateral pelvis support sway. Previously a foot could be marked planted on a frame while the torso still received the previous airborne-foot support target for one extra tick.
+- Added a two-fighter touchdown regression verifying planted feet and same-tick sway relaxation, while keeping the existing .28-per-tick smoothing bound. No authoritative CombatWorld rules, damage, foot targets, or HIT visual assets were changed.
+- GitHub writes confirmed; **full Node suite, fresh 24-case support audit, browser playback, and actual-engine recording remain unverified** for this increment. This does not establish biomechanical approval.
+
+## Three-priority movement increment (2026-11-05)
+
+1. **Repeatable qualification:** added `src/solo-qualification-matrix.mjs` to compute a JSON 24-scenario report from actual `CombatWorld` snapshots and shared rig, combining bone/IK/foot/joint diagnostics, approximate static COM support, and approximate velocity-aware capture-point support. Run `node src/solo-qualification-matrix.mjs > solo-qualification.json` from `combat-engine-cleanroom/`. The report explicitly marks visual approval unverified; static support is not a complete dynamic-balance test.
+2. **Regression coverage:** added `test/solo-qualification-matrix.test.mjs` to check scenario completeness and diagnostic provenance, plus a braking foot-target regression in `test/foot-plant-render.test.mjs`.
+3. **Braking placement:** `src/foot-plant-render.mjs` no longer forces 0.08 m of extra future anticipation when measured speed is decreasing. This shortens newly planned steps while retaining in-flight swing endpoints, planted world anchors, fixed bone geometry, and authoritative gameplay velocity.
+
+**Verification status:** GitHub commits confirmed. GitHub Actions did not return a verified run for the preceding commit; local full `npm test`, 24-case numeric output, and actual browser footage have **not** been executed or captured in this update. A direct repository clone attempt from the execution environment failed DNS resolution. No claims of movement acceptance or numerical improvements. No deployment or release-branch edits.
+
+## Source-driven V8 qualification execution (2026-11-05)
+
+The 24-case qualification runner was **executed** against source retrieved from the clean-room development branch in an isolated JavaScript V8 harness. The harness reconstructed local ES module imports and provided a JSON-based `structuredClone` substitute. This is NOT a complete native Node `npm test` run, GitHub Actions result, or browser/visual validation.
+
+- 24/24 scenario reports generated; 24/24 geometry screens passed (finite bone lengths, floor penetration and planted-target reach), and 24/24 dynamic-support reports were finite.
+- 14/24 joint continuity screens met the provisional <=0.20 m/tick screening threshold; 10 fast-locomotion scenarios exceeded it.
+- Static COM/support screening passed 6/24 (stationary/guard cases); 18 moving cases remain flagged. Static support distance alone is not proof of dynamic instability.
+- Worst joint step: Blue reverse, right foot, tick 102, 0.22947 m/tick. Worst reported planted-target error across scenarios remained near floating-point precision.
+- Tested **uncommitted** alternate fast-gait swing durations of 7, 8, 9, and 10 ticks in the same harness: 8 ticks improved the provisional continuity screen to 23/24 but left Red backward at 0.23321 m/tick; 9/10 ticks introduced substantial planted-target reach failures. No duration change was committed because it did not satisfy all gates.
+
+**Outstanding:** native Node test suite, browser actual-engine capture, creator visual approval and full moving-body support. No moveset expansion or deployment.
+
+## Diagnostic labeling correction (2026-11-05)
+
+The JSON matrix now distinguishes `staticSupportPass` (only planted-contact and approximate COM support checks) from `fullBodyDiagnosticPass` (all full-body flags, including head/COM jumps). Previously the static support label directly mirrored the full-body aggregate, which could misclassify the cause of failure. Added type checks for both. Native npm suite, browser recording, and GitHub CI are still unverified; no approval is inferred.
+
+## Native CLI verification repair (2026-11-05)
+
+Fixed `src/solo-qualification-matrix.mjs` direct-execution detection to compare normalized absolute file URLs, so `node src/solo-qualification-matrix.mjs` from the project root emits JSON instead of silently doing nothing. Added a Node `spawnSync` smoke test checking the command's exit status and 24-row output. GitHub commits verified; the smoke test and full native suite still require an actual Node runner. No browser footage or creator visual approval was obtained.
+
+## 2026-11-05 — Solo support-transfer instrumentation
+
+The real clean-room `CombatWorld` solo replay now records support transfer count, maximum swing-ankle world-space step and maximum continuously planted ankle step. These are **diagnostic measurements**, not a new animation or proof of physical balance. They distinguish a fast moving foot from unintended foot sliding and make the next gait iteration more targeted.
+
+Local Node 22 execution against the uploaded development-branch ZIP with these three instrumentation edits: targeted movement/matrix tests **13/13 passed**. Across 24 actual-engine solo replays, **246** touchdown support transfers were counted, worst swing-ankle displacement **0.22947 m/tick**, and worst continuously planted ankle displacement approximately **1.79e-15 m/tick**. Geometry screening 24/24; joint continuity 14/24; static support 6/24. For the original 14-case matrix, only Blue/Red idle and guard pass all three screens; the other ten locomotion cases fail. The old uploaded ZIP predates two test-only GitHub fixes: its complete native suite was **151/154 passed**, with three known test expectation failures; a fresh full-suite run of the newest GitHub branch and CI verification remain pending.
+
+An exploratory **uncommitted** 7-tick swing and 0.90m stride cap passed the narrow 24-case joint screen but introduced/retained native test failures, including attack-to-motion continuity; it was **reverted**, not promoted. No gameplay, gait timing, visuals, or release branch changed. Browser footage unavailable; visual sign-off pending. To record actual engine footage, serve this directory over HTTP (e.g. `python3 -m http.server 8000`), open `movement-review.html`, select each fighter/scenario, and screen-record the page with the Git commit visible in a companion note. Keep the Fuji HIT stage intact.
+
+## 2026-11-05 — Reverse/guard footstep regression coverage
+
+Added `test/gait-reversal-regression.test.mjs` to check two clean-room presentation invariants for BOTH Blue and Red: (1) reversing direction during an airborne foot swing while entering guard must preserve the continuously planted support-foot world anchor and complete the original swing without restarting it, and (2) reading the same simulation tick twice must not advance or mutate gait state. These tests use the real `FootPlantTracker` and do not modify gameplay rules, fighter speed, animation visuals, or movesets.
+
+**Verification:** GitHub test-file commit confirmed. This cycle did not execute the new tests or the full Node suite; CI, 24-case metrics after this commit, and actual browser recording are unverified. Existing 14/24 joint and 6/24 static-support results are historical baseline measurements, not new test outcomes. Next: run `npm test` and `node src/solo-qualification-matrix.mjs`, correct any failures, then review actual engine motion in `movement-review.html`. Creator sign-off remains required before moveset expansion.
+
+## 2026-11-05 — Facing-aware footwork and support continuity
+
+The clean-room presentation tracker now keeps longitudinal steps on the correct anatomical side, adjusts fast gait timing by movement direction, and prepares whole-body posture for estimated planted and landing reach without retargeting in-flight feet. See `MOVEMENT-FACING-SUPPORT-REPORT-2026-11-05.md` for the executed 160-test suite, 24-case matrix, extended support checks, source-rendered video distinction, remaining 18 static-support flags, and visual-approval/deployment gates.
+
+## 2026-11-05 — Nonfinite velocity isolation in visual footwork
+
+`src/foot-plant-render.mjs` now sanitizes nonfinite interpolated velocity components before calculating gait direction, speed, landing anticipation, and reach-aware torso height. This is a **presentation-only** safeguard for malformed or transient replay/network samples: it does not change authoritative `CombatWorld` movement or collision. Added `test/gait-nonfinite-velocity.test.mjs` for Blue/Red with positive/negative infinity, NaN, and recovery to finite movement; checks foot endpoints, world anchors, direction and posture remain finite.
+
+**Verification:** Development-branch GitHub commits confirmed with `[skip ci]` prefixes. The new test and full native Node suite were **not executed in this cycle**, and no new 24-case metrics or browser capture were produced. The last *documented executed* suite remains 160/160, joint-step 24/24 and static support 6/24 from `MOVEMENT-FACING-SUPPORT-REPORT-2026-11-05.md` (prior revision). These numbers do not validate the new change. Run `node --test test/gait-nonfinite-velocity.test.mjs`, `npm test`, and `node src/solo-qualification-matrix.mjs` on the current head before promotion. Creator approval and actual updated-build footage remain outstanding; do not deploy automatically.
+
+## 2026-11-05 - Finite velocity at the tracker-to-rig handoff
+
+The presentation rig now sanitizes nonfinite velocity components in the same way as the foot tracker. A regression first reproduced NaN arm joints at that boundary, then passed after the correction. The current local Node suite passed 162/162 and the movement matrix remains geometry 24/24, provisional joint continuity 24/24, static support 6/24. See `MOVEMENT-NONFINITE-HANDOFF-2026-11-05.md` for the exact failure, scope, verification and outstanding visual/deployment gates.

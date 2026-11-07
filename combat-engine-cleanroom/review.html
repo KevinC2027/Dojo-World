@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#121416">
+<title>HIT // Dojo World — Combat Review</title>
+<style>
+:root{color-scheme:dark;--bg:#09121e;--muted:#a7b8c9;--edge:#2b4660;--blue:#5db9ff;--red:#ff717c}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:#f3f7ff}
+main{max-width:1024px;margin:auto;padding:12px;display:grid;gap:11px}
+header{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+h1{font-size:clamp(17px,4vw,23px);letter-spacing:.13em;margin:0;font-weight:850}small,.sub{font-size:12px;color:var(--muted)}
+.tag{padding:6px 9px;border:1px solid var(--edge);border-radius:99px;color:#9ed4ff;font-size:11px}
+.arena{position:relative;aspect-ratio:16/9;min-height:260px;border:1px solid var(--edge);border-radius:16px;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#213753,#0e182a 73%)}
+#stage{position:absolute;inset:0;width:100%;height:100%;display:none;touch-action:none}
+#fallback{position:absolute;inset:0;display:grid;place-items:center;gap:10px;z-index:0;text-align:center}
+#fallback svg{width:min(72%,480px);height:auto}
+#fallback p{margin:0;color:#c9d5e4;font-size:13px;padding:0 15px}
+#error{position:absolute;bottom:8px;left:8px;right:8px;z-index:5;display:none;background:rgba(99,24,24,.95);border:1px solid #f08282;border-radius:9px;padding:9px;font-size:12px}
+#notice{position:absolute;top:9px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#0b1625c9;border:1px solid #294865;border-radius:20px;padding:6px 12px;font-size:11px;pointer-events:none}
+.score{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.fighter{padding:10px 13px;border:1px solid #31445b;border-radius:12px;background:#111f30}
+.fighter b{letter-spacing:.13em;font-size:14px}.fighter span{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.fighter.blue b{color:var(--blue)}.fighter.red b{color:var(--red);text-align:right}.fighter.red{text-align:right}
+.mid{text-align:center;font-weight:800;letter-spacing:.1em;font-size:12px;color:#a9c7d9}
+.controls{display:grid;grid-template-columns:minmax(115px,1fr) minmax(180px,1.6fr);gap:12px}
+.group{background:#111e2d;border:1px solid #294058;border-radius:14px;padding:10px;display:grid;gap:8px}
+.group>label{text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:750;color:var(--muted)}
+.dpad{display:grid;grid-template:repeat(2,52px)/repeat(3,1fr);gap:6px}
+button{min-height:49px;border:1px solid #4d6682;color:#f4f7fb;background:#233d56;border-radius:12px;font-size:13px;font-weight:780;touch-action:none;-webkit-tap-highlight-color:transparent;cursor:pointer;user-select:none}
+button:active,button.held{background:#4a729b;transform:translateY(1px)}
+.dpad button{font-size:18px}.dpad [data-hold="forward"]{grid-column:2}.dpad [data-hold="left"]{grid-column:1;grid-row:2}
+.dpad [data-hold="back"]{grid-column:2;grid-row:2}.dpad [data-hold="right"]{grid-column:3;grid-row:2}
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.actions button{padding:8px 5px;min-width:0;overflow-wrap:break-word}
+button[data-attack]{background:#164063;border-color:#3a88bd}
+button[data-hold="guard"]{background:#503c26;border-color:#997142}
+.tools{display:flex;flex-wrap:wrap;gap:8px}.tools button{min-height:39px;padding:6px 14px;flex:1}
+#status{font-size:12px;color:#a9c8e0;min-height:18px}
+p.helper{font-size:12px;line-height:1.5;color:var(--muted);margin:0}
+@media (max-width:520px){main{padding:8px;gap:8px}.arena{aspect-ratio:4/5;min-height:330px}.fighter{padding:8px}.fighter b{font-size:12px}.controls{grid-template-columns:1fr 1.25fr;gap:7px}.group{padding:7px}.dpad{grid-template-rows:repeat(2,56px)}button{font-size:12px}.actions{grid-template-columns:repeat(2,minmax(0,1fr))}.actions button{min-height:52px}#notice{font-size:10px}.tag{display:none}}
+
+.review-panel{display:grid;gap:12px;background:#111e2d;border:1px solid #29435b;border-radius:14px;padding:13px}
+.review-panel h2{font-size:17px;margin:0;letter-spacing:.045em}
+.review-select{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.review-select label{font-size:12px;color:#c6d8e5}
+.review-select select,.review-select input,.review-panel textarea{background:#101a2a;border:1px solid #4a6077;color:#f4f7fb;border-radius:9px;padding:10px;font:inherit}
+.review-select select{flex:1;min-height:44px;min-width:180px;font-size:14px}
+.review-scrub{display:grid;gap:5px}
+.review-scrub input[type=range]{width:100%;min-height:30px;accent-color:#5db9ff;touch-action:pan-x}
+.review-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.review-row button{min-height:44px;flex:1;min-width:70px}
+.review-metrics{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:#b9d1e2}
+.review-log{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;font-size:12px;background:#0c1725;border:1px solid #263d54;border-radius:9px;padding:11px;min-height:56px;max-height:125px;overflow:auto;color:#b9def7}
+.review-panel textarea{width:100%;min-height:90px;resize:vertical;font-size:13px;line-height:1.4}
+.review-warn{font-size:12px;color:#f2ca83;line-height:1.55;border-left:3px solid #b88026;padding-left:9px;margin:0}
+.review-link{color:#78bffd;text-decoration:underline;font-size:12px}
+#reviewPacket{min-height:66px;word-break:break-word}
+#reviewMessage{font-size:12px;color:#a9dcd1;min-height:17px}
+button.review-selected{outline:2px solid #c2e8ff;background:#316084}
+@media(max-width:520px){.review-panel{padding:10px}.review-row button{font-size:11px;min-width:66px}}
+</style><link rel="stylesheet" href="./hit-visual.css"></head>
+<body><main>
+<header><div><h1>HIT // DOJO WORLD</h1><small>Clean-room combat · REVIEW STATION · deterministic scenarios</small></div><div class="tag" id="simstatus">SIMULATION BOOTING</div></header>
+<div class="score"><div class="fighter blue"><b>BLUE · KUNG FU</b><span id="blueState">Ready</span></div><div class="mid">VS</div><div class="fighter red"><b>RED · BOXING</b><span id="redState">Ready</span></div></div>
+<div class="arena" id="arena">
+<div id="fallback" role="img" aria-label="Blue and red fighters standing in a training ring">
+<svg viewBox="0 0 360 235" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M20 191 L177 114 L339 190 L183 228Z" fill="#253c52" stroke="#42627d"/>
+<path d="M88 194 L162 156 L234 193" stroke="#597d9b" fill="none"/>
+<g stroke="#5db9ff" stroke-width="12" stroke-linecap="round" fill="none"><path d="M133 100 L133 149 L109 192 M133 149 L155 192 M133 112 L116 132 L132 138 M133 111 L159 123 L170 113"/></g>
+<circle cx="133" cy="82" r="17" fill="#5db9ff"/>
+<g stroke="#ff717c" stroke-width="12" stroke-linecap="round" fill="none"><path d="M244 100 L244 149 L220 192 M244 149 L265 192 M244 112 L222 122 L217 108 M244 111 L260 127 L270 117"/></g>
+<circle cx="244" cy="82" r="17" fill="#ff717c"/>
+</svg>
+<p id="fallbackText">Initializing 3D renderer…</p></div>
+<canvas id="stage" aria-label="3D combat simulation"></canvas>
+<div id="notice">AUTO EXCHANGE · TAP A MOVE TO TAKE CONTROL</div>
+<div id="error" role="alert"></div>
+</div>
+<div class="controls" style="display:none" aria-hidden="true">
+ <div class="group"><label>Movement</label><div class="dpad">
+  <button data-hold="forward" aria-label="Move forward">↑</button><button data-hold="left" aria-label="Move left">←</button>
+  <button data-hold="back" aria-label="Move back">↓</button><button data-hold="right" aria-label="Move right">→</button></div></div>
+ <div class="group"><label>Blue fighter · buttons</label><div class="actions">
+  <button data-attack="palm">PALM</button><button data-attack="straight">STRAIGHT</button>
+  <button data-attack="frontKick">FRONT KICK</button><button data-hold="guard">GUARD</button>
+  <button id="auto">AUTO: ON</button><button id="reset">RESET</button>
+ </div></div>
+</div>
+
+<section class="review-panel" id="reviewPanel" aria-label="Combat Review Station">
+ <h2>COMBAT REVIEW STATION</h2>
+ <div class="review-select"><label for="reviewScenario">Review scenario</label>
+   <select id="reviewScenario" aria-label="Choose a replay scenario">
+    <option value="palm-contact">01 · Palm strike contact</option>
+    <option value="guarded-cross">02 · Guarded cross</option>
+    <option value="simultaneous-trade">03 · Simultaneous trade</option>
+    <option value="range-miss">04 · Out-of-range miss</option>
+   </select></div>
+ <div class="review-scrub">
+  <div class="review-metrics"><strong id="reviewTime">Frame 0 / 80</strong><span id="reviewCounts">0 hits · 0 blocks</span><span id="reviewPhase">Ready</span></div>
+  <input id="reviewRange" type="range" min="0" max="80" value="0" step="1" aria-label="Replay timeline"/>
+ </div>
+ <div class="review-row">
+  <button id="reviewPrev" type="button" aria-label="Previous frame">−1 FRAME</button>
+  <button id="reviewPlay" type="button">PLAY</button>
+  <button id="reviewNext" type="button" aria-label="Next frame">+1 FRAME</button>
+  <button id="reviewSpeed" type="button">0.5×</button>
+ </div>
+ <div id="reviewTrace" class="review-log" aria-live="polite">Choose a scenario to inspect its event trace.</div>
+ <p class="review-warn">This build renders simplified 3D figures. Hit and block results are produced by the current <strong>range-based combat rules</strong>, not verified 3D hand or foot collision. Do not approve realistic contact until those systems are integrated.</p>
+ <label for="reviewNotes">Your review notes</label>
+ <textarea id="reviewNotes" placeholder="Example: Blue's strike registers before the fist reaches Red's face. Freeze at frame 13."></textarea>
+ <div class="review-row"><button id="reviewApprove" type="button">APPROVE</button><button id="reviewReject" type="button">NEEDS WORK</button><button id="reviewCopy" type="button">COPY REVIEW</button></div>
+ <textarea id="reviewPacket" aria-label="Copyable structured review feedback" readonly placeholder="Review feedback appears here; copy it into ChatGPT to request fixes."></textarea>
+ <div id="reviewMessage" role="status"></div>
+ <a class="review-link" href="./review-lite.html">Use the compatibility player if 3D does not display</a>
+ <a class="review-link" href="./index.html">Open normal practice mode</a>
+</section>
+<div id="status">Checking browser compatibility…</div>
+<p class="helper" style="display:none">Mobile: tap attacks, hold arrows to move, hold Guard to block. Desktop: arrows/WASD, J = palm, K = straight, L = kick, Shift = guard. Drag the arena to rotate the camera. Auto mode starts an exchange by default. No health bars or legacy combat code. Shared HIT Fuji environment and blue/red silhouettes. The clean-room engine remains authoritative; character motion is schematic, not validated IK.</p>
+<p class="helper"><a href="./movement-review.html" style="color:#f6bf8b;font-weight:700">SOLO MOVEMENT TESTS · 14 BLUE/RED REPLAYS</a> — qualify natural motion before expanding movesets.</p>
+</main>
+<script type="module">
+import { CombatWorld, MOVESETS, TICK_RATE } from './src/engine.mjs';
+import { fighterRig } from './src/hit-rig.mjs';
+import { FootPlantTracker } from './src/foot-plant-render.mjs';
+import { REVIEW_SCENARIOS, buildReviewReplay, frameAt, reviewPacket } from './src/review.mjs';
+const $=id=>document.getElementById(id);
+const canvas=$('stage'), arena=$('arena'), ctx=canvas.getContext('webgl',{alpha:true,antialias:true,powerPreference:'low-power'})||canvas.getContext('experimental-webgl');
+const fallback=$('fallback'), error=$('error'), simstatus=$('simstatus'), status=$('status');
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)), mix=(a,b,t)=>a+(b-a)*t;
+function fail(message){error.style.display='block';error.textContent='Renderer: '+message;fallback.style.display='grid';canvas.style.display='none';simstatus.textContent='FALLBACK VIEW';}
+addEventListener('error',e=>fail(e.message||'Browser script error'));
+addEventListener('unhandledrejection',e=>fail(String(e.reason)));
+if(!ctx){fail('3D graphics are disabled in this browser. The fallback scene remains visible.');}
+else {
+try{
+const vert='attribute vec3 aPos; attribute vec3 aNorm; uniform mat4 uMVP; uniform mat4 uModel; varying vec3 vNormal; varying vec3 vWorld; void main(){vec4 w=uModel*vec4(aPos,1.0);vWorld=w.xyz;vNormal=mat3(uModel)*aNorm;gl_Position=uMVP*vec4(aPos,1.0);}';
+const frag='precision mediump float; varying vec3 vNormal; varying vec3 vWorld; uniform vec3 uColor; void main(){vec3 n=normalize(vNormal);float l=max(0.0,dot(n,normalize(vec3(-0.5,1.0,0.9)))); float tint=0.32+0.68*l;float fog=clamp(1.0-length(vWorld.xz)*0.025,0.73,1.0); gl_FragColor=vec4(uColor*tint*fog,1.0);}';
+function shader(type,code){const s=ctx.createShader(type);ctx.shaderSource(s,code);ctx.compileShader(s);if(!ctx.getShaderParameter(s,ctx.COMPILE_STATUS))throw Error(ctx.getShaderInfoLog(s));return s}
+const p=ctx.createProgram();ctx.attachShader(p,shader(ctx.VERTEX_SHADER,vert));ctx.attachShader(p,shader(ctx.FRAGMENT_SHADER,frag));ctx.linkProgram(p);if(!ctx.getProgramParameter(p,ctx.LINK_STATUS))throw Error(ctx.getProgramInfoLog(p));
+ctx.useProgram(p);ctx.enable(ctx.DEPTH_TEST);ctx.depthFunc(ctx.LEQUAL);ctx.clearColor(0,0,0,0);
+const aPos=ctx.getAttribLocation(p,'aPos'),aNorm=ctx.getAttribLocation(p,'aNorm'),uMVP=ctx.getUniformLocation(p,'uMVP'),uModel=ctx.getUniformLocation(p,'uModel'),uColor=ctx.getUniformLocation(p,'uColor');
+const matMul=(a,b)=>{const out=new Float32Array(16);for(let c=0;c<4;c++)for(let r=0;r<4;r++){let x=0;for(let k=0;k<4;k++)x+=a[k*4+r]*b[c*4+k];out[c*4+r]=x}return out;};
+function perspective(fovy,asp,near,far){const f=1/Math.tan(fovy/2),o=new Float32Array(16);o[0]=f/asp;o[5]=f;o[10]=(far+near)/(near-far);o[11]=-1;o[14]=2*far*near/(near-far);return o;}
+const sub=(a,b)=>a.map((x,i)=>x-b[i]),cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],dot=(a,b)=>a.reduce((s,x,i)=>s+x*b[i],0),norm=v=>{let d=Math.hypot(...v)||1;return v.map(x=>x/d)};
+function lookAt(eye,at,up){const z=norm(sub(eye,at)),x=norm(cross(up,z)),y=cross(z,x);return new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1])}
+function boxMesh(){const v=[],n=[];const faces=[
+ [[0,0,1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]],
+ [[0,0,-1],[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]],
+ [[1,0,0],[1,-1,1],[1,-1,-1],[1,1,-1],[1,1,1]],
+ [[-1,0,0],[-1,-1,-1],[-1,-1,1],[-1,1,1],[-1,1,-1]],
+ [[0,1,0],[-1,1,1],[1,1,1],[1,1,-1],[-1,1,-1]],
+ [[0,-1,0],[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1]]
+ ];for(const [normal,a,b,c,d] of faces){for(const q of [a,b,c,a,c,d]){v.push(...q.map(x=>x*.5));n.push(...normal)}}return {v,n}}
+function sphereMesh(){const v=[],n=[],steps=12,rings=8;const pt=(t,p)=>[Math.sin(p)*Math.cos(t),Math.cos(p),Math.sin(p)*Math.sin(t)];
+for(let j=0;j<rings;j++)for(let i=0;i<steps;i++){const t=i*2*Math.PI/steps,t2=(i+1)*2*Math.PI/steps,p1=j*Math.PI/rings,p2=(j+1)*Math.PI/rings;for(const q of [pt(t,p1),pt(t,p2),pt(t2,p2),pt(t,p1),pt(t2,p2),pt(t2,p1)]){v.push(...q);n.push(...q)}}return {v,n}};
+function upload(mesh){const pos=ctx.createBuffer(),normal=ctx.createBuffer();ctx.bindBuffer(ctx.ARRAY_BUFFER,pos);ctx.bufferData(ctx.ARRAY_BUFFER,new Float32Array(mesh.v),ctx.STATIC_DRAW);ctx.bindBuffer(ctx.ARRAY_BUFFER,normal);ctx.bufferData(ctx.ARRAY_BUFFER,new Float32Array(mesh.n),ctx.STATIC_DRAW);return {pos,normal,count:mesh.v.length/3}}
+const cube=upload(boxMesh()),sphere=upload(sphereMesh());
+function model(pos,s,axes){const a=axes||[[1,0,0],[0,1,0],[0,0,1]];return new Float32Array([a[0][0]*s[0],a[0][1]*s[0],a[0][2]*s[0],0,a[1][0]*s[1],a[1][1]*s[1],a[1][2]*s[1],0,a[2][0]*s[2],a[2][1]*s[2],a[2][2]*s[2],0,...pos,1])}
+let vp;
+function draw(mesh,m,color){ctx.uniformMatrix4fv(uModel,false,m);ctx.uniformMatrix4fv(uMVP,false,matMul(vp,m));ctx.uniform3fv(uColor,color);ctx.bindBuffer(ctx.ARRAY_BUFFER,mesh.pos);ctx.enableVertexAttribArray(aPos);ctx.vertexAttribPointer(aPos,3,ctx.FLOAT,false,0,0);ctx.bindBuffer(ctx.ARRAY_BUFFER,mesh.normal);ctx.enableVertexAttribArray(aNorm);ctx.vertexAttribPointer(aNorm,3,ctx.FLOAT,false,0,0);ctx.drawArrays(ctx.TRIANGLES,0,mesh.count)}
+function cubeAt(pos,scale,color){draw(cube,model(pos,scale),color)}
+function orb(pos,scale,color){draw(sphere,model(pos,scale),color)}
+function segment(a,b,radius,color){const d=sub(b,a),len=Math.hypot(...d);if(len<.001)return;const y=norm(d),reference=Math.abs(y[1])>.92?[1,0,0]:[0,1,0],x=norm(cross(reference,y)),z=norm(cross(x,y));const mid=a.map((v,i)=>(v+b[i])*.5);draw(sphere,model(mid,[radius,len*.54,radius], [x,y,z]),color)}
+function local(f,v){const angle=Math.atan2(f.facing.x,f.facing.z),s=Math.sin(angle),c=Math.cos(angle);return [f.position.x+v[0]*c+v[2]*s,v[1],f.position.z-v[0]*s+v[2]*c]}
+const palette={blue:{main:[.17,.44,.84],dark:[.17,.44,.84],light:[.17,.44,.84]},red:{main:[.84,.27,.17],dark:[.84,.27,.17],light:[.84,.27,.17]}};
+function drawFighter(f,clock){
+  const ink=f.id==='blue'?[.17,.44,.84]:[.84,.27,.17];
+  const tracker=new FootPlantTracker();
+  let targets;
+  for(const frame of review.frames){targets=tracker.update(frame.snapshot.fighters[f.id],frame.tick);if(frame.tick>=reviewTick)break}
+  const rig=fighterRig(f,f.action?MOVESETS[f.id][f.action.name]:null,clock,targets);
+  const tr=v=>local(f,v);
+  const bone=(a,b,r)=>segment(tr(a),tr(b),r,ink);
+  bone(rig.pelvis,rig.chest,.09);
+  bone(rig.chest,rig.neck,.083);
+  orb(tr(rig.head),[.165,.165,.165],ink);
+  for(const leg of rig.legs){
+    bone(leg.hip,leg.knee,.078);
+    bone(leg.knee,leg.foot,.074);
+    orb(tr(leg.foot),[.12,.075,.15],ink);
+  }
+  for(const arm of rig.arms){
+    bone(arm.shoulder,arm.elbow,.073);
+    bone(arm.elbow,arm.hand,.069);
+    orb(tr(arm.hand),[.087,.087,.087],ink);
+  }
+}
+let world=new CombatWorld({startingGap:2.7}),auto=true,clock=0,turn=0,dragX=0,pressAttack=null,lastEvent='',eventTimer=0;
+
+const reviewMode=true;
+let review=buildReviewReplay('palm-contact');
+let reviewTick=0,reviewPlaying=false,reviewRate=0.5,reviewCarry=0,reviewDecision='unreviewed';
+const reviewRateChoices=[0.25,0.5,1,2];
+function setReviewFrame(requested){
+  const frame=frameAt(review,requested);
+  reviewTick=frame.tick;
+  const s=frame.snapshot;
+  world.tick=s.tick;
+  world.finished=s.finished;
+  world.winner=s.winner;
+  world.fighters=structuredClone(s.fighters);
+  $('reviewRange').max=String(review.frames.length-1);
+  $('reviewRange').value=String(reviewTick);
+  $('reviewTime').textContent='Frame '+reviewTick+' / '+(review.frames.length-1)+' ('+(reviewTick/TICK_RATE).toFixed(2)+' s)';
+  const past=review.events.filter(e=>e.tick<=reviewTick);
+  const hits=past.filter(e=>e.type==='hit').length,blocks=past.filter(e=>e.type==='blocked').length;
+  $('reviewCounts').textContent=hits+' hits · '+blocks+' blocks';
+  const trace=past.slice(-5).map(e=>'#'+e.tick+' '+e.type.toUpperCase()+
+     (e.attacker?' · '+e.attacker:'')+(e.defender?' → '+e.defender:'')+
+     (e.move?' · '+e.move:''));
+  $('reviewTrace').textContent=trace.length?trace.join('\n'):'No contact yet. Use frame controls to inspect the exchange.';
+  const current=s.fighters.blue.action;
+  $('reviewPhase').textContent=current?('Blue '+current.name+' / '+current.phase):'Blue in stance';
+  $('reviewPlay').textContent=reviewPlaying?'PAUSE':'PLAY';
+}
+function selectScenario(id){
+  review=buildReviewReplay(id);
+  reviewCarry=0;reviewPlaying=false;reviewDecision='unreviewed';
+  $('reviewApprove').classList.remove('review-selected');
+  $('reviewReject').classList.remove('review-selected');
+  $('reviewNotes').value='';
+  $('reviewPacket').value='';
+  $('reviewMessage').textContent=review.scenario.description;
+  setReviewFrame(0);
+}
+$('reviewScenario').addEventListener('change',e=>selectScenario(e.target.value));
+$('reviewRange').addEventListener('input',e=>{reviewPlaying=false;reviewCarry=0;setReviewFrame(Number(e.target.value))});
+$('reviewPrev').addEventListener('click',()=>{reviewPlaying=false;setReviewFrame(reviewTick-1)});
+$('reviewNext').addEventListener('click',()=>{reviewPlaying=false;setReviewFrame(reviewTick+1)});
+$('reviewPlay').addEventListener('click',()=>{
+  if(!reviewPlaying&&reviewTick===review.frames.length-1)setReviewFrame(0);
+  reviewPlaying=!reviewPlaying;$('reviewPlay').textContent=reviewPlaying?'PAUSE':'PLAY';
+});
+$('reviewSpeed').addEventListener('click',()=>{
+  const index=reviewRateChoices.indexOf(reviewRate);
+  reviewRate=reviewRateChoices[(index+1)%reviewRateChoices.length];
+  $('reviewSpeed').textContent=reviewRate+'×';
+});
+function buildPacket(){
+  const p=reviewPacket(review,{tick:reviewTick,decision:reviewDecision,
+    notes:$('reviewNotes').value,build:'cleanroom/combat-engine-v1 (unpublished)'});
+  const text=JSON.stringify(p,null,2);
+  $('reviewPacket').value=text;
+  return text;
+}
+function selectDecision(decision){
+  reviewDecision=decision;
+  $('reviewApprove').classList.toggle('review-selected',decision==='approved');
+  $('reviewReject').classList.toggle('review-selected',decision==='needs-work');
+  buildPacket();
+  $('reviewMessage').textContent='Feedback prepared. Tap COPY REVIEW, then paste it into ChatGPT.';
+}
+$('reviewApprove').addEventListener('click',()=>selectDecision('approved'));
+$('reviewReject').addEventListener('click',()=>selectDecision('needs-work'));
+$('reviewCopy').addEventListener('click',async()=>{
+  const result=buildPacket();
+  try{
+    if(!navigator.clipboard?.writeText)throw Error('Clipboard permission unavailable');
+    await navigator.clipboard.writeText(result);
+    $('reviewMessage').textContent='Review copied. Paste it into the Dojo World conversation.';
+  }catch(e){
+    $('reviewPacket').focus();$('reviewPacket').select();
+    $('reviewMessage').textContent='Clipboard blocked. Select and copy the feedback field manually.';
+  }
+});
+function advanceReview(){
+  if(!reviewPlaying)return;
+  reviewCarry+=reviewRate;
+  const framesToAdvance=Math.floor(reviewCarry);
+  if(framesToAdvance<=0)return;
+  reviewCarry-=framesToAdvance;
+  setReviewFrame(reviewTick+framesToAdvance);
+  if(reviewTick===review.frames.length-1){
+    reviewPlaying=false;
+    $('reviewPlay').textContent='PLAY';
+  }
+}
+
+const holds=new Set(), keys=new Set();const tracked=new Map();
+function manual(){if(auto){auto=false;$('auto').textContent='AUTO: OFF';}}
+function setHold(action,down){if(down){manual();holds.add(action)}else holds.delete(action)}
+for(const b of document.querySelectorAll('[data-hold]')){
+ b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture?.(e.pointerId);tracked.set(e.pointerId,b.dataset.hold);b.classList.add('held');setHold(b.dataset.hold,true)});
+ for(const name of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(name,e=>{const x=tracked.get(e.pointerId)||b.dataset.hold;tracked.delete(e.pointerId);b.classList.remove('held');setHold(x,false)});
+}
+for(const b of document.querySelectorAll('[data-attack]'))b.addEventListener('click',()=>{manual();pressAttack=b.dataset.attack});
+$('auto').onclick=()=>{auto=!auto;$('auto').textContent='AUTO: '+(auto?'ON':'OFF');};
+$('reset').onclick=()=>{world=new CombatWorld({startingGap:2.7});lastEvent='';status.textContent='Match restarted';};
+addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(['arrowleft','arrowright','arrowup','arrowdown',' ','shift'].includes(k))e.preventDefault();keys.add(k);if(k==='j'||k==='k'||k==='l'){manual();pressAttack={j:'palm',k:'straight',l:'frontKick'}[k]}else if('wasd'.includes(k)||k.startsWith('arrow')||k==='shift')manual()});
+addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
+addEventListener('blur',()=>{keys.clear();holds.clear();});
+let drag=null;canvas.addEventListener('pointerdown',e=>{if(e.target!==canvas)return;drag=e.clientX;canvas.setPointerCapture?.(e.pointerId)});
+canvas.addEventListener('pointermove',e=>{if(drag!==null){turn=clamp(turn+(e.clientX-drag)*.008,-.95,.95);drag=e.clientX}});
+canvas.addEventListener('pointerup',()=>drag=null);canvas.addEventListener('pointercancel',()=>drag=null);
+function userInput(){const x=Number(holds.has('right')||keys.has('d')||keys.has('arrowright'))-Number(holds.has('left')||keys.has('a')||keys.has('arrowleft'));const z=Number(holds.has('back')||keys.has('s')||keys.has('arrowdown'))-Number(holds.has('forward')||keys.has('w')||keys.has('arrowup'));const out={move:{x,z},guard:holds.has('guard')||keys.has('shift')};if(pressAttack){out.attack=pressAttack;pressAttack=null}return out}
+function aiInput(id){const self=world.fighters[id],other=world.fighters[id==='blue'?'red':'blue'];const dx=other.position.x-self.position.x,dz=other.position.z-self.position.z,d=Math.hypot(dx,dz);
+const attackNames=id==='blue'?['straight','palm','frontKick']:['jab','cross','hook'];const move=attackNames[Math.floor(world.tick/43)%3];let out={move:{x:0,z:0}};
+if(d>1.45)out.move={x:dx/d,z:dz/d};else if(d<1.04)out.move={x:-dx/d*.6,z:-dz/d*.6};
+const defending=other.action&&other.action.phase==='active'&&self.stunFrames===0;
+if(defending&&d<1.65&&((world.tick+ (id==='red'?7:0))%4<2))out.guard=true;
+if(!self.action&&!self.guarding&&self.stunFrames===0&&d<1.8&&world.tick%(id==='blue'?47:61)===0)out.attack=move;
+return out}
+function update(){
+ if(reviewMode){advanceReview();return;}
+ if(world.finished)return;
+ const input={blue:auto?aiInput('blue'):userInput(),red:aiInput('red')},events=world.step(input);
+ for(const e of events){if(['hit','blocked','knockout','match_finished'].includes(e.type)){lastEvent=e.type==='hit'?e.attacker.toUpperCase()+' '+e.move.toUpperCase()+' CONNECTS':e.type==='blocked'?e.defender.toUpperCase()+' BLOCKED':e.type==='knockout'?e.fighter.toUpperCase()+' KNOCKED OUT':'MATCH ENDED';eventTimer=95}}
+}
+function resize(){const r=arena.getBoundingClientRect();const w=Math.max(1,Math.round(r.width*Math.min(devicePixelRatio||1,1.6))),h=Math.max(1,Math.round(r.height*Math.min(devicePixelRatio||1,1.6)));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}ctx.viewport(0,0,w,h)}
+function render(){
+ resize();ctx.clear(ctx.COLOR_BUFFER_BIT|ctx.DEPTH_BUFFER_BIT);
+ const a=canvas.width/canvas.height;const distance=(a<1?8.1:6.6);
+ const eye=[Math.sin(turn)*distance*.8,3.4,Math.cos(turn)*distance];
+ vp=matMul(perspective(Math.PI/3.4,a,.08,120),lookAt(eye,[0,.83,0],[0,1,0]));
+ cubeAt([0,-.12,0],[11,.19,6.6],[.34,.30,.27]);
+ for(let i=-5;i<=5;i++)cubeAt([i,0,0],[.018,.012,6.5],[.47,.42,.35]);
+ for(let z=-3;z<=3;z++)cubeAt([0,0,z],[10.8,.014,.018],[.47,.42,.35]);
+ for(let x of [-4.8,4.8])cubeAt([x,.07,0],[.065,.14,6],[.48,.36,.27]);
+ for(let z of [-2.95,2.95])cubeAt([0,.07,z],[9.6,.14,.065],[.48,.36,.27]);
+ // Marker on center floor.
+ cubeAt([0,.014,0],[.09,.01,.95],[.62,.51,.34]);
+ drawFighter(world.fighters.blue,reviewMode?world.tick/TICK_RATE:clock);drawFighter(world.fighters.red,reviewMode?world.tick/TICK_RATE:clock);
+}
+function fighterLabel(id){const f=world.fighters[id],s=f.knockedOut?'KNOCKOUT':f.stunFrames>0?'REELING':f.guarding?'GUARDING':f.action?f.action.name.toUpperCase()+' · '+f.action.phase.toUpperCase():'IN STANCE';return s+' · '+Math.round(f.stamina)+' stamina'}
+let last=0,accum=0;const fixedDt=1/TICK_RATE;
+function loop(ts){
+ try{
+  const dt=Math.min((ts-last)/1000||0,.1);last=ts;accum+=dt;clock+=dt;
+  let frames=0;while(accum>=fixedDt&&frames<6){update();accum-=fixedDt;frames++}if(frames>=6)accum=0;
+  if(eventTimer>0)eventTimer--;
+  $('notice').textContent=reviewMode?('DETERMINISTIC REPLAY · '+review.scenario.name.toUpperCase()):world.finished?(world.winner==='draw'?'DRAW':world.winner.toUpperCase()+' WINS · TAP RESET'):eventTimer>0?lastEvent:auto?'AUTO EXCHANGE · TAP A MOVE TO TAKE CONTROL':'MANUAL CONTROL · RED IS AI';
+  $('blueState').textContent=fighterLabel('blue');$('redState').textContent=fighterLabel('red');
+  status.textContent=reviewMode?('REPLAY '+review.scenario.id+' · frame '+reviewTick+' · contact authority: '+review.contactAuthority):'REAL 3D VIEW · '+world.tick+' simulation frames · '+(auto?'automatic demo':'manual Blue control');
+  render();requestAnimationFrame(loop);
+ }catch(err){fail(err.message||String(err));}
+}
+setReviewFrame(0);fallback.style.display='none';canvas.style.display='block';simstatus.textContent='REVIEW MODE · READY';requestAnimationFrame(loop);
+}catch(err){fail(err.message||String(err))}
+}
+</script>
+</body></html>

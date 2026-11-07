@@ -1,3 +1,5 @@
+import { contactTelemetry } from './contact.mjs';
+import { strikeContactProbe } from './collision-probe.mjs';
 /**
  * Dojo World combat clean-room — version 0.1.
  * Fresh implementation. No dependency on previous project source.
@@ -9,7 +11,7 @@ export const TICK_RATE = 60;
 const DT = 1 / TICK_RATE;
 const EPS = 1e-9;
 const RADIUS = 0.42;
-const WALK_SPEED = 3.2;
+const WALK_SPEED = 1.4; // realistic walking speed (was 3.2 m/s, a run)
 const GUARD_SPEED_SCALE = 0.42;
 const ATTACK_SPEED_SCALE = 0.18;
 const ACCELERATION = 25;
@@ -17,6 +19,7 @@ const STAMINA_REGEN_PER_SEC = 9;
 const KO_HEAD_STRAIN = 95;
 const KO_BODY_STRAIN = 120;
 const MIN_GUARD_STAMINA = 3;
+const ATTACK_BUFFER_TICKS = 8; // One queued press, valid for eight fixed steps.
 const MAX_TURN_RADIANS_PER_TICK = Math.PI * 1.5 / TICK_RATE; // 270 degrees/second
 const GUARD_CONE_COS = Math.cos(Math.PI * 65 / 180); // +/-65 degrees from facing
 
@@ -28,12 +31,18 @@ export const MOVESETS = Object.freeze({
   blue: Object.freeze({
     palm: defineMove(7, 3, 12, 1.18, 8, 13, 'head', 11, 0.85),
     straight: defineMove(5, 2, 13, 1.30, 7, 11, 'head', 8, 0.62),
-    frontKick: defineMove(12, 4, 17, 1.72, 15, 21, 'body', 16, 1.4)
+    hook: defineMove(10, 3, 16, 1.02, 13, 20, 'head', 14, 0.9),
+    frontKick: defineMove(12, 4, 17, 1.72, 15, 21, 'body', 16, 1.4),
+    roundhouse: defineMove(13, 4, 18, 1.45, 16, 23, 'body', 17, 1.5)
   }),
   red: Object.freeze({
-    jab: defineMove(4, 2, 10, 1.25, 6, 9, 'head', 7, 0.52),
+    jab: defineMove(7, 2, 10, 1.25, 6, 9, 'head', 7, 0.52),
     cross: defineMove(9, 3, 18, 1.38, 13, 19, 'head', 15, 1.2),
-    hook: defineMove(11, 3, 19, 1.06, 14, 22, 'head', 16, 1.0)
+    hook: defineMove(11, 3, 19, 1.06, 14, 22, 'head', 16, 1.0),
+    uppercut: defineMove(12, 3, 20, 1.02, 15, 24, 'head', 17, 0.9),
+    leadUppercut: defineMove(10, 3, 17, 0.95, 12, 18, 'head', 13, 0.8),
+    overhand: defineMove(12, 3, 21, 1.10, 15, 22, 'head', 16, 1.0),
+    frontKick: defineMove(11, 4, 16, 1.65, 14, 20, 'body', 15, 1.3)
   })
 });
 
@@ -65,6 +74,7 @@ const createFighter = (id, x) => ({
   knockedOut: false,
   stunFrames: 0,
   action: null,
+  bufferedAttack: null,
   guarding: false
 });
 
@@ -84,6 +94,7 @@ export class CombatWorld {
       throw new RangeError('startingGap must be finite and >= 0.84 meters');
     }
     this.tick = 0;
+    this.nextAttackInstanceId = 1;
     this.finished = false;
     this.winner = null;
     this.fighters = {
@@ -95,6 +106,7 @@ export class CombatWorld {
   snapshot() {
     return structuredClone({
       tick: this.tick,
+      nextAttackInstanceId: this.nextAttackInstanceId,
       timeSeconds: this.tick * DT,
       finished: this.finished,
       winner: this.winner,
@@ -113,24 +125,48 @@ export class CombatWorld {
     this.tick += 1;
     const blue = this.fighters.blue;
     const red = this.fighters.red;
+    // Capture tick-start geometry before movement, separation, and facing changes.
+    // Shadow collision must use the same tick boundary on both fighters.
+    const previousPose = {
+      blue: { position: { ...blue.position }, facing: { ...blue.facing } },
+      red: { position: { ...red.position }, facing: { ...red.facing } }
+    };
 
     for (const fighter of [blue, red]) {
       const input = inputs[fighter.id];
       if (fighter.stunFrames > 0) fighter.stunFrames--;
+      // Buffer only during recovery. An invalid attack never replaces a valid queued press.
+      // The queue is intentionally discarded on stun/KO, and cannot bypass guarding.
+      if (!active(fighter)) fighter.bufferedAttack = null;
+      if (fighter.bufferedAttack && this.tick > fighter.bufferedAttack.expiresAt) {
+        fighter.bufferedAttack = null;
+      }
+      if (fighter.action?.phase === 'recovery' && input.attack !== undefined &&
+          Object.hasOwn(MOVESETS[fighter.id], input.attack)) {
+        fighter.bufferedAttack = {
+          name: input.attack, expiresAt: this.tick + ATTACK_BUFFER_TICKS - 1
+        };
+        events.push({ tick: this.tick, type: 'attack_buffered', fighter: fighter.id, move: input.attack });
+      }
       fighter.guarding = active(fighter) && !fighter.action && !!input.guard &&
         fighter.stamina >= MIN_GUARD_STAMINA;
 
-      if (active(fighter) && !fighter.guarding && !fighter.action && input.attack !== undefined) {
-        const move = MOVESETS[fighter.id][input.attack];
+      const queued = fighter.bufferedAttack?.name;
+      const requested = input.attack !== undefined ? input.attack : queued;
+      if (active(fighter) && !fighter.guarding && !fighter.action && requested !== undefined) {
+        const move = Object.hasOwn(MOVESETS[fighter.id], requested)
+          ? MOVESETS[fighter.id][requested] : null;
         if (move && fighter.stamina >= move.cost) {
           fighter.stamina -= move.cost;
+          fighter.bufferedAttack = null;
           fighter.action = {
-            name: input.attack,
+            name: requested,
+            instanceId: this.nextAttackInstanceId++,
             phase: 'startup',
             framesLeft: move.startup,
             connected: false
           };
-          events.push({ tick: this.tick, type: 'attack_started', fighter: fighter.id, move: input.attack });
+          events.push({ tick: this.tick, type: 'attack_started', fighter: fighter.id, move: requested, attackInstanceId: fighter.action.instanceId });
         }
       }
       const direction = norm(input.move ?? { x: 0, z: 0 });
@@ -179,12 +215,26 @@ export class CombatWorld {
         z: defender.position.z - attacker.position.z
       });
       const frontDot = attacker.facing.x * toward.x + attacker.facing.z * toward.z;
-      if (d <= move.range + RADIUS && d >= RADIUS * 2 - EPS && frontDot >= 0.65) {
-        contacts.push({ attacker, defender, move, moveName: attacker.action.name });
+      const proxyEligible = d <= move.range + RADIUS && d >= RADIUS * 2 - EPS && frontDot >= 0.65;
+      // Evaluate shadow geometry for *all* active attempts, including proxy rejects.
+      // This remains observational: only the existing proxy gate can cause damage.
+      const collisionProbe = strikeContactProbe(
+        attacker, defender, attacker.action.name,
+        move.active - attacker.action.framesLeft, move.active,
+        { attacker: previousPose[attacker.id], defender: previousPose[defender.id] }
+      );
+      if (proxyEligible) {
+        contacts.push({ attacker, defender, move, moveName: attacker.action.name, attackInstanceId: attacker.action.instanceId, collisionProbe });
         attacker.action.connected = true;
+      } else if (collisionProbe.intersected) {
+        events.push({
+          tick: this.tick, type: 'shadow_contact_rejected', attackInstanceId: attacker.action.instanceId,
+          attacker: attacker.id, defender: defender.id, move: attacker.action.name,
+          reason: '3d_intersection_without_range_authority', collisionProbe
+        });
       }
     }
-    for (const { attacker, defender, move, moveName } of contacts) {
+    for (const { attacker, defender, move, moveName, attackInstanceId, collisionProbe } of contacts) {
       const incoming = norm({ x: attacker.position.x - defender.position.x, z: attacker.position.z - defender.position.z });
       const guarded = defender.guarding && defender.stamina >= MIN_GUARD_STAMINA &&
         dot(defender.facing, incoming) >= GUARD_CONE_COS;
@@ -195,20 +245,27 @@ export class CombatWorld {
       else {
         defender.stunFrames = Math.max(defender.stunFrames, move.stun);
         defender.action = null; // Contact can interrupt recovery/startup; trade already collected.
+        defender.bufferedAttack = null; // An interrupted combo must not auto-fire after stun.
       }
       const impulse = (guarded ? 0.22 : 1) * move.push / defender.massKg * 75;
       const away = norm({ x: defender.position.x - attacker.position.x, z: defender.position.z - attacker.position.z });
       defender.velocity.x += away.x * impulse;
       defender.velocity.z += away.z * impulse;
       events.push({
-        tick: this.tick, type: guarded ? 'blocked' : 'hit', attacker: attacker.id,
+        tick: this.tick, type: guarded ? 'blocked' : 'hit', attackInstanceId, attacker: attacker.id,
         defender: defender.id, move: moveName, target: move.target,
-        strain: Number(strain.toFixed(3))
+        strain: Number(strain.toFixed(3)),
+        contact: contactTelemetry(attacker, defender, moveName, move.target),
+        collisionProbe,
+        // Diagnostic only: a range-authorized hit with no swept 3D contact
+        // is an explicit discrepancy, never an implicit authoritative miss.
+        contactDiscrepancy: collisionProbe.intersected ? null : 'range_hit_without_3d_intersection'
       });
       if (defender.condition.headStrain >= KO_HEAD_STRAIN ||
           defender.condition.bodyStrain >= KO_BODY_STRAIN) {
         defender.knockedOut = true;
         defender.action = null;
+        defender.bufferedAttack = null;
         defender.guarding = false;
         events.push({ tick: this.tick, type: 'knockout', fighter: defender.id });
       }
@@ -227,7 +284,7 @@ export class CombatWorld {
         state.phase = 'recovery'; state.framesLeft = move.recovery;
       } else {
         fighter.action = null;
-        events.push({ tick: this.tick, type: 'attack_finished', fighter: fighter.id });
+        events.push({ tick: this.tick, type: 'attack_finished', fighter: fighter.id, attackInstanceId: state.instanceId });
       }
     }
     if (blue.knockedOut || red.knockedOut) {

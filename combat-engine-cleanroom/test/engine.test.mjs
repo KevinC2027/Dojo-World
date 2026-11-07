@@ -35,6 +35,106 @@ test('blue palm has startup, makes exactly one contact then recovers', () => {
   assert.equal(w.fighters.red.condition.headStrain, MOVESETS.blue.palm.impact);
 });
 
+test('blue hook has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ blue: { attack: 'hook' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.red.condition.headStrain, MOVESETS.blue.hook.impact);
+});
+
+test('red uppercut has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ red: { attack: 'uppercut' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.blue.condition.headStrain, MOVESETS.red.uppercut.impact);
+});
+
+test('red leadUppercut has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ red: { attack: 'leadUppercut' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.blue.condition.headStrain, MOVESETS.red.leadUppercut.impact);
+});
+
+test('red overhand has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ red: { attack: 'overhand' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.blue.condition.headStrain, MOVESETS.red.overhand.impact);
+});
+
+test('blue roundhouse has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ blue: { attack: 'roundhouse' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.red.condition.bodyStrain, MOVESETS.blue.roundhouse.impact);
+});
+
+test('red frontKick has startup, makes exactly one contact then recovers', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const initial = w.step({ red: { attack: 'frontKick' } });
+  assert.equal(initial.some(x => x.type === 'hit'), false);
+  const events = initial.concat(stepN(w, 40));
+  assert.equal(events.filter(x => x.type === 'hit').length, 1);
+  assert.equal(events.filter(x => x.type === 'attack_finished').length, 1);
+  assert.equal(w.fighters.blue.condition.bodyStrain, MOVESETS.red.frontKick.impact);
+});
+
+test('guard blocks the new hand strikes', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  let events = [];
+  events.push(...w.step({ blue: { attack: 'hook' }, red: { guard: true } }));
+  events.push(...stepN(w, 14, { red: { guard: true } }));
+  assert.equal(events.filter(x => x.type === 'blocked').length, 1);
+  assert.equal(events.filter(x => x.type === 'hit').length, 0);
+  assert.ok(w.fighters.red.condition.headStrain < 3);
+});
+
+test('guard blocks the lead uppercut', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  let events = [];
+  events.push(...w.step({ red: { attack: 'leadUppercut' }, blue: { guard: true } }));
+  events.push(...stepN(w, 15, { blue: { guard: true } }));
+  assert.equal(events.filter(x => x.type === 'blocked').length, 1);
+  assert.equal(events.filter(x => x.type === 'hit').length, 0);
+  assert.ok(w.fighters.blue.condition.headStrain < 3);
+});
+
+test('guard blocks the overhand', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  let events = [];
+  events.push(...w.step({ red: { attack: 'overhand' }, blue: { guard: true } }));
+  events.push(...stepN(w, 17, { blue: { guard: true } }));
+  assert.equal(events.filter(x => x.type === 'blocked').length, 1);
+  assert.equal(events.filter(x => x.type === 'hit').length, 0);
+  assert.ok(w.fighters.blue.condition.headStrain < 3);
+});
+
+test('guard blocks the new kicks', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  let events = [];
+  events.push(...w.step({ blue: { attack: 'roundhouse' }, red: { guard: true } }));
+  events.push(...stepN(w, 18, { red: { guard: true } }));
+  assert.equal(events.filter(x => x.type === 'blocked').length, 1);
+  assert.equal(events.filter(x => x.type === 'hit').length, 0);
+  assert.ok(w.fighters.red.condition.bodyStrain < 3);
+});
+
 test('attack out of range cannot connect', () => {
   const w = new CombatWorld({ startingGap: 9 });
   const events = attackThenResolve(w, 'red', 'cross');
@@ -53,12 +153,15 @@ test('guard absorbs most strain but costs stamina', () => {
 });
 
 test('simultaneous valid active frames allow trades', () => {
-  const w = new CombatWorld({ startingGap: 1.25 });
-  // Blue straight becomes active on tick 5, Red jab on tick 5 if launched one frame later.
+  const w = new CombatWorld({ startingGap: 1.15 });
+  // Blue palm and Red jab both become active on tick 8 when launched together.
+  // (Was straight-vs-jab one frame apart; the jab's startup went 4 -> 7 ticks
+  // for hand continuity, so a reactive jab no longer overlaps the straight's
+  // ticks 6-7 — and a palm launched a frame earlier lands first and stuns Red
+  // before the jab's first active tick. Same-tick launch keeps the trade.)
   let events = [];
-  events.push(...w.step({ blue: { attack: 'straight' } }));
-  events.push(...w.step({ red: { attack: 'jab' } }));
-  events.push(...stepN(w, 5));
+  events.push(...w.step({ blue: { attack: 'palm' }, red: { attack: 'jab' } }));
+  events.push(...stepN(w, 10));
   assert.equal(events.filter(x => x.type === 'hit').length, 2);
   assert.ok(w.fighters.blue.condition.headStrain > 0);
   assert.ok(w.fighters.red.condition.headStrain > 0);
@@ -122,4 +225,91 @@ test('front-facing guard still blocks a strike', () => {
   for (let i = 0; i < 14; i++) events.push(...w.step({ blue: { guard: true } }));
   assert.equal(events.filter(e => e.type === 'blocked').length, 1);
   assert.equal(events.filter(e => e.type === 'hit').length, 0);
+});
+
+test('recovery input buffer executes on the first free tick without skipping recovery', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const events = [];
+  events.push(...w.step({ blue: { attack: 'straight' } }));
+  // The straight completes its startup and active frames, then enters recovery.
+  for (let i = 0; i < 6; i++) events.push(...w.step());
+  assert.equal(w.fighters.blue.action.phase, 'recovery');
+  // Queue within eight ticks of the end of the straight's recovery.
+  for (let i = 0; i < 6; i++) events.push(...w.step());
+  events.push(...w.step({ blue: { attack: 'palm' } }));
+  assert.equal(w.fighters.blue.bufferedAttack.name, 'palm');
+  assert.equal(w.fighters.blue.action.name, 'straight');
+  for (let i = 0; i < 6; i++) events.push(...w.step());
+  assert.equal(w.fighters.blue.action, null);
+  events.push(...w.step());
+  assert.equal(w.fighters.blue.action.name, 'palm');
+  assert.equal(events.filter(e => e.type === 'attack_started' && e.move === 'palm').length, 1);
+});
+
+test('expired buffered attack does not launch after recovery', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  w.step({ blue: { attack: 'frontKick' } });
+  for (let i = 0; i < 16; i++) w.step();
+  assert.equal(w.fighters.blue.action.phase, 'recovery');
+  w.step({ blue: { attack: 'palm' } });
+  for (let i = 0; i < 30; i++) w.step();
+  assert.equal(w.fighters.blue.action, null);
+  assert.equal(w.fighters.blue.bufferedAttack, null);
+});
+
+test('a hit interrupts and clears the defender recovery buffer', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  w.step({ blue: { attack: 'frontKick' }, red: { guard: true } });
+  for (let i = 0; i < 16; i++) w.step({ red: { guard: true } });
+  assert.equal(w.fighters.blue.action.phase, 'recovery');
+  w.step({ blue: { attack: 'palm' }, red: { attack: 'jab' } });
+  assert.equal(w.fighters.blue.bufferedAttack.name, 'palm');
+  for (let i = 0; i < 8; i++) w.step();
+  assert.ok(w.fighters.blue.stunFrames > 0);
+  assert.equal(w.fighters.blue.bufferedAttack, null);
+});
+
+test('guard prevents a queued attack from firing while held', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  w.step({ blue: { attack: 'straight' } });
+  for (let i = 0; i < 15; i++) w.step();
+  assert.equal(w.fighters.blue.action.phase, 'recovery');
+  w.step({ blue: { attack: 'palm' } });
+  for (let i = 0; i < 4; i++) w.step({ blue: { guard: true } });
+  assert.equal(w.fighters.blue.action, null);
+  w.step({ blue: { guard: true } });
+  assert.equal(w.fighters.blue.guarding, true);
+  assert.equal(w.fighters.blue.action, null);
+});
+
+test('contact telemetry records finite 3D world-space point, normal and limb', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const events = [ ...w.step({ blue: { attack: 'palm' } }) ];
+  for (let i = 0; i < 10; i++) events.push(...w.step());
+  const hit = events.find(e => e.type === 'hit');
+  assert.ok(hit);
+  assert.equal(hit.contact.model, 'range_proxy_v1');
+  assert.equal(hit.contact.limb, 'right_hand');
+  assert.ok(hit.contact.point.y > 1);
+  assert.ok(Object.values(hit.contact.point).every(Number.isFinite));
+  assert.ok(Object.values(hit.contact.normal).every(Number.isFinite));
+  assert.ok(hit.contact.normal.x < 0);
+});
+
+test('blocked contacts also expose 3D telemetry without changing guard outcome', () => {
+  const w = new CombatWorld({ startingGap: 1.3 });
+  const events = [ ...w.step({ red: { attack: 'cross' }, blue: { guard: true } }) ];
+  for (let i = 0; i < 14; i++) events.push(...w.step({ blue: { guard: true } }));
+  const blocked = events.find(e => e.type === 'blocked');
+  assert.ok(blocked);
+  assert.equal(blocked.contact.limb, 'right_hand');
+  assert.equal(blocked.contact.model, 'range_proxy_v1');
+  assert.ok(blocked.contact.point.y > 1);
+});
+
+test('contact telemetry is deterministic across equivalent simulations', () => {
+  const a = new CombatWorld({ startingGap: 1.3 });
+  const b = new CombatWorld({ startingGap: 1.3 });
+  const inputs = [{ blue: { attack: 'frontKick' } }, ...Array.from({ length: 18 }, () => ({}))];
+  assert.deepEqual(inputs.flatMap(input => a.step(input)), inputs.flatMap(input => b.step(input)));
 });
