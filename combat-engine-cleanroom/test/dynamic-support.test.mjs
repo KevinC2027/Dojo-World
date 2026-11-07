@@ -27,7 +27,7 @@ test('capture-point estimate is exactly reproducible across repeated simulations
  }
 });
 
-test('standing stance has less projected support error than fast reversal',()=>{
+test('standing stance has less projected support error than a stepped-turn reversal',()=>{
  for(const id of ['blue','red']){
   const still=measureDynamicSupport(recordSoloMotion(id,'idle'));
   const reverse=measureDynamicSupport(recordSoloMotion(id,'reverse'));
