@@ -63,7 +63,8 @@ p.helper{font-size:12px;line-height:1.5;color:var(--muted);margin:0}
   <button data-hold="back" aria-label="Move back">↓</button><button data-hold="right" aria-label="Move right">→</button></div></div>
  <div class="group"><label>Blue fighter · buttons</label><div class="actions">
   <button data-attack="palm">PALM</button><button data-attack="straight">STRAIGHT</button>
-  <button data-attack="frontKick">FRONT KICK</button><button data-hold="guard">GUARD</button>
+  <button data-attack="frontKick">FRONT KICK</button><button data-attack="hook">HOOK</button>
+  <button data-attack="roundhouse">ROUNDHOUSE</button><button data-hold="guard">GUARD</button>
   <button id="auto">AUTO: ON</button><button id="reset">RESET</button>
  </div></div>
 </div>
@@ -155,7 +156,7 @@ canvas.addEventListener('pointermove',e=>{if(drag!==null){turn=clamp(turn+(e.cli
 canvas.addEventListener('pointerup',()=>drag=null);canvas.addEventListener('pointercancel',()=>drag=null);
 function userInput(){const x=Number(holds.has('right')||keys.has('d')||keys.has('arrowright'))-Number(holds.has('left')||keys.has('a')||keys.has('arrowleft'));const z=Number(holds.has('back')||keys.has('s')||keys.has('arrowdown'))-Number(holds.has('forward')||keys.has('w')||keys.has('arrowup'));const out={move:{x,z},guard:holds.has('guard')||keys.has('shift')};if(pressAttack){out.attack=pressAttack;pressAttack=null}return out}
 function aiInput(id){const self=world.fighters[id],other=world.fighters[id==='blue'?'red':'blue'];const dx=other.position.x-self.position.x,dz=other.position.z-self.position.z,d=Math.hypot(dx,dz);
-const attackNames=id==='blue'?['straight','palm','frontKick']:['jab','cross','hook'];const move=attackNames[Math.floor(world.tick/43)%3];let out={move:{x:0,z:0}};
+const attackNames=id==='blue'?['straight','palm','frontKick','hook','roundhouse']:['jab','cross','hook','uppercut','frontKick','overhand','leadUppercut'];const move=attackNames[Math.floor(world.tick/43)%attackNames.length];let out={move:{x:0,z:0}};
 if(d>1.45)out.move={x:dx/d,z:dz/d};else if(d<1.04)out.move={x:-dx/d*.6,z:-dz/d*.6};
 const defending=other.action&&other.action.phase==='active'&&self.stunFrames===0;
 if(defending&&d<1.65&&((world.tick+ (id==='red'?7:0))%4<2))out.guard=true;
