@@ -79,7 +79,26 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   const retract=attack?pr.retract:0;
   const twist=(strike===-1?-.12:.12)*load;
   // Presentation-level linked pelvis, spine and shoulder response to support.
-  const sway=(footTargets?.bodySway||0)*.055;
+  // Travel-perpendicular sway (Nov 6 fix sketch 3): bodySway is a
+  // weight-transfer signal, but applying it along the facing frame's
+  // lateral axis puts it ALONG travel during lateral walking (facing is
+  // perpendicular to travel there), so the pelvis oscillates +/-0.055 m
+  // along the travel axis at step frequency. Apply it along the local
+  // axis perpendicular to the travel direction instead. (r,w) is the
+  // travel direction in the facing frame; the perpendicular (w,-r) is
+  // sign-flipped when w < 0 so the offset keeps pointing toward the
+  // support foot, as in forward walking. At rest the travel direction is
+  // undefined and the sway falls back to the facing lateral axis, as
+  // before. The foot-plant tracker uses the same rotation for its reach
+  // bounds (see foot-plant-render.mjs) so the bound assumes the hip
+  // position the rig actually produces.
+  const swayMag=(footTargets?.bodySway||0)*.055;
+  let swayX=swayMag,swayZ=0;
+  if(speed>.05){
+    const yaw=Math.atan2(f.facing?.x||0,f.facing?.z||0),c=Math.cos(yaw),s=Math.sin(yaw);
+    const r=(vx*c-vz*s)/speed,w=(vx*s+vz*c)/speed,sign=w>=0?1:-1;
+    swayX=swayMag*sign*w; swayZ=swayMag*sign*(-r);
+  }
   const recoil=f.stunFrames>0?-.09:0;
   // Elevation comes from the gait contact state, not a per-knee pose correction.
   const postureLift=footTargets?.postureLift||0;
@@ -90,16 +109,16 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   const stanceContrast=footTargets?C((footTargets[1]?.point[2]-footTargets[-1]?.point[2])*.9,-1,1):0;
   const freeArms=1-(footTargets?.guardWeight??(f.guarding?1:0));
   const armCounterSwing=stanceContrast*C(speed/1.4,0,1)*freeArms*.11;
-  const pelvis=[twist*.14+sway,(blue?.84:.96)+postureLift,recoil-.045*load-forwardLean*.12];
-  const chest=[twist*.42+sway*.7,(blue?1.31:1.46)+postureLift,recoil+.025*load+forwardLean*.65];
-  const neck=[twist*.45+sway*.45,(blue?1.51:1.66)+postureLift,recoil+forwardLean*.83];
-  const head=[twist*.40+sway*.4,(blue?1.75:1.89)+postureLift,recoil+forwardLean*.70];
+  const pelvis=[twist*.14+swayX,(blue?.84:.96)+postureLift,recoil-.045*load-forwardLean*.12+swayZ];
+  const chest=[twist*.42+swayX*.7,(blue?1.31:1.46)+postureLift,recoil+.025*load+forwardLean*.65+swayZ*.7];
+  const neck=[twist*.45+swayX*.45,(blue?1.51:1.66)+postureLift,recoil+forwardLean*.83+swayZ*.45];
+  const head=[twist*.40+swayX*.4,(blue?1.75:1.89)+postureLift,recoil+forwardLean*.70+swayZ*.4];
   const arms=[],legs=[];
   for(const side of [-1,1]){
     const shoulder=anchorArm(side,blue,twist);
-    shoulder[0]+=twist*.40+sway*.7;
+    shoulder[0]+=twist*.40+swayX*.7;
     shoulder[1]+=postureLift;
-    shoulder[2]+=forwardLean*.65;
+    shoulder[2]+=forwardLean*.65+swayZ*.7;
     let wrist=hand(side,blue);
     wrist[1]+=postureLift;
     wrist[2]+=forwardLean*.55-side*armCounterSwing;
@@ -128,7 +147,7 @@ export function fighterRig(f,m,clock=0,footTargets=null){
       RIG_LENGTHS.upperArm,RIG_LENGTHS.forearm,elbowPole);
     arms.push({side,shoulder,elbow:arm.joint,hand:arm.end});
     const hip=anchorLeg(side,blue,pelvis[2]);
-    hip[0]+=sway;
+    hip[0]+=swayX;
     hip[1]+=postureLift;
     hip[2]+=-forwardLean*.12;
     let ankle=foot(side,blue);

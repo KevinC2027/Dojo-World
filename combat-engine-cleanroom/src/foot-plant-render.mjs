@@ -103,6 +103,16 @@ export class FootPlantTracker {
     // ~0.42 m/s on the engine ramp, while a fixture jump straight to
     // cruise is >= 0.588 m/s (the guarded speed) — those still wait for
     // the settle gate, so settled-speed fixtures keep their tick-1 launch.
+    // This also covers a RESTART from a full stop (previousSpeed 0 after
+    // steps have launched, e.g. the stepped-turn reversal): waiting for
+    // the speed to settle leaves the root travelling on two planted feet,
+    // strands the support foot, and forces a mid-swing emergency shorten
+    // whose duration cut re-parameterizes the swing and teleports the
+    // foot ~0.23 m in one tick (measured 233.7 mm blue / 266.5 mm red in
+    // the stepped-turn restart). Launching on the first ramp tick gives
+    // the swing its full duration, so the shorten — if it fires at all —
+    // cuts at most a tick or two at low u. The speed<.5 gate is the same
+    // ramp-vs-jump discriminator in both cases.
     // Longitudinal only: the acceleration forecast is zeroed for lateral
     // travel by design, so a tick-1 lateral launch plans its endpoint off
     // the instantaneous cruise (0.42 m/s) and lands ~0.44 m behind the
@@ -111,7 +121,7 @@ export class FootPlantTracker {
     // (measured blue lateral). Lateral keeps the established settle-gate
     // timing (first launch tick 5, as in v1); no overnight launch-frame
     // test requires a lateral tick-1 launch (they are forward/backward).
-    const firstLaunch=!lateralMotion&&this.lastStart<=-1e8&&this.previousSpeed===0&&speed>0&&speed<.5;
+    const firstLaunch=!lateralMotion&&this.previousSpeed===0&&speed>0&&speed<.5;
     // Pick the foot that is about to swing before deciding whether to launch.
     // Prioritize the leg which is beyond its comfortable support reach.
     // Keep the alternating preference when neither leg is substantially behind.
@@ -256,6 +266,15 @@ export class FootPlantTracker {
     // 1.29 m away at touchdown, collapsing the pelvis). Re-aim only an
     // UNREACHABLE endpoint (>0.50 m from the forecast touchdown root; a normal landing is ~0.34 m), from the forecast touchdown root, bounded by
     // the stance foot like a fresh launch. Reachable targets are untouched.
+    // DIRECTION-AWARE (Nov 6 fix sketch 1): a reachable endpoint can still
+    // be wrong — after a reversal it can sit 0.30-0.40 m from the forecast
+    // root yet BEHIND the COM in the new travel direction (measured: the
+    // tick-77 launch lands 0.38 m behind the COM at tick 100 while only
+    // 0.39 m from the forecast root, so the distance test never fires).
+    // Fire the same re-aim when the endpoint is behind the current root
+    // along travel by more than 0.10 m. A normal swing's endpoint stays
+    // ~0.30-0.86 m ahead of the root along travel, so this never fires on
+    // ordinary walking; the 0.05 m/tick rate limit is unchanged.
     for(const side of [-1,1]){
       const leg=this.feet[side],sw=leg.swing;
       if(!sw)continue;
@@ -263,7 +282,8 @@ export class FootPlantTracker {
       const travel=speed*remaining/60;
       const futureRoot=[f.position.x+this.lastDir[0]*travel,
         f.position.z+this.lastDir[1]*travel];
-      if(dist(futureRoot,sw.end)>.50){
+      const alongTravel=(sw.end[0]-f.position.x)*this.lastDir[0]+(sw.end[1]-f.position.z)*this.lastDir[1];
+      if(dist(futureRoot,sw.end)>.50||alongTravel<-.10){
         const rotation=ROT(f.facing),lateral=[rotation.c,-rotation.s];
         const destination=[futureRoot[0]+this.lastDir[0]*.30+lateral[0]*side*.20,
           futureRoot[1]+this.lastDir[1]*.30+lateral[1]*side*.20];
@@ -298,6 +318,20 @@ export class FootPlantTracker {
     const preferred=f.id==='blue'?(moving?.20:.11):(moving?.085:.055);
     let bound=Infinity,landingBound=Infinity,futureSupportBound=Infinity;
     const baseHeight=f.id==='blue'?.84:.96;
+    // Sway vector in the facing frame (same rotation as hit-rig.mjs):
+    // the rig applies the bodySway offset along the local axis
+    // perpendicular to travel, so the reach bounds must use the same hip
+    // offset (swayX along local x, swayZ along local z) or the bound
+    // assumes a hip the rig does not produce and the leg IK clamps the
+    // ankle off its target. At rest the sway falls back to the facing
+    // lateral axis, as before.
+    const swayMag=this.bodySway*.055;
+    let swayX=swayMag,swayZ=0;
+    if(speed>.05){
+      const yaw=Math.atan2(f.facing.x,f.facing.z),yc=Math.cos(yaw),ys=Math.sin(yaw);
+      const r=(vx*yc-vz*ys)/speed,w=(vx*ys+vz*yc)/speed,sign=w>=0?1:-1;
+      swayX=swayMag*sign*w; swayZ=swayMag*sign*(-r);
+    }
     for(const side of [-1,1]){
       const sw=this.feet[side].swing;
       if(sw&&!(side===1&&f.action?.name==='frontKick')){
@@ -318,8 +352,8 @@ export class FootPlantTracker {
           const future={facing:f.facing,position:{
             x:f.position.x+this.lastDir[0]*travel,
             z:f.position.z+this.lastDir[1]*travel}};
-          const p=toLocal(future,sw.end,.035),hipX=side*.14+this.bodySway*.055;
-          const dx=p[0]-hipX,dz=p[2];
+          const p=toLocal(future,sw.end,.035),hipX=side*.14+swayX;
+          const dx=p[0]-hipX,dz=p[2]-swayZ;
           const limit=p[1]+Math.sqrt(Math.max(0,1.001*1.001-dx*dx-dz*dz))-baseHeight;
           landingBound=Math.min(landingBound,limit);
         }
@@ -327,8 +361,8 @@ export class FootPlantTracker {
       // A scheduled swing is still load-bearing on its exact launch tick.
       // Include that world-locked ankle when limiting full-body height.
       if(!fdata[side].groundedContact)continue;
-      const p=fdata[side].point,hipX=side*.14+this.bodySway*.055;
-      const dx=p[0]-hipX,dz=p[2];
+      const p=fdata[side].point,hipX=side*.14+swayX;
+      const dx=p[0]-hipX,dz=p[2]-swayZ;
       const limit=p[1]+Math.sqrt(Math.max(0,1.001*1.001-dx*dx-dz*dz))-baseHeight;
       bound=Math.min(bound,limit);
       const otherSwing=this.feet[-side].swing;
@@ -346,7 +380,7 @@ export class FootPlantTracker {
           x:f.position.x+this.lastDir[0]*travel,
           z:f.position.z+this.lastDir[1]*travel}};
         const next=toLocal(future,fdata[side].world,.035);
-        const ddx=next[0]-hipX,ddz=next[2];
+        const ddx=next[0]-hipX,ddz=next[2]-swayZ;
         const nextLimit=next[1]+Math.sqrt(Math.max(0,1.001*1.001-ddx*ddx-ddz*ddz))-baseHeight;
         futureSupportBound=Math.min(futureSupportBound,nextLimit);
       }

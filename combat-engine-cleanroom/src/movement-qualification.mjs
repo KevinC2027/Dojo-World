@@ -21,7 +21,21 @@ const sequences={
   forward:{frames:120,vector:t=>({x:1,z:0})},
   backward:{frames:120,vector:t=>({x:-1,z:0})},
   lateral:{frames:120,vector:t=>({x:0,z:1})},
-  reverse:{frames:160,vector:t=>t<80?{x:1,z:0}:{x:-1,z:0}},
+  // Stepped-turn reversal (Nov 6 fix sketch 2): the old one-tick +x -> -x
+  // flip commanded an impossible reversal — a swing launched pre-flip
+  // stayed airborne 23 ticks and landed 0.38 m behind the COM, with the
+  // COM outside support for ~26 ticks. A real 180-degree reversal is a
+  // stepped turn: walk forward, decelerate to a stop, turn in place, then
+  // step forward in the new direction. The turn phase is 40 ticks because
+  // a 180-degree turn at the engine's 270 deg/s max turn rate takes
+  // 180/270 = 0.667 s = 40 ticks. FLAG: the solo-motion harness cannot
+  // command a facing rotation — the engine auto-rotates facing toward the
+  // other fighter (30 m away, stationary), so facing stays locked along
+  // the x-axis and the turn itself is a planted pause of the correct
+  // duration, not a visible rotation. The reverse case now measures a
+  // stop-turn-walk, not an instant flip; the gate's reverse numbers
+  // change meaning accordingly (see refinement-log-20261106-1800).
+  reverse:{frames:160,vector:t=>t<60?{x:1,z:0}:t<100?STATIC:{x:-1,z:0}},
   stop:{frames:160,vector:t=>t<80?{x:1,z:0}:STATIC},
   guard:{frames:90,vector:t=>STATIC,guard:true},
   guardRelease:{frames:120,vector:t=>STATIC,guard:t=>t<55},
