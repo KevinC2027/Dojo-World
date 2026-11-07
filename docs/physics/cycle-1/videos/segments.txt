@@ -1,0 +1,4 @@
+file '/workspace/Dojo-World/docs/physics/cycle-1/videos/back-baseline.mp4'
+file '/workspace/Dojo-World/docs/physics/cycle-1/videos/back-blocked-candidate.mp4'
+file '/workspace/Dojo-World/docs/physics/cycle-1/videos/lunge-baseline.mp4'
+file '/workspace/Dojo-World/docs/physics/cycle-1/videos/lunge-blocked-candidate.mp4'

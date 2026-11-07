@@ -1,0 +1,85 @@
+{
+  "captured_at": "2026-11-03T04:24:15.899477-06:00",
+  "regular": "gameplay-regular-speed.mp4",
+  "slow": "gameplay-slow-motion-0.25x.mp4",
+  "slow_playback_scale": 0.25,
+  "segments": [
+    {
+      "source": "recovered_source/index.html",
+      "source_sha256": "786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b",
+      "case": {
+        "attacker_slot": 0,
+        "attacker_style": "back",
+        "facing": 1,
+        "distance": 0.85
+      },
+      "segment": "back-baseline.mp4",
+      "frames": 256,
+      "first_frame_ms": 16,
+      "last_frame_ms": 4096,
+      "state_sha256": "a8b0adb5ea335d38f66a6fb1c2bc7eba243c831a33e64bd639797f9067d74226"
+    },
+    {
+      "source": "workbench/throw-carry-ik-v1/index.html",
+      "source_sha256": "39e425f2318debf00743700cfb283a89d875901c02e5e9ba75fdcd1b1e96b930",
+      "case": {
+        "attacker_slot": 0,
+        "attacker_style": "back",
+        "facing": 1,
+        "distance": 0.85
+      },
+      "segment": "back-blocked-candidate.mp4",
+      "frames": 256,
+      "first_frame_ms": 16,
+      "last_frame_ms": 4096,
+      "state_sha256": "91453d2a7b33ee6a8b7ab26e36f2d6b0008f3d5af5aaa32248c47b797b787e8b"
+    },
+    {
+      "source": "recovered_source/index.html",
+      "source_sha256": "786ac6bf36413459be491609ebe986106de0a09b4753e233854cad80f0e2968b",
+      "case": {
+        "attacker_slot": 1,
+        "attacker_style": "lunge",
+        "facing": 1,
+        "distance": 0.85
+      },
+      "segment": "lunge-baseline.mp4",
+      "frames": 256,
+      "first_frame_ms": 16,
+      "last_frame_ms": 4096,
+      "state_sha256": "09f2b953142fdbfdb8786cd15dc71daa4467fb2ad5e6d73101b992e724e5e241"
+    },
+    {
+      "source": "workbench/throw-carry-ik-v1/index.html",
+      "source_sha256": "39e425f2318debf00743700cfb283a89d875901c02e5e9ba75fdcd1b1e96b930",
+      "case": {
+        "attacker_slot": 1,
+        "attacker_style": "lunge",
+        "facing": 1,
+        "distance": 0.85
+      },
+      "segment": "lunge-blocked-candidate.mp4",
+      "frames": 256,
+      "first_frame_ms": 16,
+      "last_frame_ms": 4096,
+      "state_sha256": "5e148dfb0dbd6823e22715c1ebab884edc716a565793e06cfa7c3acbbbc85913"
+    }
+  ],
+  "schedule": "One batch only. No hourly scheduler configured. No scheduling tool available; no auto-merge to activate GitHub cron.",
+  "methodology": "Actual canvas frames from real-keyboard triggered controlled throw fixtures.16ms render cadence, original60Hz simulation. Slow video duplicates playback frames; no invented animation.",
+  "limitations": [
+    "Not a natural full match or physical-device capture.",
+    "S1 input routing is a disclosed fixture.",
+    "Candidate is BLOCKED for measured continuity regressions and is not promoted or owner-approved."
+  ],
+  "gameplay-regular-speed": {
+    "duration": "16.400000",
+    "size": "595223",
+    "sha256": "7cab800882c2e4c661eaa54ebae3daef431de0b02a93f4562a3d845d89add51b"
+  },
+  "gameplay-slow-motion-0.25x": {
+    "duration": "65.583333",
+    "size": "1238380",
+    "sha256": "14ee5438afbdf92dbe560d513b7648c4573b21b32b10227e07f3c3316fdf473a"
+  }
+}

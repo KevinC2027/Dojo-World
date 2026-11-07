@@ -1,0 +1,78 @@
+{
+  "status": "REJECTED_MEASUREMENT_CALIBRATION",
+  "reason": "Native RAF initial phase differed between fresh pages; stateful pose code made fixed-clock replays disagree. No candidate edit had occurred.",
+  "cases": [
+    {
+      "id": "back-slot0-face+1-gap0.85",
+      "replay_deterministic": false,
+      "observer_neutral": true,
+      "state_hashes": [
+        "79f4899b916436385abb34300f5e7092621ad4d54a631f1a748d6ed3b7f19d63",
+        "c791b9b26ea9b5ecfeea00a2f6b64dc420663965d0cdb9ae3006082b4c33a1f0"
+      ]
+    },
+    {
+      "id": "back-slot0-face-1-gap0.85",
+      "replay_deterministic": false,
+      "observer_neutral": true,
+      "state_hashes": [
+        "608e6ce2d81fdb924451e707e4549392dd7d4a2a6b98e443f111abbf30ef9baf",
+        "8cc82155909e18dd724a99860ad4a82d0b7d5290f04d0f9691457297eff1548a"
+      ]
+    },
+    {
+      "id": "back-slot1-face+1-gap0.85",
+      "replay_deterministic": false,
+      "observer_neutral": false,
+      "state_hashes": [
+        "c41a059511053c7c2a9c0cbe9d59dcf7028157a6e54bc9302472afeaabe49ea6",
+        "9bb59b95be9e3932048474d3b5a322528cb3504aded763f1800dc36710e58b9c"
+      ]
+    },
+    {
+      "id": "back-slot1-face-1-gap0.85",
+      "replay_deterministic": false,
+      "observer_neutral": false,
+      "state_hashes": [
+        "50aee51b15718bf659a74c57b24e3a60639c7ddc9587b51c7b1542a05f904671",
+        "016371719a4ed2dcae5b7a415965373b128be4c0a332e99df20c6b8cd84608da"
+      ]
+    },
+    {
+      "id": "lunge-slot0-face+1-gap0.85",
+      "replay_deterministic": false,
+      "observer_neutral": false,
+      "state_hashes": [
+        "1c3fd2315f2fd464ce6e983d149ee0c2cd19b6c86eecf80526a56502b0d3a7e6",
+        "86eb6eb5b9e836ba7d985bd7a7d2560527a8ea4b59250561828996af945f051f"
+      ]
+    },
+    {
+      "id": "lunge-slot0-face-1-gap0.85",
+      "replay_deterministic": false,
+      "observer_neutral": false,
+      "state_hashes": [
+        "eb0779b95efd813b7138b3c619d40363a9d98260b8554e2c287501628a11a63c",
+        "f4b21206488de7081225293f63c2f2cd5d05e938b67e775d4b0b826f3f0dd199"
+      ]
+    },
+    {
+      "id": "lunge-slot1-face+1-gap0.85",
+      "replay_deterministic": false,
+      "observer_neutral": false,
+      "state_hashes": [
+        "8f59f0cc25fe85718cba8c298e7699aba6c22976f1f3c44b74e0196e245c5484",
+        "97ceade33a6ff875d10e6faa57ad3de88322959f4025e0699fce6f434fbcfc1c"
+      ]
+    },
+    {
+      "id": "lunge-slot1-face-1-gap0.85",
+      "replay_deterministic": false,
+      "observer_neutral": false,
+      "state_hashes": [
+        "69f3feeeefc5bfa1ec0d99ef5a8e97694fa87a53cd8a5ccc979aef875023073d",
+        "5e61b7835325254becdc33805033afcca58a1f3e00c7eceaaa9342acd04283c2"
+      ]
+    }
+  ]
+}
