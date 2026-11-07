@@ -37,7 +37,7 @@ const frameProgress=(f,m)=>{
   const chamberTick=Math.max(1,Math.round(m.startup*.8));
   const contactTick=Math.max(chamberTick+2,m.startup+m.active-1);
   const returnTick=contactTick+Math.max(3,Math.round(m.recovery*.75));
-  return {phase:a.phase,u:sm(1-C(a.framesLeft/Math.max(1,duration),0,1)),
+  return {phase:a.phase,elapsed,u:sm(1-C(a.framesLeft/Math.max(1,duration),0,1)),
     windup:C(elapsed/chamberTick,0,1),
     thrust:C((elapsed-chamberTick)/(contactTick-chamberTick),0,1),
     retract:sm((elapsed-contactTick)/(returnTick-contactTick))};
@@ -60,7 +60,7 @@ export function solveTwoBone(root,target,a,b,pole){
   const end=add(root,mul(u,d));
   return {joint:add(add(root,mul(u,along)),mul(bend,height)),end};
 }
-const strikeSide={palm:1,straight:-1,frontKick:1,jab:-1,cross:1,hook:-1};
+const strikeSide={palm:1,straight:-1,frontKick:1,jab:-1,cross:1,hook:-1,uppercut:1,leadUppercut:-1,overhand:1,roundhouse:1};
 export function fighterRig(f,m,clock=0,footTargets=null){
   const blue=f.id==='blue',action=f.action,pr=frameProgress(f,m);
   // Match the foot tracker when a replay sample contains invalid velocity.
@@ -70,11 +70,17 @@ export function fighterRig(f,m,clock=0,footTargets=null){
   const speed=Math.hypot(vx,vz);
   const gait=Math.sin(clock*6.5)*C(speed/1.4,0,1);
   const strike=action?strikeSide[action.name]:undefined;
-  const kick=action?.name==='frontKick';
+  const kick=action?.name==='frontKick'||action?.name==='roundhouse';
   const attack=!!(action&&m);
   // Share continuous anticipation, contact and recovery envelopes across the
   // limbs and trunk. Avoid hard resets at the startup/active/recovery seams.
   const load=attack?pr.windup*(1-pr.retract):0;
+  // Off hand, decoupled from the strike envelope (Nov 7, Kev's "both arms
+  // moving" question): it rises to guard height on its own fast ramp at
+  // attack onset, holds through the strike, and eases back during recovery,
+  // so it never travels in sync with the punching arm. When the fighter is
+  // already guarding, the hand is at the chin already and barely moves.
+  const offGuard=attack?(pr.phase==='recovery'?1-pr.retract:C(pr.elapsed/4,0,1)):0;
   const extend=attack?pr.thrust:0;
   const retract=attack?pr.retract:0;
   const twist=(strike===-1?-.12:.12)*load;
@@ -126,21 +132,43 @@ export function fighterRig(f,m,clock=0,footTargets=null){
     // guard-to-startup seam inherits the last solved stance instead of snapping.
     wrist=mix(wrist,[side*.18,(blue?1.51:1.71)+postureLift,.31],footTargets?.guardWeight??(f.guarding?1:0));
     if(attack&&side===strike&&!kick){
-      // Chamber draws fist back before extension; hook wraps horizontally, not telescopically.
+      // Chamber draws fist back before extension; hook wraps horizontally, not
+      // telescopically; uppercut chambers low at the hip and rises to the chin;
+      // overhand chambers high above the shoulder and loops over the top,
+      // crashing down onto the head. The chamber sits out and forward of the
+      // shoulder line: a chamber straight above the rest wrist would route the
+      // windup path through the shoulder point itself, folding the elbow
+      // fully and flipping its IK bend direction mid-swing (0.39 m jump).
       // Startup inherits the exact stance wrist, including arm counter-swing.
       const base=wrist.slice();
       // The hand must never chamber directly on the shoulder; that forces
       // a fully folded elbow and unstable IK bend-direction changes.
+      // Lead uppercut rides the same rising path as the rear uppercut,
+      // mirrored to the lead hand (strikeSide -1 flips the x terms).
+      const isUppercut=action.name==='uppercut'||action.name==='leadUppercut';
       const chamber=action.name==='hook'?[side*.37,1.55,.23]:
+        isUppercut?[side*.22,(blue?1.02:1.12)+postureLift,.28]:
+        action.name==='overhand'?[side*.38,(blue?1.70:1.88)+postureLift,.28]:
         [side*.25,(blue?1.40:1.58)+postureLift,.34];
       const contact=action.name==='hook'?[side*.09,1.51,.60]:
+        isUppercut?[side*.15,blue?1.42:1.57,.52]:
+        action.name==='overhand'?[side*.12,blue?1.60:1.75,.58]:
         [side*.20,blue?1.48:1.64,.68];
       if(action.name==='hook')chamber[1]+=postureLift;
       contact[1]+=postureLift;
       const loaded=mix(base,chamber,pr.windup);
+      // Overhand windup bows out to the side: a straight hip-to-high-chamber
+      // line passes within ~0.14 m of the shoulder, where the hand's 0.10 m/tick
+      // rise is a huge angular rate for the arm and the elbow whips (0.39 m
+      // jump). The bow keeps the hand ~0.44 m from the shoulder at mid-windup
+      // and vanishes at both ends, so the chamber and contact are unchanged.
+      if(action.name==='overhand'){
+        const bow=Math.sin(Math.PI*pr.windup);
+        loaded[0]+=side*.28*bow; loaded[2]+=.12*bow;
+      }
       wrist=mix(mix(loaded,contact,extend),base,retract);
     }else if(attack&&side!==strike&&!kick){
-      wrist=mix(wrist,[side*.19,(blue?1.30:1.45)+postureLift,.28+forwardLean*.55],load);
+      wrist=mix(wrist,[side*.19,(blue?1.30:1.45)+postureLift,.28+forwardLean*.55],offGuard);
     }
     const elbowPole=[side*.35,blue?-.85:-.75,-.20];
     const arm=solveTwoBone(shoulder,constrain(shoulder,wrist,RIG_LENGTHS.upperArm+RIG_LENGTHS.forearm-.002),
@@ -161,8 +189,10 @@ export function fighterRig(f,m,clock=0,footTargets=null){
     if(footTargets?.[side])ankle=footTargets[side].point.slice();
     if(kick&&side===strike){
       const neutral=footTargets?.[side]?.point?.slice()||foot(side,blue);
-      const chamber=[side*.22,.55,.27];
-      const contact=[side*.24,.88,.78];
+      // Roundhouse chambers out to the side with the knee raised and sweeps
+      // horizontally to the body; front kick chambers straight up in front.
+      const chamber=action.name==='roundhouse'?[side*.38,.70,.08]:[side*.22,.55,.27];
+      const contact=action.name==='roundhouse'?[side*.06,1.02,.72]:[side*.24,.88,.78];
       ankle=mix(mix(mix(neutral,chamber,pr.windup),contact,extend),neutral,retract);
     }
     const kneePole=[side*.32,.38,.58];

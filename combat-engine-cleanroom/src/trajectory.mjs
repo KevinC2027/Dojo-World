@@ -10,9 +10,13 @@ const STRIKES = Object.freeze({
   palm:      { limb: 'right_hand', height: 1.52, reach: 1.00, lateral: 0.17, radius: 0.105 },
   straight:  { limb: 'right_hand', height: 1.50, reach: 1.10, lateral: 0.13, radius: 0.09 },
   frontKick: { limb: 'right_foot', height: 1.04, reach: 1.43, lateral: 0.13, radius: 0.14 },
+  roundhouse: { limb: 'right_foot', height: 1.02, reach: 1.35, lateral: 0.05, radius: 0.14 },
   jab:       { limb: 'left_hand', height: 1.53, reach: 1.04, lateral: -0.16, radius: 0.09 },
   cross:     { limb: 'right_hand', height: 1.49, reach: 1.17, lateral: 0.14, radius: 0.105 },
-  hook:      { limb: 'left_hand', height: 1.49, reach: 0.90, lateral: -0.27, radius: 0.12 }
+  hook:      { limb: 'left_hand', height: 1.49, reach: 0.90, lateral: -0.27, radius: 0.12 },
+  uppercut:  { limb: 'right_hand', height: 1.38, reach: 0.85, lateral: 0.10, radius: 0.11 },
+  leadUppercut: { limb: 'left_hand', height: 1.38, reach: 0.85, lateral: -0.10, radius: 0.11 },
+  overhand:  { limb: 'right_hand', height: 1.68, reach: 0.92, lateral: 0.12, radius: 0.11 }
 });
 const finite3 = v => v && ['x','y','z'].every(k => Number.isFinite(v[k]));
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));

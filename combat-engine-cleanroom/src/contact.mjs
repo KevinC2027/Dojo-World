@@ -5,8 +5,9 @@
  */
 const HEIGHT = Object.freeze({ head: 1.62, body: 1.08 });
 const STRIKE_LIMB = Object.freeze({
-  palm: 'right_hand', straight: 'right_hand', frontKick: 'right_foot',
-  jab: 'left_hand', cross: 'right_hand', hook: 'left_hand'
+  palm: 'right_hand', straight: 'right_hand', hook: 'left_hand', frontKick: 'right_foot',
+  roundhouse: 'right_foot',
+  jab: 'left_hand', cross: 'right_hand', uppercut: 'right_hand', leadUppercut: 'left_hand', overhand: 'right_hand'
 });
 const round = value => Number(value.toFixed(6));
 

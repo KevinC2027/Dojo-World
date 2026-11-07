@@ -7,6 +7,9 @@ const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const smooth=x=>{const t=clamp(x,0,1);return t*t*(3-2*t)};
 const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
 const lerp=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
+// Both kicks lift the striking (right) foot off the ground; the support,
+// landing-bound and planted-state logic must treat them identically.
+const isKick=name=>name==='frontKick'||name==='roundhouse';
 const ROT=({x,z})=>{const angle=Math.atan2(x,z);return {c:Math.cos(angle),s:Math.sin(angle)}};
 function toWorld(f,p){const {c,s}=ROT(f.facing);return [f.position.x+p[0]*c+p[2]*s,f.position.z-p[0]*s+p[2]*c]}
 function toLocal(f,w,y){const {c,s}=ROT(f.facing),dx=w[0]-f.position.x,dz=w[1]-f.position.z;return [dx*c-dz*s,y,dx*s+dz*c]}
@@ -342,9 +345,9 @@ export class FootPlantTracker {
     }
     // Carry a small lateral weight-transfer signal through step boundaries.
     const gaitSupport=this.feet[-1].swing?1:this.feet[1].swing?-1:0;
-    // A front kick removes the striking foot from ground support. Transfer
+    // A kick removes the striking foot from ground support. Transfer
     // body weight toward the non-kicking leg only AFTER it can actually plant.
-    const groundedKickSupport=f.action?.name==='frontKick'&&!this.feet[-1].swing;
+    const groundedKickSupport=isKick(f.action?.name)&&!this.feet[-1].swing;
     const support=groundedKickSupport?-1:gaitSupport;
     this.bodySway+=(support-this.bodySway)*.28;
     // Coordinate standing height with leg reach, rather than solving each
@@ -371,7 +374,7 @@ export class FootPlantTracker {
     }
     for(const side of [-1,1]){
       const sw=this.feet[side].swing;
-      if(sw&&!(side===1&&f.action?.name==='frontKick')){
+      if(sw&&!(side===1&&isKick(f.action?.name))){
         // Only enforce the landing reach in the last few ticks before
         // touchdown. Earlier in the swing the foot is still under the hip,
         // so the pelvis may rise to full extension and the stance knee can
@@ -451,7 +454,7 @@ export class FootPlantTracker {
       }
       // The visual strike leg is airborne even if its stored neutral
       // footprint remains world-anchored for smooth recovery.
-      const airborneKick=side===1&&f.action?.name==='frontKick';
+      const airborneKick=side===1&&isKick(f.action?.name);
       // At the exact launch tick the foot is still at the world-locked
       // takeoff point and floor height, even though the swing has been scheduled.
       // Keep 'planted' as the operational stance state; report contact separately.

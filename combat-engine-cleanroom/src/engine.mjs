@@ -31,12 +31,18 @@ export const MOVESETS = Object.freeze({
   blue: Object.freeze({
     palm: defineMove(7, 3, 12, 1.18, 8, 13, 'head', 11, 0.85),
     straight: defineMove(5, 2, 13, 1.30, 7, 11, 'head', 8, 0.62),
-    frontKick: defineMove(12, 4, 17, 1.72, 15, 21, 'body', 16, 1.4)
+    hook: defineMove(10, 3, 16, 1.02, 13, 20, 'head', 14, 0.9),
+    frontKick: defineMove(12, 4, 17, 1.72, 15, 21, 'body', 16, 1.4),
+    roundhouse: defineMove(13, 4, 18, 1.45, 16, 23, 'body', 17, 1.5)
   }),
   red: Object.freeze({
     jab: defineMove(7, 2, 10, 1.25, 6, 9, 'head', 7, 0.52),
     cross: defineMove(9, 3, 18, 1.38, 13, 19, 'head', 15, 1.2),
-    hook: defineMove(11, 3, 19, 1.06, 14, 22, 'head', 16, 1.0)
+    hook: defineMove(11, 3, 19, 1.06, 14, 22, 'head', 16, 1.0),
+    uppercut: defineMove(12, 3, 20, 1.02, 15, 24, 'head', 17, 0.9),
+    leadUppercut: defineMove(10, 3, 17, 0.95, 12, 18, 'head', 13, 0.8),
+    overhand: defineMove(12, 3, 21, 1.10, 15, 22, 'head', 16, 1.0),
+    frontKick: defineMove(11, 4, 16, 1.65, 14, 20, 'body', 15, 1.3)
   })
 });
 
