@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>HIT v3.184 · Real-Time 1v1</title>
+<title>HIT v3.185 · Real-Time 1v1</title>
 <style>
 :root{--bg:#eceae4;--fg:#1b1b1f;--panel:#fff;--accent:#d6452b;--blue:#2b6fd6;--ring:#d6d0c0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--fg:#eee;--panel:#1d2128;--accent:#ff6a4d;--blue:#5a9bff;--ring:#272c35}}
@@ -226,7 +226,8 @@ const THROW_PHASES={
   {name:'carry',lift:.65,liftFrames:18,release:24,carryFrames:24,victim:{overBack:1}},
   {name:'launch',vy:4.6,vx:1.9,arc:'DQ99',ic:'ippon'}]},
 };
-function throwPos(f,o){return ((f.x-o.x)*o.fx+(f.z-o.z)*o.fz)<0?'back':'ippon'}   // VISION v3.30 — THROWS: throw varies by position. The same throw input reads where the attacker stands relative to the foe: behind the foe (the foe-to-attacker vector points against the foe's facing, dot<0) it is the back-first throw (THROW_PHASES.back — the foe is driven forward over the front), in front it is the over-the-shoulder toss (ippon). Face-to-face is the default, so v3.29's ippon behaviour is unchanged there; the back entry was the live red throw before v3.29, so its grab/carry/launch phases already work for both styles.
+function throwPos(f,o){return 'ippon'}   /* v3.185 — BOTH fighters throw over the shoulder (ippon seoi nage), from any position. The standing flip (the back-first hip toss, and the lunge style's arm-grab turn) is no longer reachable: every throw route asks throwPos, and the ippon routine places the foe in front of the thrower itself, so it does not depend on which side the thrower started. Original v3.30 rule kept below for reference. */
+function throwPosOld(f,o){return ((f.x-o.x)*o.fx+(f.z-o.z)*o.fz)<0?'back':'ippon'}   // VISION v3.30 — THROWS: throw varies by position. The same throw input reads where the attacker stands relative to the foe: behind the foe (the foe-to-attacker vector points against the foe's facing, dot<0) it is the back-first throw (THROW_PHASES.back — the foe is driven forward over the front), in front it is the over-the-shoulder toss (ippon). Face-to-face is the default, so v3.29's ippon behaviour is unchanged there; the back entry was the live red throw before v3.29, so its grab/carry/launch phases already work for both styles.
 // Hit test: strike point (reach along facing) must land inside the defender's body radius (~.3m), not merely near its center. Throws are a two-hand grab, so slightly more forgiving.
 const HURT=.3, HURT_T=.4;
 const cv=document.getElementById('c'),g=cv.getContext('2d');
@@ -4927,7 +4928,7 @@ mkP('PGB',{su:14,dmg:36,h:1.4,kb:6,hs:26,hv:1,rc:24,pole:1,reach:1.7},ovhK(0,0,0
   const sideOf = (f) => f === S[0] ? 'RED' : f === blue ? 'BLUE' : null;
   function newBlue() {
     const b = mk(1.5, 1); b.ck = 'bl'; b.style = API.round % 2 ? 'back' : 'lunge'; b.arch = AR[API.round % AR.length];
-    b.x = 1e5; b.z = CZ; b.fx = -1; b.fz = 0; b.hx = CX + 1.5; b.hz = CZ; b.hr = 3; b.prov = 0; b._skyHold = 1; if (window.HIT_CHARS && HIT_CHARS.opponentChar) { const _oc = HIT_CHARS._matchBlue || HIT_CHARS.opponentChar(); if (_oc) { b._pat = [_oc.hex, _oc.hex, _oc.hex, _oc.hex]; b._colName = _oc.col; b.art = _oc.art; b.arch = _oc.arch; b._charName = _oc.name; b._charTaunt = _oc.taunt; } } return b;
+    b.x = 1e5; b.z = CZ; b.fx = -1; b.fz = 0; b.hx = CX + 1.5; b.hz = CZ; b.hr = 3; b.prov = 0; b._skyHold = 1; if (window.HIT_CHARS && HIT_CHARS.opponentChar) { const _oc = HIT_CHARS._matchBlue || HIT_CHARS.opponentChar(); if (_oc) { b._pat = [_oc.hex, _oc.hex, _oc.hex, _oc.hex]; b._colName = _oc.col; b.art = _oc.art; b.arch = _oc.arch; b._charName = _oc.name; b._charTaunt = _oc.taunt; } } b.art = 'KARATE'; b.style = 'lunge'; /* v3.185 — Blue is the karate fighter: KARATE stance + its signature strikes (RP, VK), and the Blue (lunge) movement set, every round */ return b;
   }
   function result(win, lose) {
     API[win === 'RED' ? 'red' : 'blue']++;
@@ -4960,6 +4961,7 @@ mkP('PGB',{su:14,dmg:36,h:1.4,kb:6,hs:26,hv:1,rc:24,pole:1,reach:1.7},ovhK(0,0,0
     a.hp = MAXHP; a.st = 'idle'; a.t = 0; a.y = 0; a.vx = a.vy = a.vz = 0; a.prov = 0;
     var nb = newBlue();
     if (blueChar) { nb._pat = [blueChar.hex, blueChar.hex, blueChar.hex, blueChar.hex]; nb._colName = blueChar.col; nb.art = blueChar.art; nb.arch = blueChar.arch; nb._charName = blueChar.name; nb._charTaunt = blueChar.taunt; }
+    nb.art = 'KARATE'; nb.style = 'lunge'; // v3.185 — Blue is always the karate build, whatever the joining player's own art
     S[1] = nb; blue = nb;
     ringIn();
     return true;
@@ -6071,7 +6073,7 @@ void main(){ vec2 q = vec2(gl_VertexID == 1 ? 3.0 : -1.0, gl_VertexID == 2 ? 3.0
 (function () {
   'use strict';
 
-  var VERSION = 'v3.184';
+  var VERSION = 'v3.185';
   var D = 3; // input delay, ticks (50ms at 60Hz)
   var SYNC_EVERY = 300; // ticks between host state snapshots
   var POS_EPS = 0.05; // metres; resync when a fighter is further off than this
