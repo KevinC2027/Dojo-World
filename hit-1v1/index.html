@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>HIT v3.185 · Real-Time 1v1</title>
+<title>HIT v3.186 · Real-Time 1v1</title>
 <style>
 :root{--bg:#eceae4;--fg:#1b1b1f;--panel:#fff;--accent:#d6452b;--blue:#2b6fd6;--ring:#d6d0c0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--fg:#eee;--panel:#1d2128;--accent:#ff6a4d;--blue:#5a9bff;--ring:#272c35}}
@@ -6040,6 +6040,207 @@ void main(){ vec2 q = vec2(gl_VertexID == 1 ? 3.0 : -1.0, gl_VertexID == 2 ? 3.0
 </script>
 
 <script>
+/* v3.186 — ATTACKER BODY MECHANICS (refinement log phase 2: R9 kick support-foot pivot, R10 punch hip/shoulder
+   rotation + rear-heel pivot, R11 hook elbow height, R12 follow-through and recoil, R13 counter-hit scaling).
+   PRESENTATION ONLY, like R2: everything below runs only while a figure is DRAWN (drawF), so the simulation, the hit
+   tests, damage, timing and the real-time lockstep see exactly the poses they saw before. No R() and no change to the
+   figure template. Every limb keeps its exact bone length: each edit re-solves the elbow/knee on its own circle, and
+   a final check restores the authored pose for the frame if any bone is off by >1.2 cm or any value is not finite.
+   ?off=r9,r10,r11,r12,r13 turns each one off for A/B comparison.
+   R9  Kick support-foot pivot. A roundhouse turns the standing foot ~75-90 deg, a front kick ~17. The support knee
+       kept pointing straight ahead; it now turns outward about its own hip-ankle line (ankle planted), eased with the strike.
+   R10 Punch rotation. Real crosses/hooks turn the shoulders ~45-60 deg and the hips ~35-45; the authored hips turned
+       ~14-20. Hips/shoulders are raised toward those targets at contact (never lowered), the guard hand rides with the
+       chest, and the rear heel lifts and pivots forward ~4 cm as the punch lands.
+   R11 Hook elbow height. A hook lands with the elbow at about shoulder height and the forearm near horizontal; the
+       elbow is rotated about the shoulder-fist line up to that height, outward.
+   R12 Follow-through and recoil. The trunk and head carry through the blow (less when it misses, a little more
+       overextended), and a landed strike rebounds: the fist/foot springs ~3-5 cm back off the target before recovery.
+   R13 Counter-hit scaling. A blow that lands while the victim is attacking (or walking into it) reads harder: the
+       v3.145 reaction amplitude is scaled up to x1.35 in the drawn pose only. */
+(() => {
+  'use strict';
+  if (typeof pose !== 'function' || typeof drawF !== 'function' || typeof ss !== 'function' || typeof c01 !== 'function') return;
+  const OFF = new Set();
+  try { const q = new URLSearchParams(location.search).get('off'); if (q) for (const k of q.split(',')) OFF.add(k); } catch (e) { /* no location */ }
+  const API = window.HIT_ATTACKER = { version: 'v3.186', on: ['r9', 'r10', 'r11', 'r12', 'r13'].filter(k => !OFF.has(k)), n: { r9: 0, r10: 0, r11: 0, r12: 0, r13: 0 }, reverted: 0, maxBoneErr: 0, error: null };
+  if (window.HIT_REFINE && Array.isArray(window.HIT_REFINE.on)) for (const k of API.on) window.HIT_REFINE.on.push(k);
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], add = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+  const mul = (a, k) => [a[0] * k, a[1] * k, a[2] * k], dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const len = (a) => Math.hypot(a[0], a[1], a[2]), nrm = (a) => { const l = len(a) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const LIMB = { hl: ['el', .40, .40], hr: ['er', .40, .40], fl: ['kl', .62, .62], fr: ['kr', .62, .62] };
+  const ALL = ['pel', 'neck', 'head', 'hl', 'hr', 'el', 'er', 'fl', 'fr', 'kl', 'kr'];
+  const roots = (p) => {   // same anchors the drawing uses (see v3.172 R2)
+    const rs = p.rotS || 0, rh = p.rotH || 0, nk = p.neck, pl = p.pel;
+    return { hl: [nk[0] + .11 * rs, nk[1] - .05, .22 - .03 * rs], hr: [nk[0] - .11 * rs, nk[1] - .05, -.22 + .03 * rs],
+      fl: [pl[0] + .04 * rh, pl[1], pl[2] + .12 - .009 * rh], fr: [pl[0] - .04 * rh, pl[1], pl[2] - .12 + .009 * rh] };
+  };
+  function solve(A, B, J, L1, L2) {   // two-bone solve that keeps the joint on the side it is already bent toward
+    const d0 = sub(B, A), dl = len(d0), u = nrm(d0), d = Math.min(Math.max(dl, .05), L1 + L2 - .004);
+    let w = sub(sub(J, A), mul(u, dot(sub(J, A), u)));
+    if (len(w) < 1e-4) w = [0, -1, 0];
+    const v = nrm(sub(w, mul(u, dot(w, u)))), a = (L1 * L1 - L2 * L2 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, L1 * L1 - a * a));
+    return add(add(A, mul(u, a)), mul(v, h));
+  }
+  const fit = (A, B, L1, L2) => { const d = sub(B, A), l = len(d), mx = (L1 + L2) * .99; return l > mx ? add(A, mul(d, mx / l)) : B; };
+  const rotAbout = (r, u, th) => { const c = Math.cos(th), s = Math.sin(th), k = cross(u, r), d = dot(u, r) * (1 - c); return [r[0] * c + k[0] * s + u[0] * d, r[1] * c + k[1] * s + u[1] * d, r[2] * c + k[2] * s + u[2] * d]; };
+  // strike weight: 0 -> 1 over the startup, 1 through the active frames, 1 -> 0 over most of the recovery
+  const wt = (f, m) => { const t = f.t, su = m.su || 8, ac = m.ac || 3, rc = m.rc || 16; return t < su ? ss(c01(t / su)) : t < su + ac ? 1 : 1 - ss(c01((t - su - ac) / (rc * .6))); };
+
+  let DRAW = 0;
+  const _drawF186 = drawF;
+  drawF = function () { DRAW++; try { return _drawF186.apply(this, arguments); } finally { DRAW--; } };
+
+  const strikeLimb = (f, m, p, R) => {
+    if (m.gx && LIMB[m.gx.limb]) return m.gx.limb;
+    if (m === M.P) return (f.pn === 1 || f.pn === 3 || f.pn === 4) ? 'hr' : 'hl';
+    let k = null, bx = .25;
+    for (const c of ['hl', 'hr', 'fl', 'fr']) if (p[c] && p[c][0] - R[c][0] > bx) { bx = p[c][0] - R[c][0]; k = c; }
+    return k;
+  };
+  // which kind of punch (for R10 targets / R11)
+  const punchKind = (f, m) => {
+    if (m === M.P) return f.bb ? 'body' : ['jab', 'cross', 'hook', 'upper', 'over'][f.pn || 0] || 'jab';
+    if (m === M.X) return 'heavy';
+    if (m === M.H) return 'hook';
+    if (m === M.V || m === M.U) return 'upper';
+    if (m === M.B) return 'jab';
+    return null;
+  };
+  const TARGET = { jab: [.85, .9], cross: [1.45, 1.7], hook: [1.5, 1.7], upper: [.9, 1.3], over: [1.5, 1.5], heavy: [1.7, 1.9], body: [.9, 1.0] };
+
+  function r9(f, p, m, k, R) {
+    if (!/^f/.test(k) || f.y > .05) return;
+    const sup = k === 'fl' ? 'fr' : 'fl', sj = LIMB[sup][0];
+    if (!p[sup] || !p[sj] || p[sup][1] > .06 || p[k][1] < .08) return;
+    if (m === M.Z || m === M.TK || m.rn || m.ja || m.jm) return;   // spin / airborne / run kicks carry their own turn
+    const dx = p[k][0] - R[k][0], dz = Math.abs(p[k][2] - R[k][2]);
+    let th = .30;                                                         // front kick ~17 deg
+    if (m === M.Y || m === M.Q || m.id === 'HK') th = 1.31;               // roundhouse-type ~75 deg
+    else if (m === M.W || (dz > .28 && dx < .7)) th = 1.05;               // low / swinging kick ~60 deg
+    const t = f.t, su = m.su || 10, ac = m.ac || 3, rc = m.rc || 20;
+    const u = t < su ? ss(c01(t / (su * .9))) : t < su + ac ? 1 : 1 - ss(c01((t - su - ac) / (rc * .7)));
+    if (u < .01) return;
+    const A = R[sup], B = p[sup], r = sub(p[sj], A), ax = nrm(sub(B, A)), out = sup === 'fl' ? 1 : -1;
+    let best = null, bz = -9;
+    for (const sg of [1, -1]) { const q = rotAbout(r, ax, sg * th * u); if (out * q[2] > bz) { bz = out * q[2]; best = q; } }
+    p[sj] = add(A, best); API.n.r9++;
+  }
+
+  function r10(f, p, m, k, R) {
+    const kind = punchKind(f, m);
+    if (!kind || !/^h/.test(k)) return;
+    const u = wt(f, m); if (u < .02) return;
+    const tg = TARGET[kind], s0 = p.rotS || 0, h0 = p.rotH || 0;
+    if (Math.abs(s0) < .05 || Math.abs(h0) < .05) return;                // only punches that already turn; never invent a direction
+    const sS = Math.sign(s0), sH = Math.sign(h0);
+    const s1 = sS * Math.max(Math.abs(s0), tg[0] * u), h1 = sH * Math.max(Math.abs(h0), tg[1] * u);
+    if (s1 !== s0 || h1 !== h0) {
+      p.rotS = s1; p.rotH = h1;
+      const R1 = roots(p), o = k === 'hl' ? 'hr' : 'hl';
+      // striking arm: the fist stays where the contact solve put it; the other hand rides with its shoulder
+      p[LIMB[k][0]] = solve(R1[k], fit(R1[k], p[k], .4, .4), p[LIMB[k][0]], .4, .4); p[k] = fit(R1[k], p[k], .4, .4);
+      const dS = sub(R1[o], R[o]); p[o] = add(p[o], dS); if (p[LIMB[o][0]]) p[LIMB[o][0]] = add(p[LIMB[o][0]], dS);
+      for (const c of ['fl', 'fr']) if (p[c]) { p[c] = fit(R1[c], p[c], .62, .62); p[LIMB[c][0]] = solve(R1[c], p[c], p[LIMB[c][0]], .62, .62); }
+    }
+    // rear heel: the back foot (planted, lower x) lifts ~3.5 cm and rolls forward ~4 cm onto its toes as the punch lands
+    if (!p.fl || !p.fr) { API.n.r10++; return; }
+    const Rr = roots(p), rear = p.fl[0] <= p.fr[0] ? 'fl' : 'fr';
+    if (p[rear] && p[rear][1] < .04 && f.y < .05) {
+      const sc = { jab: .5, body: .8, upper: .8, hook: .9, cross: 1, over: 1, heavy: 1.2 }[kind] || .8;
+      p[rear] = fit(Rr[rear], add(p[rear], [.04 * u * sc, .035 * u * sc, 0]), .62, .62);
+      p[LIMB[rear][0]] = solve(Rr[rear], p[rear], p[LIMB[rear][0]], .62, .62);
+    }
+    API.n.r10++;
+  }
+
+  function r11(f, p, m, k, R) {
+    if (!/^h/.test(k) || punchKind(f, m) !== 'hook') return;
+    const u = wt(f, m); if (u < .05) return;
+    const jk = LIMB[k][0], S = roots(p)[k], H = p[k], E0 = p[jk];
+    const d = sub(H, S), dl = len(d); if (dl < .35 || dl > .79) return;
+    const ux = nrm(d), a = (.16 - .16 + dl * dl) / (2 * dl), h = Math.sqrt(Math.max(0, .16 - a * a)), C = add(S, mul(ux, a));
+    let b1 = sub([0, 1, 0], mul(ux, ux[1])); if (len(b1) < .1) return; b1 = nrm(b1);
+    const b2 = cross(ux, b1), out = k === 'hl' ? 1 : -1;
+    const A1 = h * b1[1], B1 = h * b2[1], Rr = Math.hypot(A1, B1); if (Rr < 1e-5) return;
+    const base = Math.atan2(B1, A1), cs = Math.max(-1, Math.min(1, (S[1] - .03 - C[1]) / Rr)), dp = Math.acos(cs);
+    let tgt = null, tz = -9;
+    for (const ph of [base + dp, base - dp]) { const E = add(C, add(mul(b1, h * Math.cos(ph)), mul(b2, h * Math.sin(ph)))); if (out * E[2] > tz) { tz = out * E[2]; tgt = ph; } }
+    const r0 = sub(E0, C), ph0 = Math.atan2(dot(r0, b2), dot(r0, b1));
+    let dph = tgt - ph0; while (dph > Math.PI) dph -= 2 * Math.PI; while (dph < -Math.PI) dph += 2 * Math.PI;
+    const ph = ph0 + dph * u;
+    p[jk] = add(C, add(mul(b1, h * Math.cos(ph)), mul(b2, h * Math.sin(ph)))); API.n.r11++;
+  }
+
+  function r12(f, p, m, k, R) {
+    const t = f.t, su = m.su || 8, ac = m.ac || 3, rc = m.rc || 16, kick = /^f/.test(k);
+    if (t < su) return;
+    const landed = !!f.hit, jk = LIMB[k][0], R0 = roots(p);
+    const ph = (t - su) / (ac + rc * .55);
+    if (ph > 0 && ph < 1 && !kick) {   // trunk carries through the blow
+      const env = Math.sin(Math.PI * ph) * (landed ? 1 : 1.35), dn = [.03 * env, -.012 * env, 0], dh = [.036 * env, -.01 * env, 0];
+      p.neck = add(p.neck, dn); p.head = add(p.head, dh); p.pel = add(p.pel, [.012 * env, 0, 0]);
+      const R1 = roots(p), o = /l$/.test(k) ? 'hr' : 'hl', dS = sub(R1[o], R0[o]);
+      p[o] = add(p[o], dS); if (p[LIMB[o][0]]) p[LIMB[o][0]] = add(p[LIMB[o][0]], dS);
+      p[k] = fit(R1[k], p[k], .4, .4); p[jk] = solve(R1[k], p[k], p[jk], .4, .4);
+      for (const c of ['fl', 'fr']) if (p[c]) { p[c] = fit(R1[c], p[c], .62, .62); p[LIMB[c][0]] = solve(R1[c], p[c], p[LIMB[c][0]], .62, .62); }
+      API.n.r12++;
+    }
+    if (landed && t >= su + ac - 1 && t < su + ac + 5) {   // rebound off the target
+      const u = Math.sin(Math.PI * c01((t - su - ac + 1) / 6)), L = kick ? .62 : .40, Rt = roots(p)[k];
+      const dir = nrm(sub(Rt, p[k])), amt = (kick ? .05 : .035) * u;
+      p[k] = add(p[k], mul(dir, amt)); p[jk] = solve(Rt, p[k], p[jk], L, L); API.n.r12++;
+    }
+  }
+
+  const _pose186 = pose;
+  pose = function (f) {
+    const h = f && f._hr, sc = DRAW && h && h.cnt && !OFF.has('r13');
+    let a0; if (sc) { a0 = h.amp; h.amp = Math.min(1.7, a0 * h.cnt); }   // R13: counter-hit reads harder, drawing only
+    let p; try { p = _pose186.apply(this, arguments); } finally { if (sc) h.amp = a0; }
+    if (!DRAW || !p || !p.pel || !f || f.st !== 'atk' || !f.mv || f.y > .3) return p;
+    const m = f.mv; if (m.throw || m.jm || m.pole || m.sp || m === M.N || m === M.C || m === M.E || m === M.G || m === M.DS || m === M.S) return p;
+    if ((f._rb || 0) > .02) return p;
+    const snap = {}; for (const j of ALL) if (p[j]) snap[j] = p[j].slice(); const sr = [p.rotS, p.rotH];
+    try {
+      const R = roots(p), k = strikeLimb(f, m, p, R);
+      if (k && p[k] && p[LIMB[k][0]]) {
+        if (!OFF.has('r10')) r10(f, p, m, k, R);
+        if (!OFF.has('r9')) r9(f, p, m, k, roots(p));
+        if (!OFF.has('r11')) r11(f, p, m, k, roots(p));
+        if (!OFF.has('r12')) r12(f, p, m, k, roots(p));
+      }
+      // safety net: exact bone lengths and finite numbers, or this frame keeps its authored pose
+      const R2 = roots(p); let bad = false, worst = 0;
+      for (const c of ['hl', 'hr', 'fl', 'fr']) {
+        const [jk, L1, L2] = LIMB[c]; if (!p[c] || !p[jk]) continue;
+        const e1 = Math.abs(len(sub(p[jk], R2[c])) - L1), e2 = Math.abs(len(sub(p[c], p[jk])) - L2);
+        worst = Math.max(worst, e1, e2); if (!(e1 < 1e9) || !(e2 < 1e9)) bad = true;
+      }
+      for (const j of ALL) if (p[j] && !(isFinite(p[j][0]) && isFinite(p[j][1]) && isFinite(p[j][2]))) bad = true;
+      if (bad || worst > .012) { for (const j of ALL) if (snap[j]) p[j] = snap[j]; p.rotS = sr[0]; p.rotH = sr[1]; API.reverted++; }
+      else API.maxBoneErr = Math.max(API.maxBoneErr, worst);
+    } catch (e) { API.error = String(e && e.message || e); for (const j of ALL) if (snap[j]) p[j] = snap[j]; p.rotS = sr[0]; p.rotH = sr[1]; }
+    return p;
+  };
+
+  // R13: remember, at the moment a blow lands, whether the victim was attacking or walking into it (read-only)
+  const _th186 = tryHit;
+  tryHit = function (f, o) {
+    const pre = o ? { st: o.st, mv: o.mv, t: o.t, vx: o.vx || 0, vz: o.vz || 0 } : null, r = _th186.apply(this, arguments);
+    try {
+      if (pre && o._hr && o._hr.tk === tk && !OFF.has('r13')) {
+        const ax = f.x - o.x, az = f.z - o.z, al = Math.hypot(ax, az) || 1, close = (pre.vx * ax + pre.vz * az) / al;
+        const m = pre.mv, atk = pre.st === 'atk' && m && !m.throw && pre.t < (m.su || 0) + (m.ac || 0);
+        o._hr.cnt = atk ? 1.35 : close > 1.2 ? 1.15 : 0; if (o._hr.cnt) API.n.r13++;
+      }
+    } catch (e) { API.error = String(e && e.message || e); }
+    return r;
+  };
+})();
+</script>
+<script>
 /* HIT v3.179 — REAL-TIME 1v1 NETCODE.
    Design: DELAY-BASED LOCKSTEP over a WebRTC data channel.
    - The fight sim is deterministic given (initial seeds, input sequence):
@@ -6073,7 +6274,7 @@ void main(){ vec2 q = vec2(gl_VertexID == 1 ? 3.0 : -1.0, gl_VertexID == 2 ? 3.0
 (function () {
   'use strict';
 
-  var VERSION = 'v3.185';
+  var VERSION = 'v3.186';
   var D = 3; // input delay, ticks (50ms at 60Hz)
   var SYNC_EVERY = 300; // ticks between host state snapshots
   var POS_EPS = 0.05; // metres; resync when a fighter is further off than this
