@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>HIT v3.183 · Real-Time 1v1</title>
+<title>HIT v3.184 · Real-Time 1v1</title>
 <style>
 :root{--bg:#eceae4;--fg:#1b1b1f;--panel:#fff;--accent:#d6452b;--blue:#2b6fd6;--ring:#d6d0c0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--fg:#eee;--panel:#1d2128;--accent:#ff6a4d;--blue:#5a9bff;--ring:#272c35}}
@@ -1037,9 +1037,21 @@ function stickSet(nx,ny){ // VISION v3.65 — the stick reports a normalized vec
 }
 function stickEnd(){stickSet(0,0);_stkId=null}
 function stickPos(e){const r=stkEl.getBoundingClientRect(),cx=(r.left||0)+r.width/2,cy=(r.top||0)+r.height/2;return[(e.clientX-cx)/(r.width/2),(e.clientY-cy)/(r.height/2)]}
-stkEl.addEventListener('pointerdown',e=>{e.preventDefault();if(_stkId!==null)return;_stkId=e.pointerId;stkEl.setPointerCapture(e.pointerId);const p=stickPos(e);stickSet(p[0],p[1])});
-stkEl.addEventListener('pointermove',e=>{if(e.pointerId!==_stkId)return;const p=stickPos(e);stickSet(p[0],p[1])});
-['pointerup','pointercancel','lostpointercapture'].forEach(ev=>stkEl.addEventListener(ev,e=>{if(e.pointerId===_stkId)stickEnd()}));
+/* v3.184 — STICK STUCK FIX. The stick only let go when it saw its own pointerup/pointercancel. Any missed release (a right-click / long-press menu, a finger lifted while the page lost focus, a mouse released outside the window) left _stkId set: the knob kept steering from a ghost press, and the 'one pointer at a time' guard then ignored every new touch. Now: a stale hold is replaced by the next press, a mouse move with no button down ends the hold, releases are also caught at window level, and a watchdog drops a hold whose pointer capture has gone. */
+let _stkType='',_stkCap=false;
+const _stkDead=()=>{_stkId=null;_stkCap=false;stickSet(0,0)};
+stkEl.addEventListener('pointerdown',e=>{e.preventDefault();
+  if(_stkId!==null){if(_stkCap&&stkEl.hasPointerCapture&&stkEl.hasPointerCapture(_stkId))return;_stkDead()} // a live finger keeps the stick; a dead one is replaced
+  _stkId=e.pointerId;_stkType=e.pointerType;_stkCap=false;
+  try{stkEl.setPointerCapture(e.pointerId);_stkCap=true}catch(_e){} // no capture: the window-level listeners below still end the hold
+  const p=stickPos(e);stickSet(p[0],p[1])});
+stkEl.addEventListener('pointermove',e=>{if(e.pointerId!==_stkId)return;if(e.pointerType==='mouse'&&e.buttons===0){_stkDead();return}const p=stickPos(e);stickSet(p[0],p[1])});
+['pointerup','pointercancel','lostpointercapture'].forEach(ev=>stkEl.addEventListener(ev,e=>{if(e.pointerId===_stkId)_stkDead()}));
+['pointerup','pointercancel'].forEach(ev=>window.addEventListener(ev,e=>{if(e.pointerId===_stkId)_stkDead()},true));
+['touchend','touchcancel'].forEach(ev=>document.addEventListener(ev,e=>{if(_stkId!==null&&_stkType==='touch'&&e.touches.length===0)_stkDead()},true)); // every finger is up: nothing can still be on the stick
+stkEl.addEventListener('contextmenu',e=>{e.preventDefault();_stkDead()});
+setInterval(()=>{if(_stkId!==null&&_stkCap&&stkEl.hasPointerCapture&&!stkEl.hasPointerCapture(_stkId))_stkDead()},150); // watchdog: capture gone = release missed
+try{const st=document.createElement('style');st.textContent='#stk,#pad,#ab,#mv{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}';document.head.appendChild(st);['#pad','#ab','#mv'].forEach(q=>{const x=document.querySelector(q);if(x)x.addEventListener('contextmenu',e=>e.preventDefault())})}catch(_e){}
 function setCtl(mode){ // VISION v3.65 — switch the movement control. Clears every movement input first (H0 + the player's live input, like setAuto) so a held D-pad direction or a pushed stick cannot keep moving red after the switch; drops the held-stick pointer; removes the D-pad 'on' highlight; shows only the active control; relabels the toggle (it names the mode you switch TO).
   for(const k in H0)H0[k]=0;const i=S[0].i;i.l=i.r=i.u=i.d=i.g=0;i.ax=i.az=0;_stkId=null;stickSet(0,0);
   document.querySelectorAll('#dp button').forEach(b=>{if(b.classList)b.classList.remove('on')});
@@ -6059,7 +6071,7 @@ void main(){ vec2 q = vec2(gl_VertexID == 1 ? 3.0 : -1.0, gl_VertexID == 2 ? 3.0
 (function () {
   'use strict';
 
-  var VERSION = 'v3.183';
+  var VERSION = 'v3.184';
   var D = 3; // input delay, ticks (50ms at 60Hz)
   var SYNC_EVERY = 300; // ticks between host state snapshots
   var POS_EPS = 0.05; // metres; resync when a fighter is further off than this
