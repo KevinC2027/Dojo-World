@@ -82,3 +82,4 @@ Rules for choosing them:
 - 2026-11-21T16:58Z STARTED step 3 (Claude, scheduled run)
 - 2026-11-21T17:15Z FINISHED step 3: PASSED — v2.4 (window reveals, cornices, Northfield storefronts + signs; fills +14% worst case; doors/solids unchanged)
 - 2026-11-21: Kev asked for the bushes to be revamped; v2.5 built live in the session from v2.4 (Claude). Step 4 starts from v2.5.
+- 2026-11-21T20:58Z STARTED step 4 (Claude, scheduled run)
