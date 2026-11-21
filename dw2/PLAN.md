@@ -34,12 +34,12 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Cap backing-store DPR at 2 if it costs nothing visually (iPhone is 3x).
 - Release gate: default spawn view under ~15,000 fills/frame AND ≥4x faster average frame time than v2.0 in perf.py; near trees look the same in side-by-side screenshots (wind sway still visible in video); zero new page/module errors; town, Sky Tree lift and coliseum still reachable.
 
-### Step 2 — Sky Tree realism  — STATUS: PENDING (needs Step 1 PASSED)
+### Step 2 — Sky Tree realism  — STATUS: PASSED (v2.3, Nov 21: near view 3,653 fills vs 3,253 default = +12%; walking up to it 4,940 vs 7,804 in v2.2; doorway rebuilt as a hollow in the trunk; lift both ways OK. Report: `dw2/reports/step2_3.md`)
 - Rebuild the Sky Tree visuals with the same bark ridges/plates, branch structure, two-tone tufts, leaf texture and wind sway as the town trees, scaled to its giant size, plus a convincing doorway in the trunk. Use Step 1's sprite cache so it stays cheap.
 - Do not change the wind-lift travel logic (HIT_TRAVEL) or the door position.
 - Release gate: screenshots near and far match town-tree style; fills/frame near the Sky Tree within 20% of Step 1's default view; lift still works both ways.
 
-### Step 3 — Buildings toward GTA V-level detail  — STATUS: PENDING (needs Step 2 PASSED)
+### Step 3 — Buildings toward GTA V-level detail  — STATUS: PENDING (Step 2 PASSED; start from v2.3)
 - Facade depth (inset windows with frames/sills/reflections), trim and cornices, signage, weathering/grime, rooftop clutter, varied materials per lot type; keep interiors and doors working.
 - Cache static facade layers to sprites so detail doesn't bring the lag back.
 - Release gate: before/after screenshots of each building type; fills/frame in a town-centre view no more than 25% above Step 2; no collision/door regressions.
@@ -76,3 +76,4 @@ Rules for choosing them:
 - 2026-11-21: added the "new objectives" rule after Step 4 (Claude).
 - 2026-11-21: Kev set Dojo_World_v2_2 as the new baseline; Step 1 marked PASSED from its measurements; next is Step 2 (Claude).
 - 2026-11-21T13:01Z STARTED step 2 (Claude, scheduled run)
+- 2026-11-21T14:10Z FINISHED step 2: PASSED — v2.3 (sprite hysteresis −37% fills while walking to the Sky Tree; trunk doorway rebuilt; lift OK)
