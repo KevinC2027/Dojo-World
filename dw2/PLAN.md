@@ -39,12 +39,12 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Do not change the wind-lift travel logic (HIT_TRAVEL) or the door position.
 - Release gate: screenshots near and far match town-tree style; fills/frame near the Sky Tree within 20% of Step 1's default view; lift still works both ways.
 
-### Step 3 — Buildings toward GTA V-level detail  — STATUS: PENDING (Step 2 PASSED; start from v2.3)
+### Step 3 — Buildings toward GTA V-level detail  — STATUS: PASSED (v2.4, Nov 21: inset window reveals, projecting cornices, named storefronts with awnings, readable civic signs; town-centre fills +4% to +14% vs v2.3; solids/doors unchanged. Report: `dw2/reports/step3_2.4.md`)
 - Facade depth (inset windows with frames/sills/reflections), trim and cornices, signage, weathering/grime, rooftop clutter, varied materials per lot type; keep interiors and doors working.
 - Cache static facade layers to sprites so detail doesn't bring the lag back.
 - Release gate: before/after screenshots of each building type; fills/frame in a town-centre view no more than 25% above Step 2; no collision/door regressions.
 
-### Step 4 — NPC logic and vehicle awareness  — STATUS: PENDING (needs Step 3 PASSED)
+### Step 4 — NPC logic and vehicle awareness  — STATUS: PENDING (Step 3 PASSED; start from v2.4)
 - NPCs look before crossing, prefer crosswalks and lights, step back from an approaching car, react to horns; drivers and NPCs notice Red (line of sight only — never through walls).
 - Don't change combat rules or Red's controls.
 - Release gate: scripted test of N crossings with zero NPC–car overlaps; a short real-time video of crossings; no new errors; frame time within 10% of Step 3.
@@ -78,3 +78,4 @@ Rules for choosing them:
 - 2026-11-21T13:01Z STARTED step 2 (Claude, scheduled run)
 - 2026-11-21T13:15Z FINISHED step 2: PASSED — v2.3 (sprite hysteresis −37% fills while walking to the Sky Tree; trunk doorway rebuilt; lift OK)
 - 2026-11-21T16:58Z STARTED step 3 (Claude, scheduled run)
+- 2026-11-21T17:15Z FINISHED step 3: PASSED — v2.4 (window reveals, cornices, Northfield storefronts + signs; fills +14% worst case; doors/solids unchanged)
