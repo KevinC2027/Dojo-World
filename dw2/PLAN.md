@@ -44,5 +44,28 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Don't change combat rules or Red's controls.
 - Release gate: scripted test of N crossings with zero NPC–car overlaps; a short real-time video of crossings; no new errors; frame time within 10% of Step 3.
 
+## After Step 4 — new objectives (Kev, Nov 21: "once you've met all objectives, create new ones")
+When Steps 1–4 are all PASSED, the run that finds them so writes the NEXT batch of 3–4 steps here (Step 5, 6, ...), each in the same
+format (what to build, rules, release gate, STATUS), then starts the first one in that same run. Repeat whenever a batch is all PASSED.
+Rules for choosing them:
+- Each objective must build or improve a real, playable feature (not planning-only, audit-only or QA-only work).
+- Stay in the current roadmap phase: (2) widen the world, add depth and non-combat activities. Kev decides when phases advance, so do NOT start
+  phase (3) multiplayer expansion (proximity chat, message bubbles) or (4) a photo-real / Unreal Engine port on your own.
+- Do NOT build the declined combat items: pose-matched move selection ("item 4") or policy search ("item 5").
+- Keep performance in budget: every new step's gate includes fills/frame and frame time within 15% of the previous PASSED build.
+- Prefer items from Kev's own lists that the build doesn't yet do well (check the code before choosing):
+  * World wishlist: coins that move like real coins in a bag; safes/ATMs/banks with guards; a police system; a mayor for each town;
+    towns ruined by tragedy; large scenic open spaces; multi-level buildings with scalable rooftops; realistic PG-13 fall damage with a
+    timed recovery penalty; hospitals; an underground secret society; travelers between areas; businessmen.
+  * World directives: swimmable water with realistic effects and depth by body of water; every building open, fully furnished, with
+    working items unique to it; stairs inside buildings, no ladders outside (ladders only where relevant); modern countryside with roads
+    and vehicles; airport placed for future map expansion.
+  * Dojo Credits: physical coins in a belt pouch, only in towns/apartments (not the coliseum); wallet menu lives in MENU only; never buys
+    combat advantage, no cash-out.
+  * Non-combat activities that fit the town (jobs, errands, shops, games) and keep "simple to operate, stylistically deep".
+- Standing rules still apply: thin stick figures, same animation style, controls, camera and combat logic; no AI sees through walls;
+  Red moves by the on-screen joystick only; Dojo Credits stay out of the coliseum.
+
 ## Run log
 - 2026-11-20: plan, baseline copy, perf harness and baseline report committed (Claude).
+- 2026-11-21: added the "new objectives" rule after Step 4 (Claude).
