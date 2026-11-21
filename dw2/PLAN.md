@@ -3,7 +3,7 @@
 Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live GitHub Pages build).
 
 ## Ground rules (Kev's standing rules — every run follows them)
-- `dw2/Dojo_World_v2_BASELINE.html` is the immutable reference. Never edit it; its sha256 is in `dw2/BASELINE.sha256`.
+- `dw2/Dojo_World_v2_BASELINE.html` is the immutable reference (since Nov 21 this is Kev's Dojo_World_v2_2 upload; the earlier v2.0 is in `dw2/archive/`). Never edit it; its sha256 is in `dw2/BASELINE.sha256`.
 - Each step writes a NEW build file `dw2/builds/Dojo_World_v2.<n>.html`, starting from the newest build whose step is marked PASSED below.
 - Same game: keep the thin stick-figure characters, the animation style, controls, camera, combat logic, move rules and responsiveness. No character geometry/animation changes.
 - Single self-contained HTML file, plays on iPhone Safari.
@@ -13,7 +13,12 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Visual evidence: before/after screenshots at the same views, plus recorded gameplay video in real time (not sped up, no title/report cards). Note in the report that the headless renderer is software-only, so the video's frame rate is lower than on a phone.
 - Deliver the playable single-file HTML as an attached file in the session every run (Kev's standing preference), not only a link.
 
-## Baseline measurements (v2.0, default spawn view, 430x932 @2x)
+## NEW BASELINE (Nov 21, 2026): Kev uploaded Dojo_World_v2_2 = `dw2/builds/Dojo_World_v2.2.html` (internal module version v3.261)
+- Default spawn view: ~3,250 fills + 300 ellipses + ~440 drawImage per frame (trees are now cached sprites); 0 page/module errors; frame time ~10x faster than v2.0 in perf.py. Report: `dw2/reports/v2.2_baseline_perf.json`.
+- Remaining top fill sites: SC.poly (~1,100/frame), wall quads, worldGround surface, drawLot.
+- All new builds start from v2.2 (or later PASSED builds), never from v2.0.
+
+## Old baseline measurements (v2.0, default spawn view, 430x932 @2x) — history only
 - ~266,000 canvas fills + ~135,000 ellipses per frame; 74 trees drawn per frame (264 in world), 58 of them >40 m away and mostly hidden behind the dojo roof/buildings.
 - ~97% of fills come from `sceneTree` leaf tufts (lines ~2299–2320: 3 sub-tufts x 26 clusters/tier, two-tone tip, ellipse cap, 3 leaf dabs each). Only culling is a left/right screen check.
 - Quick test: screen-size LOD of clusters/dabs alone halved frame time — real headroom is much bigger.
@@ -22,7 +27,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 
 ## Steps
 
-### Step 1 — Performance (trees first)  — STATUS: PENDING
+### Step 1 — Performance (trees first)  — STATUS: PASSED (met by Kev's v2.2 baseline: ~3,250 fills/frame vs 266,000; ~10x faster). Small leftovers (DPR cap at 2, SC.poly hot spot) may be folded into later steps if cheap.
 - Cache each tree's foliage (and bark) to an offscreen canvas sprite, keyed by species/seed/scale and a screen-size bucket; redraw per frame with drawImage. Keep wind sway as a cheap bend (e.g. 3–4 horizontal slices drawn with increasing lateral offset, height² falloff as now), so the tree still bends from a planted base.
 - Distance/size LOD: full detail only when large on screen; simplified far trees; skip trees fully occluded behind solid buildings/roofs where cheap to test.
 - Check other hot spots the profiler shows after trees (SC.c colour-string building per fill, ground/lot fills) and fix any cheap wins.
@@ -69,3 +74,4 @@ Rules for choosing them:
 ## Run log
 - 2026-11-20: plan, baseline copy, perf harness and baseline report committed (Claude).
 - 2026-11-21: added the "new objectives" rule after Step 4 (Claude).
+- 2026-11-21: Kev set Dojo_World_v2_2 as the new baseline; Step 1 marked PASSED from its measurements; next is Step 2 (Claude).

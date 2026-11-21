@@ -249,7 +249,7 @@ const HURT=.3, HURT_T=.4;
 const cv=document.getElementById('c'),g=cv.getContext('2d');
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 let W=300,H=300;
-function rs(){const d=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}   /* v3.199 — clientWidth/clientHeight are the layout size, so the backing store stays landscape when the app is CSS-rotated (getBoundingClientRect returns the rotated, portrait-shaped visual box) */
+function rs(){const d=Math.min(devicePixelRatio||1,window.__dprCap||99);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}   /* v3.199 — clientWidth/clientHeight are the layout size, so the backing store stays landscape when the app is CSS-rotated (getBoundingClientRect returns the rotated, portrait-shaped visual box) */
 new ResizeObserver(rs).observe(cv);
 
 // ================= STATE =================
@@ -487,7 +487,7 @@ function avoidAhead(f){ /* v3.200 — SPATIAL AWARENESS: an unprovoked NPC steer
     try{const L=window.HIT_TOWN&&HIT_TOWN.list;if(L)for(const A of L){if(A.k==='bird'||(A.y||0)>.2)continue;const dd=Math.hypot(A.x-x,A.z-z);if(dd<d)d=dd;}}catch(e){}
     const dp=Math.hypot(S[0].x-x,S[0].z-z);if(dp<d)d=dp;
     for(const n of crowd){if(n===f||n._sitBench||(n.y||0)>.6)continue;const dd=Math.hypot(n.x-x,n.z-z);if(dd<d)d=dd;}
-    for(const so of WORLD.solids){if(x>so.x0-.4&&x<so.x1+.4&&z>so.z0-.4&&z<so.z1+.4)return 0;}
+    for(const so of SC.SG.q(x,z,.41)){if(x>so.x0-.4&&x<so.x1+.4&&z>so.z0-.4&&z<so.z1+.4)return 0;}
     try{const C=window.HIT_ROADS&&HIT_ROADS.cars;if(C)for(const c of C){if(c.park)continue;const dd=Math.hypot(c.x-x,c.z-z);if(dd<d)d=dd;}}catch(e){}
     return d;
   };
@@ -1010,7 +1010,7 @@ function draw(){
     else if(p.k==='lamp')pool(p.x,p.z,2.0,.30); /* VISION v3.77 */
     else if(p.k==='store')pool(p.x,p.z-p.d-1.2,2.6,.22); /* VISION v3.77 */
   } /* VISION v3.77 */
-  const colOf=f=>f===S[0]||f.ck==='ac'?ac:f.ck==='bl'?bl:(f._ck===undefined?(f._ck=(f===S[1]||f.corpseBlue)?1:0):f._ck)?bl:(f._pat?f._pat[0]:'#8a5bd6'); /* v3.136 MERGE — colour: the stored colour key (ck, set at creation) decides first; a fighter with no stored colour falls back to the current game's rule (blue if it was the target when first drawn, else purple), fixed for life. */ /* v3.127 — COLOR: a fighter's color is the one stored on them (ck), not their role — S[1] no longer forces blue, a crowd NPC no longer forces purple, a corpse keeps the victim's color. The gold lock ring (v3.72) still marks the locked target. */ const order=[[S[0],colOf(S[0])],[S[1],colOf(S[1])],...crowd.filter(n=>n!==S[1]).map(n=>[n,colOf(n)]),...corpses.map(n=>[n,colOf(n)]) /* v3.127 — COLOR: the corpseBlue flag is gone; a corpse renders its stored color (ck), so no fighter ever changes color — alive, down, or dead. */,...WORLD.props.map(p=>[p,'prop']),...(POLE.held?[]:[[POLEP,'prop']]),...(_insideRoom()?[]:SCENE.map(p=>[p,'prop']))].sort((a,b)=>_dk101(b[0])-_dk101(a[0])); /* VISION v3.64 — PROPS IN DEPTH ORDER: the world props join the fighter render list, sorted by the same depth key, so a near-side prop occludes a fighter behind it and a far-side prop sits behind the fighters — the depth ordering stays coherent as the camera moves. */
+  const colOf=f=>f===S[0]||f.ck==='ac'?ac:f.ck==='bl'?bl:(f._ck===undefined?(f._ck=(f===S[1]||f.corpseBlue)?1:0):f._ck)?bl:(f._pat?f._pat[0]:'#8a5bd6'); /* v3.136 MERGE — colour: the stored colour key (ck, set at creation) decides first; a fighter with no stored colour falls back to the current game's rule (blue if it was the target when first drawn, else purple), fixed for life. */ /* v3.127 — COLOR: a fighter's color is the one stored on them (ck), not their role — S[1] no longer forces blue, a crowd NPC no longer forces purple, a corpse keeps the victim's color. The gold lock ring (v3.72) still marks the locked target. */ const order=[[S[0],colOf(S[0])],[S[1],colOf(S[1])],...crowd.filter(n=>n!==S[1]).map(n=>[n,colOf(n)]),...corpses.map(n=>[n,colOf(n)]) /* v3.127 — COLOR: the corpseBlue flag is gone; a corpse renders its stored color (ck), so no fighter ever changes color — alive, down, or dead. */,...WORLD.props.map(p=>[p,'prop']),...(POLE.held?[]:[[POLEP,'prop']]),...(_insideRoom()?[]:SCENE.map(p=>[p,'prop']))].sort(((K)=>(a,b)=>{let ka=K.get(a),kb=K.get(b);if(ka===undefined)K.set(a,ka=_dk101(a[0]));if(kb===undefined)K.set(b,kb=_dk101(b[0]));return kb-ka})(new Map())); /* v3.260 PERF — depth keys computed once per item per frame instead of inside every comparison (same keys, same stable order) */ /* VISION v3.64 — PROPS IN DEPTH ORDER: the world props join the fighter render list, sorted by the same depth key, so a near-side prop occludes a fighter behind it and a far-side prop sits behind the fighters — the depth ordering stays coherent as the camera moves. */
   for(let pi=0;pi<16;pi++){const py=H*.12+((pi*47+tk*(0.10+((pi*13)%5)*0.02))%(H*.83)),px=((pi*173)%1000)/1000*W+Math.sin(tk*.01+pi*1.7)*14;g.fillStyle=pi%2?'rgba(246,194,202,.55)':'rgba(240,170,185,.60)';g.beginPath();g.ellipse(px,py,4,2.4,Math.sin(tk*.02+pi)*.6,0,7);g.fill()} /* VISION v3.63 — DRIFTING PETALS: sixteen small cherry-blossom petals in the existing blossom palette (pink, alpha .55-.60), falling slowly on the tick clock (0.10-0.18 px/tick, ~40-55s top to bottom) and swaying ±14px with a fluttering rotation — atmosphere, not a snowstorm. Drawn after the stage but BEFORE the fighters, so a petal can never cover a fighter's face; at 4x2.4px they cannot read as hit effects or projectiles. */
   for(let mi=0;mi<14;mi++){ /* v3.242 — MORE DUST MOTES: fourteen now, swaying wider */ /* VISION v3.77 — DUST MOTES: ten slow warm motes drifting in the low light (slower than the petals, 0.05-0.08 px/tick, ±10 px sway, alpha breathing .05-.45 on the tick clock) — lit dust, not a second petal fall. Drawn after the petals and BEFORE the fighters, like the petals, so a mote can never cover a fighter's face. */
     const mx2=((mi*137)%1000)/1000*W+Math.sin(tk*.006+mi*2.3)*16; /* VISION v3.77 — v3.242: sway widened ±10 -> ±16 px */
@@ -1160,6 +1160,14 @@ document.getElementById('hit-stop').onclick=()=>{if(hitRecorder?.state==='record
 let acc=0,last=performance.now();
 function loop(now){acc+=Math.min(.1,(now-last)/1000);last=now;while(acc>=DT){tick();acc-=DT}draw();requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
+/* v3.260 PERF — ADAPTIVE RESOLUTION: the game starts at the screen's full sharpness. If frames stay slow (under ~45 fps for
+   3 s straight) on a 3x screen, it steps down once to 2x (still retina) for the rest of the session. ?hd=1 keeps full
+   sharpness always; ?hd=0 starts at 2x. */
+(function(){let q='';try{q=new URLSearchParams(location.search).get('hd')||''}catch(e){}
+  if(q==='0'){window.__dprCap=2;try{rs()}catch(e){}return}if(q==='1')return;
+  let last=0,slow=0,done=false;function m(t){if(done)return;if(last){const dt=t-last;if(dt<250){slow=dt>22?slow+dt:Math.max(0,slow-dt*2)}}last=t;
+    if(slow>3000&&(devicePixelRatio||1)>2){done=true;window.__dprCap=2;try{rs()}catch(e){}return}requestAnimationFrame(m)}
+  requestAnimationFrame(m)})();
 
 // ===== VF+ LAYER (v3): open 2D world, new strikes, 2nd live throw, counter-hit, throw clash/escape =====
 M.E={su:8,ac:3,rc:16,dmg:15,reach:.7,h:1.3,kb:3.4,hs:22,bs:10,vf:1};   // elbow smash (forward+P, close)
@@ -2161,8 +2169,72 @@ function sceneBuilding(p){
 
 // ---- trees: tapered trunk, limbs, depth-sorted leaf clusters with light/dark tones and leaf specks, falling leaves ----
 SC.PAL={oak:[[58,104,60],[78,128,70],[104,152,84],[142,182,104]],sakura:[[214,120,150],[238,150,176],[248,190,208],[252,222,232]],maple:[[168,56,40],[204,84,44],[232,128,52],[246,176,72]],pine:[[36,76,58],[48,98,70],[66,122,84],[100,150,100]]};
+/* v3.260 PERF — tier sprite cache engine (see sceneTree). Presentation-only; no game state is read or written. */
+SC.TC={on:true,fid:0,bud:0,bf:-1,list:[],renders:0,live:0,hits:0};
+(function _tcF(){SC.TC.fid++;requestAnimationFrame(_tcF)})();
+SC.tierCache=function(p,tiers,tierFn,y0Of,cx,wXat,q0){
+  const T=SC.TC;if(!T.on)return false;
+  try{
+    if(T.bf!==T.fid){T.bf=T.fid;T.bud=0;
+      if(T.list.length&&(T.fid%60)===0){T.list=T.list.filter(q=>{const c=q._tc;if(c&&T.fid-c.used>900){c.cv.width=c.cv.height=0;q._tc=null;return false}return !!q._tc})}}
+    const dpr=(cv.width/W)||1,k0=q0.s;if(!(k0>0))return false;
+    const KB=Math.log(1.07),kb=Math.ceil(Math.log(k0)/KB),kTop=Math.exp(kb*KB),yb=Math.round(cam.yaw/0.035);
+    let c=p._tc;const fresh=c&&c.kb===kb&&c.yb===yb&&c.dpr===dpr;
+    const usable=c&&c.dpr===dpr&&k0/c.k0>0.55&&k0/c.k0<1.6;
+    if(!fresh&&(T.bud<(usable?3:14))){
+      // measure every tier's exact screen footprint with a recording pass (no pixels), then lay the tiers out in one atlas
+      const LF=p.lift||0,Qr=(x,y,z)=>{const r=P(x,y+LF,z);return{x:r.x-q0.x,y:r.y-q0.y,s:r.s,d:r.d}};
+      const box=[];
+      for(let i=0;i<tiers;i++){const bb={x0:1e9,y0:1e9,x1:-1e9,y1:-1e9};const pt=(x,y,r)=>{if(x-r<bb.x0)bb.x0=x-r;if(x+r>bb.x1)bb.x1=x+r;if(y-r<bb.y0)bb.y0=y-r;if(y+r>bb.y1)bb.y1=y+r};
+        const M={fillStyle:'',beginPath(){},closePath(){},fill(){},moveTo(x,y){pt(x,y,0)},lineTo(x,y){pt(x,y,0)},ellipse(x,y,rx,ry){pt(x,y,Math.max(rx,ry))}};
+        tierFn(M,Qr,i,0,0);if(bb.x1<bb.x0){bb.x0=bb.y0=0;bb.x1=bb.y1=1}box.push(bb)}
+      const pad=2;let R=dpr*kTop/k0,wMax=0,hSum=0;
+      const lay=()=>{wMax=0;hSum=0;for(const bb of box){bb.w=bb.x1-bb.x0+2*pad;bb.h=bb.y1-bb.y0+2*pad;bb.dw=Math.ceil(bb.w*R);bb.dh=Math.ceil(bb.h*R);bb.sy=hSum;hSum+=bb.dh+2;if(bb.dw>wMax)wMax=bb.dw}};lay();
+      {const fz=Math.min(1,2048/wMax,4096/hSum,Math.sqrt(6e6/(wMax*hSum)));if(fz<1&&fz>=.4){R*=fz*.98;lay()}}
+      if(wMax>2048||hSum>4096||wMax*hSum>6e6){T.live++;if(c)c.used=T.fid;return usable?SC._tcDraw(p,c,tiers,y0Of,cx,wXat,q0):false}
+      if(!c){c={cv:document.createElement('canvas')};p._tc=c;T.list.push(p)}
+      const cv=c.cv;if(cv.width<wMax||cv.height<hSum||cv.width>wMax*1.5||cv.height>hSum*1.5){cv.width=wMax;cv.height=hSum}
+      const G=c.ctx&&c.cv===cv?c.ctx:(c.ctx=cv.getContext('2d'));G.setTransform(1,0,0,1,0,0);G.clearRect(0,0,cv.width,cv.height);
+      for(let i=0;i<tiers;i++){const bb=box[i];G.setTransform(R,0,0,R,(pad-bb.x0)*R,bb.sy+(pad-bb.y0)*R);tierFn(G,Qr,i,0,0)}
+      G.setTransform(1,0,0,1,0,0);
+      c.box=box;c.R=R;c.k0=k0;c.kb=kb;c.yb=yb;c.dpr=dpr;c.pad=pad;T.bud+=usable?1:1;T.renders++;
+    } else if(!usable){T.live++;return false}
+    else T.hits++;
+    c.used=T.fid;
+    return SC._tcDraw(p,c,tiers,y0Of,cx,wXat,q0);
+  }catch(e){SC.TC.err=String(e);SC.TC.on=false;return false}
+};
+SC._tcDraw=function(p,c,tiers,y0Of,cx,wXat,q0){
+  const sc=q0.s/c.k0,cv=c.cv,pad=c.pad;
+  for(let i=0;i<tiers;i++){const bb=c.box[i],y0=y0Of(i),wx=wXat(y0);let dx=0,dy=0;
+    if(wx){const LF=p.lift||0,a=P(cx,y0+LF,p.z),b=P(cx+wx,y0+LF,p.z);dx=b.x-a.x;dy=b.y-a.y}
+    g.drawImage(cv,0,bb.sy,bb.dw,bb.dh,q0.x+(bb.x0-pad)*sc+dx,q0.y+(bb.y0-pad)*sc+dy,bb.dw/c.R*sc,bb.dh/c.R*sc)}
+  return true;
+};
+/* v3.260 PERF — SOLID GRID: a lookup grid over WORLD.solids so collision and path checks look only at nearby solids instead of
+   all ~1,000 every time. Queries return the nearby solids in their ORIGINAL order, so every result (including ties) is identical.
+   The grid is rebuilt whenever the solids list is replaced or changes length; any list it does not know falls back to the full list. */
+SC.SG={arr:null,n:0,cand:null,cn:-1,cells:null,big:[],CS:4,mark:null,stamp:0,builds:0};
+SC.SG.q=function(x,z,r){const G=SC.SG,arr=WORLD.solids;
+  if(arr!==G.arr||arr.length!==G.n){if(arr===G.cand&&arr.length===G.cn){G.build(arr)}else{G.cand=arr;G.cn=arr.length;return arr}}
+  if(!(x===x&&z===z&&r===r))return arr;
+  const CS=G.CS,ix0=Math.floor((x-r)/CS),ix1=Math.floor((x+r)/CS),iz0=Math.floor((z-r)/CS),iz1=Math.floor((z+r)/CS);
+  if((ix1-ix0+1)*(iz1-iz0+1)>36)return arr;
+  const st=++G.stamp,mk=G.mark,idx=[];
+  for(const i of G.big){if(mk[i]!==st){mk[i]=st;idx.push(i)}}
+  for(let ix=ix0;ix<=ix1;ix++)for(let iz=iz0;iz<=iz1;iz++){const c=G.cells.get(ix*73856093^iz*19349663);if(c)for(const i of c){if(mk[i]!==st){mk[i]=st;idx.push(i)}}}
+  idx.sort((a,b)=>a-b);const out=[];
+  for(const i of idx){const so=arr[i];if(!(so.x0>x+r||so.x1<x-r||so.z0>z+r||so.z1<z-r))out.push(so)}
+  return out};
+SC.SG.build=function(arr){const G=SC.SG,CS=G.CS,cells=new Map(),big=[];
+  for(let i=0;i<arr.length;i++){const so=arr[i];
+    if(!so||!isFinite(so.x0)||!isFinite(so.x1)||!isFinite(so.z0)||!isFinite(so.z1)){big.push(i);continue}
+    const ix0=Math.floor(Math.min(so.x0,so.x1)/CS),ix1=Math.floor(Math.max(so.x0,so.x1)/CS),iz0=Math.floor(Math.min(so.z0,so.z1)/CS),iz1=Math.floor(Math.max(so.z0,so.z1)/CS);
+    if((ix1-ix0+1)*(iz1-iz0+1)>64){big.push(i);continue}
+    for(let ix=ix0;ix<=ix1;ix++)for(let iz=iz0;iz<=iz1;iz++){const k=ix*73856093^iz*19349663;let c=cells.get(k);if(!c)cells.set(k,c=[]);c.push(i)}}
+  G.arr=arr;G.n=arr.length;G.cells=cells;G.big=big;G.mark=new Uint32Array(arr.length+1);G.stamp=0;G.builds++};
 function sceneTree(p){
-  const sp=p.sp||'oak',sc=p.sc||1,seed=p.x*13.7+p.z*7.1,q0=SC.Q(p.x,0,p.z),Q=SC.Q;if(q0.x<-260||q0.x>W+260)return;
+  const sp=p.sp||'oak',sc=p.sc||1,seed=p.x*13.7+p.z*7.1,Q=p.lift?((x,y,z)=>SC.Q(x,y+p.lift,z)):SC.Q,q0=Q(p.x,0,p.z);if(q0.x<-260||q0.x>W+260)return;
   const near=q0.s>34,pal=SC.PAL[sp]||SC.PAL.oak,bend=(SC.h(seed)-.5)*.4,th=(sp==='pine'?1.7:2.3)*sc,sway=Math.sin(tk*.022+seed)*.05;
   const treeTop=th+(sp==='pine'?3.8:sp==='sakura'?1.55:1.9)*sc;
   // FINAL — WIND SWAY: the trees were static. Now the whole tree bends gently in the wind: a time-varying lateral offset growing with the square of height (base planted, canopy moves most), so the trunk bends and the canopy sways as one connected body, not a rigid rotation. Per-tree phase (seed) + amplitude variation + a slow gust that swells/fades, so trees don't move in lockstep. Outer tufts move more than inner ones (edge bonus at draw time). Uses the game's own tick clock tk — no separate timer.
@@ -2171,7 +2243,7 @@ function sceneTree(p){
   const wXat=y=>wAmp*wSway*Math.pow(Math.max(0,y)/treeTop,2);
   const tp=(t)=>[p.x+bend*t*t+wXat(th*t),th*t,p.z];
   // R3 REALISM — BARK TEXTURE: the trunk was a smooth flat ribbon with only a few bark lines. Now: a rougher silhouette edge (hash-jittered width), vertical bark ridges (wavy dark/light lines following the trunk), and irregular bark plates (small patches in varied browns), so it reads as real bark. Gated on trunk screen width (>10px) so distant trees skip the detail — more robust than the old s>34 near gate at mid vantages. All species; sakura keeps its own trunk color.
-  {const w0=.20*sc,w1=.10*sc,N=6;const L=[],Rr=[];for(let i=0;i<=N;i++){const t=i/N,c=tp(t),w=(w0+(w1-w0)*t+(i===0?.05*sc:0))*(1+(SC.h(seed+i*3.1)-.5)*.16);L.push(Q(c[0]-w,c[1],c[2]));Rr.push(Q(c[0]+w,c[1],c[2]))}
+  if(!p.co){const w0=.20*sc,w1=.10*sc,N=6;const L=[],Rr=[];for(let i=0;i<=N;i++){const t=i/N,c=tp(t),w=(w0+(w1-w0)*t+(i===0?.05*sc:0))*(1+(SC.h(seed+i*3.1)-.5)*.16);L.push(Q(c[0]-w,c[1],c[2]));Rr.push(Q(c[0]+w,c[1],c[2]))}
     g.fillStyle=sp==='sakura'?'rgba(70,48,42,.98)':'rgba(86,58,38,.98)';g.beginPath();g.moveTo(L[0].x,L[0].y);for(let i=1;i<=N;i++)g.lineTo(L[i].x,L[i].y);for(let i=N;i>=0;i--)g.lineTo(Rr[i].x,Rr[i].y);g.closePath();g.fill();
     g.fillStyle='rgba(255,226,180,.14)';g.beginPath();g.moveTo(L[0].x,L[0].y);for(let i=1;i<=N;i++)g.lineTo((L[i].x+(Rr[i].x-L[i].x)*.3),L[i].y);for(let i=N;i>=0;i--)g.lineTo(L[i].x,L[i].y);g.closePath();g.fill();
     const barkOn=(0.40*sc)*q0.s>10;
@@ -2191,7 +2263,7 @@ function sceneTree(p){
     else { tiers=5; tierStart=th*0.62; topY=th+1.9*sc; tierH=0.9*sc; radFn=t=>1.5*Math.pow(Math.sin(Math.PI*(0.18+0.72*t)),0.75)*sc; }   // broad rounded dome: ~0.94 at the base, 1.5 at the middle, ~0.62 at the top
     const cx=p.x+bend;
     // R4 REALISM — BRANCH STUBS: the canopy sat on the trunk with no visible branch structure. Two short limbs emerge from the trunk just below the canopy base and angle up-out into the foliage, so the canopy connects to the trunk instead of sitting on a pole. Drawn before the core, so the core + clusters cover the upper part (it disappears into the canopy) and only the lower stub shows. Same screen-width gate as the bark.
-    if((0.40*sc)*q0.s>10){for(const sd of[-1,1]){const t0=(tierStart-.28*sc)/th, t1=(tierStart+.02*sc)/th, t2=(tierStart+.28*sc)/th, a=tp(t0), b=tp(t1), c=tp(t2), qA=Q(a[0]+sd*.05*sc, a[1], a[2]), qB=Q(b[0]+sd*.28*sc, b[1], b[2]), qC=Q(c[0]+sd*.46*sc, c[1], c[2]);g.strokeStyle='rgba(70,46,28,.9)';g.lineWidth=Math.max(1.5,.05*sc*q0.s);g.beginPath();g.moveTo(qA.x,qA.y);g.lineTo(qB.x,qB.y);g.lineTo(qC.x,qC.y);g.stroke();}}
+    if(!p.co&&(0.40*sc)*q0.s>10){for(const sd of[-1,1]){const t0=(tierStart-.28*sc)/th, t1=(tierStart+.02*sc)/th, t2=(tierStart+.28*sc)/th, a=tp(t0), b=tp(t1), c=tp(t2), qA=Q(a[0]+sd*.05*sc, a[1], a[2]), qB=Q(b[0]+sd*.28*sc, b[1], b[2]), qC=Q(c[0]+sd*.46*sc, c[1], c[2]);g.strokeStyle='rgba(70,46,28,.9)';g.lineWidth=Math.max(1.5,.05*sc*q0.s);g.beginPath();g.moveTo(qA.x,qA.y);g.lineTo(qB.x,qB.y);g.lineTo(qC.x,qC.y);g.stroke();}}
     // trunk to the top (pine only): tapered ribbon from the ground to the TOP tier, following the bend curve (was only to th, so the upper tiers had no trunk). Broad species keep the common trunk (to th), which disappears into the canopy.
     if(isPine){const w0=0.12*sc, w1=0.05*sc, N=12;
       const L=[], R=[];
@@ -2223,11 +2295,16 @@ function sceneTree(p){
       g.fillStyle=SC.c(palT[0], .95, .75);
       g.beginPath(); g.moveTo(pts[0].x, pts[0].y); for(let i=1;i<pts.length;i++) g.lineTo(pts[i].x, pts[i].y); g.closePath(); g.fill();}
     // tiers as CLUSTER FIELDS (v2.9 it2, generalized): NO flat faces at all — the foliage surface is built entirely from overlapping drooping clusters of varied size, angle and color, y-jittered so no horizontal rows form. The dark core behind them keeps the gaps closed.
-    for(let i=0;i<tiers;i++){
+    /* v3.260 PERF — TREE TIER CACHE: each foliage tier is drawn once into an off-screen sprite (same code, same colours,
+       same tuft order) and then placed every frame, instead of re-filling ~2,000 shapes per tree per frame. The trunk, bark,
+       limbs, dark core and falling leaves stay live. Wind is kept: every tier is shifted by its own wind offset each frame,
+       exactly as before. A sprite is re-drawn when the tree's on-screen scale moves ~7% or the camera turns 2 degrees.
+       Very close trees (too big to cache) and any failure fall back to the original live draw. */
+    const _tier=(G,Q,i,_wo,_sw)=>{
       const tFrac=i/(tiers-1);
       const y0=tierStart+tFrac*(topY-tierStart);
-      const rad=(radFn(tFrac)+sway*tFrac*0.15)*(1+(SC.h(seed+i*31.7)-.5)*.16);   // R4: per-tier silhouette wobble — the outline bumps in/out ±8% per tier instead of following one smooth curve (same hash as the core, so core + clusters stay consistent)
-      const tcx=cx+wXat(y0), tcz=p.z;
+      const rad=(radFn(tFrac)+_sw*tFrac*0.15)*(1+(SC.h(seed+i*31.7)-.5)*.16);   // R4: per-tier silhouette wobble — the outline bumps in/out ±8% per tier instead of following one smooth curve (same hash as the core, so core + clusters stay consistent)
+      const tcx=cx+(_wo?wXat(y0):0), tcz=p.z;
       const NC=26, CL=[];   // R5: denser — 26 main clusters/tier so the sprays overlap more and the separations shrink
       for(let k=0;k<NC;k++){
         const u=SC.h(seed+i*17.3+k*7.9), v=SC.h(seed+i*5.3+k*13.1), w=SC.h(seed+i*11.7+k*3.7), j1=SC.h(seed+i*13.7+k*3.3), j2=SC.h(seed+i*7.1+k*5.7), j3=SC.h(seed+i*3.9+k*11.3);
@@ -2288,23 +2365,23 @@ function sceneTree(p){
       CL.sort((a,b)=>a.bz-b.bz);   // back to front
       for(const c of CL){
         // FINAL — WIND SWAY (edge bonus): outer tufts move more than inner ones — an extra lateral shift scaled by the tuft's distance from the tier axis, on top of the tier shift already in tcx. (The dab hash still uses the unshifted c.bx, so the texture doesn't flicker.)
-        const wBonus=wXat(y0)*.35*Math.abs((c.bx-tcx)/rad), wBx=c.bx+wBonus, wTipX=c.tipX+wBonus;
+        const wBonus=(_wo?wXat(y0):0)*.35*Math.abs((c.bx-tcx)/rad), wBx=c.bx+wBonus, wTipX=c.tipX+wBonus;
         // R4: ROUNDED TIPS + WIDER FAN — 3 overlapping sub-tufts fanning from one base, each tipped with a same-color ellipse cap that blunts the sharp apex into a soft feathered edge; sides fanned wider (±.55) so the cluster reads as a broad soft spray, not a pointed wedge.
         const subs=[[0,1,.92,1],[-.55,.76,.72,.88],[.55,.8,.72,.92]];
         for(const s of subs){
           const sTipX=wTipX+s[0]*c.wid*2.4, sTipY=c.tipY+(1-s[1])*c.len*.9, sTipZ=c.tipZ;
           const bw=c.wid*s[2];
           const p0=Q(wBx-bw/2, c.by, c.bz), p1=Q(wBx+bw/2, c.by, c.bz), p2=Q(sTipX, sTipY, sTipZ);
-          g.fillStyle=SC.c(c.col, .92, s[3]);
-          g.beginPath(); g.moveTo(p0.x, p0.y); g.lineTo(p1.x, p1.y); g.lineTo(p2.x, p2.y); g.closePath(); g.fill();
+          G.fillStyle=SC.c(c.col, .92, s[3]);
+          G.beginPath(); G.moveTo(p0.x, p0.y); G.lineTo(p1.x, p1.y); G.lineTo(p2.x, p2.y); G.closePath(); G.fill();
           // R1 REALISM — TWO-TONE TUFT: the drooping tip is shaded darker (shadow on the underside, sun from upper-left), so each tuft reads as lit foliage with volume instead of one flat solid color. Tip triangle = lower ~45% of the tuft, same hue, brightness .55 vs .92.
           const tx0=p0.x+(p2.x-p0.x)*.55, ty0=p0.y+(p2.y-p0.y)*.55, tx1=p1.x+(p2.x-p1.x)*.55, ty1=p1.y+(p2.y-p1.y)*.55;
-          g.fillStyle=SC.c(c.col, .55, s[3]);
-          g.beginPath(); g.moveTo(tx0,ty0); g.lineTo(tx1,ty1); g.lineTo(p2.x,p2.y); g.closePath(); g.fill();
+          G.fillStyle=SC.c(c.col, .55, s[3]);
+          G.beginPath(); G.moveTo(tx0,ty0); G.lineTo(tx1,ty1); G.lineTo(p2.x,p2.y); G.closePath(); G.fill();
           // rounded tip cap: darker tip color, elongated along the tuft direction, so the point reads soft instead of sharp — kept small (0.28× base width) so it rounds the tip without reading as a separate blob
           const mx=(p0.x+p1.x)/2, my=(p0.y+p1.y)/2, dx=p2.x-mx, dy=p2.y-my, dl=Math.hypot(dx,dy)||1;
           const capR=Math.max(1.2, bw*p0.s*0.28);
-          g.beginPath(); g.ellipse(p2.x, p2.y, capR, capR*0.6, Math.atan2(dy,dx), 0, 7); g.fill();
+          G.beginPath(); G.ellipse(p2.x, p2.y, capR, capR*0.6, Math.atan2(dy,dx), 0, 7); G.fill();
           // R2 REALISM — FINER LEAF TEXTURE: small leaf-like dabs (needles on pine) in slightly varied colors inside each sub-tuft, so the large flat areas break into finer foliage. Gated on tuft screen size (dl>6px) — only drawn when the tuft is big enough on screen for the texture to be visible; distant/small tufts skip the dabs, which keeps the draw load bounded. (The per-tree near gate s>34 was too fragile: the pine-tight vantage measures s=34.6, so other trees could fall just under it and silently lose the dabs.) Deterministic (hash-based). Dabs follow the tuft's two-tone: base region (u<.55) varies around brightness .92, tip region (u>=.55) around .55.
           if(dl>6){
             const tuftA=Math.atan2(dy,dx), baseW=Math.abs(p1.x-p0.x), cSeed=c.bx*13.7+c.by*7.1+c.bz*3.3;
@@ -2316,15 +2393,16 @@ function sceneTree(p){
               const dLen=Math.max(1.6, dl*.13*(0.85+hw*.3));
               const dWid=dLen*(isPine?.28:.48);
               const dBri=(u<.55?.92:.55)*(0.82+hw*.42);
-              g.fillStyle=SC.c(c.col, dBri, s[3]);
-              g.beginPath(); g.ellipse(dCx, dCy, dLen, dWid, tuftA, 0, 7); g.fill();
+              G.fillStyle=SC.c(c.col, dBri, s[3]);
+              G.beginPath(); G.ellipse(dCx, dCy, dLen, dWid, tuftA, 0, 7); G.fill();
             }
           }
         }
       }
-    }
+    };
+    if(!SC.tierCache||!SC.tierCache(p,tiers,_tier,(i)=>tierStart+(i/(tiers-1))*(topY-tierStart),cx,wXat,q0))for(let i=0;i<tiers;i++)_tier(g,Q,i,1,sway);
     // falling leaves / petals (oak, sakura, maple only — as before; pine has none)
-    if(!isPine&&near)for(let i=0;i<4;i++){const t=((tk*.45+i*47+seed*9)%150)/150,lx=p.x+bend+wXat((th+1.5*sc)*(1-t))+(Math.sin(t*9+i*2+seed)*.7+(t*.9))*sc,ly=(th+1.5*sc)*(1-t),q=Q(lx,ly,p.z+(i%2?.25:-.2)),col=pal[(i+1)%4];g.save();g.globalAlpha=.85*(1-t*.4);g.fillStyle=SC.c(col,1);g.beginPath();g.ellipse(q.x,q.y,.05*q.s,.028*q.s,t*10+i,0,7);g.fill();g.restore()}
+    if(!p.co&&!isPine&&near)for(let i=0;i<4;i++){const t=((tk*.45+i*47+seed*9)%150)/150,lx=p.x+bend+wXat((th+1.5*sc)*(1-t))+(Math.sin(t*9+i*2+seed)*.7+(t*.9))*sc,ly=(th+1.5*sc)*(1-t),q=Q(lx,ly,p.z+(i%2?.25:-.2)),col=pal[(i+1)%4];g.save();g.globalAlpha=.85*(1-t*.4);g.fillStyle=SC.c(col,1);g.beginPath();g.ellipse(q.x,q.y,.05*q.s,.028*q.s,t*10+i,0,7);g.fill();g.restore()}
   }
 }
 
@@ -3088,16 +3166,16 @@ const _pr97=pipeReset;pipeReset=function(f){f._cx=null;f._cz=null;f._br=null;f._
 rebuildSolids();
 // ---- vault / climb planner ----
 function vlPlan(a,dx,dz,run){const r=.3,reach=r+(run?.55:.22);let best=null,bd=9;
-  for(const s of WORLD.solids){if(!(s.h<=2.1))continue;const cx=_cl(s.x0,s.x1,a.x),cz=_cl(s.z0,s.z1,a.z),ex=a.x-cx,ez=a.z-cz,d=Math.hypot(ex,ez);if(d>reach||d<1e-6)continue;const into=-(dx*ex+dz*ez)/d;if(into<(s.h<=1.15?.42:.72))continue;if(d<bd){bd=d;best={s:s,d:d,into:into}}}
+  for(const s of SC.SG.q(a.x,a.z,reach+.01)){if(!(s.h<=2.1))continue;const cx=_cl(s.x0,s.x1,a.x),cz=_cl(s.z0,s.z1,a.z),ex=a.x-cx,ez=a.z-cz,d=Math.hypot(ex,ez);if(d>reach||d<1e-6)continue;const into=-(dx*ex+dz*ez)/d;if(into<(s.h<=1.15?.42:.72))continue;if(d<bd){bd=d;best={s:s,d:d,into:into}}}
   if(!best)return null;
-  const blk=(x,z)=>{let m=null;for(const s of WORLD.solids){const cx=_cl(s.x0,s.x1,x),cz=_cl(s.z0,s.z1,z);if(Math.hypot(x-cx,z-cz)<r-.002&&(!m||s.h>m.h))m=s}return m};
+  const blk=(x,z)=>{let m=null;for(const s of SC.SG.q(x,z,r+.01)){const cx=_cl(s.x0,s.x1,x),cz=_cl(s.z0,s.z1,z);if(Math.hypot(x-cx,z-cz)<r-.002&&(!m||s.h>m.h))m=s}return m};
   let tin=null,H=0,tl=null;
   for(let t=0;t<=3.6;t+=.04){const m=blk(a.x+dx*t,a.z+dz*t);if(m){if(m.h>2.1)return null;if(tin==null)tin=t;H=Math.max(H,m.h)}else if(tin!=null&&t>tin+.1){tl=t;break}}
   if(tl==null||tin==null)return null;tl+=.12;if(blk(a.x+dx*tl,a.z+dz*tl))return null;if(tl-tin>3.2)return null;
   const lx=a.x+dx*tl,lz=a.z+dz*tl;if(lx<WORLD.walkMin||lx>WORLD.walkMax||lz<WORLD.zmin||lz>WORLD.zmax)return null;
   return{H:H,tin:tin,tl:tl,lx:lx,lz:lz,d:best.d}}
 function vlProf(x0,z0,dx,dz,tl){const n=Math.ceil(tl/.05)+1,r=[];
-  for(let i=0;i<n;i++){const x=x0+dx*i*.05,z=z0+dz*i*.05;let m=0;for(const q of WORLD.solids){if(q.h<=2.1&&x>q.x0-.14&&x<q.x1+.14&&z>q.z0-.14&&z<q.z1+.14&&q.h>m)m=q.h}r.push(m)}
+  for(let i=0;i<n;i++){const x=x0+dx*i*.05,z=z0+dz*i*.05;let m=0;for(const q of SC.SG.q(x,z,.15)){if(q.h<=2.1&&x>q.x0-.14&&x<q.x1+.14&&z>q.z0-.14&&z<q.z1+.14&&q.h>m)m=q.h}r.push(m)}
   const o=[];for(let i=0;i<n;i++){let t=0,c=0;for(let k=-5;k<=5;k++){const j=_cl(0,n-1,i+k);t+=r[j];c++}o.push(t/c)}return{raw:r,sm:o}}
 function vlG(P,s,sm){const A=sm?P.sm:P.raw,f=_cl(0,A.length-1,s/.05),i=Math.floor(f);return A[i]+(A[Math.min(A.length-1,i+1)]-A[i])*(f-i)}
 function vlHn(v,s){let m=0;for(let d=.1;d<=.7;d+=.1)m=Math.max(m,vlG(v.P,s+d,0));return m}
@@ -3153,7 +3231,7 @@ function vlPose(p,f){const v=f._vl,u=Math.min(1,v.t/v.dur),h=v.h,Tp=v.type,y=f.y
   vlClear(p,f,e)}
 // ---- v3.119 obstacle clearance: no limb passes through the obstacle it is crossing ----
 function vlWorld(f,q){return[f.x+f.fx*q[0]-f.fz*q[2],f.y+q[1],f.z+f.fz*q[0]+f.fx*q[2]]}
-function vlDepth(f,q,pad){const w=vlWorld(f,q);let d=0;for(const s of WORLD.solids){if(!(s.h<=2.1))continue;if(w[0]>s.x0-pad&&w[0]<s.x1+pad&&w[2]>s.z0-pad&&w[2]<s.z1+pad&&w[1]<s.h-.02){const dd=Math.min(w[0]-s.x0+pad,s.x1+pad-w[0],w[2]-s.z0+pad,s.z1+pad-w[2],s.h-.02-w[1]);if(dd>d)d=dd}}return d}
+function vlDepth(f,q,pad){const w=vlWorld(f,q);let d=0;for(const s of SC.SG.q(w[0],w[2],Math.abs(pad)+.01)){if(!(s.h<=2.1))continue;if(w[0]>s.x0-pad&&w[0]<s.x1+pad&&w[2]>s.z0-pad&&w[2]<s.z1+pad&&w[1]<s.h-.02){const dd=Math.min(w[0]-s.x0+pad,s.x1+pad-w[0],w[2]-s.z0+pad,s.z1+pad-w[2],s.h-.02-w[1]);if(dd>d)d=dd}}return d}
 function vlFootOut(f,q){if(vlDepth(f,q,.04)<=0)return q;let up=null,bk=null;
   for(let u=.04;u<=1.3;u+=.04){const c=[q[0],q[1]+u,q[2]];if(vlDepth(f,c,.04)<=0){up=[c,u];break}}
   for(let b=.03;b<=.7;b+=.03){const c=[q[0]-b,q[1],q[2]];if(vlDepth(f,c,.04)<=0){bk=[c,b];break}}
@@ -3283,7 +3361,7 @@ const _wander97=wander;wander=function(f,o){if(f===S[0]||f.hp<=0)return _wander9
   f._wch=0;return _wander97(f,o)};
 // ---- v3.101 low obstacles are walkable terrain ----
 function _dk101(o){return P(o.x,0,o.z).d-((o===S[0]&&(o._gy||0)>.05)?1:0)}
-function gndAt(x,z){let m=groundY(x,z);for(const q of WORLD.solids){if(q.h<=.55&&x>q.x0-.12&&x<q.x1+.12&&z>q.z0-.12&&z<q.z1+.12&&q.h>m)m=q.h}return m} /* v3.383 — GROUND HEIGHT: fighters stand on the terrain (baseline is the terrain, not 0, so valleys/lakebeds read) */
+function gndAt(x,z){let m=groundY(x,z);for(const q of SC.SG.q(x,z,.13)){if(q.h<=.55&&x>q.x0-.12&&x<q.x1+.12&&z>q.z0-.12&&z<q.z1+.12&&q.h>m)m=q.h}return m} /* v3.383 — GROUND HEIGHT: fighters stand on the terrain (baseline is the terrain, not 0, so valleys/lakebeds read) */
 const _cw101=collideWorld;collideWorld=function(f){if(f===S[0]&&!f._vl&&(f.st==='idle'||f.st==='walk'||f.st==='step'||(f._gy||0)>.05)){const sv=WORLD.solids;WORLD.solids=sv.filter(q=>!(q.h<=.55));try{return _cw101(f)}finally{WORLD.solids=sv}}return _cw101(f)};
 const _tick101=tick;tick=function(){_tick101();const a=S[0];if(a._vl){a._gy=(a._gy||0)*.8;if(a._gy<.01)a._gy=0;a.y+=a._gy;a._gr=0;return}if(a.jump&&a._jsp!=null){a._gy=a.y;a._gr=0;return}if(a.st==='air'){a._gy=0;a._gr=0;return}
   let g=gndAt(a.x,a.z);const W3=window.HIT_WATER;let sw=0;if(W3&&W3.depthAt&&W3.depthAt(a.x,a.z)>=1){sw=1;const bb=W3.bodyAt&&W3.bodyAt(a.x,a.z);g=Math.max(g,bb&&bb.id==='river'?-0.5:0);}const y0=a._gy||0;let y=y0+(g-y0)*(g>y0?.22:.3);if(Math.abs(g-y)<.004)y=g; /* v3.383 — GROUND HEIGHT: swimming rides the water surface, not the riverbed */
@@ -3464,6 +3542,8 @@ const _cw141=collideWorld;collideWorld=function(f){const px=f.x,pz=f.z;_cw141(f)
   const e=st==='air'?.25:.12,tx=f.vx-vn*nx,tz=f.vz-vn*nz;f.vx=tx*.7-e*vn*nx;f.vz=tz*.7-e*vn*nz;const sp=-vn;
   if(!(f._wimp&&tk-f._wimp.tk<8)){f._wimp={tk,s:sp,lx:nx*f.fx+nz*f.fz,lz:-nx*f.fz+nz*f.fx};try{envImpact(f.x-nx*.3,f.z-nz*.3,Math.min(9,sp*.9),nx,nz)}catch(_e){}shake=Math.max(shake,Math.min(.6,.12*sp))}
   if(f._rg){const R=f._rg,l0=nx*f.fx+nz*f.fz,l1=-nx*f.fz+nz*f.fx;for(const j of RG_J){const w=R.W[j],wn=w[0]*l0+w[2]*l1;if(wn<0){w[0]-=1.3*wn*l0;w[2]-=1.3*wn*l1}}R.sl=0;R.calm=0}};
+/* v3.260 PERF — collision chain sees only solids within 1.5 m (it acts within 0.3 m); same order, same result. */
+const _cw260=collideWorld;collideWorld=function(f){const sv=WORLD.solids,nb=SC.SG.q(f.x,f.z,1.5);if(nb===sv)return _cw260(f);WORLD.solids=nb;try{return _cw260(f)}finally{if(WORLD.solids===nb)WORLD.solids=sv}};
 const _pose141=pose;pose=function(f){const p=_pose141(f),w=f._wimp;if(!w||(f.st!=='stun'&&f.st!=='stumble'&&f.st!=='air'))return p;const t=tk-w.tk;if(t<0||t>=16)return p;
   const A=.13*Math.min(1.6,w.s/4)*Math.exp(-t*.22)*Math.cos(t*.42),mv=(j,k)=>{if(p[j])p[j]=[p[j][0]-w.lx*A*k,p[j][1],p[j][2]-w.lz*A*k]};mv('neck',.6);mv('head',1.15);mv('hl',.9);mv('hr',.9);mv('el',.6);mv('er',.6);if(f._smOn)try{limbSolve(p,f)}catch(_e){}return p};
 
@@ -7849,6 +7929,31 @@ mkP('PGB',{su:14,dmg:36,h:1.4,kb:6,hs:26,hv:1,rc:24,pole:1,reach:1.7},ovhK(0,0,0
     const lab = P(PAD.x, 2.25, PAD.z), fs = Math.max(9, Math.min(15, k.s * .22)); g.font = '800 ' + fs + 'px system-ui,sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; const txt = '↓ TOWN', tw = g.measureText(txt).width + 12;
     g.fillStyle = 'rgba(14,20,40,.82)'; g.fillRect(lab.x - tw / 2, lab.y - fs * .8, tw, fs * 1.6); g.fillStyle = 'rgba(' + c + ',1)'; g.fillText(txt, lab.x, lab.y); g.restore();
   };
+  /* v3.261 — SKY TREE REALISM (Kev Nov 18: "the same realism for the sky tree"): the canopy is now built from the same detailed
+     foliage the town trees use (layered drooping leaf clusters, two-tone tufts, leaf texture, wind sway), as ten giant oak lobes —
+     six behind the trunk, four in front — instead of thirty flat circles. The trunk gets bark ridges, bark plates, root flares and
+     thick limbs reaching into the lobes. The doorway, wind lift, label and travel are unchanged. Lobes use the tree sprite cache. */
+  const LOBES = [[-6, 9, 2.6, 1], [6.2, 9.4, 2.6, 1], [0, 12, 3.2, 1], [-3.6, 15.5, 2.4, 1], [3.8, 16, 2.4, 1], [0, 18.6, 2.2, 1],
+                 [-7.4, 8.4, 2.0, 0], [7.4, 8.8, 2.0, 0], [-2.8, 10, 2.2, 0], [3, 10.4, 2.2, 0]]
+    .map(([dx, yb, sc, back]) => ({ k: 'tree', sp: 'oak', dx: dx, yb: yb, sc: sc, back: back, co: 1, lift: yb - 1.43 * sc, w: 0, d: 0 }));
+  const skyLobes = (back, X, Z) => { for (const L of LOBES) { if (L.back !== back) continue; L.x = X + L.dx; L.z = Z + (back ? .6 : -.25); try { sceneTree(L); } catch (e) { API.error = String(e && e.message || e); } } };
+  const skyLimbs = (X, Z, s) => {   // thick tapered limbs from the trunk crown out into each lobe
+    for (const L of LOBES) { if (Math.abs(L.dx) < .5) continue; const y0 = 9 + Math.min(2.5, L.yb * .12), x0 = Math.sign(L.dx) * .9, x1 = L.dx * .82, y1 = L.yb + .9, w0 = .55, w1 = .18;
+      const nx = -(y1 - y0), ny = x1 - x0, nl = Math.hypot(nx, ny) || 1, ux = nx / nl, uy = ny / nl, q = (x, y) => P(X + x, y, Z - .05);
+      const a = q(x0 + ux * w0, y0 + uy * w0), b = q(x1 + ux * w1, y1 + uy * w1), c = q(x1 - ux * w1, y1 - uy * w1), d = q(x0 - ux * w0, y0 - uy * w0);
+      g.fillStyle = '#5e4129'; g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.lineTo(c.x, c.y); g.lineTo(d.x, d.y); g.closePath(); g.fill();
+      g.strokeStyle = 'rgba(255,200,140,.28)'; g.lineWidth = Math.max(1, s * .04); g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke(); }
+  };
+  const skyBark = (X, Z, s, prof) => {   // bark ridges following the trunk, bark plates, root flares
+    const Qb = (dx, y) => P(X + dx, y, Z - .02), wAt = (y) => { for (let i = 1; i < prof.length; i++) if (y <= prof[i][0]) { const a = prof[i - 1], b = prof[i], u = (y - a[0]) / (b[0] - a[0]); return a[1] + (b[1] - a[1]) * u; } return prof[prof.length - 1][1]; };
+    for (let r = 0; r < 5; r++) { const sd = r < 2 ? -1 : r > 2 ? 1 : 0, ang = (r - 2) * .55; const q0 = Qb(Math.sin(ang * 1.4) * 3.6, 0), qe = Qb(Math.sin(ang * 1.4) * 5.2 + sd * .6, 0), q1 = Qb(Math.sin(ang) * 2.2, 1.2); g.fillStyle = '#5f4128'; g.beginPath(); g.moveTo(q1.x, q1.y); g.lineTo(q0.x - s * .5, q0.y); g.lineTo(qe.x, qe.y + s * .05); g.lineTo(q0.x + s * .5, q0.y); g.closePath(); g.fill(); }
+    if (s < 6) return;
+    g.lineCap = 'round';
+    for (let r = 0; r < 11; r++) { const f = -.86 + r * .172; g.strokeStyle = r % 2 ? 'rgba(150,108,68,.34)' : 'rgba(34,20,10,.46)'; g.lineWidth = Math.max(1, s * (r % 2 ? .035 : .055)); g.beginPath();
+      for (let y = 0; y <= 12; y += .75) { const q = Qb(f * wAt(y) + (hsh(r * 7.3 + y * 1.9) - .5) * .18, y); if (y) g.lineTo(q.x, q.y); else g.moveTo(q.x, q.y); } g.stroke(); }
+    for (let k = 0; k < 26; k++) { const y = .4 + hsh(k * 5.1 + 3) * 11, w = wAt(y), x = (hsh(k * 2.7 + 9) - .5) * 1.7 * w; if (Math.abs(x) < .9 && y < 2.6) continue; const q = Qb(x, y), v = hsh(k * 3.3 + 1); g.fillStyle = v < .4 ? 'rgba(42,26,14,.5)' : v < .75 ? 'rgba(112,78,48,.45)' : 'rgba(160,122,80,.38)'; g.beginPath(); g.ellipse(q.x, q.y, Math.max(1, s * .1), Math.max(1.5, s * .26), (hsh(k) - .5) * .4, 0, 7); g.fill(); }
+    for (let k = 0; k < 6; k++) { const y = 3 + hsh(k * 9.1) * 7, x = (hsh(k * 4.4 + 2) - .5) * 1.4 * wAt(y), q = Qb(x, y); g.fillStyle = 'rgba(96,128,62,.45)'; g.beginPath(); g.ellipse(q.x, q.y, s * .35, s * .16, 0, 0, 7); g.fill(); }   // moss
+  };
   const drawTree = () => {
     const X = TREE.x, Z = DOOR.z, base = P(X, 0, Z); if (!base || !isFinite(base.x) || base.s <= 0) return;
     const s = base.s, t = tk / 60, Q = (dx, y) => P(X + dx, y, Z);
@@ -7858,11 +7963,12 @@ mkP('PGB',{su:14,dmg:36,h:1.4,kb:6,hs:26,hv:1,rc:24,pole:1,reach:1.7},ovhK(0,0,0
     /* canopy behind the trunk */
     const blob = (i, back) => { const ox = (hsh(i) - .5) * 15, y = 9.5 + hsh(i + 9) * 9.5, rad = 2.6 + hsh(i + 21) * 2.4, q = P(X + ox, y + Math.sin(t * .7 + i) * .08, Z + (back ? .6 : -.2)), sh = hsh(i + 33);
       g.fillStyle = back ? 'rgb(' + (38 + sh * 20 | 0) + ',' + (92 + sh * 30 | 0) + ',' + (52 + sh * 16 | 0) + ')' : 'rgb(' + (62 + sh * 34 | 0) + ',' + (134 + sh * 44 | 0) + ',' + (70 + sh * 22 | 0) + ')'; g.beginPath(); g.arc(q.x, q.y, rad * q.s, 0, 7); g.fill(); };
-    for (let i = 0; i < 16; i++) blob(i, 1);
+    skyLobes(1, X, Z);
     /* trunk: flared roots, tapering up into the canopy */
     const prof = [[0, 3.1], [.5, 2.55], [1.4, 2.3], [4, 2.0], [8, 1.7], [12, 1.45]], L = prof.map(p => Q(-p[1], p[0])), R = prof.map(p => Q(p[1], p[0])).reverse();
     g.fillStyle = '#6b4a2e'; g.beginPath(); g.moveTo(L[0].x, L[0].y); for (const q of L.slice(1)) g.lineTo(q.x, q.y); for (const q of R) g.lineTo(q.x, q.y); g.closePath(); g.fill(); g.strokeStyle = 'rgba(255,200,140,.45)'; g.lineWidth = Math.max(1, .06 * L[0].s); g.beginPath(); g.moveTo(L[0].x, L[0].y); for (const q of L.slice(1)) g.lineTo(q.x, q.y); g.stroke(); /* v3.268 — TRUNK CATCHES THE SUN: a thin warm highlight along the trunk's sun-facing edge */
     g.fillStyle = 'rgba(40,24,12,.28)'; g.beginPath(); const Rm = prof.map(p => Q(p[1] * .45, p[0])); g.moveTo(Rm[0].x, Rm[0].y); for (const q of Rm.slice(1)) g.lineTo(q.x, q.y); for (const q of R) g.lineTo(q.x, q.y); g.closePath(); g.fill();
+    skyBark(X, Z, s, prof);
     g.strokeStyle = 'rgba(46,28,14,.55)'; g.lineWidth = Math.max(1, s * .05); g.lineCap = 'round';
     for (let i = 0; i < 7; i++) { const bx = (hsh(i + 50) - .5) * 3.2, y0 = .3 + hsh(i + 60) * 5, a0 = Q(bx, y0), a1 = Q(bx * .8 + .1, y0 + 2 + hsh(i + 70) * 3); g.beginPath(); g.moveTo(a0.x, a0.y); g.lineTo(a1.x, a1.y); g.stroke(); }
     /* the doorway: an arch glowing with wind */
@@ -7874,7 +7980,7 @@ mkP('PGB',{su:14,dmg:36,h:1.4,kb:6,hs:26,hv:1,rc:24,pole:1,reach:1.7},ovhK(0,0,0
     g.save(); g.clip(); g.strokeStyle = 'rgba(255,255,255,.75)'; g.lineWidth = Math.max(1, s * .035);
     for (let i = 0; i < 5; i++) { const ph = (t * .55 + i / 5) % 1, y = ph * dh, wv = hw * .8 * (1 - ph * .5); g.beginPath(); for (let j = 0; j <= 10; j++) { const an = t * 3 + i * 1.3 + j * .5, q = Q(Math.cos(an) * wv, y + j * .03); if (j) g.lineTo(q.x, q.y); else g.moveTo(q.x, q.y); } g.stroke(); }
     g.restore();
-    for (let i = 16; i < 30; i++) blob(i, 0);
+    skyLimbs(X, Z, s); skyLobes(0, X, Z);
     /* leaves drifting up out of the door */
     for (let i = 0; i < 7; i++) { const ph = (t * .22 + hsh(i + 80)) % 1, q = Q(Math.sin(t * 1.3 + i * 2) * (.5 + ph * 1.8), .4 + ph * 7); g.fillStyle = 'rgba(190,240,170,' + (.8 * (1 - ph)) + ')'; g.beginPath(); g.ellipse(q.x, q.y, s * .09, s * .045, t * 2 + i, 0, 7); g.fill(); }
     const lab = Q(0, 3.2), fs = Math.max(9, Math.min(16, s * .26)); g.font = '800 ' + fs + 'px system-ui,sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; const txt = 'SKY TREE  ↑  COLISEUM', tw = g.measureText(txt).width + 14;
@@ -8114,6 +8220,7 @@ PR('tree',8.31,45.19,{"sp":"sakura","sc":1.55,"w":0.45,"d":0.45}); PR('tree',-12
         g.closePath(); g.fill();
       }
       // storey lines and windows
+      if (window.HIT_BDET) HIT_BDET.face(p, st, f, pt, Hh, bl, front, ruin);
       const fl = st.floors, uw = 1 / st.cols;
       for (let s = 0; s < fl; s++) {
         if (p.sty === 'silo') continue; /* v3.358 — SILO HAS NO WINDOWS: a grain silo is a sealed cylinder; the 4x1 window grid it used to carry is removed. */
@@ -8124,7 +8231,7 @@ PR('tree',8.31,45.19,{"sp":"sakura","sc":1.55,"w":0.45,"d":0.45}); PR('tree',-12
           const u0 = k * uw + uw * .26, u1 = k * uw + uw * .74;
           if (ruin && y1 > Hh * (.38 + .62 * H(p.seed * 7 + f.i * 11 + Math.round(u0 * 9) * 1.7)) * .9) continue;
           const lit = !ruin && night() > .3 && H(p.seed + k + s * 3 + p.x) < .6;
-          quad(pt(u0, y0), pt(u1, y0), pt(u1, y1), pt(u0, y1), ruin ? st.win : lit ? '#ffe39a' : st.win);
+          quad(pt(u0, y0), pt(u1, y0), pt(u1, y1), pt(u0, y1), ruin ? st.win : lit ? '#ffe39a' : st.win); if (window.HIT_BDET) HIT_BDET.win(p, st, pt, u0, u1, y0, y1, lit, ruin, f, bl);
           g.strokeStyle = st.trim; g.lineWidth = Math.max(.6, .05 * bl.s); g.beginPath(); g.moveTo(pt(u0, y0).x, pt(u0, y0).y); g.lineTo(pt(u1, y0).x, pt(u1, y0).y); g.stroke();
         }
       }
@@ -8139,11 +8246,12 @@ PR('tree',8.31,45.19,{"sp":"sakura","sc":1.55,"w":0.45,"d":0.45}); PR('tree',-12
       }
       // cornice / base
       if (!ruin) { const cy = pt(0, Hh), cz = pt(1, Hh); g.strokeStyle = st.trim; g.lineWidth = Math.max(1, .22 * bl.s); g.lineCap = 'round'; g.beginPath(); g.moveTo(cy.x, cy.y); g.lineTo(cz.x, cz.y); g.stroke(); /* v3.355 — CIVIC PARAPETS: the civic blocks were flat-topped slabs with only a cornice line and no roof, though every STY entry defines a roof colour that was never used. Each visible face now carries a parapet band in its roof colour (0.6 m, side faces shaded like the walls), so the hospital, town hall, bank and police read as finished buildings. */ if (p.sty === 'silo') { /* v3.358 — SILO CONE: a silo wears a conical top, not a flat parapet band. Each face carries a triangle to a central apex 1.6 m up, forming a four-sided pyramid cap in the roof colour. */ quad(pt(0, Hh), pt(1, Hh), pt(.5, Hh + 1.6), pt(.5, Hh + 1.6), front ? st.roof : shade(st.roof, .8)); } else if (p.sty !== 'barn' && GABLE.indexOf(p.sty) < 0) { /* v3.359 — the barn skips the flat parapet band; its gambrel roof is drawn in world space after the faces loop. v3.361 — the gable-roof styles skip it too; their pitched roofs are drawn in world space after the faces loop. */ quad(pt(0, Hh), pt(1, Hh), pt(1, Hh + .6), pt(0, Hh + .6), front ? st.roof : shade(st.roof, .8)); } }
-      g.strokeStyle = 'rgba(30,24,18,.5)'; g.lineWidth = Math.max(.6, .03 * bl.s); g.beginPath(); g.moveTo(bl.x, bl.y); g.lineTo(pt(0, Hh).x, pt(0, Hh).y); g.stroke();
+      g.strokeStyle = 'rgba(30,24,18,.5)'; g.lineWidth = Math.max(.6, .03 * bl.s); g.beginPath(); g.moveTo(bl.x, bl.y); g.lineTo(pt(0, Hh).x, pt(0, Hh).y); g.stroke(); if (window.HIT_BDET) HIT_BDET.faceAfter(p, st, f, pt, Hh, bl, front, ruin);
     }
     if (p.sty === 'barn') { /* v3.359 — BARN GAMBREL ROOF: a barn wears a two-slope gambrel, not a flat parapet. Ridge runs along the long axis (x); steep lower slope (56 deg) to a break 1.2 m in and 1.8 m up, shallow upper slope (13 deg) to the ridge 2.6 m above the 7 m walls; pentagonal gable ends in the wall colours. */ const bx0 = p.x - p.w, bx1 = p.x + p.w, bzS = p.z + p.d, bzN = p.z - p.d, bzC = p.z, brS = bzS - p.d * .26, brN = bzN + p.d * .26, yB = Hh + 1.8, yR = Hh + 2.6; SC.poly([Q(bx0, Hh, bzS), Q(bx1, Hh, bzS), Q(bx1, yB, brS), Q(bx0, yB, brS)], st.roof, 0); SC.poly([Q(bx0, yB, brS), Q(bx1, yB, brS), Q(bx1, yR, bzC), Q(bx0, yR, bzC)], st.roof, 0); SC.poly([Q(bx0, Hh, bzN), Q(bx1, Hh, bzN), Q(bx1, yB, brN), Q(bx0, yB, brN)], shade(st.roof, .8), 0); SC.poly([Q(bx0, yB, brN), Q(bx1, yB, brN), Q(bx1, yR, bzC), Q(bx0, yR, bzC)], shade(st.roof, .8), 0); SC.poly([Q(bx1, Hh, bzS), Q(bx1, Hh, bzN), Q(bx1, yB, brN), Q(bx1, yR, bzC), Q(bx1, yB, brS)], st.side, 1); SC.poly([Q(bx0, Hh, bzN), Q(bx0, Hh, bzS), Q(bx0, yB, brS), Q(bx0, yR, bzC), Q(bx0, yB, brN)], st.wall, 1); /* v3.360 — GABLE WINDING FIX: SC.poly culls counterclockwise (A>=0) polygons; both gables were listed counterclockwise from their facing side and never drew. Reversed so each traces clockwise (A<0) from the side it faces. */ }
     if (GABLE.indexOf(p.sty) >= 0) { /* v3.361 — GABLE ROOF: houses, shops, the inn, the farmhouse, the stone house and the shacks wore flat parapet caps. Now each carries a pitched gable: two roof slopes meeting at a ridge along the long axis, triangular gable ends in the wall colours, ridge height depth * .45 capped at 2.4 m. Gable triangles use the v3.360 clockwise winding. */ const gx0 = p.x - p.w, gx1 = p.x + p.w, gzS = p.z + p.d, gzN = p.z - p.d, gzC = p.z, gyR = Hh + Math.min(p.d * .45, 2.4); SC.poly([Q(gx0, Hh, gzS), Q(gx1, Hh, gzS), Q(gx1, gyR, gzC), Q(gx0, gyR, gzC)], st.roof, 0); SC.poly([Q(gx0, Hh, gzN), Q(gx1, Hh, gzN), Q(gx1, gyR, gzC), Q(gx0, gyR, gzC)], shade(st.roof, .8), 0); SC.poly([Q(gx1, Hh, gzS), Q(gx1, Hh, gzN), Q(gx1, gyR, gzC)], st.side, 1); SC.poly([Q(gx0, Hh, gzN), Q(gx0, Hh, gzS), Q(gx0, gyR, gzC)], st.wall, 1); if (['house', 'inn', 'farmhouse', 'stonehouse', 'shack'].indexOf(p.sty) >= 0 || p.id === 'nf_s5') { /* v3.362 — CHIMNEY: the gable-roof houses had no chimney. A brick chimney now rises from the ridge, off-centre toward the east gable, with a cap and a rising smoke wisp (same drifting, fading puff pattern as the sceneBuilding houses). Shops and the hangar get none. v3.371 — SMITHY CHIMNEY: the smithy is a blacksmith forge, the one shop that needs a chimney for the forge smoke, so it is admitted by id. */ const cx = p.x + p.w * .55, cz = p.z, cy0 = gyR - .3, cy1 = gyR + 1.0; SC.rz(cx - .25, cx + .25, cz + .25, cy0, cy1, '#9a5a44'); SC.rz(cx - .25, cx + .25, cz - .25, cy0, cy1, '#7a4636'); SC.sl(cx - .25, cz - .25, cz + .25, cy0, cy1, '#8a4e3c'); SC.sr(cx + .25, cz - .25, cz + .25, cy0, cy1, '#8a4e3c'); SC.rz(cx - .32, cx + .32, cz + .32, cy1, cy1 + .12, '#5a3a2a'); for (let s = 0; s < 4; s++) { const ph = (tk * .011 + s * .25 + (((p.x * 13.7 + p.z * 7.1) % 1) + 1) % 1) % 1, sy = cy1 + .12 + ph * 2.4, sx = cx + ph * ph * 1.6 * (0.8 + (((p.x * 7.3 + p.z * 3.1) % 1) + 1) % 1 * 0.4) + Math.sin(tk * .008 + s * 2.1 + p.x) * .12; const sr = Math.round(215 - 15 * ph), sg = Math.round(180 + 20 * ph), sb = Math.round(150 + 55 * ph); SC.glow(sx, sy, cz, .16 + ph * .5, .22 * (1 - ph), sr + ',' + sg + ',' + sb); } } }
     // frontage signs and features (front face only, drawn in world space on the front plane)
+    if (window.HIT_BDET) HIT_BDET.after(p, st, GABLE.indexOf(p.sty) >= 0);
     const zf = p.z - p.d - .02;
     const label = (s, y, col, bg) => { const q = Q(p.x, y, zf), fs = Math.max(8, Math.min(18, q.s * .5)); g.font = '800 ' + fs + 'px system-ui,sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; const tw = g.measureText(s).width + 12; g.fillStyle = bg; g.fillRect(q.x - tw / 2, q.y - fs * .75, tw, fs * 1.5); g.fillStyle = col; g.fillText(s, q.x, q.y); };
     if (p.nm) { /* v3.357 — TERMINAL IDENTITY: a building with an explicit name uses it first. The airport terminal is sty 'hall', so it used to hit the hall branch and wear a 'TOWN HALL' label with a clock tower and town-hall columns. Now it reads 'AIRPORT TERMINAL' and skips the hall frontage. Buildings without a name fall through to their style branches as before. */ label(p.nm, p.h * .92, st.sign || '#f6ead0', st.signBg || '#4a3a2c'); } else if (p.sty === 'hospital') {
@@ -8544,8 +8652,9 @@ PR('tree',8.31,45.19,{"sp":"sakura","sc":1.55,"w":0.45,"d":0.45}); PR('tree',-12
   }
   for (const id in SPEC) addRoom(id, SPEC[id]);
   const _ri = _roomItems; _roomItems = function (id) { return SPEC[id] ? SPEC[id].items : _ri.apply(this, arguments); };
-  const insideId = () => { const v = S[0]; if (v._lv) return null; for (const id in SPEC) { const R = ROOMS[id]; if (R && v.x >= R.x0 && v.x <= R.x1 && v.z >= R.z0 && v.z <= R.z1) return id; } return null; };
+  const _iiM = { k: '' }; const insideId = () => { const v = S[0]; if (v._lv) return null; const mk = SC.TC.fid + '|' + tk + '|' + v.x + '|' + v.z; if (_iiM.k === mk) return _iiM.r; let r = null; for (const id in SPEC) { const R = ROOMS[id]; if (R && v.x >= R.x0 && v.x <= R.x1 && v.z >= R.z0 && v.z <= R.z1) { r = id; break; } } _iiM.k = mk; _iiM.r = r; return r; }; /* v3.260 PERF — memo per frame+tick+position */
   const _ir = _insideRoom; _insideRoom = function () { if (S[0]._lv || S[0]._deep) return null; return _ir.apply(this, arguments); };
+  { const _ir260 = _insideRoom, M = { k: '' }; _insideRoom = function () { const v = S[0], k = SC.TC.fid + '|' + tk + '|' + v.x + '|' + v.z + '|' + (v._lv ? 1 : 0) + (v._deep ? 1 : 0); if (M.k === k) return M.r; const r = _ir260.apply(this, arguments); M.k = k; M.r = r; return r; }; } /* v3.260 PERF — memo per frame+tick+position */
   const _rs = rebuildSolids;
   rebuildSolids = function () {
     _rs.apply(this, arguments);
@@ -8648,7 +8757,7 @@ PR('tree',8.31,45.19,{"sp":"sakura","sc":1.55,"w":0.45,"d":0.45}); PR('tree',-12
     const id = ROOMOF[p.id], inside = id && insideId() === id;
     if (inside) return cutaway(p, ROOMS[id]);
     const r = baseLot.apply(this, arguments);
-    try { if (p.sty !== 'ruin') drawRoof(p); } catch (e) { API.error = String(e && e.message || e); }
+    try { if (p.sty !== 'ruin') { drawRoof(p); if (window.HIT_BDET) HIT_BDET.roof(p, STY[p.sty]); } } catch (e) { API.error = String(e && e.message || e); }
     return r;
   };
   function cutaway(p, R) {   // inside: the front wall drops to a low strip with the door gap so the room reads
@@ -9873,24 +9982,26 @@ PR('tree',8.31,45.19,{"sp":"sakura","sc":1.55,"w":0.45,"d":0.45}); PR('tree',-12
         if (--c.homeT <= 0) { const ds = ((g.gs - c.s) % c.L.len + c.L.len) % c.L.len; if (ds < 2.5) { c.mode = 'out'; c.ot = 0; c.ox = c.x; c.oz = c.z; continue; } }
       }
       const p0 = at(c.L, c.s), hl = Math.hypot(p0.hx, p0.hz) || 1, hx = p0.hx / hl, hz = p0.hz / hl, rx = hz, rz = -hx;
-      c.blkAnimal = null; let blocked = false;
-      for (const f of fs) { const dx = f.x - p0.x, dz = f.z - p0.z, al = dx * hx + dz * hz, la = Math.abs(dx * rx + dz * rz); if (al > -.7 && al < 5.6 && la < 1.9) { blocked = true; break; } }
+      c.blkAnimal = null; c.blkPerson = null; let blocked = false, caution = 1; const AW = window.HIT_AWARE && HIT_AWARE.on ? HIT_AWARE : null;
+      for (const f of fs) { const dx = f.x - p0.x, dz = f.z - p0.z, al = dx * hx + dz * hz, la = Math.abs(dx * rx + dz * rz); if (al > -.7 && al < 5.6 && la < 1.9) { blocked = true; c.blkPerson = f; break; } if (AW && al >= 5.6 && al < 12 && la < 2.6) caution = Math.min(caution, .3 + .7 * (al - 5.6) / 6.4); } /* v3.261 — EASE OFF EARLY: a person 6-12 m ahead slows the kart gradually */
       if (!blocked) for (const an of (window.HIT_TOWN && HIT_TOWN.list || [])) { if (an.k === 'bird' && (an.y || 0) > .2) continue; const dx = an.x - p0.x, dz = an.z - p0.z, al = dx * hx + dz * hz, la = Math.abs(dx * rx + dz * rz); if (al > -.7 && al < 5.6 && la < 1.9) { blocked = true; c.blkAnimal = an; break; } } /* v3.205 — WAIT FOR ANIMALS: a ground animal in the road ahead blocks the car, same as a person; it is never run over */
       if (!blocked) for (const o of CARS) { if (o === c || o.mode === 'parked') continue; const dx = o.x - p0.x, dz = o.z - p0.z, al = dx * hx + dz * hz, la = Math.abs(dx * rx + dz * rz), same = (o.hx * hx + o.hz * hz) > 0; if (same && al > 0 && al < 3.4 + (c.len + o.len) * .5 && la < 1.2) { blocked = true; break; } }
       if (!blocked) for (const j of JARMS) { const dx = j.x - p0.x, dz = j.z - p0.z, al = dx * hx + dz * hz, la = Math.abs(dx * rx + dz * rz); if (la < 2.8 && al > 3.3 && al < 5.2) { const ph = phase(j.x, j.z), vert = Math.abs(hz) > Math.abs(hx), green = (ph === 'NS') === vert; if (!green || (ph === 'NSy' && vert) || (ph === 'EWy' && !vert)) blocked = true; break; } }
+      if (AW) { for (const q of AW.fights()) { const dx = q.x - p0.x, dz = q.z - p0.z, al = dx * hx + dz * hz, la = Math.abs(dx * rx + dz * rz); if (al > -2 && al < 14 && la < 4.5) { if (al < 8) blocked = true; else caution = Math.min(caution, .3); } } /* v3.261 — FIGHT AHEAD: crawl from 14 m, stop inside 8 m */
+        if (blocked && c.blkPerson && !c.blkAnimal) { c.blkPT = (c.blkPT || 0) + 1; if (c.blkPT === 75 || (c.blkPT > 75 && (c.blkPT - 75) % 120 === 0)) { c.honkT = 45; c.blkPerson._honk = tk; c.blkPerson._honkBy = c; AW.honks++; } } else c.blkPT = 0; } /* v3.261 — HONK AT PEOPLE who keep blocking the lane */
       c.stop = blocked ? 1 : 0;
       if (c.honkT > 0) c.honkT--;
       if (blocked && c.blkAnimal) { c.blkT = (c.blkT || 0) + 1; if (c.blkT === 60 || (c.blkT > 60 && (c.blkT - 60) % 90 === 0)) { c.honkT = 45; const an = c.blkAnimal; if (an) { if (an.k === 'bird' && an.st === 'ground') { an.st = 'fly'; an.t = 0; const an2 = Math.random() * 6.283; an.vx = Math.cos(an2) * 3.5; an.vz = Math.sin(an2) * 2; an.vy = 3.2; } else if (an.st !== 'flee') { an.st = 'flee'; an.t = 0; const dx = an.x - c.x, dz = an.z - c.z, lat = dx * (-hz) + dz * hx, sgn = lat >= 0 ? 1 : -1; an.fx = -hz * sgn; an.fz = hx * sgn; } } } } else c.blkT = 0; /* v3.205 — HONK: after ~1s waiting on an animal the car honks (a ! shows above it); the honk scares the animal off the road */
       const pA = at(c.L, c.s + 2.5), turnA = Math.abs(Math.atan2(hx * pA.hz - hz * pA.hx, hx * pA.hx + hz * pA.hz));
       /* v3.215 — MARIO KART (Claude-assisted): drift on corners builds a mini-turbo; hop when drift starts; boost pads; braking for pedestrians/animals overrides drift and boost. */
-      if (blocked) { if (c.drift) { c.drift = 0; c.driftT = 0; } }
+      if (blocked || caution < .9) { if (c.drift) { c.drift = 0; c.driftT = 0; } }
       else if (turnA > .25 && c.v > .02) { if (!c.drift) { c.drift = 1; c.driftT = 0; c.hopT = 12; } c.driftT = (c.driftT || 0) + 1; }
       else if (c.drift) { c.drift = 0; c.boostT = 30; }
       if ((c.hopT || 0) > 0) { c.hopT--; c.hopY = Math.sin((1 - c.hopT / 12) * Math.PI) * .28; } else c.hopY = 0;
       for (const bp of BOOST_PADS) { const padS = LOOPS[bp.li].len * bp.f; if (c.L === LOOPS[bp.li] && Math.abs(c.s - padS) < 1.2 && !(c.boostT > 0)) c.boostT = 45; }
       if ((c.boostT || 0) > 0) c.boostT--;
       const boostMul = (c.boostT || 0) > 0 ? 1.45 : 1, spd = turnA > .25 ? c.sp * (c.drift ? .85 : .55) * boostMul : c.sp * boostMul;
-      c.v += ((blocked ? 0 : spd) - c.v) * (blocked ? .22 : .05); if (c.v < .0005) c.v = 0; /* v3.202 — DEADBAND FIX: the old .002 deadband was HIGHER than the turn-slowdown startup step (sp*.55*.04 ≈ .0013), so a car that stopped on a tight turn could never get moving again — v was zeroed every tick. The bus sat at the RIVER BRIDGE corner (v=0, stop=0, nothing ahead) stuck forever. .0005 still snaps true creep to zero but lets the slowest turn speed start the car. */
+      c.v += ((blocked ? 0 : spd * caution) - c.v) * (blocked ? .22 : (caution < 1 && spd * caution < c.v) ? .12 : .05); if (c.v < .0005) c.v = 0; /* v3.202 — DEADBAND FIX: the old .002 deadband was HIGHER than the turn-slowdown startup step (sp*.55*.04 ≈ .0013), so a car that stopped on a tight turn could never get moving again — v was zeroed every tick. The bus sat at the RIVER BRIDGE corner (v=0, stop=0, nothing ahead) stuck forever. .0005 still snaps true creep to zero but lets the slowest turn speed start the car. */
       c.s += c.v; const p = at(c.L, c.s); c.x = p.x; c.z = p.z; c.hx = p.hx; c.hz = p.hz; c.ax = Math.abs(p.hx) >= Math.abs(p.hz) ? 'x' : 'z'; c.dir = (c.ax === 'x' ? p.hx : p.hz) >= 0 ? 1 : -1;
     }
     const pl = API.plane, rz = (AP.rz0 + AP.rz1) / 2 + .6;
@@ -10121,6 +10232,114 @@ PR('tree',8.31,45.19,{"sp":"sakura","sc":1.55,"w":0.45,"d":0.45}); PR('tree',-12
   DEF.report = () => ({ version: DEF.version, on: DEF.on, decisions: DEF.st.n, unreactedMisses: DEF.st.none, by: Object.assign({}, DEF.st.by), answered: DEF.st.answered, hit: DEF.st.hit, accuracy: DEF.st.answered + DEF.st.hit ? +(DEF.st.answered / (DEF.st.answered + DEF.st.hit)).toFixed(3) : null });
   DEF.reset = () => { DEF.st = { n: 0, none: 0, by: { guard: 0, slip: 0, dodge: 0, parry: 0, step: 0, wait: 0 }, answered: 0, hit: 0, open: [] }; };
 })();
+</script>
+<script>
+/* v3.261 — STREET AWARENESS (Kev Nov 18: "increase npc logic and awareness including vehicles").
+   Town pedestrians (unprovoked crowd NPCs only — never Red, never Blue, never a foe who is fighting) now read the street:
+   - TRAFFIC: a kart rolling toward them in its lane, or a kart honking at them, makes them hurry sideways out of its path
+     (they pick the side they are already on) and glance at it; a "!" pops over their head.
+   - CROSSINGS: while they wait at a zebra they look left and right along the road instead of staring ahead.
+   - SPRINTING RED: someone sprinting straight at them within 3 m gets a quick sidestep.
+   - FIGHTS: a fight within 10 m that they can actually see (no seeing through walls) stops them: most turn and watch from
+     a distance, back off if it comes within 4 m, and the timid ones (about one in four) leave the area. They remember it for
+     about 3 s after it ends, then go back to their errand. Someone mid-crossing finishes crossing first.
+   Karts (patched inside the road system's stepCars):
+   - they ease off early for a person 6-12 m ahead instead of braking at the last moment, brake harder when needed, and
+     skip drift/boost while cautious;
+   - they honk at a person who keeps blocking them (after ~1.2 s, then every 2 s), which sends that person off the road;
+   - a fight on or beside the road ahead slows them to a crawl from 14 m and stops them inside 8 m.
+   No combat rule, move or fighter AI is touched. The game's own roaming still runs first every tick, so its random draws are
+   unchanged; this layer uses only hashes. ?aware=0 turns it off. */
+(() => {
+  'use strict';
+  const API = window.HIT_AWARE = { version: 'v3.261', on: true, error: null, dodges: 0, watch: 0, flee: 0, honks: 0 };
+  try { if (new URLSearchParams(location.search).get('aware') === '0') API.on = false; } catch (e) { }
+  if (typeof npcRoam !== 'function' || typeof S === 'undefined') { API.on = false; return; }
+  const hh = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+  const inTown = () => { try { return !(window.HIT_SKY && HIT_SKY.on) && !S[0]._deep; } catch (e) { return false; } };
+  const cars = () => (window.HIT_ROADS && HIT_ROADS.cars) || [];
+  const COMBAT = new Set(['atk', 'stun', 'stumble', 'down', 'getup', 'block', 'carry']);
+  const seesThrough = (ax, az, bx, bz) => { try { return typeof wallBetween === 'function' && wallBetween(ax, az, bx, bz); } catch (e) { return false; } };
+
+  /* fight points: two live bodies within 2.6 m with at least one of them in a combat state; recomputed once per tick */
+  let fT = -1, FP = [], SEQ = 0;
+  API.fights = function () {
+    if (fT === tk) return FP; fT = tk; FP = [];
+    if (!API.on) return FP;
+    try {
+      const L = [];
+      for (const f of S) if (f && f.hp > 0) L.push(f);
+      if (typeof crowd !== 'undefined') for (const n of crowd) if (n && n.hp > 0 && (n.prov || COMBAT.has(n.st))) L.push(n);
+      for (let i = 0; i < L.length; i++) { const a = L[i]; if (!COMBAT.has(a.st)) continue;
+        for (let j = 0; j < L.length; j++) { if (i === j) continue; const b = L[j]; if (Math.hypot(a.x - b.x, a.z - b.z) < 2.6) { FP.push({ x: (a.x + b.x) / 2, z: (a.z + b.z) / 2 }); break; } } }
+    } catch (e) { API.error = String(e && e.message || e); }
+    return FP;
+  };
+
+  function turn(n, tx, tz, rate) { const cur = Math.atan2(n.fz, n.fx); let d = Math.atan2(tz, tx) - cur; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; const na = cur + Math.max(-rate, Math.min(rate, d)); n.fx = Math.cos(na); n.fz = Math.sin(na); }
+  const still = (n) => { const i = n.i; i.l = i.r = i.u = i.d = i.g = i.bp = i.bk = i.bi = i.bh = i.bc = 0; };
+  const walk = (n, tx, tz, rate) => { still(n); turn(n, tx, tz, rate); n.i.r = 1; };
+  const navOf = (n) => { try { return window.HIT_ROADS && HIT_ROADS.NAVN && HIT_ROADS.NAVN.get(n); } catch (e) { return null; } };
+
+  function aware(n) {
+    const M = n._aw || (n._aw = { dodge: 0, dx: 0, dz: 0, fx: 0, fz: 0, fmem: -1e9, timid: hh(++SEQ * 7.31 + .5) < .25, look: 0 });
+    const nav = navOf(n), crossing = nav && nav.onRoad;
+    if (M.dodge > 0) { M.dodge--; walk(n, M.dx, M.dz, .45); return true; }   // finishing a dodge
+    /* 1. traffic */
+    for (const c of cars()) {
+      if (!c || c.mode === 'parked' || !c.hx) continue;
+      const hl = Math.hypot(c.hx, c.hz) || 1, hx = c.hx / hl, hz = c.hz / hl, dx = n.x - c.x, dz = n.z - c.z, al = dx * hx + dz * hz, la = dx * -hz + dz * hx;
+      const honked = n._honk && tk - n._honk < 90 && n._honkBy === c, moving = (c.v || 0) > .012;
+      const inLane = Math.abs(la) < 1.7 && al > -.5 && al < 3 + (c.v || 0) * 140;
+      if (honked || (moving && inLane && !crossing) || (crossing && moving && al > 0 && al < 3.2 && Math.abs(la) < 1.4)) {
+        const sg = la >= 0 ? 1 : -1; M.dx = -hz * sg; M.dz = hx * sg; M.dodge = honked ? 50 : 32; n._alertT = 50; API.dodges++;
+        if (crossing) return false;          // on the zebra: keep going across rather than turning back
+        walk(n, M.dx, M.dz, .45); return true;
+      }
+    }
+    /* 2. Red sprinting straight at them */
+    const a = S[0];
+    if (a && a.hp > 0) { const vx = a.vx || 0, vz = a.vz || 0, sp = Math.hypot(vx, vz), dx = n.x - a.x, dz = n.z - a.z, d = Math.hypot(dx, dz);
+      if (sp > 4.2 && d < 3 && d > .2 && (vx * dx + vz * dz) / (sp * d) > .8) { const sg = (vx * dz - vz * dx) >= 0 ? 1 : -1; M.dx = -vz / sp * sg; M.dz = vx / sp * sg; M.dodge = 20; n._alertT = 30; API.dodges++; walk(n, M.dx, M.dz, .5); return true; } }
+    /* 3. fights they can see */
+    if (!crossing) {
+      let best = null, bd = 1e9;
+      for (const q of API.fights()) { const d = Math.hypot(q.x - n.x, q.z - n.z); if (d < 10 && d < bd && !seesThrough(n.x, n.z, q.x, q.z)) { bd = d; best = q; } }
+      if (best) { M.fmem = tk; M.fx = best.x; M.fz = best.z; M.fd = bd; }
+      if (tk - M.fmem < 180) {
+        const dx = n.x - M.fx, dz = n.z - M.fz, d = Math.hypot(dx, dz) || .01;
+        if (M.timid && d < 14) { walk(n, dx, dz, .3); if (!n._fled) { n._fled = 1; API.flee++; n._alertT = 40; } return true; }
+        if (d < 4) { walk(n, dx, dz, .35); n._alertT = Math.max(n._alertT || 0, 20); return true; }
+        still(n); turn(n, -dx, -dz, .12); if (!n._watching) { n._watching = 1; API.watch++; } return true;
+      }
+      n._watching = 0; n._fled = 0;
+    }
+    /* 4. waiting at a crossing: look along the road both ways */
+    if (nav && nav.path && nav.wait > 0 && !nav.onRoad) { const wp = nav.path[nav.i]; if (wp && wp.e && wp.e.cross) { const ph = Math.floor((nav.wait + (n.x * 7 | 0)) / 70) % 2, ax = wp.e.ax === 'z' ? 1 : 0; still(n); if (ax) turn(n, ph ? 1 : -1, 0, .08); else turn(n, 0, ph ? 1 : -1, .08); return true; } }
+    return false;
+  }
+
+  // the original roaming runs FIRST every tick (so every random draw it makes happens exactly as before); awareness then
+  // overrides only where the person walks or looks this tick.
+  const _nr = npcRoam;
+  npcRoam = function (n, a) {
+    const r = _nr.apply(this, arguments);
+    try {
+      if (API.on && n && !n.prov && n !== S[0] && n !== S[1] && n.hp > 0 && !n._sitBench && !n._sitGoal && !n._rec && !COMBAT.has(n.st) && n.st !== 'air' && inTown()) aware(n);
+    } catch (e) { API.error = String(e && e.message || e); }
+    return r;
+  };
+  const _tk = tick; tick = function () { const r = _tk.apply(this, arguments); try { if (typeof crowd !== 'undefined') for (const n of crowd) if (n && n._alertT > 0) n._alertT--; } catch (e) { } return r; };
+
+  /* "!" over a startled pedestrian */
+  const _dr = draw; draw = function () {
+    const r = _dr.apply(this, arguments);
+    try { if (API.on && typeof crowd !== 'undefined' && inTown()) for (const n of crowd) { if (!(n._alertT > 0) || n.hp <= 0) continue; const q = P(n.x, 2.15, n.z); if (q.x < -20 || q.x > W + 20 || q.s <= 0) continue;
+      const fs = Math.max(10, Math.min(20, q.s * .34)), al = Math.min(1, n._alertT / 12); g.save(); g.globalAlpha = al; g.font = '900 ' + fs + 'px system-ui,sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(30,20,10,.75)'; g.beginPath(); g.arc(q.x, q.y, fs * .62, 0, 7); g.fill(); g.fillStyle = '#ffd75a'; g.fillText('!', q.x, q.y + 1); g.restore(); } } catch (e) { }
+    return r;
+  };
+})();
+
 </script>
 <script>
 /* v3.162 — GPU WORLD FX (additive, presentation only).
@@ -10859,5 +11078,206 @@ void main(){ vec2 q = vec2(gl_VertexID == 1 ? 3.0 : -1.0, gl_VertexID == 2 ? 3.0
     try { rebuildSolids(); } catch (e) { API.error = String(e && e.message || e); }
   } catch (e) { API.error = String(e && e.message || e); }
 })();
+</script>
+<script>
+/* v3.261 — BUILDING DETAIL PASS (Kev Nov 18: "revamp all buildings and structures to have similar details as GTA V").
+   Every town building (the 40 envlot buildings: homes, shops, inn, barn, farmhouse, shacks, silo, hospital, town halls, bank,
+   police, airport) gets a real-world detail layer drawn through the game's own projection:
+   - WALL MATERIAL per style: brick (shop, inn), clapboard siding (house, farmhouse), vertical planks (barn, shack), ashlar stone
+     (hall, bank, stone house), precast concrete panels (hospital, police), corrugated ribs (silo). One textured fill per wall,
+     split into a few strips on angled walls so the courses follow the perspective.
+   - WEATHERING: a dark plinth and grime band at the base, a shadow under the cornice, dirt streaks under the sills.
+   - FLOOR BANDS between storeys, CORNER QUOINS on brick/stone buildings, DOWNPIPES with brackets at the corners,
+     WALL LAMPS beside the front door (they glow at night).
+   - WINDOWS: frame, mullions, stone sill with its shadow, lintel, sky reflection on the glass, blinds/curtains at varied heights
+     (warm when lit), AC units on modern buildings, flower boxes on homes.
+   - ROOFS: tile courses, ridge cap and gutter on pitched roofs; TV antennas on some homes; rooftop AC units, vents, antenna
+     masts and water tanks on the flat-roofed civic buildings.
+   Presentation only: no solids, rooms, doors or game rules change. Level of detail drops with distance so it stays fast.
+   ?bdet=0 turns the layer off. */
+(() => {
+  'use strict';
+  const API = window.HIT_BDET = { version: 'v3.261', on: true, error: null };
+  try { if (new URLSearchParams(location.search).get('bdet') === '0') API.on = false; } catch (e) { }
+  if (typeof SC === 'undefined' || typeof P !== 'function') { API.on = false; return; }
+  const hh = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+  const nightK = () => { try { return (typeof NIGHT !== 'undefined' && NIGHT) || 0; } catch (e) { return 0; } };
+  const MAT = { house: 'siding', farmhouse: 'siding', shack: 'plank', barn: 'plank', shop: 'brick', inn: 'brick', hall: 'stone', bank: 'stone', stonehouse: 'stone', hospital: 'panel', police: 'panel', silo: 'rib' };
+  const MODERN = { hospital: 1, police: 1, bank: 1, shop: 1, hall: 1 };
+  const HOMEY = { house: 1, farmhouse: 1, inn: 1, shack: 1 };
+  const QUOIN = { brick: 1, stone: 1 };
+  const guard = (fn) => function () { if (!API.on) return; try { return fn.apply(this, arguments); } catch (e) { API.error = String(e && e.message || e); API.on = false; } };
+
+  /* ---------- material tiles (drawn once, used as repeating patterns) ---------- */
+  const TILE = {};
+  function tile(kind) {
+    if (TILE[kind]) return TILE[kind];
+    const c = document.createElement('canvas'), x = c.getContext('2d');
+    let tw, th, TW, TH;
+    if (kind === 'brick') {          // two courses of 0.25 x 0.075 m bricks per tile, staggered, varied tones, light mortar
+      tw = .5; th = .15; TW = 80; TH = 24; c.width = TW; c.height = TH;
+      for (let r = 0; r < 2; r++) for (let k = -1; k < 3; k++) { const ox = (r ? TW / 4 : 0) + k * TW / 2, y = r * TH / 2, v = hh(r * 7.3 + k * 3.1 + 1);
+        x.fillStyle = v < .3 ? 'rgba(150,62,44,.42)' : v < .6 ? 'rgba(168,78,52,.38)' : v < .85 ? 'rgba(128,52,38,.44)' : 'rgba(186,102,70,.36)'; x.fillRect(ox + 1, y + 1, TW / 2 - 2, TH / 2 - 2); }
+      x.fillStyle = 'rgba(232,222,204,.55)'; x.fillRect(0, 0, TW, 1.4); x.fillRect(0, TH / 2, TW, 1.4);
+      for (const vx of [0, TW / 2]) x.fillRect(vx, 0, 1.4, TH / 2); for (const vx of [TW / 4, TW * 3 / 4]) x.fillRect(vx, TH / 2, 1.4, TH / 2);
+      x.fillStyle = 'rgba(40,20,12,.18)'; x.fillRect(0, TH / 2 - 1.2, TW, 1.2); x.fillRect(0, TH - 1.2, TW, 1.2);
+    } else if (kind === 'siding') {  // horizontal lap boards 0.2 m: shadow under each lap, light top edge
+      tw = 1; th = .4; TW = 40; TH = 32; c.width = TW; c.height = TH;
+      for (let r = 0; r < 2; r++) { const y = r * TH / 2; x.fillStyle = 'rgba(255,255,255,.16)'; x.fillRect(0, y, TW, 2); x.fillStyle = 'rgba(40,28,16,.24)'; x.fillRect(0, y + TH / 2 - 3, TW, 3); x.fillStyle = 'rgba(40,28,16,.08)'; x.fillRect(0, y + TH / 2 - 7, TW, 4); }
+    } else if (kind === 'plank') {   // vertical boards 0.25 m with dark gaps and grain
+      tw = .5; th = 1; TW = 40; TH = 80; c.width = TW; c.height = TH;
+      for (let k = 0; k < 2; k++) { const ox = k * TW / 2; x.fillStyle = k ? 'rgba(255,240,220,.06)' : 'rgba(30,18,10,.06)'; x.fillRect(ox, 0, TW / 2, TH); x.fillStyle = 'rgba(24,14,8,.38)'; x.fillRect(ox, 0, 2, TH);
+        x.strokeStyle = 'rgba(30,18,10,.12)'; x.lineWidth = 1; for (let gq = 0; gq < 3; gq++) { const gx = ox + 5 + gq * 5 + hh(k * 3 + gq) * 3; x.beginPath(); x.moveTo(gx, 0); x.bezierCurveTo(gx + 2, TH * .3, gx - 2, TH * .6, gx + 1, TH); x.stroke(); } }
+    } else if (kind === 'stone') {   // ashlar blocks 0.6 x 0.3 m, staggered, toned, dark joints
+      tw = 1.2; th = .6; TW = 96; TH = 48; c.width = TW; c.height = TH;
+      for (let r = 0; r < 2; r++) for (let k = -1; k < 3; k++) { const ox = (r ? TW / 4 : 0) + k * TW / 2, y = r * TH / 2, v = hh(r * 5.7 + k * 9.1 + 2);
+        x.fillStyle = v < .33 ? 'rgba(255,250,236,.12)' : v < .66 ? 'rgba(60,50,40,.09)' : 'rgba(150,130,100,.10)'; x.fillRect(ox + 1, y + 1, TW / 2 - 2, TH / 2 - 2);
+        x.fillStyle = 'rgba(255,255,255,.14)'; x.fillRect(ox + 1, y + 1, TW / 2 - 2, 1.5); }
+      x.fillStyle = 'rgba(40,32,24,.32)'; x.fillRect(0, TH / 2 - 1.5, TW, 1.5); x.fillRect(0, TH - 1.5, TW, 1.5);
+      for (const vx of [0, TW / 2]) x.fillRect(vx, 0, 1.5, TH / 2); for (const vx of [TW / 4, TW * 3 / 4]) x.fillRect(vx, TH / 2, 1.5, TH / 2);
+    } else if (kind === 'panel') {   // precast panels 1.5 x 1.2 m: joints, tie holes, faint staining
+      tw = 1.5; th = 1.2; TW = 60; TH = 48; c.width = TW; c.height = TH;
+      x.fillStyle = 'rgba(40,40,44,.22)'; x.fillRect(0, 0, TW, 1.2); x.fillRect(0, 0, 1.2, TH);
+      x.fillStyle = 'rgba(40,40,44,.18)'; for (const [a, b] of [[8, 8], [TW - 8, 8], [8, TH - 8], [TW - 8, TH - 8]]) { x.beginPath(); x.arc(a, b, 1.3, 0, 7); x.fill(); }
+      const gr = x.createLinearGradient(0, 0, 0, TH); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(60,56,50,.08)'); x.fillStyle = gr; x.fillRect(0, 0, TW, TH);
+    } else {                         // rib: corrugated metal, 0.15 m ribs
+      tw = .3; th = 1; TW = 24; TH = 40; c.width = TW; c.height = TH;
+      x.fillStyle = 'rgba(255,255,255,.16)'; x.fillRect(0, 0, 4, TH); x.fillRect(TW / 2, 0, 4, TH); x.fillStyle = 'rgba(0,0,0,.16)'; x.fillRect(6, 0, 3, TH); x.fillRect(TW / 2 + 6, 0, 3, TH);
+    }
+    return (TILE[kind] = { c: c, tw: tw, th: th, TW: TW, TH: TH, pat: null });
+  }
+
+  const fillQ = (a, b, c, d, col) => { g.fillStyle = col; g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.lineTo(c.x, c.y); g.lineTo(d.x, d.y); g.closePath(); g.fill(); };
+  const seg = (a, b, col, w) => { g.strokeStyle = col; g.lineWidth = w; g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke(); };
+  const flen = (f) => Math.hypot(f.b[0] - f.a[0], f.b[1] - f.a[1]);
+
+  /* ---------- 1. wall face, before the windows ---------- */
+  API.face = guard(function (p, st, f, pt, Hh, bl, front, ruin) {
+    const br = pt(1, 0), sMax = Math.max(bl.s, br.s); if (sMax < 5) return;
+    const len = flen(f); if (len < .2) return;
+    const kind = MAT[p.sty];
+    if (kind && !ruin && sMax > 8) {
+      const T = tile(kind); if (!T.pat) T.pat = g.createPattern(T.c, 'repeat');
+      const N = 1 + Math.min(5, Math.floor(Math.abs(Math.log(bl.s / br.s)) * 8)), su = T.tw / T.TW, sv = T.th / T.TH;
+      g.fillStyle = T.pat;
+      for (let i = 0; i < N; i++) {
+        const ua = i / N, ub = (i + 1) / N, A = pt(ua, 0), B = pt(ub, 0), C = pt(ua, 1), wl = (ub - ua) * len;
+        const Ux = (B.x - A.x) / wl, Uy = (B.y - A.y) / wl, Vx = C.x - A.x, Vy = C.y - A.y;
+        T.pat.setTransform(new DOMMatrix([Ux * su, Uy * su, -Vx * sv, -Vy * sv, A.x - ua * len * Ux, A.y - ua * len * Uy]));
+        const D = pt(ub, Hh), E = pt(ua, Hh); fillQ(A, B, D, E, T.pat);
+      }
+    }
+    if (ruin) {   // soot climbing the broken walls
+      for (let k = 0; k < 4; k++) { const u = .1 + hh(p.seed + f.i * 3 + k) * .8, w = .06 + hh(k + p.seed) * .08; fillQ(pt(u - w, 0), pt(u + w, 0), pt(u + w * .3, Hh * .7), pt(u - w * .3, Hh * .75), 'rgba(20,16,14,.22)'); }
+      return;
+    }
+    // weathering: plinth, grime band, shadow under the cornice
+    fillQ(pt(0, 0), pt(1, 0), pt(1, .42), pt(0, .42), 'rgba(34,28,22,.26)');
+    fillQ(pt(0, .42), pt(1, .42), pt(1, 1.0), pt(0, 1.0), 'rgba(40,32,24,.08)');
+    seg(pt(0, .42), pt(1, .42), 'rgba(255,250,240,.22)', Math.max(.6, .03 * sMax));
+    fillQ(pt(0, Hh - .32), pt(1, Hh - .32), pt(1, Hh), pt(0, Hh), 'rgba(0,0,0,.13)');
+    // floor bands between storeys
+    if (p.sty !== 'silo' && sMax > 9) { const fl = st.floors; for (let k = 1; k < fl; k++) { const y = k * (Hh * .86 / fl) + .06; fillQ(pt(0, y), pt(1, y), pt(1, y + .14), pt(0, y + .14), st.trim); seg(pt(0, y + .14), pt(1, y + .14), 'rgba(255,255,255,.18)', 1); seg(pt(0, y), pt(1, y), 'rgba(0,0,0,.22)', 1); } }
+  });
+
+  /* ---------- 2. each window ---------- */
+  API.win = guard(function (p, st, pt, u0, u1, y0, y1, lit, ruin, f, bl) {
+    if (ruin) return;
+    const a = pt(u0, y0), b = pt(u1, y0), c = pt(u1, y1), d = pt(u0, y1), hp = Math.abs(d.y - a.y); if (hp < 7) return;
+    const len = flen(f), du = (u1 - u0), m = 1 / len, sd = hh(p.seed * 3.1 + u0 * 17.3 + y0 * 5.3 + f.i * 11.7 + p.x * .37), s = a.s;
+    const kind = MAT[p.sty];
+    // sill + its shadow, lintel
+    fillQ(pt(u0 - .05 * m, y0 - .1), pt(u1 + .05 * m, y0 - .1), pt(u1 + .05 * m, y0), pt(u0 - .05 * m, y0), 'rgba(228,220,204,.96)');
+    fillQ(pt(u0 - .05 * m, y0 - .18), pt(u1 + .05 * m, y0 - .18), pt(u1 + .05 * m, y0 - .1), pt(u0 - .05 * m, y0 - .1), 'rgba(0,0,0,.16)');
+    if (kind === 'brick' || kind === 'stone') fillQ(pt(u0 - .06 * m, y1), pt(u1 + .06 * m, y1), pt(u1 + .06 * m, y1 + .13), pt(u0 - .06 * m, y1 + .13), kind === 'brick' ? 'rgba(214,204,186,.9)' : 'rgba(236,228,212,.6)');
+    if (hp < 13) return;
+    // dirt streak under the sill
+    fillQ(pt(u0 + du * .2, y0 - .18), pt(u1 - du * .2, y0 - .18), pt(u1 - du * .35, y0 - .8), pt(u0 + du * .35, y0 - .8), 'rgba(40,30,20,.06)');
+    // blinds / curtains
+    if (sd < .5) { const fr = .2 + .55 * hh(sd * 91.7), yc = y1 - (y1 - y0) * fr, e = pt(u0, yc), h = pt(u1, yc); fillQ(d, c, h, e, lit ? 'rgba(255,212,150,.78)' : (sd < .25 ? 'rgba(234,226,208,.86)' : 'rgba(176,140,112,.8)'));
+      if (hp > 16) { g.strokeStyle = 'rgba(0,0,0,.10)'; g.lineWidth = 1; g.beginPath(); for (let k = 1; k < 6; k++) { const yy = y1 - (y1 - yc) * k / 6, l = pt(u0, yy), r = pt(u1, yy); g.moveTo(l.x, l.y); g.lineTo(r.x, r.y); } g.stroke(); } }
+    // sky reflection on the glass
+    if (!lit) { const m1 = pt(u0 + du * .55, y1), m2 = pt(u0, y1 - (y1 - y0) * .62); g.fillStyle = 'rgba(255,255,255,.2)'; g.beginPath(); g.moveTo(d.x, d.y); g.lineTo(m1.x, m1.y); g.lineTo(m2.x, m2.y); g.closePath(); g.fill();
+      const n1 = pt(u0 + du * .78, y1), n2 = pt(u0 + du * .66, y1), n3 = pt(u0, y1 - (y1 - y0) * .9), n4 = pt(u0, y1 - (y1 - y0) * .78); fillQ(n2, n1, n3, n4, 'rgba(255,255,255,.1)'); }
+    // frame + mullions
+    const fw = Math.max(.8, .05 * s), dark = 'rgba(40,34,28,.85)', lt = 'rgba(244,240,232,.9)', fc = MODERN[p.sty] ? dark : lt;
+    g.strokeStyle = fc; g.lineWidth = fw; g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.lineTo(c.x, c.y); g.lineTo(d.x, d.y); g.closePath();
+    const mt = pt(u0 + du / 2, y1), mb = pt(u0 + du / 2, y0), hl = pt(u0, y0 + (y1 - y0) * .62), hr = pt(u1, y0 + (y1 - y0) * .62); g.moveTo(mt.x, mt.y); g.lineTo(mb.x, mb.y); g.moveTo(hl.x, hl.y); g.lineTo(hr.x, hr.y); g.stroke();
+    // AC unit hanging under the sill (modern buildings) / flower box (homes)
+    const um = u0 + du / 2;
+    if (MODERN[p.sty] && sd > .8 && y0 > 1.6) { const w = .3 * m, y2 = y0 - .22, y3 = y2 - .42; fillQ(pt(um - w, y3), pt(um + w, y3), pt(um + w, y2), pt(um - w, y2), '#c9ccc8'); seg(pt(um - w, y2), pt(um + w, y2), 'rgba(255,255,255,.5)', 1);
+      g.strokeStyle = 'rgba(60,62,64,.6)'; g.lineWidth = 1; g.beginPath(); for (let k = 1; k < 5; k++) { const yy = y3 + (y2 - y3) * k / 5, l = pt(um - w * .8, yy), r = pt(um + w * .1, yy); g.moveTo(l.x, l.y); g.lineTo(r.x, r.y); } g.stroke();
+      const fan = pt(um + w * .5, (y2 + y3) / 2); g.fillStyle = 'rgba(70,72,74,.7)'; g.beginPath(); g.arc(fan.x, fan.y, Math.max(1, .13 * s), 0, 7); g.fill();
+      if (sd > .9) { const dr = pt(um + w * .7, y3 - .5); seg(pt(um + w * .7, y3), dr, 'rgba(70,72,74,.45)', 1); } }
+    else if (HOMEY[p.sty] && sd > .62 && sd < .86) { const w = du * .55 + .05 * m, y2 = y0 - .1, y3 = y2 - .22; fillQ(pt(u0 + du / 2 - w, y3), pt(u0 + du / 2 + w, y3), pt(u0 + du / 2 + w, y2), pt(u0 + du / 2 - w, y2), '#7a5434');
+      for (let k = 0; k < 6; k++) { const fq = pt(u0 + du / 2 - w + (k + .5) * 2 * w / 6, y2 + .06 + hh(k + sd) * .1); g.fillStyle = k % 2 ? 'rgba(76,128,58,.95)' : ['#e2574c', '#f2c94c', '#f4f0e8', '#d86fa8'][(sd * 37 + k) % 4 | 0]; g.beginPath(); g.arc(fq.x, fq.y, Math.max(1, .09 * s), 0, 7); g.fill(); } }
+  });
+
+  /* ---------- 3. after the face (corners, pipes, lamps) ---------- */
+  API.faceAfter = guard(function (p, st, f, pt, Hh, bl, front, ruin) {
+    if (ruin || p.sty === 'silo') return;
+    const br = pt(1, 0), sMax = Math.max(bl.s, br.s); if (sMax < 10) return;
+    const len = flen(f), m = 1 / len, kind = MAT[p.sty];
+    // quoins on brick and stone buildings
+    if (QUOIN[kind] && sMax > 13) for (const side of [0, 1]) for (let y = 0, r = 0; y < Hh - .3; y += .34, r++) { const w = (r % 2 ? .32 : .52) * m, u0 = side ? 1 - w : 0, u1 = side ? 1 : w; fillQ(pt(u0, y + .02), pt(u1, y + .02), pt(u1, y + .32), pt(u0, y + .32), 'rgba(236,228,212,.5)'); }
+    // downpipe at the far corner of the face, with brackets and a shoe at the bottom
+    const up = 1 - .25 * m, pw = Math.max(1.2, .09 * sMax), top = pt(up, Hh - .1), bot = pt(up, .1);
+    seg(top, bot, '#5c5a56', pw); seg(pt(up - .03 * m, Hh - .1), pt(up - .03 * m, .1), 'rgba(255,255,255,.22)', Math.max(.5, pw * .3));
+    for (let y = 1.2; y < Hh - .3; y += 1.6) { const q0 = pt(up - .08 * m, y), q1 = pt(up + .08 * m, y); seg(q0, q1, '#3e3c3a', Math.max(1, pw * .6)); }
+    seg(pt(up, .25), pt(up - .22 * m, .05), '#5c5a56', pw);
+    // gutter along the top of the face
+    seg(pt(0, Hh - .04), pt(1, Hh - .04), 'rgba(70,68,64,.85)', Math.max(1, .07 * sMax));
+    // wall lamps either side of the front door (glow at night)
+    if (front && p.id !== 'silo' && p.id !== 'ap_hangar') {
+      const uw = 1 / st.cols, du = .5 - uw * .32, dv = .5 + uw * .32, nk = nightK();
+      for (const u of [du - .3 * m, dv + .3 * m]) { const q = pt(u, 2.25), qb = pt(u, 2.05); fillQ(pt(u - .07 * m, 2.05), pt(u + .07 * m, 2.05), pt(u + .07 * m, 2.4), pt(u - .07 * m, 2.4), '#2e2a26');
+        g.fillStyle = nk > .25 ? 'rgba(255,224,150,.98)' : 'rgba(250,240,210,.85)'; g.beginPath(); g.arc(q.x, q.y, Math.max(1, .06 * sMax), 0, 7); g.fill(); seg(qb, pt(u, 1.95), '#2e2a26', 1);
+        if (nk > .25) { const wx = f.a[0] + (f.b[0] - f.a[0]) * u, wz = f.a[1] + (f.b[1] - f.a[1]) * u - .15; SC.glow(wx, 2.25, wz, .9, .35 * nk, '255,210,130'); } }
+    }
+  });
+
+  /* ---------- 4. after the whole building (pitched roofs) ---------- */
+  API.after = guard(function (p, st, gable) {
+    if (!gable) return;
+    const Hh = p.h, gx0 = p.x - p.w, gx1 = p.x + p.w, gzN = p.z - p.d, gzC = p.z, gyR = Hh + Math.min(p.d * .45, 2.4);
+    const q0 = SC.Q(p.x, Hh, gzN); if (q0.s < 8) return;
+    const s = q0.s, ex = .25;   // eaves overhang
+    // tile courses on the street-side slope, ridge cap, eave fascia + gutter
+    const n = Math.max(3, Math.min(14, Math.round(Math.hypot(gyR - Hh, gzC - gzN) / .32)));
+    g.strokeStyle = 'rgba(0,0,0,.2)'; g.lineWidth = Math.max(.6, .03 * s); g.beginPath();
+    for (let k = 1; k < n; k++) { const t = k / n, y = Hh + (gyR - Hh) * t, z = gzN + (gzC - gzN) * t, a = SC.Q(gx0, y, z), b = SC.Q(gx1, y, z); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); } g.stroke();
+    if (s > 10) { g.strokeStyle = 'rgba(255,255,255,.08)'; g.beginPath(); const cols = Math.min(40, Math.round((gx1 - gx0) / .45)); for (let k = 1; k < cols; k++) { const x = gx0 + (gx1 - gx0) * k / cols, a = SC.Q(x, Hh, gzN), b = SC.Q(x, gyR, gzC); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); } g.stroke(); }
+    seg(SC.Q(gx0 - .05, gyR + .04, gzC), SC.Q(gx1 + .05, gyR + .04, gzC), 'rgba(40,30,26,.9)', Math.max(1.2, .1 * s));
+    seg(SC.Q(gx0 - ex, Hh - .02, gzN - ex * .6), SC.Q(gx1 + ex, Hh - .02, gzN - ex * .6), 'rgba(236,228,214,.9)', Math.max(1.2, .1 * s));
+    seg(SC.Q(gx0 - ex, Hh - .12, gzN - ex * .6), SC.Q(gx1 + ex, Hh - .12, gzN - ex * .6), 'rgba(80,78,74,.9)', Math.max(1, .07 * s));
+    // TV antenna on some homes, satellite dish on some shops
+    const k = hh(p.seed * 1.7 + p.x * .31 + p.z * .17);
+    if (HOMEY[p.sty] && k < .55) { const ax = p.x - p.w * .45, b = SC.Q(ax, gyR, gzC), t = SC.Q(ax, gyR + 1.8, gzC); seg(b, t, 'rgba(60,60,62,.9)', Math.max(1, .04 * s));
+      for (const [y, w] of [[1.2, .5], [1.5, .38], [1.75, .26]]) seg(SC.Q(ax - w, gyR + y, gzC), SC.Q(ax + w, gyR + y, gzC), 'rgba(60,60,62,.9)', Math.max(.6, .025 * s)); }
+    if (p.sty === 'shop' && k < .6) { const q = SC.Q(p.x - p.w * .3, gyR - .5, gzC - .6); g.fillStyle = '#e4e6e4'; g.beginPath(); g.ellipse(q.x, q.y, .32 * q.s, .26 * q.s, -.4, 0, 7); g.fill(); g.strokeStyle = 'rgba(80,80,80,.7)'; g.lineWidth = Math.max(1, .03 * q.s); g.stroke(); seg(q, { x: q.x + .3 * q.s, y: q.y - .1 * q.s }, 'rgba(80,80,80,.8)', Math.max(1, .03 * q.s)); }
+  });
+
+  /* ---------- 5. flat roofs: rooftop plant ---------- */
+  const box = (x0, x1, z0, z1, y0, y1, cf, ct, cs) => { SC.rz(x0, x1, z0, y0, y1, cf); if (cam.mx < x0) SC.sl(x0, z0, z1, y0, y1, cs); else if (cam.mx > x1) SC.sr(x1, z0, z1, y0, y1, cs); SC.slab(x0, x1, z0, z1, y1, ct); };
+  API.roof = guard(function (p, st) {
+    if (!st || MAT[p.sty] === 'siding' || HOMEY[p.sty] || p.sty === 'barn' || p.sty === 'silo' || p.sty === 'ruin' || p.sty === 'shop' || p.sty === 'stonehouse') return;
+    const h = p.h, x0 = p.x - p.w, x1 = p.x + p.w, z0 = p.z - p.d, z1 = p.z + p.d, q = SC.Q(p.x, h, z0); if (q.s < 7 || q.x < -200 || q.x > W + 200) return;
+    const n = 2 + Math.floor(hh(p.seed + p.x) * 3);
+    for (let k = 0; k < n; k++) {   // AC condensers: grey box, louvres, fan
+      const cx = x0 + 1.4 + hh(p.x * .7 + k * 3.3) * (x1 - x0 - 2.8), cz = z0 + 1.2 + hh(p.z * .9 + k * 5.1) * Math.max(.1, z1 - z0 - 2.4);
+      box(cx - .6, cx + .6, cz - .4, cz + .4, h, h + .85, '#a8adb0', '#c9cdcf', '#8b9094');
+      const f = SC.Q(cx + .22, h + .45, cz - .41); g.fillStyle = 'rgba(50,52,54,.75)'; g.beginPath(); g.arc(f.x, f.y, .26 * f.s, 0, 7); g.fill();
+      g.strokeStyle = 'rgba(60,62,64,.5)'; g.lineWidth = 1; g.beginPath(); for (let j = 1; j < 5; j++) { const a = SC.Q(cx - .55, h + j * .17, cz - .41), b = SC.Q(cx - .1, h + j * .17, cz - .41); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); } g.stroke();
+    }
+    for (let k = 0; k < 3; k++) { const vx = x0 + .8 + hh(p.seed + k * 7.7) * (x1 - x0 - 1.6), vz = z0 + .8 + hh(p.seed + k * 2.3) * Math.max(.1, z1 - z0 - 1.6); box(vx - .12, vx + .12, vz - .12, vz + .12, h, h + .55, '#7c8084', '#5c6064', '#6c7074'); SC.slab(vx - .2, vx + .2, vz - .2, vz + .2, h + .55, '#4c5054'); }
+    const mx = x0 + (x1 - x0) * (.2 + .6 * hh(p.x + 4.4)), mz = (z0 + z1) / 2, mb = SC.Q(mx, h, mz), mt = SC.Q(mx, h + 4.2, mz);   // antenna mast with a blinking red light
+    seg(mb, mt, 'rgba(70,70,74,.95)', Math.max(1, .05 * mb.s)); for (const y of [1.6, 2.6, 3.5]) seg(SC.Q(mx - .4, h + y, mz), SC.Q(mx + .4, h + y, mz), 'rgba(70,70,74,.9)', Math.max(.6, .03 * mb.s));
+    if ((tk >> 5) % 2) { g.fillStyle = 'rgba(255,60,50,.95)'; g.beginPath(); g.arc(mt.x, mt.y, Math.max(1.5, .08 * mt.s), 0, 7); g.fill(); }
+    if (p.sty === 'hospital' || p.sty === 'hall' || hh(p.seed + 9) < .4) {   // water tank on legs
+      const tx = x1 - 2.2, tz = z1 - 2.2, ty = h + 1.4; for (const [lx, lz] of [[-.7, -.7], [.7, -.7], [-.7, .7], [.7, .7]]) seg(SC.Q(tx + lx, h, tz + lz), SC.Q(tx + lx, ty, tz + lz), 'rgba(80,66,52,.9)', Math.max(1, .06 * q.s));
+      box(tx - .9, tx + .9, tz - .9, tz + .9, ty, ty + 1.8, '#8a6a4c', '#6a4e38', '#755a42'); for (const y of [.5, 1.2]) seg(SC.Q(tx - .9, ty + y, tz - .91), SC.Q(tx + .9, ty + y, tz - .91), 'rgba(40,30,20,.6)', Math.max(1, .04 * q.s)); }
+  });
+})();
+
 </script>
 </body></html>
