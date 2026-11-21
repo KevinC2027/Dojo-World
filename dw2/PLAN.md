@@ -44,7 +44,9 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Cache static facade layers to sprites so detail doesn't bring the lag back.
 - Release gate: before/after screenshots of each building type; fills/frame in a town-centre view no more than 25% above Step 2; no collision/door regressions.
 
-### Step 4 — NPC logic and vehicle awareness  — STATUS: PENDING (Step 3 PASSED; start from v2.4)
+### Step 3b — Bushes revamp (Kev, Nov 21: "The bushes need to be revamped with the rest of the game")  — STATUS: PASSED (v2.5: bushes now use the tree foliage style, with flowering variants, drawn from the sprite cache; fills −1%, frame time within noise. Report: `dw2/reports/bushes_2.5.md`)
+
+### Step 4 — NPC logic and vehicle awareness  — STATUS: PENDING (Step 3 PASSED; start from v2.5, which includes the bushes revamp)
 - NPCs look before crossing, prefer crosswalks and lights, step back from an approaching car, react to horns; drivers and NPCs notice Red (line of sight only — never through walls).
 - Don't change combat rules or Red's controls.
 - Release gate: scripted test of N crossings with zero NPC–car overlaps; a short real-time video of crossings; no new errors; frame time within 10% of Step 3.
@@ -79,3 +81,4 @@ Rules for choosing them:
 - 2026-11-21T13:15Z FINISHED step 2: PASSED — v2.3 (sprite hysteresis −37% fills while walking to the Sky Tree; trunk doorway rebuilt; lift OK)
 - 2026-11-21T16:58Z STARTED step 3 (Claude, scheduled run)
 - 2026-11-21T17:15Z FINISHED step 3: PASSED — v2.4 (window reveals, cornices, Northfield storefronts + signs; fills +14% worst case; doors/solids unchanged)
+- 2026-11-21: Kev asked for the bushes to be revamped; v2.5 built live in the session from v2.4 (Claude). Step 4 starts from v2.5.
