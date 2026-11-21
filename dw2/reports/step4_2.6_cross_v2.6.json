@@ -1,0 +1,566 @@
+[
+ {
+  "ticks": 72000,
+  "crossingsStarted": 7,
+  "crossingsCompleted": 6,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 9,
+  "targetInRoadTicks": 1,
+  "maxPeds": 24,
+  "simMsPerTick": 0.783,
+  "aware": {
+   "dodges": 5,
+   "honks": 0,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 0,
+   "makeRoom": 0,
+   "kartHolds": null,
+   "roadExits": 2
+  },
+  "kerb": {
+   "looks": 9,
+   "lookAborts": 2,
+   "kartYields": 1,
+   "midHolds": null,
+   "contactsResolved": 0,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 3,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   56.0,
+   -24.0
+  ],
+  "seed": 103
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 12,
+  "crossingsCompleted": 12,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 586,
+  "targetInRoadTicks": 1346,
+  "maxPeds": 12,
+  "simMsPerTick": 0.531,
+  "aware": {
+   "dodges": 19,
+   "honks": 8,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 0,
+   "makeRoom": 0,
+   "kartHolds": null,
+   "roadExits": 9
+  },
+  "kerb": {
+   "looks": 884,
+   "lookAborts": 5,
+   "kartYields": 17,
+   "midHolds": null,
+   "contactsResolved": 96,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 0,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   6.0,
+   -64.0
+  ],
+  "seed": 105
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 25,
+  "crossingsCompleted": 25,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 105,
+  "targetInRoadTicks": 0,
+  "maxPeds": 16,
+  "simMsPerTick": 0.745,
+  "aware": {
+   "dodges": 15,
+   "honks": 2,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 0,
+   "makeRoom": 0,
+   "kartHolds": null,
+   "roadExits": 33
+  },
+  "kerb": {
+   "looks": 1032,
+   "lookAborts": 4,
+   "kartYields": 25,
+   "midHolds": null,
+   "contactsResolved": 0,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 0,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   -1.5,
+   14.0
+  ],
+  "seed": 107
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 43,
+  "crossingsCompleted": 41,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 1028,
+  "targetInRoadTicks": 2177,
+  "maxPeds": 22,
+  "simMsPerTick": 0.755,
+  "aware": {
+   "dodges": 53,
+   "honks": 25,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 9,
+   "makeRoom": 0,
+   "kartHolds": 3,
+   "roadExits": 29
+  },
+  "kerb": {
+   "looks": 801,
+   "lookAborts": 11,
+   "kartYields": 77,
+   "midHolds": null,
+   "contactsResolved": 70,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 0,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   60.0,
+   26.0
+  ],
+  "seed": 109
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 18,
+  "crossingsCompleted": 17,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 100,
+  "targetInRoadTicks": 83,
+  "maxPeds": 16,
+  "simMsPerTick": 0.816,
+  "aware": {
+   "dodges": 194,
+   "honks": 126,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 2,
+   "makeRoom": 0,
+   "kartHolds": null,
+   "roadExits": 4
+  },
+  "kerb": {
+   "looks": 1550,
+   "lookAborts": 4,
+   "kartYields": 110,
+   "midHolds": 76,
+   "contactsResolved": 0,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 0,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   4.0,
+   24.0
+  ],
+  "seed": 11
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 17,
+  "crossingsCompleted": 17,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 66,
+  "targetInRoadTicks": 361,
+  "maxPeds": 16,
+  "simMsPerTick": 0.711,
+  "aware": {
+   "dodges": 20,
+   "honks": 4,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 2,
+   "makeRoom": 0,
+   "kartHolds": null,
+   "roadExits": 5
+  },
+  "kerb": {
+   "looks": 308,
+   "lookAborts": 3,
+   "kartYields": 8,
+   "midHolds": null,
+   "contactsResolved": 0,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 0,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   4.0,
+   24.0
+  ],
+  "seed": 111
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 17,
+  "crossingsCompleted": 17,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 259,
+  "targetInRoadTicks": 412,
+  "maxPeds": 11,
+  "simMsPerTick": 0.531,
+  "aware": {
+   "dodges": 10,
+   "honks": 0,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 0,
+   "makeRoom": 0,
+   "kartHolds": null,
+   "roadExits": 6
+  },
+  "kerb": {
+   "looks": 21,
+   "lookAborts": 4,
+   "kartYields": 30,
+   "midHolds": null,
+   "contactsResolved": 0,
+   "drivewayWaits": 5,
+   "postsMoved": 1,
+   "spotsMoved": 1,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   -56.0,
+   -26.0
+  ],
+  "seed": 113
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 21,
+  "crossingsCompleted": 21,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 254,
+  "targetInRoadTicks": 873,
+  "maxPeds": 11,
+  "simMsPerTick": 0.766,
+  "aware": {
+   "dodges": 23,
+   "honks": 10,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 1,
+   "makeRoom": 0,
+   "kartHolds": 1,
+   "roadExits": 4
+  },
+  "kerb": {
+   "looks": 52,
+   "lookAborts": 4,
+   "kartYields": 63,
+   "midHolds": 7,
+   "contactsResolved": 0,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 1,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   -56.0,
+   -26.0
+  ],
+  "seed": 13
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 33,
+  "crossingsCompleted": 32,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 9,
+  "targetInRoadTicks": 1,
+  "maxPeds": 25,
+  "simMsPerTick": 0.978,
+  "aware": {
+   "dodges": 28,
+   "honks": 2,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 0,
+   "makeRoom": 0,
+   "kartHolds": null,
+   "roadExits": 10
+  },
+  "kerb": {
+   "looks": 291,
+   "lookAborts": 8,
+   "kartYields": 72,
+   "midHolds": null,
+   "contactsResolved": 0,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 3,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   56.0,
+   -24.0
+  ],
+  "seed": 3
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 24,
+  "crossingsCompleted": 24,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 774,
+  "targetInRoadTicks": 2385,
+  "maxPeds": 12,
+  "simMsPerTick": 0.722,
+  "aware": {
+   "dodges": 14,
+   "honks": 3,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 0,
+   "makeRoom": 0,
+   "kartHolds": null,
+   "roadExits": 23
+  },
+  "kerb": {
+   "looks": 206,
+   "lookAborts": 2,
+   "kartYields": 35,
+   "midHolds": null,
+   "contactsResolved": 0,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 0,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   6.0,
+   -64.0
+  ],
+  "seed": 5
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 23,
+  "crossingsCompleted": 23,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 0,
+  "targetInRoadTicks": 0,
+  "maxPeds": 16,
+  "simMsPerTick": 0.826,
+  "aware": {
+   "dodges": 24,
+   "honks": 3,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 0,
+   "makeRoom": 0,
+   "kartHolds": null,
+   "roadExits": 4
+  },
+  "kerb": {
+   "looks": 24,
+   "lookAborts": 1,
+   "kartYields": 32,
+   "midHolds": 1,
+   "contactsResolved": 0,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 0,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   -1.5,
+   14.0
+  ],
+  "seed": 7
+ },
+ {
+  "ticks": 72000,
+  "crossingsStarted": 34,
+  "crossingsCompleted": 34,
+  "overlaps": 0,
+  "redOverlaps": 0,
+  "closeCalls": 0,
+  "jaywalkTicks": 515,
+  "targetInRoadTicks": 1801,
+  "maxPeds": 21,
+  "simMsPerTick": 0.877,
+  "aware": {
+   "dodges": 23,
+   "honks": 12,
+   "watch": 0,
+   "flee": 0,
+   "redHonks": 0,
+   "noticeRed": 2,
+   "makeRoom": 0,
+   "kartHolds": 3,
+   "roadExits": 13
+  },
+  "kerb": {
+   "looks": 269,
+   "lookAborts": 2,
+   "kartYields": 37,
+   "midHolds": null,
+   "contactsResolved": 27,
+   "drivewayWaits": 0,
+   "postsMoved": 1,
+   "spotsMoved": 0,
+   "shoulderRoutes": 5
+  },
+  "errors": {
+   "roads": null,
+   "aware": null,
+   "life": null
+  },
+  "ovList": [],
+  "pageErrors": [],
+  "file": "Dojo_World_v2.6.html",
+  "red": [
+   60.0,
+   26.0
+  ],
+  "seed": 9
+ }
+]

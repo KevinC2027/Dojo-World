@@ -46,10 +46,11 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 
 ### Step 3b — Bushes revamp (Kev, Nov 21: "The bushes need to be revamped with the rest of the game")  — STATUS: PASSED (v2.5: bushes now use the tree foliage style, with flowering variants, drawn from the sprite cache; fills −1%, frame time within noise. Report: `dw2/reports/bushes_2.5.md`)
 
-### Step 4 — NPC logic and vehicle awareness  — STATUS: PENDING (Step 3 PASSED; start from v2.5, which includes the bushes revamp)
+### Step 4 — NPC logic and vehicle awareness  — STATUS: PASSED (v2.6, Nov 21: kerb drill (walk to the corner, wait for the light, look both ways, route-aware car check), karts yield at zebras and need line of sight, honks only at people in the road, driveways wait, people leave the carriageway and never walk into a kart, townsfolk notice Red by sight; travelers moved to the shoulder. Crossing test: 269 crossings / 864k ticks with 0 overlaps (v2.5: 314), carriageway person-ticks 847k -> 3.7k, honks 8,066 -> 195; fills unchanged, frame time within noise. Report: `dw2/reports/step4_2.6.md`)
 - NPCs look before crossing, prefer crosswalks and lights, step back from an approaching car, react to horns; drivers and NPCs notice Red (line of sight only — never through walls).
 - Don't change combat rules or Red's controls.
 - Release gate: scripted test of N crossings with zero NPC–car overlaps; a short real-time video of crossings; no new errors; frame time within 10% of Step 3.
+- Test: `python3 -I dw2/tools/cross.py <build> --ticks 72000 --red x,z --seed n` (seeded, no drawing; counts crossings, overlaps, carriageway ticks, honks).
 
 ## After Step 4 — new objectives (Kev, Nov 21: "once you've met all objectives, create new ones")
 When Steps 1–4 are all PASSED, the run that finds them so writes the NEXT batch of 3–4 steps here (Step 5, 6, ...), each in the same
@@ -83,3 +84,4 @@ Rules for choosing them:
 - 2026-11-21T17:15Z FINISHED step 3: PASSED — v2.4 (window reveals, cornices, Northfield storefronts + signs; fills +14% worst case; doors/solids unchanged)
 - 2026-11-21: Kev asked for the bushes to be revamped; v2.5 built live in the session from v2.4 (Claude). Step 4 starts from v2.5.
 - 2026-11-21T20:58Z STARTED step 4 (Claude, scheduled run)
+- 2026-11-21T22:08Z FINISHED step 4: PASSED — v2.6 (0 pedestrian–kart overlaps in 269 crossings / 864k ticks vs 314 in v2.5; jaywalking −99.6%; honks −98%; perf level). Steps 1–4 all PASSED: next run writes the new batch (Step 5+).
