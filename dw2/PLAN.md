@@ -76,4 +76,4 @@ Rules for choosing them:
 - 2026-11-21: added the "new objectives" rule after Step 4 (Claude).
 - 2026-11-21: Kev set Dojo_World_v2_2 as the new baseline; Step 1 marked PASSED from its measurements; next is Step 2 (Claude).
 - 2026-11-21T13:01Z STARTED step 2 (Claude, scheduled run)
-- 2026-11-21T14:10Z FINISHED step 2: PASSED — v2.3 (sprite hysteresis −37% fills while walking to the Sky Tree; trunk doorway rebuilt; lift OK)
+- 2026-11-21T13:15Z FINISHED step 2: PASSED — v2.3 (sprite hysteresis −37% fills while walking to the Sky Tree; trunk doorway rebuilt; lift OK)
