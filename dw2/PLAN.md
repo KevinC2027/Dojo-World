@@ -175,3 +175,4 @@ Rules for choosing them:
 - 2026-11-22T13:59Z STARTED step 11 (Claude, scheduled run)
 - 2026-11-22T14:16Z FINISHED step 11: PASSED — v2.14 gomoku vs the innkeeper at the inn bar (touch board, threat-aware AI, W/L/D record; 120 games 0 illegal, every four/open three blocked; perf level)
 - 2026-11-22: Kev set a standing rule: new paid services/goods may be priced without asking (see PRICES under "After Step 4") (Claude).
+- 2026-11-22T14:59Z STARTED step 12 (Claude, scheduled run)
