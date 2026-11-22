@@ -223,3 +223,4 @@ Rules for choosing them:
 - 2026-11-22T16:21Z FINISHED step 13: PASSED — v2.16 home cooking (10 stoves, 6 recipes, SEAR/SERVE pan game; cook.py 2 seeds all checks, ingredients used only on serve, 0 coins, perf in budget); new batch Steps 13–16 written
 - 2026-11-22T16:59Z STARTED step 14 (Claude, scheduled run)
 - 2026-11-22T17:39Z FINISHED step 14: PASSED — v2.17 town bus + fares (4 stops with shelters/timetables, 10 DC validated 'fare' debit, bell to get off; bus.py 2 seeds 16/16 rides, 0 overlaps, 0 moving contacts; perf in budget)
+- 2026-11-22T17:59Z STARTED step 15 (Claude, scheduled run)
