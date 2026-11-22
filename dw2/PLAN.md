@@ -177,3 +177,4 @@ Rules for choosing them:
 - 2026-11-22: Kev set a standing rule: new paid services/goods may be priced without asking (see PRICES under "After Step 4") (Claude).
 - 2026-11-22T14:59Z STARTED step 12 (Claude, scheduled run)
 - 2026-11-22T15:22Z FINISHED step 12: PASSED — v2.15 Mirror Lake swim course (beach start board, 5 buoys + finish gate, timer/best, missed-buoy detection; swim.py 2 seeds all checks, ~40 s course; perf within budget). Batch Steps 9–12 all PASSED: next run writes the new batch.
+- 2026-11-22T15:59Z STARTED step 13 (Claude, scheduled run; writing new batch Steps 13–16)
