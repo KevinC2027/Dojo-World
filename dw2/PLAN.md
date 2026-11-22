@@ -52,7 +52,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test of N crossings with zero NPC–car overlaps; a short real-time video of crossings; no new errors; frame time within 10% of Step 3.
 - Test: `python3 -I dw2/tools/cross.py <build> --ticks 72000 --red x,z --seed n` (seeded, no drawing; counts crossings, overlaps, carriageway ticks, honks).
 
-### Step 5 — Fishing (non-combat activity)  — STATUS: IN PROGRESS
+### Step 5 — Fishing (non-combat activity)  — STATUS: PASSED (v2.7, Nov 22: rod rests at the lake pier, Eastwater pools, river bank and farm pond; cast/nibble/bite/strike/reel with tension, 13 species by water body, fishing log; 480/480 casts in water, good play 200/200 caught, early strikes 0 hooks, greedy reeling snaps, no reeling slips; fills +0.03% default / +0.6% pier while reeling, ms level. Also fixed the pier deck being painted over by the lake and Red standing 1.5 m down in it. Report: `dw2/reports/step5_2.7.md`)
 - A real cast-and-reel game at rod rests on Mirror Lake pier, the Eastwater pools, the river bank and the farm pond, using the
   existing INTERACT flow to start: hold to swing back (power meter), release to cast; nibbles vs the bite; tap to strike; hold to reel,
   ease off when the fish runs (tension), slack too long and the hook slips. Species, length and weight depend on the water body and
@@ -63,7 +63,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
   joystick packs up; species differ by water body; zero page/module errors; fills/frame and frame time within 15% of v2.6 at the
   default view and at the pier while reeling; real-time video of cast -> bite -> reel -> catch.
 
-### Step 6 — Paying with real coins in town shops  — STATUS: NOT STARTED (needs Step 5 PASSED)
+### Step 6 — Paying with real coins in town shops  — STATUS: NOT STARTED (next)
 - Wire up spending (today: "free sample: spending is not set up yet", "Coins are not wired up yet"): the Northfield general store,
   bakery and smithy counters, the farm stand honesty box and the ramen stall take real coins from Red's pouch through the existing
   DC ledger (a new validated 'shop' debit, prices from DC_CONFIG), with the coins flying from the pouch to the counter.
@@ -121,3 +121,4 @@ Rules for choosing them:
 - 2026-11-21T20:58Z STARTED step 4 (Claude, scheduled run)
 - 2026-11-21T22:08Z FINISHED step 4: PASSED — v2.6 (0 pedestrian–kart overlaps in 269 crossings / 864k ticks vs 314 in v2.5; jaywalking −99.6%; honks −98%; perf level). Steps 1–4 all PASSED: next run writes the new batch (Step 5+).
 - 2026-11-22T00:58Z STARTED step 5 (Claude, scheduled run; writing new batch Steps 5–8)
+- 2026-11-22T01:34Z FINISHED step 5: PASSED — v2.7 fishing at four rod rests (480/480 casts in water, 0 early hooks, perf level) + pier deck/height fix; new batch Steps 5–8 written
