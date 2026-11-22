@@ -115,7 +115,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test (legal moves only, the AI blocks open fours, win/draw detection correct over many random games);
   zero errors; perf within 15% of the previous PASSED build.
 
-### Step 12 — Mirror Lake swim course  — STATUS: NOT STARTED
+### Step 12 — Mirror Lake swim course  — STATUS: PASSED (v2.15, Nov 22: sandy beach + start board on the south shore, INTERACT -> 3-2-1-GO, five numbered buoys in order (next one ringed, edge arrow), finish gate float line, chip with time/next buoy/distance/best; missed buoys flagged and not counted; leaving the water, false start, never getting in, cancel, boat, coliseum end the run; per-viewer best + last five. swim.py x2 seeds: 8/8 full runs (one diving) all buoys in order while swimming, time = counted ticks, best = min, skip/straight-to-gate missed detected and recovered, out/dry/false/area/reload all correct, 0 errors; regressions boat/fish PASS; fills +0.1% default / +1.5% beach / +2.0% lake, ms level at default/beach, +6% to +11% on the lake mid-run. Report: `dw2/reports/step12_2.15.md`)
 - The buoy line becomes a timed swim course: a start board on the beach, numbered buoys drawn on the water, a lap timer and best
   times, using the existing swimming/diving physics (no new poses). Missing a buoy is shown; leaving the water ends the run.
 - Release gate: scripted swim of the course (all buoys reachable, timer and best time correct, missed buoy detected); zero errors;
@@ -176,3 +176,4 @@ Rules for choosing them:
 - 2026-11-22T14:16Z FINISHED step 11: PASSED — v2.14 gomoku vs the innkeeper at the inn bar (touch board, threat-aware AI, W/L/D record; 120 games 0 illegal, every four/open three blocked; perf level)
 - 2026-11-22: Kev set a standing rule: new paid services/goods may be priced without asking (see PRICES under "After Step 4") (Claude).
 - 2026-11-22T14:59Z STARTED step 12 (Claude, scheduled run)
+- 2026-11-22T15:22Z FINISHED step 12: PASSED — v2.15 Mirror Lake swim course (beach start board, 5 buoys + finish gate, timer/best, missed-buoy detection; swim.py 2 seeds all checks, ~40 s course; perf within budget). Batch Steps 9–12 all PASSED: next run writes the new batch.
