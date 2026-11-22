@@ -1,0 +1,412 @@
+{
+ "seed": 7,
+ "errors": [],
+ "view": {
+  "sees": true,
+  "hit1": true,
+  "ev1": {
+   "tk": 215,
+   "victim": "Businessman",
+   "vid": "b1",
+   "seen": "pc1"
+  },
+  "provAfterHit": 1,
+  "ph1": [
+   "alert:call",
+   "alert:walk",
+   "alert:talk",
+   "patrol"
+  ],
+  "victimCalm": true,
+  "warned": true,
+  "offences": 1,
+  "sees2": true,
+  "hit2": true,
+  "ph2": [
+   "arrest:call",
+   "arrest:walk",
+   "arrest:cuff",
+   "jail:fade",
+   "jail:in"
+  ],
+  "jailed": true,
+  "inPolice": "police",
+  "doorShut": true,
+  "tIn": 1431,
+  "cellPos": [
+   108.9,
+   8.3
+  ],
+  "tryOut": {
+   "reached": false,
+   "ticks": 300,
+   "x": 109.8,
+   "z": 7.8
+  },
+  "heldIn": true,
+  "cellTicks": 1200,
+  "state": "patrol",
+  "offencesAfter": 0,
+  "doorOpen": true,
+  "out": {
+   "reached": true,
+   "ticks": 188,
+   "x": 106,
+   "z": -1.18
+  },
+  "outside": true,
+  "ok": true
+ },
+ "wall": {
+  "wall": [
+   81,
+   91,
+   9,
+   9.5
+  ],
+  "dist": 3.7,
+  "wallBetween": true,
+  "sees": false,
+  "hit": true,
+  "ev": [
+   {
+    "tk": 2900,
+    "victim": "Businessman",
+    "vid": "b1",
+    "seen": null
+   }
+  ],
+  "ph": [
+   "patrol"
+  ],
+  "offences": 0,
+  "ctrlSees": true,
+  "ctrlHit": true,
+  "ctrlEv": [
+   {
+    "tk": 3373,
+    "victim": "Businessman",
+    "vid": "b1",
+    "seen": "pc1"
+   }
+  ],
+  "ctrlState": "alert",
+  "ok": true
+ },
+ "shopWindow": {
+  "inside": "nf_s1",
+  "dist": 4.08,
+  "sees": false,
+  "hit": true,
+  "ev": [
+   {
+    "tk": 3459,
+    "victim": "Clerk",
+    "vid": "clk_gs",
+    "seen": null
+   }
+  ],
+  "ph": [
+   "patrol"
+  ],
+  "ok": true
+ },
+ "provoked": {
+  "seesFirst": false,
+  "hit1": true,
+  "firstSeen": null,
+  "seesNow": true,
+  "prov": 1,
+  "moreHits": 3,
+  "ph": [
+   "patrol"
+  ],
+  "offences": 0,
+  "foe": true,
+  "seesFoe": true,
+  "foeInfo": [
+   "bl",
+   "idle",
+   100,
+   0
+  ],
+  "foeHit": true,
+  "foeInfo2": [
+   "stun",
+   98.42857142857143,
+   "atk",
+   92.84,
+   93.57
+  ],
+  "foeEv": 0,
+  "foeState": "patrol",
+  "sky": true,
+  "skyEv": 0,
+  "skyState": "patrol",
+  "back": true,
+  "ok": true
+ },
+ "lost": {
+  "hit": true,
+  "state1": "alert",
+  "seesAfter": false,
+  "endTicks": 476,
+  "end": {
+   "ev": "end",
+   "why": "lost",
+   "kind": "warn",
+   "cop": "pc1",
+   "tk": 5488
+  },
+  "ok": true
+ },
+ "away": {
+  "jailed": true,
+  "jailSky": false,
+  "state": "patrol",
+  "back": true,
+  "ok": true
+ },
+ "patrol": {
+  "pc1": 61.3,
+  "pc2": 83.4,
+  "pc3": 83.4,
+  "ok": true
+ },
+ "desk": {
+  "lines": [
+   "Desk sergeant: \"The rules are simple. Officers walk the square and Northfield. Hit someone who did nothing to you where an officer can see it, and you get a warning.\"",
+   "Desk sergeant: \"Do it again within a minute and a half and you sit in that cell for twenty seconds. The door unlocks by itself. No fines, no record.\"",
+   "Desk sergeant: \"Sparring in the dojo, the ring and the coliseum is your business. So is a fight somebody else started. We only judge what we see.\"",
+   "Desk sergeant: \"Sparring in the dojo, the ring and the coliseum is your business. So is a fight somebody else started. We only judge what we see.\""
+  ],
+  "rules": 4,
+  "cellFree": "An empty cell, freshly mopped. The key hangs well out of rea",
+  "ok": true
+ },
+ "fuzz": {
+  "runs": 40,
+  "stuck": 0,
+  "arrests": 4,
+  "warns": 0,
+  "jailsReleased": 4,
+  "notSeen": 0,
+  "bad": [
+   [
+    20,
+    "spawn"
+   ],
+   [
+    25,
+    "spawn"
+   ],
+   [
+    27,
+    "spawn"
+   ],
+   [
+    37,
+    "spawn"
+   ],
+   [
+    38,
+    "spawn"
+   ]
+  ],
+  "events": 40,
+  "ok": true
+ },
+ "moduleErrors": {},
+ "log": [
+  {
+   "ev": "warn",
+   "cop": "pc2",
+   "tk": 37803
+  },
+  {
+   "ev": "end",
+   "why": "warned",
+   "kind": "warn",
+   "cop": "pc2",
+   "tk": 38003
+  },
+  {
+   "ev": "call",
+   "kind": "warn",
+   "cop": "pc2",
+   "victim": "Businessman",
+   "tk": 39363
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 39408
+  },
+  {
+   "ev": "warn",
+   "cop": "pc2",
+   "tk": 39521
+  },
+  {
+   "ev": "end",
+   "why": "warned",
+   "kind": "warn",
+   "cop": "pc2",
+   "tk": 39721
+  },
+  {
+   "ev": "call",
+   "kind": "warn",
+   "cop": "pc3",
+   "victim": "Businessman",
+   "tk": 40770
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 40815
+  },
+  {
+   "ev": "warn",
+   "cop": "pc3",
+   "tk": 40845
+  },
+  {
+   "ev": "end",
+   "why": "warned",
+   "kind": "warn",
+   "cop": "pc3",
+   "tk": 41045
+  },
+  {
+   "ev": "call",
+   "kind": "arrest",
+   "cop": "pc3",
+   "victim": "Businessman",
+   "tk": 41220
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 41265
+  },
+  {
+   "ev": "cuff",
+   "cop": "pc3",
+   "tk": 41333
+  },
+  {
+   "ev": "jail",
+   "by": "pc3",
+   "tk": 41383
+  },
+  {
+   "ev": "end",
+   "why": "arrested",
+   "kind": "arrest",
+   "cop": "pc3",
+   "tk": 41383
+  },
+  {
+   "ev": "release",
+   "why": "time",
+   "tk": 42605
+  },
+  {
+   "ev": "call",
+   "kind": "warn",
+   "cop": "pc2",
+   "victim": "Businessman",
+   "tk": 43308
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 43353
+  },
+  {
+   "ev": "warn",
+   "cop": "pc2",
+   "tk": 43374
+  },
+  {
+   "ev": "call",
+   "kind": "arrest",
+   "cop": "pc2",
+   "victim": "Businessman",
+   "tk": 43426
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 43471
+  },
+  {
+   "ev": "cuff",
+   "cop": "pc2",
+   "tk": 43496
+  },
+  {
+   "ev": "jail",
+   "by": "pc2",
+   "tk": 43546
+  },
+  {
+   "ev": "end",
+   "why": "arrested",
+   "kind": "arrest",
+   "cop": "pc2",
+   "tk": 43546
+  },
+  {
+   "ev": "release",
+   "why": "time",
+   "tk": 44768
+  },
+  {
+   "ev": "call",
+   "kind": "warn",
+   "cop": "pc3",
+   "victim": "Businessman",
+   "tk": 44808
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 44853
+  },
+  {
+   "ev": "call",
+   "kind": "arrest",
+   "cop": "pc3",
+   "victim": "Businessman",
+   "tk": 45233
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 45278
+  },
+  {
+   "ev": "end",
+   "why": "gone",
+   "kind": "arrest",
+   "cop": "pc3",
+   "tk": 45301
+  }
+ ],
+ "summary": {
+  "view": true,
+  "wall": true,
+  "shopWindow": true,
+  "provoked": true,
+  "lost": true,
+  "away": true,
+  "patrol": true,
+  "desk": true,
+  "fuzz": true,
+  "pageErrors": 0,
+  "moduleErrors": {},
+  "PASS": true
+ }
+}

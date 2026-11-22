@@ -1,0 +1,389 @@
+{
+ "seed": 11,
+ "errors": [],
+ "view": {
+  "sees": true,
+  "hit1": true,
+  "ev1": {
+   "tk": 214,
+   "victim": "Businessman",
+   "vid": "b1",
+   "seen": "pc1"
+  },
+  "provAfterHit": 1,
+  "ph1": [
+   "alert:call",
+   "alert:walk",
+   "alert:talk",
+   "patrol"
+  ],
+  "victimCalm": true,
+  "warned": true,
+  "offences": 1,
+  "sees2": true,
+  "hit2": true,
+  "ph2": [
+   "arrest:call",
+   "arrest:walk",
+   "arrest:cuff",
+   "jail:fade",
+   "jail:in"
+  ],
+  "jailed": true,
+  "inPolice": "police",
+  "doorShut": true,
+  "tIn": 1593,
+  "cellPos": [
+   108.9,
+   8.3
+  ],
+  "tryOut": {
+   "reached": false,
+   "ticks": 300,
+   "x": 109.8,
+   "z": 7.8
+  },
+  "heldIn": true,
+  "cellTicks": 1200,
+  "state": "patrol",
+  "offencesAfter": 0,
+  "doorOpen": true,
+  "out": {
+   "reached": true,
+   "ticks": 188,
+   "x": 106,
+   "z": -1.18
+  },
+  "outside": true,
+  "ok": true
+ },
+ "wall": {
+  "wall": [
+   81,
+   91,
+   9,
+   9.5
+  ],
+  "dist": 3.7,
+  "wallBetween": true,
+  "sees": false,
+  "hit": true,
+  "ev": [
+   {
+    "tk": 3062,
+    "victim": "Businessman",
+    "vid": "b1",
+    "seen": null
+   }
+  ],
+  "ph": [
+   "patrol"
+  ],
+  "offences": 0,
+  "ctrlSees": true,
+  "ctrlHit": true,
+  "ctrlEv": [
+   {
+    "tk": 3518,
+    "victim": "Businessman",
+    "vid": "b1",
+    "seen": "pc1"
+   }
+  ],
+  "ctrlState": "alert",
+  "ok": true
+ },
+ "shopWindow": {
+  "inside": "nf_s1",
+  "dist": 4.08,
+  "sees": false,
+  "hit": true,
+  "ev": [
+   {
+    "tk": 3604,
+    "victim": "Clerk",
+    "vid": "clk_gs",
+    "seen": null
+   }
+  ],
+  "ph": [
+   "patrol"
+  ],
+  "ok": true
+ },
+ "provoked": {
+  "seesFirst": false,
+  "hit1": true,
+  "firstSeen": null,
+  "seesNow": true,
+  "prov": 1,
+  "moreHits": 3,
+  "ph": [
+   "patrol"
+  ],
+  "offences": 0,
+  "foe": true,
+  "seesFoe": true,
+  "foeInfo": [
+   "bl",
+   "walk",
+   100,
+   0
+  ],
+  "foeHit": true,
+  "foeInfo2": [
+   "stun",
+   97.57142857142858,
+   "atk",
+   95.03,
+   96.13
+  ],
+  "foeEv": 0,
+  "foeState": "patrol",
+  "sky": true,
+  "skyEv": 0,
+  "skyState": "patrol",
+  "back": true,
+  "ok": true
+ },
+ "lost": {
+  "hit": true,
+  "state1": "alert",
+  "seesAfter": false,
+  "endTicks": 476,
+  "end": {
+   "ev": "end",
+   "why": "lost",
+   "kind": "warn",
+   "cop": "pc1",
+   "tk": 5891
+  },
+  "ok": true
+ },
+ "away": {
+  "jailed": true,
+  "jailSky": false,
+  "state": "patrol",
+  "back": true,
+  "ok": true
+ },
+ "patrol": {
+  "pc1": 60.5,
+  "pc2": 83.4,
+  "pc3": 83.4,
+  "ok": true
+ },
+ "desk": {
+  "lines": [
+   "Desk sergeant: \"The rules are simple. Officers walk the square and Northfield. Hit someone who did nothing to you where an officer can see it, and you get a warning.\"",
+   "Desk sergeant: \"Do it again within a minute and a half and you sit in that cell for twenty seconds. The door unlocks by itself. No fines, no record.\"",
+   "Desk sergeant: \"Sparring in the dojo, the ring and the coliseum is your business. So is a fight somebody else started. We only judge what we see.\"",
+   "Desk sergeant: \"Sparring in the dojo, the ring and the coliseum is your business. So is a fight somebody else started. We only judge what we see.\""
+  ],
+  "rules": 4,
+  "cellFree": "An empty cell, freshly mopped. The key hangs well out of rea",
+  "ok": true
+ },
+ "fuzz": {
+  "runs": 40,
+  "stuck": 0,
+  "arrests": 5,
+  "warns": 0,
+  "jailsReleased": 6,
+  "notSeen": 0,
+  "bad": [],
+  "events": 40,
+  "ok": true
+ },
+ "moduleErrors": {},
+ "log": [
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 47446
+  },
+  {
+   "ev": "call",
+   "kind": "arrest",
+   "cop": "pc1",
+   "victim": "Businessman",
+   "tk": 47692
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 47737
+  },
+  {
+   "ev": "cuff",
+   "cop": "pc1",
+   "tk": 48242
+  },
+  {
+   "ev": "jail",
+   "by": "pc1",
+   "tk": 48292
+  },
+  {
+   "ev": "end",
+   "why": "arrested",
+   "kind": "arrest",
+   "cop": "pc1",
+   "tk": 48292
+  },
+  {
+   "ev": "release",
+   "why": "time",
+   "tk": 49514
+  },
+  {
+   "ev": "call",
+   "kind": "warn",
+   "cop": "pc2",
+   "victim": "Traveler",
+   "tk": 50718
+  },
+  {
+   "ev": "calm",
+   "who": "Traveler",
+   "tk": 50763
+  },
+  {
+   "ev": "end",
+   "why": "lost",
+   "kind": "warn",
+   "cop": "pc2",
+   "tk": 51421
+  },
+  {
+   "ev": "call",
+   "kind": "warn",
+   "cop": "pc1",
+   "victim": "Businesswoman",
+   "tk": 52240
+  },
+  {
+   "ev": "calm",
+   "who": "Businesswoman",
+   "tk": 52285
+  },
+  {
+   "ev": "warn",
+   "cop": "pc1",
+   "tk": 52618
+  },
+  {
+   "ev": "end",
+   "why": "warned",
+   "kind": "warn",
+   "cop": "pc1",
+   "tk": 52818
+  },
+  {
+   "ev": "call",
+   "kind": "warn",
+   "cop": "pc1",
+   "victim": "Businessman",
+   "tk": 52858
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 52903
+  },
+  {
+   "ev": "call",
+   "kind": "arrest",
+   "cop": "pc1",
+   "victim": "Businessman",
+   "tk": 53009
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 53054
+  },
+  {
+   "ev": "cuff",
+   "cop": "pc1",
+   "tk": 53083
+  },
+  {
+   "ev": "jail",
+   "by": "pc1",
+   "tk": 53133
+  },
+  {
+   "ev": "end",
+   "why": "arrested",
+   "kind": "arrest",
+   "cop": "pc1",
+   "tk": 53133
+  },
+  {
+   "ev": "release",
+   "why": "time",
+   "tk": 54355
+  },
+  {
+   "ev": "call",
+   "kind": "warn",
+   "cop": "pc1",
+   "victim": "Businessman",
+   "tk": 54395
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 54440
+  },
+  {
+   "ev": "call",
+   "kind": "arrest",
+   "cop": "pc1",
+   "victim": "Businessman",
+   "tk": 54474
+  },
+  {
+   "ev": "calm",
+   "who": "Businessman",
+   "tk": 54519
+  },
+  {
+   "ev": "cuff",
+   "cop": "pc1",
+   "tk": 54616
+  },
+  {
+   "ev": "jail",
+   "by": "pc1",
+   "tk": 54666
+  },
+  {
+   "ev": "end",
+   "why": "arrested",
+   "kind": "arrest",
+   "cop": "pc1",
+   "tk": 54666
+  },
+  {
+   "ev": "release",
+   "why": "time",
+   "tk": 55888
+  }
+ ],
+ "summary": {
+  "view": true,
+  "wall": true,
+  "shopWindow": true,
+  "provoked": true,
+  "lost": true,
+  "away": true,
+  "patrol": true,
+  "desk": true,
+  "fuzz": true,
+  "pageErrors": 0,
+  "moduleErrors": {},
+  "PASS": true
+ }
+}

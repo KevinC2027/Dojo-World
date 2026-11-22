@@ -72,7 +72,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted purchase test (balance, pouch coins and ledger agree; insufficient funds refused; coliseum refuses); gifts
   given to townsfolk show a reaction; no ledger errors; fills/frame and frame time within 15% of Step 5.
 
-### Step 7 — Police response (line of sight only)  — STATUS: NOT STARTED (next)
+### Step 7 — Police response (line of sight only)  — STATUS: PASSED (v2.9, Nov 22: three patrol officers (civic ring road, Northfield south pavement x2) + the station officers; they respond only to Red's first strike on an unprovoked townsperson they can SEE (16 m, in front, same room, no wallBetween): callout, fight broken up, walk over, warning; a second within 90 s -> fade -> rebuilt holding cell for 20 s, the door unlocks by itself; desk explains the rules. police.py x2 seeds: in view responds, behind a wall / from inside a shop none, provoked fights + dojo foes + coliseum none, cell releases at 1,200 ticks and Red walks out, 40 random incidents each with 0 stuck states, 0 errors; fills +0.1% default / +1.4% civic responding / −0.8% cell, ms level. Also fixed 'route' walkers (b1, travelers) freezing after their first leg. Report: `dw2/reports/step7_2.9.md`)
 - Officers patrol the civic square and Northfield. If an officer SEES Red (wallBetween line of sight, never through walls) attack a
   townsperson who did not provoke him, the officer calls out, then walks over; repeat offences within a short window get Red escorted
   to the holding cell for a short timed wait (the door unlocks by itself). The police desk explains the rules.
@@ -80,7 +80,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: an assault in view triggers a response, the same assault behind a wall triggers none, provoked fights
   trigger none; the cell timer releases Red; no stuck states; fills/frame and frame time within 15% of Step 6.
 
-### Step 8 — Bakery courier errands  — STATUS: NOT STARTED (needs Step 7 PASSED)
+### Step 8 — Bakery courier errands  — STATUS: NOT STARTED (next)
 - A simple job: the Northfield bakery hands Red a parcel (drawn in hand) to deliver to a named house, the inn or the town hall; a
   waypoint marker and a timer; the recipient thanks Red at the door. Rewards: a stamp card and, only if Kev approves, a small
   daily-capped coin tip through the ledger (a new validated 'job' source).
@@ -125,3 +125,4 @@ Rules for choosing them:
 - 2026-11-22T04:59Z STARTED step 6 (Claude, scheduled run)
 - 2026-11-22T05:25Z FINISHED step 6: PASSED — v2.8 town shops take real coins (5 counters, 10 gift items, validated 'shop' debit) + gift bag and townsfolk reactions; perf level
 - 2026-11-22T08:58Z STARTED step 7 (Claude, scheduled run)
+- 2026-11-22T09:40Z FINISHED step 7: PASSED — v2.9 police (3 patrol officers + station; line-of-sight only: warning, then 20 s holding cell that unlocks itself; wall/shop/provoked/foe/coliseum none; 80 random incidents 0 stuck; perf level) + fixed frozen route walkers
