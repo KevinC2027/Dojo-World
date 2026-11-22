@@ -124,3 +124,4 @@ Rules for choosing them:
 - 2026-11-22T01:34Z FINISHED step 5: PASSED — v2.7 fishing at four rod rests (480/480 casts in water, 0 early hooks, perf level) + pier deck/height fix; new batch Steps 5–8 written
 - 2026-11-22T04:59Z STARTED step 6 (Claude, scheduled run)
 - 2026-11-22T05:25Z FINISHED step 6: PASSED — v2.8 town shops take real coins (5 counters, 10 gift items, validated 'shop' debit) + gift bag and townsfolk reactions; perf level
+- 2026-11-22T08:58Z STARTED step 7 (Claude, scheduled run)
