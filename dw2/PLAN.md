@@ -121,6 +121,48 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted swim of the course (all buoys reachable, timer and best time correct, missed buoy detected); zero errors;
   perf within 15% of the previous PASSED build.
 
+### Step 13 — Home cooking with your produce  — STATUS: IN PROGRESS (started Nov 22, 15:59Z)
+- The home stoves (the Northfield houses, the farmhouse and the stone house) become real kitchens: when Red's gift bag holds ingredients,
+  INTERACT the stove opens a recipe book (6 recipes from allotment produce + shop goods, e.g. tomato omelette = tomatoes + eggs, daikon
+  oden = daikon + eggs, strawberry sando = strawberries + melon pan, loaded ramen = ramen + eggs + daikon). COOK runs a short pan
+  minigame on a touch panel (heat needle: tap SEAR, then SERVE, in the golden zone): perfect / good / overdone. The ingredients leave
+  the bag only when the dish is served; cancelling, a fight or leaving the house returns them. The dish goes in the gift bag (giftable;
+  a perfect dish is loved by anyone). Recipe book remembers dishes cooked and best quality per viewer. With an empty bag the stove keeps
+  its old "cook a meal" behaviour.
+- Rules: no coins earned, no new hp/stat effects (the old stove heal is unchanged), no change to Red's pose, camera, controls or combat;
+  towns only; no seeded R() calls; ?off=cook turns it off.
+- Release gate: scripted test (`dw2/tools/cook.py`, two seeds): every recipe cooked through INTERACT + the panel at a real stove; perfect /
+  good / overdone timing graded correctly; ingredients consumed exactly once and only on SERVE; cancel / fight / leaving return them;
+  missing-ingredient recipes refused; dish in the bag, giftable, perfect = love; book survives reload; empty bag keeps the old stove;
+  ledger untouched, audit clean; zero errors; fills/frame and frame time within 15% of v2.15; real-time video.
+
+### Step 14 — Riding the town bus (fares)  — STATUS: NOT STARTED
+- Bus stops with shelters and timetables at the civic square, Northfield, the Southbank farms and the airport. The yellow bus that
+  already drives the roads runs a fixed loop and stops at each one; INTERACT at a stop while it waits = "Board (fare)": a validated
+  'fare' ledger debit (price in DC_CONFIG, ~10 DC, Kev's PRICES rule), Red rides inside (camera follows the bus), the chip shows the
+  next stop, INTERACT "Get off at the next stop" sets him down on the pavement. Refused without charge when the pouch is short.
+- Rules: Red keeps his pose (standing aboard, hidden behind the bus body), no combat aboard, the bus still stops for pedestrians, towns
+  only, no coliseum; ?off=bus.
+- Release gate: scripted test: board/alight at every stop, the fare charged once per ride and refused when short, Red never left inside
+  a wall or the road, the bus never overlaps a pedestrian while carrying him; zero errors; perf within 15% of Step 13; real-time video.
+
+### Step 15 — Kite flying on the south meadow  — STATUS: NOT STARTED
+- A kite (sold at the general store, ~35 DC, kept, not a gift) flown from the open south meadow / Highlands top: INTERACT to launch,
+  the joystick walks Red as usual while the line pulls; hold the KITE button to reel in / release to let out; gusts from a wind model
+  lift or drop it, too much slack and it stalls and falls, too low over trees snags it. Height and time-aloft records per viewer;
+  the kite and line drawn in the world (line from Red's real hand position, no pose change).
+- Rules: never in the coliseum, packed away by any fight; no AI reacts through walls; no seeded R() calls; ?off=kite.
+- Release gate: scripted test: launch works only in open ground, a steady hold keeps it aloft for 60 s, letting it slack stalls it,
+  trees snag it, records correct and saved; zero errors; perf within 15% of Step 14; real-time video.
+
+### Step 16 — Rain showers that change the town  — STATUS: NOT STARTED
+- Occasional rain showers (a wall-clock weather cycle, a few minutes long): rain streaks and puddle ripples, darker wet ground and roofs,
+  townsfolk open umbrellas or walk to the nearest shelter/awning (by walkable route, never through walls) and come back after; rain
+  waters the allotment beds; fish bite a little faster; the swim course and boats stay open. A WEATHER line on the town board.
+- Rules: no change to fighting, camera or controls; the coliseum keeps its own sky; ?off=rain.
+- Release gate: scripted test: a shower starts and ends on schedule, wets all four beds, townsfolk under cover by line of route with no
+  wall crossings and none stuck after it ends; fills/frame and frame time within 15% of Step 15 while raining (rain drawn cheaply).
+
 ## After Step 4 — new objectives (Kev, Nov 21: "once you've met all objectives, create new ones")
 When Steps 1–4 are all PASSED, the run that finds them so writes the NEXT batch of 3–4 steps here (Step 5, 6, ...), each in the same
 format (what to build, rules, release gate, STATUS), then starts the first one in that same run. Repeat whenever a batch is all PASSED.
