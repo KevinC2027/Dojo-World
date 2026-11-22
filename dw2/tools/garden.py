@@ -40,7 +40,7 @@ async def main():
         b = await p.chromium.launch(); ctx = await b.new_context(viewport={'width': 430, 'height': 932}); pg = await ctx.new_page()
         pg.on('pageerror', lambda e: out['errors'].append(str(e)[:300]))
         await pg.add_init_script(INIT)
-        await pg.goto('file://' + FILE); await boot(pg)
+        await pg.goto('file://' + FILE + (arg('--q') or '')); await boot(pg)
         await pg.evaluate("()=>{for(let i=0;i<150;i++)tick()}")
         start = await pg.evaluate("()=>__st()")
         out['start'] = {'bal': start['bal'], 'avail': start['avail']}

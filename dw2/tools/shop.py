@@ -29,7 +29,7 @@ async def main():
         b = await p.chromium.launch(); ctx = await b.new_context(viewport={'width': 430, 'height': 932}); pg = await ctx.new_page()
         pg.on('pageerror', lambda e: out['errors'].append(str(e)[:300]))
         await pg.add_init_script(INIT)
-        await pg.goto('file://' + FILE); await pg.wait_for_function('window.HIT_DC&&HIT_DC.eco&&HIT_DC.eco.summary().count>0&&window.HIT_SHOP', timeout=20000)
+        await pg.goto('file://' + FILE + (arg('--q') or '')); await pg.wait_for_function('window.HIT_DC&&HIT_DC.eco&&HIT_DC.eco.summary().count>0&&window.HIT_SHOP', timeout=20000)
         await pg.wait_for_timeout(1500); await pg.evaluate("requestAnimationFrame=()=>0")
         await pg.evaluate(HELP)
         await pg.evaluate("()=>{for(let i=0;i<150;i++)tick()}")   # the welcome coins land in the pouch first

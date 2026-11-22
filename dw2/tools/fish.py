@@ -49,7 +49,7 @@ async def main():
         pg = await b.new_page(viewport={'width': 430, 'height': 932}, device_scale_factor=1)
         errs = []; pg.on('pageerror', lambda e: errs.append(str(e)[:300]))
         await pg.add_init_script(INIT)
-        await pg.goto('file://' + FILE); await pg.wait_for_timeout(2500)
+        await pg.goto('file://' + FILE + (arg('--q') or '')); await pg.wait_for_timeout(2500)
         await pg.evaluate("requestAnimationFrame=()=>0")
         plan = [('good', N), ('early', max(4, N // 3)), ('late', max(4, N // 4)), ('greedy', max(6, N // 2)), ('lazy', max(4, N // 4)), ('cancel', 3)]
         out = {}

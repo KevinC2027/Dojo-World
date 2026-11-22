@@ -72,7 +72,7 @@ async def main():
         pg = await b.new_page(viewport={'width': 430, 'height': 932}, device_scale_factor=1)
         errs = []; pg.on('pageerror', lambda e: errs.append(str(e)[:300]))
         await pg.add_init_script(INIT)
-        await pg.goto('file://' + FILE); await boot(pg)
+        await pg.goto('file://' + FILE + (arg('--q') or '')); await boot(pg)
         await pg.evaluate("()=>{try{localStorage.removeItem('dw2_swim_v1')}catch(e){}}")
         await pg.reload(); await boot(pg)
         # ---------- prompt ----------

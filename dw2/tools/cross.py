@@ -43,7 +43,7 @@ async def main():
         pg = await b.new_page(viewport={'width': 430, 'height': 932}, device_scale_factor=1)
         errs = []; pg.on('pageerror', lambda e: errs.append(str(e)[:300]))
         await pg.add_init_script(INIT)
-        await pg.goto('file://' + FILE); await pg.wait_for_timeout(2500)
+        await pg.goto('file://' + FILE + (arg('--q') or '')); await pg.wait_for_timeout(2500)
         await pg.evaluate("window.__JL=%s;window.__stopLoop=1;" % ("[]" if "--jl" in sys.argv else "null") + " requestAnimationFrame=()=>0")   # stop the render loop: only the test ticks the world
         done = 0; r = None
         while done < TICKS:

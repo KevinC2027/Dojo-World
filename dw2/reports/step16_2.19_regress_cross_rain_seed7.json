@@ -1,0 +1,47 @@
+{
+ "ticks": 36000,
+ "crossingsStarted": 9,
+ "crossingsCompleted": 9,
+ "overlaps": 0,
+ "redOverlaps": 0,
+ "closeCalls": 0,
+ "jaywalkTicks": 0,
+ "targetInRoadTicks": 0,
+ "maxPeds": 16,
+ "simMsPerTick": 0.674,
+ "aware": {
+  "dodges": 21,
+  "honks": 3,
+  "watch": 0,
+  "flee": 0,
+  "redHonks": 0,
+  "noticeRed": 0,
+  "makeRoom": 0,
+  "kartHolds": 2,
+  "roadExits": null
+ },
+ "kerb": {
+  "looks": 656,
+  "lookAborts": 3,
+  "kartYields": 21,
+  "midHolds": null,
+  "contactsResolved": 0,
+  "drivewayWaits": 0,
+  "postsMoved": 1,
+  "spotsMoved": 0,
+  "shoulderRoutes": 5
+ },
+ "errors": {
+  "roads": null,
+  "aware": null,
+  "life": null
+ },
+ "ovList": [],
+ "pageErrors": [],
+ "file": "Dojo_World_v2.19.html",
+ "red": [
+  -1.5,
+  14.0
+ ],
+ "seed": 7
+}

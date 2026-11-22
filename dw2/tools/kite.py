@@ -53,7 +53,7 @@ async def main():
         pg = await b.new_page(viewport={'width': 430, 'height': 932}, device_scale_factor=1)
         errs = []; pg.on('pageerror', lambda e: errs.append(str(e)[:300]))
         await pg.add_init_script(INIT)
-        await pg.goto('file://' + FILE); await boot(pg)
+        await pg.goto('file://' + FILE + (arg('--q') or '')); await boot(pg)
         await pg.evaluate("()=>{try{localStorage.clear()}catch(e){}}"); await pg.reload(); await boot(pg)
         # ---------- shop: no kite, a short pouch ----------
         C['nokite'] = await pg.evaluate('''()=>{__at(-30,-24);__T(20);const n=__near(),r=HIT_KITE.launch();return{prompt:n&&n.label,code:r.code,ok:(!n||n.act!=='kitefly')&&r.code==='none'&&HIT_KITE.st()==='off'}}''')

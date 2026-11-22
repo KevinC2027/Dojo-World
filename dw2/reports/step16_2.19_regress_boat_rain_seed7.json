@@ -1,0 +1,179 @@
+{
+ "board": {
+  "tries": 10,
+  "ok": 10,
+  "bad": []
+ },
+ "hire": {
+  "price": 15,
+  "before": {
+   "avail": 500,
+   "n": 1,
+   "hires": 0,
+   "bag": 0,
+   "audit": true,
+   "pouchOk": true
+  },
+  "after10": {
+   "avail": 350,
+   "n": 11,
+   "hires": 10,
+   "bag": 0,
+   "audit": true,
+   "pouchOk": true
+  },
+  "charged": 150,
+  "expect": 150,
+  "ok": true
+ },
+ "far": {
+  "label": "Rowing: row back to the pier to moor",
+  "stillAboard": true
+ },
+ "dirs": [
+  {
+   "k": 0,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0,
+   "grounded": false,
+   "swimmerStop": false,
+   "pierStop": false,
+   "swimmersNear": 0
+  },
+  {
+   "k": 1,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0,
+   "grounded": false,
+   "swimmerStop": false,
+   "pierStop": false,
+   "swimmersNear": 0
+  },
+  {
+   "k": 2,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0.1,
+   "grounded": false,
+   "swimmerStop": false,
+   "pierStop": false,
+   "swimmersNear": 0
+  },
+  {
+   "k": 3,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0.9,
+   "grounded": false,
+   "swimmerStop": false,
+   "pierStop": false,
+   "swimmersNear": 0
+  },
+  {
+   "k": 4,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0.9,
+   "grounded": false,
+   "swimmerStop": false,
+   "pierStop": false,
+   "swimmersNear": 0
+  },
+  {
+   "k": 5,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0,
+   "grounded": false,
+   "swimmerStop": false,
+   "pierStop": false,
+   "swimmersNear": 0
+  },
+  {
+   "k": 6,
+   "yaw": 0,
+   "moved": 1.83,
+   "errDeg": 0,
+   "grounded": true,
+   "swimmerStop": false,
+   "pierStop": false,
+   "swimmersNear": 0
+  },
+  {
+   "k": 7,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0,
+   "grounded": false,
+   "swimmerStop": false,
+   "pierStop": false,
+   "swimmersNear": 0
+  }
+ ],
+ "random": {
+  "ticks": 3000,
+  "hullBad": 0,
+  "overlap": 0,
+  "redWet": 0,
+  "redAir": 0,
+  "minSwimGap": 1,
+  "minDepth": 99,
+  "pierHits": 0,
+  "stuckMax": 0,
+  "maxV": 0.036,
+  "swimmerTicks": 9000,
+  "dist": 33.8,
+  "blocked": {
+   "swimmer": 95,
+   "free": 2,
+   "pier": 634,
+   "shallow": 98
+  },
+  "blockedAt": [
+   38.2,
+   47.1,
+   -2.67
+  ],
+  "maxVms": 2.16,
+  "stats": {
+   "boards": 11,
+   "moors": 10,
+   "strokes": 119,
+   "groundings": 4,
+   "swimStops": 1,
+   "pierStops": 4
+  },
+  "swimmers": 3
+ },
+ "attack": {
+  "states": [
+   "idle",
+   "idle",
+   "idle",
+   "idle",
+   0
+  ],
+  "aboard": true
+ },
+ "leaveTown": {
+  "aboard": false,
+  "api": "moored"
+ },
+ "drain": {
+  "hires": 22,
+  "lastCode": "insufficient",
+  "onPier": true,
+  "unchanged": true,
+  "availLeft": 5,
+  "audit": true,
+  "pouchOk": true,
+  "ok": true
+ },
+ "boatError": null,
+ "moduleErrors": {},
+ "pageErrors": [],
+ "file": "Dojo_World_v2.19.html",
+ "seed": 7
+}

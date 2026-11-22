@@ -1,0 +1,258 @@
+{
+ "file": "Dojo_World_v2.19.html",
+ "seed": 7,
+ "checks": {
+  "garden0": [
+   false,
+   false,
+   false,
+   false
+  ],
+  "showers": [
+   {
+    "name": "civic",
+    "t0": 1795377731534,
+    "t1": 1795377909354,
+    "dur": 177.8,
+    "dryBefore": true,
+    "startLag": 0.017,
+    "flagLag": 7.5,
+    "fullLag": 25,
+    "startToast": true,
+    "cover": {
+     "folk": 13,
+     "sheltered": 4,
+     "umbrellas": 9,
+     "uncovered": 0,
+     "list": []
+    },
+    "atSpot": 4,
+    "waiting": 4,
+    "endLag": 0.013,
+    "flagOffLag": -3.737,
+    "endToast": true,
+    "stillSteered": [],
+    "back": {
+     "sheltered": 6,
+     "home": 6,
+     "maxHomeDist": 0.29,
+     "otherReleases": [],
+     "gaveUp": 0,
+     "leftOnSpot": 0
+    },
+    "walk": {
+     "steps": 4114,
+     "people": 6,
+     "wall": 0,
+     "solid": 0,
+     "road": 0,
+     "bad": []
+    },
+    "spotsFree": true,
+    "ok": true
+   },
+   {
+    "name": "northfield",
+    "t0": 1795379748717,
+    "t1": 1795380024972,
+    "dur": 276.3,
+    "dryBefore": true,
+    "startLag": 0.017,
+    "flagLag": 7.5,
+    "fullLag": 25,
+    "startToast": true,
+    "cover": {
+     "folk": 9,
+     "sheltered": 3,
+     "umbrellas": 6,
+     "uncovered": 0,
+     "list": []
+    },
+    "atSpot": 3,
+    "waiting": 3,
+    "endLag": 0.012,
+    "flagOffLag": -3.738,
+    "endToast": true,
+    "stillSteered": [],
+    "back": {
+     "sheltered": 5,
+     "home": 5,
+     "maxHomeDist": 0.3,
+     "otherReleases": [],
+     "gaveUp": 0,
+     "leftOnSpot": 0
+    },
+    "walk": {
+     "steps": 7255,
+     "people": 5,
+     "wall": 0,
+     "solid": 0,
+     "road": 0,
+     "bad": []
+    },
+    "spotsFree": true,
+    "ok": true
+   },
+   {
+    "name": "farms",
+    "t0": 1795380519230,
+    "t1": 1795380796623,
+    "dur": 277.4,
+    "dryBefore": true,
+    "startLag": 0.017,
+    "flagLag": 7.5,
+    "fullLag": 25,
+    "startToast": true,
+    "cover": {
+     "folk": 8,
+     "sheltered": 2,
+     "umbrellas": 6,
+     "uncovered": 0,
+     "list": []
+    },
+    "atSpot": 2,
+    "waiting": 2,
+    "endLag": 0.007,
+    "flagOffLag": -3.743,
+    "endToast": true,
+    "stillSteered": [],
+    "back": {
+     "sheltered": 4,
+     "home": 4,
+     "maxHomeDist": 0.3,
+     "otherReleases": [],
+     "gaveUp": 0,
+     "leftOnSpot": 0
+    },
+    "walk": {
+     "steps": 6098,
+     "people": 4,
+     "wall": 0,
+     "solid": 0,
+     "road": 0,
+     "bad": []
+    },
+    "spotsFree": true,
+    "ok": true
+   }
+  ],
+  "garden": {
+   "wetAfter": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "left": [
+    22,
+    22,
+    22,
+    22
+   ],
+   "wet2": [
+    false,
+    false,
+    false,
+    false
+   ],
+   "ok": true,
+   "dryBefore": true
+  },
+  "gardenStart": {
+   "before": [
+    false,
+    false,
+    false,
+    false
+   ],
+   "raining": true,
+   "after2s": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "ok": true
+  },
+  "fish": {
+   "spot": "lake",
+   "dry": {
+    "mul": 1,
+    "n": 40,
+    "mean": 270.575
+   },
+   "rain": {
+    "mul": 0.7,
+    "n": 40,
+    "mean": 190.025
+   },
+   "dryAgain": 1,
+   "ratio": 0.702,
+   "ok": true
+  },
+  "board": {
+   "dry": {
+    "label": "Notice board",
+    "msg": "WEATHER: dry; next shower in about 5 min, for about 3 min."
+   },
+   "dryOk": true,
+   "wet": {
+    "label": "Notice board",
+    "msg": "WEATHER: a shower now, clearing in about 2 min."
+   },
+   "wetOk": true,
+   "innItem": true,
+   "innLabel": "Notice board",
+   "inn": "WEATHER: a shower now, clearing in about 2 min.",
+   "innOk": true,
+   "ok": true
+  },
+  "coliseum": {
+   "stateBefore": 16,
+   "I": 0,
+   "raining": false,
+   "steered": 0,
+   "drawErr": null,
+   "ok": true
+  },
+  "draw": {
+   "spots": [
+    {
+     "n": "civic",
+     "err": null,
+     "umb": 10
+    },
+    {
+     "n": "northfield",
+     "err": null,
+     "umb": 5
+    },
+    {
+     "n": "farms",
+     "err": null,
+     "umb": 6
+    }
+   ],
+   "ok": true
+  },
+  "errors": {
+   "module": {},
+   "page": [],
+   "ok": true
+  },
+  "stats": {
+   "showers": 4,
+   "decided": 64,
+   "sheltered": 27,
+   "umbrellas": 37,
+   "arrived": 17,
+   "home": 3,
+   "gaveUp": 0,
+   "reroutes": 0,
+   "routes": 39,
+   "released": 16,
+   "retargets": 3949
+  }
+ },
+ "pass": true
+}

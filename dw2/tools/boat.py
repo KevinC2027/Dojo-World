@@ -90,7 +90,7 @@ async def main():
         pg = await b.new_page(viewport={'width': 430, 'height': 932}, device_scale_factor=1)
         errs = []; pg.on('pageerror', lambda e: errs.append(str(e)[:300]))
         await pg.add_init_script(INIT)
-        await pg.goto('file://' + FILE); await pg.wait_for_timeout(2500)
+        await pg.goto('file://' + FILE + (arg('--q') or '')); await pg.wait_for_timeout(2500)
         try: await pg.wait_for_function('!window.HIT_DC||(HIT_DC.eco&&HIT_DC.eco.summary().count>0)', timeout=20000)
         except Exception: pass
         await pg.evaluate("requestAnimationFrame=()=>0")

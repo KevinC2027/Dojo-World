@@ -155,7 +155,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: launch works only in open ground, a steady hold keeps it aloft for 60 s, letting it slack stalls it,
   trees snag it, records correct and saved; zero errors; perf within 15% of Step 14; real-time video.
 
-### Step 16 — Rain showers that change the town  — STATUS: NOT STARTED
+### Step 16 — Rain showers that change the town  — STATUS: PASSED (v2.19, Nov 22: wall-clock showers (15-min slots, ~half rain, 2.5–5 min, 25 s build-up/ease-off; ?rain=1/0, ?off=rain); grey sky, wet wash, 2-layer streaks, ground ripples; outdoor townsfolk walk by route to 42 spots (bus shelters, pavilion, awnings) or open umbrellas, walk back after; beds watered, fish ×0.7 wait, WEATHER line on notice boards; coliseum dry. rain.py x2 seeds PASS: start/end within 1 tick of schedule, 0 uncovered at +70 s, 29k steered steps 0 wall/solid/road, all back within 0.3 m, none stuck; regressions garden/shop/cook/kite/bus/swim/fish/boat/cross PASS (swim+boat also in rain); fills +0.0–0.8%, ms −0.5%/+0.8% while raining. Report: `dw2/reports/step16_2.19.md`)
 - Occasional rain showers (a wall-clock weather cycle, a few minutes long): rain streaks and puddle ripples, darker wet ground and roofs,
   townsfolk open umbrellas or walk to the nearest shelter/awning (by walkable route, never through walls) and come back after; rain
   waters the allotment beds; fish bite a little faster; the swim course and boats stay open. A WEATHER line on the town board.
@@ -226,3 +226,4 @@ Rules for choosing them:
 - 2026-11-22T17:59Z STARTED step 15 (Claude, scheduled run)
 - 2026-11-22T18:44Z FINISHED step 15: PASSED — v2.18 kite flying (general store 35 DC, open-ground launch, hold/release line tension with stalls, wind gusts/lulls, tree + roof snags with TUG, records; kite.py 2 seeds all checks; perf in budget)
 - 2026-11-22T18:59Z STARTED step 16 (Claude, scheduled run)
+- 2026-11-22T19:56Z FINISHED step 16: PASSED — v2.19 rain showers (wall-clock schedule, townsfolk shelter by route or umbrella and walk back, beds watered, fish bite faster, WEATHER on boards; rain.py 2 seeds all checks, 0 wall crossings; perf level while raining). Batch Steps 13–16 all PASSED: next run writes the new batch.
