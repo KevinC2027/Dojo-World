@@ -1,0 +1,571 @@
+{
+ "seed": 11,
+ "checks": {
+  "oldstove": {
+   "labels": [
+    "Stove: cook a meal",
+    "Stove: cook a meal",
+    "Stove: cook a meal",
+    "Stove: cook a meal",
+    "Stove: cook a meal",
+    "Stove: cook a meal",
+    "Stove: cook a meal",
+    "Stove: cook a meal",
+    "Wood stove: cook",
+    "Stove: cook a meal"
+   ],
+   "panel": false,
+   "hp": 91.42857142857143,
+   "ok": true
+  },
+  "setup": {
+   "buys": [
+    {
+     "item": "eggs",
+     "ok": true,
+     "code": null
+    },
+    {
+     "item": "eggs",
+     "ok": true,
+     "code": null
+    },
+    {
+     "item": "eggs",
+     "ok": true,
+     "code": null
+    },
+    {
+     "item": "eggs",
+     "ok": true,
+     "code": null
+    },
+    {
+     "item": "melonpan",
+     "ok": true,
+     "code": null
+    },
+    {
+     "item": "honey",
+     "ok": true,
+     "code": null
+    },
+    {
+     "item": "ramen",
+     "ok": true,
+     "code": null
+    }
+   ],
+   "bag": {
+    "tomatoes": 4,
+    "daikon": 4,
+    "strawberries": 2,
+    "sunflowers": 2,
+    "eggs": 4,
+    "melonpan": 1,
+    "honey": 1,
+    "ramen": 1
+   },
+   "ok": true
+  },
+  "stoves": {
+   "n": 10,
+   "rooms": [
+    "nf_s0",
+    "nf_s2",
+    "nf_s4",
+    "nf_n0",
+    "nf_n2",
+    "nf_n3",
+    "nf_n4",
+    "nf_n5",
+    "farmhouse",
+    "stonehouse"
+   ],
+   "bad": [],
+   "ok": true
+  },
+  "cook": {
+   "detail": [
+    {
+     "rid": "omelette",
+     "stove": 0,
+     "prompt": "Stove: recipe book (6 you can cook)",
+     "room": "nf_s0",
+     "btn": true,
+     "cooking": true,
+     "taps": [
+      {
+       "ok": true,
+       "h": 0.662,
+       "w": 86
+      },
+      {
+       "ok": true,
+       "h": 0.727,
+       "w": 80
+      }
+     ],
+     "panAdded": true,
+     "midBag": true,
+     "midBag2": true,
+     "q": "perfect",
+     "used": [
+      "garden:test:0:tomatoes",
+      "shop:mws1crkv5xk4-1"
+     ],
+     "cookAfter": false,
+     "panGone": true,
+     "usedItems": [
+      "garden:test:0:tomatoes",
+      "shop:mws1crkv5xk4-1"
+     ],
+     "bagOk": true,
+     "usedFromBag": true,
+     "dishInBag": true,
+     "oldestOk": true,
+     "noCoins": true,
+     "panelBook": true,
+     "want": "perfect",
+     "ok": true
+    },
+    {
+     "rid": "oden",
+     "stove": 2,
+     "prompt": "Stove: recipe book (6 you can cook)",
+     "room": "nf_s4",
+     "btn": true,
+     "cooking": true,
+     "taps": [
+      {
+       "ok": true,
+       "h": 0.7,
+       "w": 119
+      },
+      {
+       "ok": true,
+       "h": 0.643,
+       "w": 90
+      }
+     ],
+     "panAdded": true,
+     "midBag": true,
+     "midBag2": true,
+     "q": "good",
+     "used": [
+      "garden:test:4:daikon",
+      "shop:mws1crkv5xk4-2"
+     ],
+     "cookAfter": false,
+     "panGone": true,
+     "usedItems": [
+      "garden:test:4:daikon",
+      "shop:mws1crkv5xk4-2"
+     ],
+     "bagOk": true,
+     "usedFromBag": true,
+     "dishInBag": true,
+     "oldestOk": true,
+     "noCoins": true,
+     "panelBook": true,
+     "want": "good",
+     "ok": true
+    },
+    {
+     "rid": "salad",
+     "stove": 4,
+     "prompt": "Stove: recipe book (6 you can cook)",
+     "room": "nf_n2",
+     "btn": true,
+     "cooking": true,
+     "taps": [
+      {
+       "ok": true,
+       "h": 0.525,
+       "w": 63
+      },
+      {
+       "off": 105
+      }
+     ],
+     "panAdded": true,
+     "midBag": true,
+     "midBag2": true,
+     "q": "overdone",
+     "used": [
+      "garden:test:1:tomatoes",
+      "garden:test:5:daikon"
+     ],
+     "cookAfter": false,
+     "panGone": true,
+     "usedItems": [
+      "garden:test:1:tomatoes",
+      "garden:test:5:daikon"
+     ],
+     "bagOk": true,
+     "usedFromBag": true,
+     "dishInBag": true,
+     "oldestOk": true,
+     "noCoins": true,
+     "panelBook": true,
+     "want": "overdone",
+     "ok": true
+    },
+    {
+     "rid": "sando",
+     "stove": 6,
+     "prompt": "Stove: recipe book (6 you can cook)",
+     "room": "nf_n4",
+     "btn": true,
+     "cooking": true,
+     "taps": [
+      {
+       "ok": true,
+       "h": 0.2,
+       "w": 28
+      },
+      {
+       "ok": true,
+       "h": 0.7,
+       "w": 84
+      }
+     ],
+     "panAdded": true,
+     "midBag": true,
+     "midBag2": true,
+     "q": "rushed",
+     "used": [
+      "garden:test:8:strawberries",
+      "shop:mws1crkv5xk4-5"
+     ],
+     "cookAfter": false,
+     "panGone": true,
+     "usedItems": [
+      "garden:test:8:strawberries",
+      "shop:mws1crkv5xk4-5"
+     ],
+     "bagOk": true,
+     "usedFromBag": true,
+     "dishInBag": true,
+     "oldestOk": true,
+     "noCoins": true,
+     "panelBook": true,
+     "want": "rushed",
+     "ok": true
+    },
+    {
+     "rid": "bars",
+     "stove": 8,
+     "prompt": "Stove: recipe book (5 you can cook)",
+     "room": "farmhouse",
+     "btn": true,
+     "cooking": true,
+     "taps": [
+      {
+       "ok": true,
+       "h": 0.7,
+       "w": 105
+      },
+      {
+       "ok": true,
+       "h": 0.6,
+       "w": 72
+      }
+     ],
+     "panAdded": true,
+     "midBag": true,
+     "midBag2": true,
+     "q": "perfect",
+     "used": [
+      "garden:test:10:sunflowers",
+      "shop:mws1crkv5xk4-6"
+     ],
+     "cookAfter": false,
+     "panGone": true,
+     "usedItems": [
+      "garden:test:10:sunflowers",
+      "shop:mws1crkv5xk4-6"
+     ],
+     "bagOk": true,
+     "usedFromBag": true,
+     "dishInBag": true,
+     "oldestOk": true,
+     "noCoins": true,
+     "panelBook": true,
+     "want": "perfect",
+     "ok": true
+    },
+    {
+     "rid": "ramen2",
+     "stove": 9,
+     "prompt": "Stove: recipe book (4 you can cook)",
+     "room": "stonehouse",
+     "btn": true,
+     "cooking": true,
+     "taps": [
+      {
+       "ok": true,
+       "h": 0.644,
+       "w": 103
+      },
+      {
+       "ok": true,
+       "h": 0.862,
+       "w": 112
+      }
+     ],
+     "panAdded": true,
+     "midBag": true,
+     "midBag2": true,
+     "q": "good",
+     "used": [
+      "shop:mws1crkv5xk4-7",
+      "shop:mws1crkv5xk4-3",
+      "garden:test:6:daikon"
+     ],
+     "cookAfter": false,
+     "panGone": true,
+     "usedItems": [
+      "shop:mws1crkv5xk4-7",
+      "shop:mws1crkv5xk4-3",
+      "garden:test:6:daikon"
+     ],
+     "bagOk": true,
+     "usedFromBag": true,
+     "dishInBag": true,
+     "oldestOk": true,
+     "noCoins": true,
+     "panelBook": true,
+     "want": "good",
+     "ok": true
+    }
+   ],
+   "ok": true
+  },
+  "oldest": {
+   "n": 6,
+   "ok": true
+  },
+  "missing": {
+   "disabled": true,
+   "miss": [
+    "melonpan"
+   ],
+   "code": "missing",
+   "cooking": false,
+   "same": true,
+   "ok": true
+  },
+  "cancels": {
+   "detail": {
+    "button": {
+     "cooking": true,
+     "after": false,
+     "why": "button",
+     "same": true,
+     "book": true,
+     "ok": true
+    },
+    "left": {
+     "cooking": true,
+     "room": null,
+     "after": false,
+     "why": "left",
+     "panel": false,
+     "same": true,
+     "ok": true
+    },
+    "fight": {
+     "cooking": true,
+     "victim": "Traveler",
+     "hit": true,
+     "after": false,
+     "why": "fight",
+     "same": true,
+     "ok": true
+    },
+    "area": {
+     "cooking": true,
+     "sky": true,
+     "after": false,
+     "why": "area",
+     "same": true,
+     "openSky": "area",
+     "panel": false,
+     "back": true,
+     "ok": true
+    }
+   },
+   "ok": true
+  },
+  "warm": {
+   "btn": true,
+   "hp": 100,
+   "panel": false,
+   "ok": true
+  },
+  "give": {
+   "q": "perfect",
+   "perfect": {
+    "btn": true,
+    "item": "dish_omelette",
+    "love": true,
+    "line": "Farmer: \"For me? Oh, this is exactly what I wanted!\""
+   },
+   "good": {
+    "btn": true,
+    "item": "dish_oden",
+    "love": false,
+    "line": "Farmer: \"Oh! That is nice of you.\""
+   },
+   "ok": true
+  },
+  "ledger": {
+   "spent": 115,
+   "want": 115,
+   "credits": [
+    1,
+    1
+   ],
+   "audit": true,
+   "used": 15,
+   "unique": 15,
+   "cookUsed": 15,
+   "ok": true
+  },
+  "reload": {
+   "before": {
+    "book": {
+     "omelette": {
+      "n": 2,
+      "best": "perfect"
+     },
+     "oden": {
+      "n": 1,
+      "best": "good"
+     },
+     "salad": {
+      "n": 1,
+      "best": "overdone"
+     },
+     "sando": {
+      "n": 1,
+      "best": "rushed"
+     },
+     "bars": {
+      "n": 1,
+      "best": "perfect"
+     },
+     "ramen2": {
+      "n": 1,
+      "best": "good"
+     }
+    },
+    "bag": {
+     "tomatoes": 1,
+     "daikon": 1,
+     "strawberries": 1,
+     "sunflowers": 1,
+     "dish_salad": 1,
+     "dish_sando": 1,
+     "dish_bars": 1,
+     "dish_ramen2": 1,
+     "dish_omelette": 1
+    }
+   },
+   "after": {
+    "book": {
+     "omelette": {
+      "n": 2,
+      "best": "perfect"
+     },
+     "oden": {
+      "n": 1,
+      "best": "good"
+     },
+     "salad": {
+      "n": 1,
+      "best": "overdone"
+     },
+     "sando": {
+      "n": 1,
+      "best": "rushed"
+     },
+     "bars": {
+      "n": 1,
+      "best": "perfect"
+     },
+     "ramen2": {
+      "n": 1,
+      "best": "good"
+     }
+    },
+    "bag": {
+     "tomatoes": 1,
+     "daikon": 1,
+     "strawberries": 1,
+     "sunflowers": 1,
+     "dish_salad": 1,
+     "dish_sando": 1,
+     "dish_bars": 1,
+     "dish_ramen2": 1,
+     "dish_omelette": 1
+    }
+   },
+   "ok": true
+  },
+  "final": {
+   "stats": {
+    "opened": 0,
+    "started": 0,
+    "served": 0,
+    "cancelled": 0,
+    "refused": 0
+   },
+   "book": {
+    "omelette": {
+     "n": 2,
+     "best": "perfect"
+    },
+    "oden": {
+     "n": 1,
+     "best": "good"
+    },
+    "salad": {
+     "n": 1,
+     "best": "overdone"
+    },
+    "sando": {
+     "n": 1,
+     "best": "rushed"
+    },
+    "bars": {
+     "n": 1,
+     "best": "perfect"
+    },
+    "ramen2": {
+     "n": 1,
+     "best": "good"
+    }
+   }
+  }
+ },
+ "errors": [],
+ "moduleErrors": {},
+ "summary": {
+  "oldstove": true,
+  "setup": true,
+  "stoves": true,
+  "cook": true,
+  "oldest": true,
+  "missing": true,
+  "cancels": true,
+  "warm": true,
+  "give": true,
+  "ledger": true,
+  "reload": true,
+  "pageErrors": 0,
+  "moduleErrors": {},
+  "PASS": true
+ }
+}

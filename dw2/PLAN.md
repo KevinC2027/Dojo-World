@@ -121,7 +121,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted swim of the course (all buoys reachable, timer and best time correct, missed buoy detected); zero errors;
   perf within 15% of the previous PASSED build.
 
-### Step 13 — Home cooking with your produce  — STATUS: IN PROGRESS (started Nov 22, 15:59Z)
+### Step 13 — Home cooking with your produce  — STATUS: PASSED (v2.16, Nov 22: all 10 home stoves open a recipe book when the bag holds an ingredient; 6 recipes; SEAR/SERVE heat-needle panel graded perfect/good/rushed/overdone; ingredients used only on SERVE (oldest first); cancel/leave/fight/coliseum use nothing; dish giftable, perfect = loved; book saved. cook.py x2 seeds all PASS (6/6 grades as aimed, 0 coins, audit clean, reload keeps book + dishes, empty bag = old stove); shop/garden regressions PASS; fills +0.0% default / +5% kitchen while cooking, ms level / +7%. Report: `dw2/reports/step13_2.16.md`)
 - The home stoves (the Northfield houses, the farmhouse and the stone house) become real kitchens: when Red's gift bag holds ingredients,
   INTERACT the stove opens a recipe book (6 recipes from allotment produce + shop goods, e.g. tomato omelette = tomatoes + eggs, daikon
   oden = daikon + eggs, strawberry sando = strawberries + melon pan, loaded ramen = ramen + eggs + daikon). COOK runs a short pan
@@ -220,3 +220,4 @@ Rules for choosing them:
 - 2026-11-22T14:59Z STARTED step 12 (Claude, scheduled run)
 - 2026-11-22T15:22Z FINISHED step 12: PASSED — v2.15 Mirror Lake swim course (beach start board, 5 buoys + finish gate, timer/best, missed-buoy detection; swim.py 2 seeds all checks, ~40 s course; perf within budget). Batch Steps 9–12 all PASSED: next run writes the new batch.
 - 2026-11-22T15:59Z STARTED step 13 (Claude, scheduled run; writing new batch Steps 13–16)
+- 2026-11-22T16:21Z FINISHED step 13: PASSED — v2.16 home cooking (10 stoves, 6 recipes, SEAR/SERVE pan game; cook.py 2 seeds all checks, ingredients used only on serve, 0 coins, perf in budget); new batch Steps 13–16 written
