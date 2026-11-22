@@ -165,3 +165,4 @@ Rules for choosing them:
 - 2026-11-22T11:58Z STARTED step 9 (Claude, scheduled run; writing new batch Steps 9–12)
 - 2026-11-22T12:18Z FINISHED step 9: PASSED — v2.11 rowing boats on Mirror Lake (ro-oar sculling, inertia, wake; 0 hull/swimmer violations in 12k random ticks; perf level); new batch Steps 9–12 written
 - 2026-11-22: Kev approved coins for boats; v2.12 built live in the session from v2.11 (15 DC 'hire' debit + two boat fixes) (Claude).
+- 2026-11-22T12:59Z STARTED step 10 (Claude, scheduled run)
