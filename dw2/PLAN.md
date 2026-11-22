@@ -128,3 +128,4 @@ Rules for choosing them:
 - 2026-11-22T09:40Z FINISHED step 7: PASSED — v2.9 police (3 patrol officers + station; line-of-sight only: warning, then 20 s holding cell that unlocks itself; wall/shop/provoked/foe/coliseum none; 80 random incidents 0 stuck; perf level) + fixed frozen route walkers
 - 2026-11-22T09:59Z STARTED step 8 (Claude, scheduled run)
 - 2026-11-22T11:12Z FINISHED step 8: PASSED — v2.10 bakery courier (12 destinations, parcel in hand, wall-aware route + timer, door marker never through walls, recipient meets Red at the door, stamp card; 48/48 deliveries walked, 0 wall crossings; drop/fight/coliseum cancels clean; perf level; no coin tip pending Kev). Batch Steps 5–8 all PASSED: next run writes the new batch.
+- 2026-11-22T11:58Z STARTED step 9 (Claude, scheduled run; writing new batch Steps 9–12)
