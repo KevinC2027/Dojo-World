@@ -1,0 +1,334 @@
+{
+ "seed": 7,
+ "checks": {
+  "nopacket": {
+   "prompt": "Bed 1: empty \u00b7 seeds at the honesty box",
+   "crop": null,
+   "code": "No seed packets. Buy them at the farm stand honesty box.",
+   "ok": true
+  },
+  "buy": {
+   "n": 4,
+   "okN": 4,
+   "detail": [
+    {
+     "item": "seed_tomato",
+     "prompt": "Honesty box: eggs and seed packets",
+     "panel": "shop:stand",
+     "btn": true,
+     "entry": {
+      "src": "shop",
+      "amt": 8,
+      "item": "seed_tomato"
+     },
+     "ok": true
+    },
+    {
+     "item": "seed_daikon",
+     "prompt": "Honesty box: eggs and seed packets",
+     "panel": "shop:stand",
+     "btn": true,
+     "entry": {
+      "src": "shop",
+      "amt": 6,
+      "item": "seed_daikon"
+     },
+     "ok": true
+    },
+    {
+     "item": "seed_sunflower",
+     "prompt": "Honesty box: eggs and seed packets",
+     "panel": "shop:stand",
+     "btn": true,
+     "entry": {
+      "src": "shop",
+      "amt": 10,
+      "item": "seed_sunflower"
+     },
+     "ok": true
+    },
+    {
+     "item": "seed_strawberry",
+     "prompt": "Honesty box: eggs and seed packets",
+     "panel": "shop:stand",
+     "btn": true,
+     "entry": {
+      "src": "shop",
+      "amt": 12,
+      "item": "seed_strawberry"
+     },
+     "ok": true
+    }
+   ],
+   "ok": true
+  },
+  "sow": {
+   "detail": [
+    {
+     "bed": 0,
+     "prompt": "Sow bed 1 (4 seed packets)",
+     "panel": "sow:0",
+     "btn": true,
+     "crop": "tomatoes",
+     "seed": "seed_tomato",
+     "stage": 0,
+     "packets": [
+      4,
+      3
+     ],
+     "ok": true
+    },
+    {
+     "bed": 1,
+     "prompt": "Sow bed 2 (3 seed packets)",
+     "panel": "sow:1",
+     "btn": true,
+     "crop": "daikon",
+     "seed": "seed_daikon",
+     "stage": 0,
+     "packets": [
+      3,
+      2
+     ],
+     "ok": true
+    },
+    {
+     "bed": 2,
+     "prompt": "Sow bed 3 (2 seed packets)",
+     "panel": "sow:2",
+     "btn": true,
+     "crop": "sunflowers",
+     "seed": "seed_sunflower",
+     "stage": 0,
+     "packets": [
+      2,
+      1
+     ],
+     "ok": true
+    },
+    {
+     "bed": 3,
+     "prompt": "Sow bed 4 (1 seed packet)",
+     "panel": null,
+     "crop": "strawberries",
+     "seed": "seed_strawberry",
+     "stage": 0,
+     "packets": [
+      1,
+      0
+     ],
+     "ok": true
+    }
+   ],
+   "ok": true,
+   "panelUsed": 3
+  },
+  "sowOccupied": {
+   "code": "occupied",
+   "ok": true
+  },
+  "can": {
+   "dryWater": "no_can",
+   "takePrompt": {
+    "label": "Take the watering can",
+    "act": "gardenpost"
+   },
+   "held": true,
+   "emptyWater": "empty_can",
+   "farFill": "far",
+   "pondPrompt": {
+    "label": "Fill the watering can (farm pond)",
+    "act": "gardenfill"
+   },
+   "water": 4,
+   "ok": true
+  },
+  "grow": {
+   "water": [
+    "Water the tomatoes (4 left)",
+    "Water the daikon (3 left)",
+    "Water the sunflowers (2 left)",
+    "Water the strawberries (1 left)"
+   ],
+   "canAfter": 0,
+   "g0": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "g60": [
+    60,
+    60,
+    60,
+    60
+   ],
+   "st60": [
+    2,
+    2,
+    2,
+    2
+   ],
+   "g150": [
+    120,
+    120,
+    120,
+    120
+   ],
+   "wet150": [
+    false,
+    false,
+    false,
+    false
+   ],
+   "promptDry": "Daikon 66% \u00b7 dry, needs water",
+   "g450": [
+    120,
+    120,
+    120,
+    120
+   ],
+   "notRipe": "not_ripe",
+   "refill": "Fill the watering can (farm pond)",
+   "g520": [
+    180,
+    180,
+    180,
+    180
+   ],
+   "stages": [
+    4,
+    4,
+    4,
+    4
+   ],
+   "noCoins": true,
+   "ok": true
+  },
+  "harvest": {
+   "h": [
+    "Harvest the tomatoes",
+    "Harvest the daikon",
+    "Harvest the sunflowers",
+    "Harvest the strawberries"
+   ],
+   "bag": [
+    "tomatoes",
+    "daikon",
+    "sunflowers",
+    "strawberries"
+   ],
+   "beds": [
+    null,
+    null,
+    null,
+    null
+   ],
+   "noCoins": true,
+   "ok": true
+  },
+  "ledger": {
+   "seedDebits": 4,
+   "sown": 4,
+   "held": 0,
+   "seedSum": 36,
+   "bal": 464,
+   "start": 500,
+   "audit": true,
+   "ok": true
+  },
+  "give": {
+   "prompt": "Give a gift to Farmer",
+   "panel": "bag",
+   "btn": true,
+   "react": true,
+   "item": "sunflowers",
+   "love": true,
+   "line": "Farmer: \"For me? Oh, this is exactly what I wanted!\"",
+   "bag": [
+    4,
+    3
+   ],
+   "ok": true
+  },
+  "reload": {
+   "before": {
+    "buy": true,
+    "crop": "tomatoes",
+    "grown": 30000,
+    "wet": true,
+    "bag": [
+     "daikon",
+     "strawberries",
+     "tomatoes"
+    ],
+    "dt": 855000
+   },
+   "after": {
+    "crop": "tomatoes",
+    "grown": 36237,
+    "wet": true,
+    "bag": [
+     "daikon",
+     "strawberries",
+     "tomatoes"
+    ],
+    "can": false,
+    "grownLater": 76237
+   },
+   "ok": true
+  },
+  "area": {
+   "held0": true,
+   "sky": true,
+   "held1": false,
+   "codes": [
+    "area",
+    "area",
+    "area",
+    "area"
+   ],
+   "props": 0,
+   "back": true,
+   "propsBack": 4,
+   "ok": true
+  },
+  "final": {
+   "audit": {
+    "ok": true,
+    "issues": [],
+    "balance": 456,
+    "entries": 6
+   },
+   "stats": {
+    "sown": 0,
+    "poured": 0,
+    "fills": 0,
+    "harvests": 0,
+    "refused": 4
+   }
+  }
+ },
+ "errors": [],
+ "start": {
+  "bal": 500,
+  "avail": 500
+ },
+ "moduleErrors": {},
+ "summary": {
+  "nopacket": true,
+  "buy": true,
+  "sow": true,
+  "sowOccupied": true,
+  "can": true,
+  "grow": true,
+  "harvest": true,
+  "ledger": true,
+  "give": true,
+  "reload": true,
+  "area": true,
+  "pageErrors": 0,
+  "moduleErrors": {},
+  "PASS": true
+ }
+}

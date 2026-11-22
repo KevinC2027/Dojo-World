@@ -146,7 +146,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: board/alight at every stop, the fare charged once per ride and refused when short, Red never left inside
   a wall or the road, the bus never overlaps a pedestrian while carrying him; zero errors; perf within 15% of Step 13; real-time video.
 
-### Step 15 — Kite flying on the south meadow  — STATUS: NOT STARTED
+### Step 15 — Kite flying on the south meadow  — STATUS: PASSED (v2.18, Nov 22: paper kite at the general store (35 DC 'shop' debit, bought once, OWNED, never a gift); launch only on open ground (meadow, Highlands, overlook top; trees/walls/road/water/indoors refused); KITE button hold = reel in, release = let out, slack >2.2 s stalls; wind model with veer, lulls and gusts; low kites snag trees/roofs, TUG x3 frees; down -> REEL IN -> FLY; line from Red's real hand; packed by fights/coliseum/boat/bus/water/indoors; records per viewer. kite.py x2 seeds PASS: 60 s steady hold x3 wind phases 0 stalls, slack stalls 3/3 at 2.2 s, gust taut, skilled flyer 31 m/90 s, tree + roof snags below the top, high pass over canopies 0 snags, records match, 0 errors; regressions shop/garden/cook/bus PASS; fills +0.0% default / +0.2-0.3% flying, ms within noise. Report: `dw2/reports/step15_2.18.md`)
 - A kite (sold at the general store, ~35 DC, kept, not a gift) flown from the open south meadow / Highlands top: INTERACT to launch,
   the joystick walks Red as usual while the line pulls; hold the KITE button to reel in / release to let out; gusts from a wind model
   lift or drop it, too much slack and it stalls and falls, too low over trees snags it. Height and time-aloft records per viewer;
@@ -224,3 +224,4 @@ Rules for choosing them:
 - 2026-11-22T16:59Z STARTED step 14 (Claude, scheduled run)
 - 2026-11-22T17:39Z FINISHED step 14: PASSED — v2.17 town bus + fares (4 stops with shelters/timetables, 10 DC validated 'fare' debit, bell to get off; bus.py 2 seeds 16/16 rides, 0 overlaps, 0 moving contacts; perf in budget)
 - 2026-11-22T17:59Z STARTED step 15 (Claude, scheduled run)
+- 2026-11-22T18:44Z FINISHED step 15: PASSED — v2.18 kite flying (general store 35 DC, open-ground launch, hold/release line tension with stalls, wind gusts/lulls, tree + roof snags with TUG, records; kite.py 2 seeds all checks; perf in budget)

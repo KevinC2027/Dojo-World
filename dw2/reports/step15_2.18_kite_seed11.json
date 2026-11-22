@@ -1,0 +1,390 @@
+{
+ "file": "Dojo_World_v2.18.html",
+ "seed": 11,
+ "checks": {
+  "nokite": {
+   "prompt": null,
+   "code": "none",
+   "ok": true
+  },
+  "short": {
+   "avail": 5,
+   "code": "insufficient",
+   "after": 5,
+   "entries": 0,
+   "owned": false,
+   "ok": true
+  },
+  "buy": {
+   "price": 35,
+   "b0": 500,
+   "btn0": "35 DC",
+   "b1": 465,
+   "debits": [
+    {
+     "amt": 35,
+     "shop": "general"
+    }
+   ],
+   "flown": 35,
+   "btn1": "OWNED",
+   "btn1dis": true,
+   "second": "owned",
+   "b2": 465,
+   "bag": [],
+   "audit": {
+    "ok": true,
+    "issues": [],
+    "balance": 465,
+    "entries": 2
+   },
+   "owned": true,
+   "ok": true,
+   "ownedAfterReload": true
+  },
+  "open": {
+   "open": [
+    {
+     "n": "meadow",
+     "label": "Fly the kite",
+     "ok": true,
+     "st": "fly",
+     "y": -0.0
+    },
+    {
+     "n": "meadow2",
+     "label": "Fly the kite (best 5 m)",
+     "ok": true,
+     "st": "fly",
+     "y": 0
+    },
+    {
+     "n": "highlands",
+     "label": "Fly the kite (best 5 m)",
+     "ok": true,
+     "st": "fly",
+     "y": 0.1
+    },
+    {
+     "n": "highlands2",
+     "label": "Fly the kite (best 6 m)",
+     "ok": true,
+     "st": "fly",
+     "y": 0.1
+    },
+    {
+     "n": "overlook",
+     "label": "Fly the kite (best 6 m)",
+     "ok": true,
+     "st": "fly",
+     "y": 5.1
+    }
+   ],
+   "shut": [
+    {
+     "n": "trees",
+     "prompt": null,
+     "code": "trees",
+     "st": "off"
+    },
+    {
+     "n": "walls",
+     "prompt": null,
+     "code": "walls",
+     "st": "off"
+    },
+    {
+     "n": "road",
+     "prompt": null,
+     "code": "road",
+     "st": "off"
+    },
+    {
+     "n": "water",
+     "prompt": null,
+     "code": "water",
+     "st": "off"
+    },
+    {
+     "n": "inside",
+     "room": "nf_s0",
+     "prompt": false,
+     "code": "inside",
+     "st": "off"
+    }
+   ],
+   "ok": true
+  },
+  "hold": {
+   "trials": [
+    {
+     "phase": 0,
+     "st": "fly",
+     "aloftTicks": 3600,
+     "notFlying": 0,
+     "minY": 4.29,
+     "maxSlack": 0,
+     "wind": [
+      4.93,
+      8.52
+     ],
+     "line": 5
+    },
+    {
+     "phase": 41000,
+     "st": "fly",
+     "aloftTicks": 3600,
+     "notFlying": 0,
+     "minY": 3.26,
+     "maxSlack": 0,
+     "wind": [
+      3.81,
+      6.86
+     ],
+     "line": 5
+    },
+    {
+     "phase": 97000,
+     "st": "fly",
+     "aloftTicks": 3600,
+     "notFlying": 0,
+     "minY": 3.55,
+     "maxSlack": 0,
+     "wind": [
+      4.15,
+      5.9
+     ],
+     "line": 5
+    }
+   ],
+   "ok": true
+  },
+  "slack": {
+   "trials": [
+    {
+     "phase": 0,
+     "stallAfterS": 2.22,
+     "landAfterS": 3.83,
+     "hand": "hand",
+     "relaunch": "fly"
+    },
+    {
+     "phase": 23000,
+     "stallAfterS": 2.22,
+     "landAfterS": 4.22,
+     "hand": "hand",
+     "relaunch": "fly"
+    },
+    {
+     "phase": 61000,
+     "stallAfterS": 2.22,
+     "landAfterS": 4.48,
+     "hand": "hand",
+     "relaunch": "fly"
+    }
+   ],
+   "ok": true
+  },
+  "gust": {
+   "gust": {
+    "L0": 5,
+    "L1": 23,
+    "y0": 5,
+    "y1": 13,
+    "minVa": 4.6,
+    "stalled": false,
+    "Lmax": 45
+   },
+   "lull": {
+    "line": 45,
+    "y_wind": 31.34,
+    "y_lull": 14.12,
+    "y_back": 30.94,
+    "st": "fly"
+   },
+   "ok": true
+  },
+  "skill": {
+   "maxY": 31.4,
+   "st": "fly",
+   "aloftS": 90,
+   "line": 45,
+   "ok": true
+  },
+  "snag": {
+   "target": {
+    "x": -68,
+    "z": -14,
+    "top": 8.8,
+    "dist": 22.4
+   },
+   "tree": {
+    "launched": true,
+    "label": "Fly the kite (best 31 m)",
+    "st": "snag",
+    "on": "tree",
+    "y": 2.93,
+    "kite": [
+     -65.3,
+     2.9,
+     -14.2
+    ],
+    "steps": 250,
+    "red": [
+     -61.5,
+     -17
+    ],
+    "tugs": [
+     "snag",
+     "snag",
+     "fall"
+    ],
+    "landed": "down",
+    "hand": "hand",
+    "belowTop": true
+   },
+   "roofAt": {
+    "x": -57.1,
+    "z": -95.7,
+    "h": 7
+   },
+   "roof": {
+    "launched": true,
+    "label": "Fly the kite (best 31 m)",
+    "st": "snag",
+    "on": "wall",
+    "y": 4.35,
+    "kite": [
+     -62.2,
+     4.3,
+     -92.9
+    ],
+    "steps": 29,
+    "red": [
+     -58.8,
+     -95
+    ],
+    "tugs": [
+     "snag",
+     "snag",
+     "fall"
+    ],
+    "landed": "down",
+    "hand": "hand"
+   },
+   "high": {
+    "line": 45,
+    "reach": 33.5,
+    "st": "fly",
+    "snagTicks": 0,
+    "ticksOverACanopy": 39,
+    "treesPassedOver": 2,
+    "lowestClearanceOverACanopy": 17.9,
+    "closestToTarget": 12.87,
+    "heightThere": 31.2,
+    "treeTop": 8.8,
+    "steps": 266
+   },
+   "ok": true
+  },
+  "walk": {
+   "without": {
+    "d": 11.1,
+    "st": "off"
+   },
+   "with": {
+    "d": 11.1,
+    "st": "fly"
+   },
+   "ok": true
+  },
+  "pack": {
+   "ups": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "punchAt": null,
+   "punch": {
+    "st": "off",
+    "why": "fight",
+    "redSt": "atk"
+   },
+   "guard": {
+    "st": "off",
+    "why": "fight"
+   },
+   "hit": {
+    "st": "off",
+    "why": "fight"
+   },
+   "sky": {
+    "st": "off",
+    "why": "area",
+    "launch": "area"
+   },
+   "boat": {
+    "st": "off",
+    "why": "boat"
+   },
+   "water": {
+    "st": "off",
+    "why": "water",
+    "wd": 5.5
+   },
+   "inside": {
+    "st": "off",
+    "why": "inside",
+    "room": "nf_s0"
+   },
+   "packDown": {
+    "st0": "down",
+    "label": "Pack the kite away",
+    "st": "off"
+   },
+   "ok": true
+  },
+  "draw": {
+   "states": [
+    "fly",
+    "fall",
+    "down",
+    "hand"
+   ],
+   "err": null,
+   "modErr": null,
+   "ok": true
+  },
+  "records": {
+   "rec": {
+    "v": 1,
+    "bestH": 31.4,
+    "bestT": 5400,
+    "flights": 29,
+    "stalls": 4,
+    "snags": 2
+   },
+   "maxHeightSeen": 31.41,
+   "longestFlightTicks": 5400,
+   "afterReload": {
+    "v": 1,
+    "bestH": 31.4,
+    "bestT": 5400,
+    "flights": 29,
+    "stalls": 4,
+    "snags": 2
+   },
+   "ok": true
+  },
+  "errors": {
+   "page": [],
+   "modules": {},
+   "ok": true
+  }
+ },
+ "pass": true
+}
