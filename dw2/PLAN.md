@@ -109,7 +109,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test (plant -> water -> grow -> harvest at all four beds, dry beds pause, no coins without a buy, ledger
   agrees); zero errors; fills/frame and frame time within 15% of the previous PASSED build.
 
-### Step 11 — Gomoku board at the inn  — STATUS: NOT STARTED
+### Step 11 — Gomoku board at the inn  — STATUS: PASSED (v2.14, Nov 22: 13x13 goban on the inn bar beside the innkeeper; INTERACT opens a touch board (tap = ghost, tap again = place); threat-aware AI (win > block four > own open four > block open three > score, with variety); per-viewer W/L/D record, CLOSE pauses, reload keeps game. gomoku.py x2 seeds, 120 games / 5,701 moves re-checked in Python: 0 illegal, results + record all match, 2,836 innkeeper moves: every win taken, 192/192 fours and 224/224 open threes blocked; hand-built positions 7/7; full-board draw detected; leave/coliseum/downed keeper close cleanly; 0 errors; fills +2.4% inn / +0.0% default, ms level. Report: `dw2/reports/step11_2.14.md`)
 - A real board game: INTERACT the board table in the inn to play five-in-a-row (9x9 or 13x13) against the innkeeper on a touch overlay
   (tap to place; the innkeeper answers with a simple threat-aware AI); wins/losses on a per-viewer record. Simple to operate.
 - Release gate: scripted test (legal moves only, the AI blocks open fours, win/draw detection correct over many random games);
@@ -168,3 +168,4 @@ Rules for choosing them:
 - 2026-11-22T12:59Z STARTED step 10 (Claude, scheduled run)
 - 2026-11-22T13:24Z FINISHED step 10: PASSED — v2.13 allotment garden (seeds at the honesty box, sow/fill/water/grow/harvest at 4 beds, dry beds pause, produce giftable; garden.py 2 seeds all checks, 0 coins without a buy, ledger agrees; fills +3.4%, ms level)
 - 2026-11-22T13:59Z STARTED step 11 (Claude, scheduled run)
+- 2026-11-22T14:16Z FINISHED step 11: PASSED — v2.14 gomoku vs the innkeeper at the inn bar (touch board, threat-aware AI, W/L/D record; 120 games 0 illegal, every four/open three blocked; perf level)

@@ -1,0 +1,288 @@
+{
+ "seed": 11,
+ "checks": {
+  "prompt": {
+   "street": null,
+   "inside": "nf_n1",
+   "away": {
+    "label": "Bar: order a drink",
+    "act": "h193_nf_n1_0"
+   },
+   "at": "Gomoku: play the innkeeper",
+   "panel": "gomoku",
+   "ok": true
+  },
+  "tap": {
+   "ghost": 0,
+   "after": [
+    84,
+    97
+   ],
+   "occupied": 2,
+   "ok": true
+  },
+  "legal": {
+   "games": 60,
+   "moves": 2862,
+   "illegal": [],
+   "resultMismatch": [],
+   "recordMismatch": [],
+   "tally_W_L_D": {
+    "rand": [
+     0,
+     40,
+     0
+    ],
+    "smart": [
+     2,
+     6,
+     12
+    ]
+   },
+   "lengths": [
+    10,
+    10,
+    169,
+    10,
+    12,
+    169,
+    24,
+    12,
+    169,
+    10,
+    14,
+    169,
+    10,
+    10,
+    84,
+    10,
+    10,
+    169,
+    10,
+    12,
+    40,
+    16,
+    10,
+    25,
+    10,
+    14,
+    27,
+    12,
+    14,
+    169,
+    12,
+    12,
+    56,
+    10,
+    10,
+    169,
+    10,
+    12,
+    40,
+    12,
+    10,
+    169,
+    10,
+    12,
+    169,
+    14,
+    14,
+    169,
+    10,
+    14,
+    169,
+    10,
+    10,
+    169,
+    18,
+    14,
+    60,
+    12,
+    10,
+    26
+   ],
+   "ok": true
+  },
+  "blocks": {
+   "aiMovesChecked": 1424,
+   "situations": {
+    "win": 46,
+    "four": 100,
+    "ownOpen4": 40,
+    "open3": 116,
+    "open3x2": 2,
+    "quiet": 1122
+   },
+   "violations": [],
+   "ok": true
+  },
+  "set": {
+   "open3": {
+    "i": [
+     6,
+     4
+    ],
+    "why": "block3",
+    "ok": true
+   },
+   "split3": {
+    "i": [
+     6,
+     6
+    ],
+    "why": "block3",
+    "ok": true
+   },
+   "diag3": {
+    "i": [
+     7,
+     7
+    ],
+    "why": "block3",
+    "ok": true
+   },
+   "closed4": {
+    "i": [
+     3,
+     7
+    ],
+    "why": "block4",
+    "ok": true
+   },
+   "broken4": {
+    "i": [
+     5,
+     4
+    ],
+    "why": "block4",
+    "ok": true
+   },
+   "ownWin": {
+    "i": [
+     8,
+     2
+    ],
+    "why": "win",
+    "ok": true
+   },
+   "open4": {
+    "blocked": [
+     6,
+     8
+    ],
+    "redStill": 1,
+    "ok": true,
+    "winner": 1
+   },
+   "ok": true
+  },
+  "draw": {
+   "bad": 0,
+   "over": 3,
+   "moves": 169,
+   "d": [
+    12,
+    13
+   ],
+   "ok": true
+  },
+  "flow": {
+   "midNew": "in_play",
+   "resign": true,
+   "l": [
+    47,
+    48
+   ],
+   "closed": true,
+   "prompt": {
+    "label": "Gomoku: resume the game (4 stones)",
+    "act": "gomoku"
+   },
+   "kept": true,
+   "mv": [
+    70,
+    56,
+    60,
+    73
+   ],
+   "rec": {
+    "w": 2,
+    "l": 48,
+    "d": 13
+   },
+   "ok": true,
+   "afterReload": {
+    "moves": [
+     70,
+     56,
+     60,
+     73
+    ],
+    "rec": {
+     "w": 2,
+     "l": 48,
+     "d": 13
+    },
+    "prompt": "Gomoku: resume the game (4 stones)",
+    "panel": "gomoku",
+    "turn": 1
+   }
+  },
+  "leave": {
+   "open0": "gomoku",
+   "afterWalkOut": null,
+   "kept": 4,
+   "open1": "gomoku",
+   "sky": true,
+   "afterSky": null,
+   "skyOpen": "area",
+   "back": true,
+   "downCode": "keeper",
+   "reopen": "gomoku",
+   "ok": true
+  }
+ },
+ "errors": [],
+ "stats": {
+  "games": 0,
+  "moves": 0,
+  "aiMoves": 0,
+  "refused": 2
+ },
+ "moduleErrors": {},
+ "summary": {
+  "prompt": true,
+  "tap": true,
+  "legal": true,
+  "blocks": true,
+  "set": true,
+  "draw": true,
+  "flow": true,
+  "leave": true,
+  "games": 60,
+  "tally_W_L_D": {
+   "rand": [
+    0,
+    40,
+    0
+   ],
+   "smart": [
+    2,
+    6,
+    12
+   ]
+  },
+  "aiMovesChecked": 1424,
+  "situations": {
+   "win": 46,
+   "four": 100,
+   "ownOpen4": 40,
+   "open3": 116,
+   "open3x2": 2,
+   "quiet": 1122
+  },
+  "pageErrors": 0,
+  "moduleErrors": {},
+  "PASS": true
+ }
+}
