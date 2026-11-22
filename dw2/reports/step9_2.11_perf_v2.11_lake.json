@@ -1,0 +1,65 @@
+{
+ "perFrame": {
+  "fill": 2297,
+  "stroke": 1186,
+  "ellipse": 209,
+  "arc": 218,
+  "drawImage": 186
+ },
+ "frameMsAvg": 48.1,
+ "frameMsP95": 66.7,
+ "treesInView": 33,
+ "moduleErrors": {},
+ "topFillSites": [
+  [
+   716,
+   "SC.poly:2021 < SC.poly:4151"
+  ],
+  [
+   299,
+   "surface:9310 < worldGround:9335"
+  ],
+  [
+   110,
+   "SC.poly:4164 < SC.slab:2026"
+  ],
+  [
+   91,
+   "fillQ:11402 < Object.<anonymous>:11443"
+  ],
+  [
+   72,
+   "fillQ:11402 < Object.<anonymous>:11442"
+  ],
+  [
+   68,
+   "quad:8287 < drawLot:8331"
+  ],
+  [
+   56,
+   "sceneTree:2261 < drawProp:2585"
+  ],
+  [
+   49,
+   "SC.poly:4164 < window.groundMesh:8272"
+  ],
+  [
+   45,
+   "fillQ:11402 < Object.<anonymous>:11530"
+  ],
+  [
+   42,
+   "draw:971 < draw:1732"
+  ],
+  [
+   42,
+   "fillQ:11402 < Object.<anonymous>:11531"
+  ],
+  [
+   37,
+   "sceneTree:2257 < drawProp:2585"
+  ]
+ ],
+ "pageErrors": [],
+ "file": "Dojo_World_v2.11.html"
+}

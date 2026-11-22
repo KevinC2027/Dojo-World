@@ -1,0 +1,112 @@
+{
+ "board": {
+  "tries": 10,
+  "ok": 10,
+  "bad": []
+ },
+ "far": {
+  "label": "Rowing: row back to the pier to moor",
+  "stillAboard": true
+ },
+ "dirs": [
+  {
+   "k": 0,
+   "yaw": 0,
+   "moved": 2.09,
+   "errDeg": 9.8,
+   "grounded": false
+  },
+  {
+   "k": 1,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0.1,
+   "grounded": false
+  },
+  {
+   "k": 2,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0.4,
+   "grounded": false
+  },
+  {
+   "k": 3,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0.4,
+   "grounded": false
+  },
+  {
+   "k": 4,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0.1,
+   "grounded": false
+  },
+  {
+   "k": 5,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0.3,
+   "grounded": false
+  },
+  {
+   "k": 6,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 0.1,
+   "grounded": false
+  },
+  {
+   "k": 7,
+   "yaw": 0,
+   "moved": 2.16,
+   "errDeg": 1,
+   "grounded": false
+  }
+ ],
+ "random": {
+  "ticks": 6000,
+  "hullBad": 0,
+  "overlap": 0,
+  "redWet": 0,
+  "redAir": 0,
+  "minSwimGap": 0.302,
+  "minDepth": 99,
+  "pierHits": 0,
+  "stuckMax": 0,
+  "maxV": 0.036,
+  "swimmerTicks": 22110,
+  "dist": 110.3,
+  "maxVms": 2.16,
+  "stats": {
+   "boards": 11,
+   "moors": 10,
+   "strokes": 150,
+   "groundings": 4,
+   "swimStops": 2,
+   "pierStops": 0
+  },
+  "swimmers": 3
+ },
+ "attack": {
+  "states": [
+   "idle",
+   "idle",
+   "idle",
+   "idle",
+   0
+  ],
+  "aboard": true
+ },
+ "leaveTown": {
+  "aboard": false,
+  "api": "moored"
+ },
+ "boatError": null,
+ "moduleErrors": {},
+ "pageErrors": [],
+ "file": "Dojo_World_v2.11.html",
+ "seed": 11
+}

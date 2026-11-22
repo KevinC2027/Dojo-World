@@ -87,7 +87,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test of N deliveries to every destination (all reachable without walking through walls; doors open);
   dropping the job, fights and the coliseum cancel cleanly; no errors; fills/frame and frame time within 15% of Step 7.
 
-### Step 9 — Rowing boats on Mirror Lake  — STATUS: IN PROGRESS
+### Step 9 — Rowing boats on Mirror Lake  — STATUS: PASSED (v2.11, Nov 22: wasen moored at the pier, Red sculls standing with a ro oar (no pose change), camera-relative heading with inertia, wake/oar swirls/bob; grounds in shallows, never through the pier, stops short of swimmers; MOOR button. boat.py x2 seeds: 20/20 board+moor, 8 directions within 20°, 12,000 random ticks with swimmers: 0 hull violations, 0 swimmer overlaps, Red never swimming; attacks/jump off aboard; leaving town moors; 0 errors; fills +0.0% to +0.3%, ms level. Report: `dw2/reports/step9_2.11.md`)
 - A boat jetty on the Mirror Lake pier: INTERACT "Take a boat" puts Red in a small wooden wasen moored at the pier. Red stands at the
   stern and sculls it with a long ro oar (the Japanese standing stroke, so Red keeps his normal stance: no new pose). The joystick sets
   the heading (camera-relative, like walking); the boat turns toward it with real inertia (builds speed stroke by stroke, glides and
@@ -162,3 +162,4 @@ Rules for choosing them:
 - 2026-11-22T09:59Z STARTED step 8 (Claude, scheduled run)
 - 2026-11-22T11:12Z FINISHED step 8: PASSED — v2.10 bakery courier (12 destinations, parcel in hand, wall-aware route + timer, door marker never through walls, recipient meets Red at the door, stamp card; 48/48 deliveries walked, 0 wall crossings; drop/fight/coliseum cancels clean; perf level; no coin tip pending Kev). Batch Steps 5–8 all PASSED: next run writes the new batch.
 - 2026-11-22T11:58Z STARTED step 9 (Claude, scheduled run; writing new batch Steps 9–12)
+- 2026-11-22T12:18Z FINISHED step 9: PASSED — v2.11 rowing boats on Mirror Lake (ro-oar sculling, inertia, wake; 0 hull/swimmer violations in 12k random ticks; perf level); new batch Steps 9–12 written
