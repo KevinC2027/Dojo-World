@@ -266,3 +266,4 @@ Rules for choosing them:
 - 2026-11-22T20:28Z FINISHED step 17: PASSED — v2.20 omikuji at Shrine Hill (10 DC 'hire' draw, shake/stick/slip panel, 32-slip book, tie bad slips on the musubi rack; omikuji.py 2 seeds all checks, audit clean; perf in budget); new batch Steps 17–20 written
 - 2026-11-22T20:59Z STARTED step 18 (Claude, scheduled run)
 - 2026-11-22T21:27Z FINISHED step 18: PASSED — v2.21 mayors' town requests (Hale + Ines, 6 request kinds on existing activities, TOWN FRIEND ribbon board, expiry/wrong-hall refusals; mayor.py 2 seeds all checks; perf in budget)
+- 2026-11-22T21:59Z STARTED step 19 (Claude, scheduled run)
