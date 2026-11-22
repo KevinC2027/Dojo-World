@@ -126,3 +126,4 @@ Rules for choosing them:
 - 2026-11-22T05:25Z FINISHED step 6: PASSED — v2.8 town shops take real coins (5 counters, 10 gift items, validated 'shop' debit) + gift bag and townsfolk reactions; perf level
 - 2026-11-22T08:58Z STARTED step 7 (Claude, scheduled run)
 - 2026-11-22T09:40Z FINISHED step 7: PASSED — v2.9 police (3 patrol officers + station; line-of-sight only: warning, then 20 s holding cell that unlocks itself; wall/shop/provoked/foe/coliseum none; 80 random incidents 0 stuck; perf level) + fixed frozen route walkers
+- 2026-11-22T09:59Z STARTED step 8 (Claude, scheduled run)
