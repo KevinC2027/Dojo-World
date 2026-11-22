@@ -221,3 +221,4 @@ Rules for choosing them:
 - 2026-11-22T15:22Z FINISHED step 12: PASSED — v2.15 Mirror Lake swim course (beach start board, 5 buoys + finish gate, timer/best, missed-buoy detection; swim.py 2 seeds all checks, ~40 s course; perf within budget). Batch Steps 9–12 all PASSED: next run writes the new batch.
 - 2026-11-22T15:59Z STARTED step 13 (Claude, scheduled run; writing new batch Steps 13–16)
 - 2026-11-22T16:21Z FINISHED step 13: PASSED — v2.16 home cooking (10 stoves, 6 recipes, SEAR/SERVE pan game; cook.py 2 seeds all checks, ingredients used only on serve, 0 coins, perf in budget); new batch Steps 13–16 written
+- 2026-11-22T16:59Z STARTED step 14 (Claude, scheduled run)
