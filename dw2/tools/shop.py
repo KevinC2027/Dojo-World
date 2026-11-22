@@ -32,7 +32,7 @@ async def main():
         await pg.wait_for_timeout(1500); await pg.evaluate("requestAnimationFrame=()=>0")
         await pg.evaluate(HELP)
         await pg.evaluate("()=>{for(let i=0;i<150;i++)tick()}")   # the welcome coins land in the pouch first
-        items = await pg.evaluate("()=>HIT_DC.config.shop.items.map(i=>({id:i.id,shop:i.shop,price:i.price}))")
+        items = await pg.evaluate("()=>HIT_DC.config.shop.items.map(i=>({id:i.id,shop:i.shop,price:i.price,kind:i.kind||null}))")
         # ---------- buy every item at its counter, through INTERACT + the DOM button ----------
         for it in items:
             await pg.evaluate("()=>{window.__dt+=61000}")
@@ -45,7 +45,7 @@ async def main():
               o.after=__state(); const h=HIT_DC.eco.history(1)[0]; o.entry={src:h.src,amt:h.amt,item:h.meta&&h.meta.item,shop:h.meta&&h.meta.shop,t:h.t};
               __T(90); o.landed=HIT_DC.coins.filter(k=>k.to!=='red').length===0; return o}''', it)
             r['ok'] = (r['panel'] == 'shop:' + it['shop'] and r['btn'] and r['after']['avail'] == r['before']['avail'] - it['price'] and r['after']['pouchOk']
-                       and r['entry'] == {'src': 'shop', 'amt': it['price'], 'item': it['id'], 'shop': it['shop'], 't': 'd'} and r['flown'] == it['price'] and r['after']['bag'] == r['before']['bag'] + 1
+                       and r['entry'] == {'src': 'shop', 'amt': it['price'], 'item': it['id'], 'shop': it['shop'], 't': 'd'} and r['flown'] == it['price'] and r['after']['bag'] == r['before']['bag'] + (0 if it.get('kind') == 'seed' else 1)   # v2.13: seed packets are sown, not gifts
                        and r['after']['audit']['ok'])
             out['buys'].append(r)
         # ---------- refusals ----------

@@ -1,0 +1,163 @@
+{
+ "lake": {
+  "sessions": 60,
+  "landedInWater": 60,
+  "withFloat": 60,
+  "bodies": [
+   "lake"
+  ],
+  "species": {
+   "koi": 2,
+   "carp": 21,
+   "ltrout": 22,
+   "bass": 10,
+   "boot": 5
+  },
+  "byPolicy": {
+   "good": {
+    "caught": 25
+   },
+   "early": {
+    "reeledIn": 8
+   },
+   "late": {
+    "stolen": 6
+   },
+   "greedy": {
+    "snapped": 10,
+    "caught": 2
+   },
+   "lazy": {
+    "slipped": 6
+   },
+   "cancel": {
+    "packed+walked": 3
+   }
+  },
+  "bad": []
+ },
+ "marsh": {
+  "sessions": 60,
+  "landedInWater": 60,
+  "withFloat": 60,
+  "bodies": [
+   "marsh2"
+  ],
+  "species": {
+   "perch": 33,
+   "snake": 6,
+   "loach": 16,
+   "boot": 5
+  },
+  "byPolicy": {
+   "good": {
+    "caught": 25
+   },
+   "early": {
+    "reeledIn": 8
+   },
+   "late": {
+    "stolen": 6
+   },
+   "greedy": {
+    "snapped": 11,
+    "caught": 1
+   },
+   "lazy": {
+    "slipped": 6
+   },
+   "cancel": {
+    "packed+walked": 3
+   }
+  },
+  "bad": []
+ },
+ "river": {
+  "sessions": 60,
+  "landedInWater": 60,
+  "withFloat": 60,
+  "bodies": [
+   "river"
+  ],
+  "species": {
+   "dace": 16,
+   "rtrout": 22,
+   "eel": 6,
+   "boot": 3,
+   "cat": 13
+  },
+  "byPolicy": {
+   "good": {
+    "caught": 25
+   },
+   "early": {
+    "reeledIn": 8
+   },
+   "late": {
+    "stolen": 6
+   },
+   "greedy": {
+    "snapped": 9,
+    "caught": 3
+   },
+   "lazy": {
+    "slipped": 6
+   },
+   "cancel": {
+    "packed+walked": 3
+   }
+  },
+  "bad": []
+ },
+ "pond": {
+  "sessions": 60,
+  "landedInWater": 60,
+  "withFloat": 60,
+  "bodies": [
+   "pond"
+  ],
+  "species": {
+   "crucian": 36,
+   "boot": 6,
+   "gill": 17,
+   "koi": 1
+  },
+  "byPolicy": {
+   "good": {
+    "caught": 25
+   },
+   "early": {
+    "reeledIn": 8
+   },
+   "late": {
+    "stolen": 6
+   },
+   "greedy": {
+    "snapped": 7,
+    "caught": 5
+   },
+   "lazy": {
+    "slipped": 6
+   },
+   "cancel": {
+    "packed+walked": 3
+   }
+  },
+  "bad": []
+ },
+ "stats": {
+  "casts": 240,
+  "bites": 196,
+  "hooks": 172,
+  "catches": 111,
+  "snaps": 37,
+  "slips": 24,
+  "early": 2,
+  "missed": 24,
+  "packed": 12
+ },
+ "moduleErrors": {},
+ "pageErrors": [],
+ "file": "Dojo_World_v2.13.html",
+ "seed": 7
+}

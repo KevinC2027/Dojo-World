@@ -102,7 +102,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
   shallows, never overlapping a swimmer; Red is never swimming while aboard; fills/frame and frame time within 15% of v2.10 at the
   default view and on the lake; zero page/module errors; real-time video of boarding, rowing and mooring.
 
-### Step 10 — Allotment garden at the farm  — STATUS: NOT STARTED
+### Step 10 — Allotment garden at the farm  — STATUS: PASSED (v2.13, Nov 22: four raised beds + can post east of the farm stand; tomato/daikon/sunflower/strawberry packets (6–12 DC) at the honesty box via the existing 'shop' debit, never in the gift bag; sow by INTERACT (SOW panel for several kinds), fill the can at the farm pond (4 pours), water; 3 min of wet soil to ripen, one pour = 2 min wet, dry beds pause and droop; 5 drawn stages; harvest into the gift bag, giftable. garden.py x2 seeds: 4/4 buys, 4/4 sown, growth 60/120/120(dry 300 s)/180 s exact, 4/4 harvested, 0 coins from growing, 4 debits = 4 sown, audit clean, reload keeps beds + bag, coliseum refuses and returns the can, 0 errors; regressions shop/fish/boat/courier/police PASS; fills +3.4% at the allotment, +0.0% default, ms level. Report: `dw2/reports/step10_2.13.md`)
 - Four allotment beds by the farm stand: buy a seed packet at the honesty box (the existing validated 'shop' debit), INTERACT a bed to
   plant, fill the watering can at the farm pond and water; crops grow through visible stages over a few real minutes (dry beds pause),
   then harvest into the gift bag (giftable like the shop items). Growth is saved per viewer. Never changes fighting ability.
@@ -166,3 +166,4 @@ Rules for choosing them:
 - 2026-11-22T12:18Z FINISHED step 9: PASSED — v2.11 rowing boats on Mirror Lake (ro-oar sculling, inertia, wake; 0 hull/swimmer violations in 12k random ticks; perf level); new batch Steps 9–12 written
 - 2026-11-22: Kev approved coins for boats; v2.12 built live in the session from v2.11 (15 DC 'hire' debit + two boat fixes) (Claude).
 - 2026-11-22T12:59Z STARTED step 10 (Claude, scheduled run)
+- 2026-11-22T13:24Z FINISHED step 10: PASSED — v2.13 allotment garden (seeds at the honesty box, sow/fill/water/grow/harvest at 4 beds, dry beds pause, produce giftable; garden.py 2 seeds all checks, 0 coins without a buy, ledger agrees; fills +3.4%, ms level)
