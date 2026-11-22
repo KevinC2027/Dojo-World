@@ -163,7 +163,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: a shower starts and ends on schedule, wets all four beds, townsfolk under cover by line of route with no
   wall crossings and none stuck after it ends; fills/frame and frame time within 15% of Step 15 while raining (rain drawn cheaply).
 
-### Step 17 — Omikuji fortunes at Shrine Hill  — STATUS: IN PROGRESS
+### Step 17 — Omikuji fortunes at Shrine Hill  — STATUS: PASSED (v2.20, Nov 22: roofed stand by the offering box + musubi rack in front of the hall; 10 DC 'hire' debit (place shrine, DC_CONFIG); SHAKE x3 -> stick 1–32 -> slip (7 grades, verse, 5 lines, fixed per stick); KEEP -> 32-slip book, or carry the slip (drawn in Red's real hand) and tie it on the rack; paid draws survive close/fight/reload; 3 a day. omikuji.py x2 seeds all PASS: one debit per draw, short/daily/coliseum/holding refused with no charge, 3,200 sticks within ±1.0 pt of the table, audit clean, 0 errors; regressions boat/shop PASS; fills +0.6–0.7%, ms median +2% default / −4% shrine. No new collision solids (a solid let the engine climb Red onto the rack). Report: `dw2/reports/step17_2.20.md`)
 - An omikuji stand beside the Shrine Hill offering box: INTERACT "Draw a fortune · 10 DC" posts a validated 'hire' debit (DC_CONFIG.hire,
   place 'shrine', Kev's PRICES rule), the coins fly to the stand, and a touch panel opens: SHAKE the hexagonal box three times, a numbered
   stick (1–32) slides out, the slip unrolls with its grade (Great blessing … Great curse) and short lines for wish / travel / fishing /
@@ -176,7 +176,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
   keep → book, carry → tie → knot on the rack, all kept after a reload; a fight mid-draw keeps the paid stick; audit clean; zero errors;
   fills/frame and frame time within 15% of v2.19 at the default view and at the shrine; real-time video.
 
-### Step 18 — The mayors' town requests  — STATUS: NOT STARTED (needs Step 17 PASSED)
+### Step 18 — The mayors' town requests  — STATUS: NOT STARTED (Step 17 PASSED: next)
 - Mayor Hale (Town Hall) and Deputy Mayor Ines (Northfield Hall) each post a small daily request built on activities that already exist
   (e.g. bring a perfect dish to someone named, catch a fish species from a given water, give a harvested crop, swim the course under a
   time, deliver for the baker on time, fly the kite above a height). INTERACT the mayor to take it, the chip tracks it, hand in at the
@@ -263,3 +263,4 @@ Rules for choosing them:
 - 2026-11-22T18:59Z STARTED step 16 (Claude, scheduled run)
 - 2026-11-22T19:56Z FINISHED step 16: PASSED — v2.19 rain showers (wall-clock schedule, townsfolk shelter by route or umbrella and walk back, beds watered, fish bite faster, WEATHER on boards; rain.py 2 seeds all checks, 0 wall crossings; perf level while raining). Batch Steps 13–16 all PASSED: next run writes the new batch.
 - 2026-11-22T19:58Z STARTED step 17 (Claude, scheduled run; writing new batch Steps 17–20)
+- 2026-11-22T20:30Z FINISHED step 17: PASSED — v2.20 omikuji at Shrine Hill (10 DC 'hire' draw, shake/stick/slip panel, 32-slip book, tie bad slips on the musubi rack; omikuji.py 2 seeds all checks, audit clean; perf in budget); new batch Steps 17–20 written
