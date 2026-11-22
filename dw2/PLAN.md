@@ -140,6 +140,11 @@ Rules for choosing them:
   * Dojo Credits: physical coins in a belt pouch, only in towns/apartments (not the coliseum); wallet menu lives in MENU only; never buys
     combat advantage, no cash-out.
   * Non-combat activities that fit the town (jobs, errands, shops, games) and keep "simple to operate, stylistically deep".
+  * PRICES (Kev, Nov 22: standing rule): new paid services and goods (hires, rentals, entry fees, seed packets, gift items) may be
+    priced without asking Kev. Each charge is a validated ledger debit (like 'shop' / 'hire') with its price in DC_CONFIG, in the same
+    range as the existing tables (about 10–90 DC; boat hire is 15), towns only, refused without charging when the pouch is short,
+    checked by eco.audit(). Never for combat advantage, never in the coliseum, no cash-out. New ways to EARN coins (tips, rewards)
+    still need Kev's OK.
 - Standing rules still apply: thin stick figures, same animation style, controls, camera and combat logic; no AI sees through walls;
   Red moves by the on-screen joystick only; Dojo Credits stay out of the coliseum.
 
@@ -169,3 +174,4 @@ Rules for choosing them:
 - 2026-11-22T13:24Z FINISHED step 10: PASSED — v2.13 allotment garden (seeds at the honesty box, sow/fill/water/grow/harvest at 4 beds, dry beds pause, produce giftable; garden.py 2 seeds all checks, 0 coins without a buy, ledger agrees; fills +3.4%, ms level)
 - 2026-11-22T13:59Z STARTED step 11 (Claude, scheduled run)
 - 2026-11-22T14:16Z FINISHED step 11: PASSED — v2.14 gomoku vs the innkeeper at the inn bar (touch board, threat-aware AI, W/L/D record; 120 games 0 illegal, every four/open three blocked; perf level)
+- 2026-11-22: Kev set a standing rule: new paid services/goods may be priced without asking (see PRICES under "After Step 4") (Claude).
