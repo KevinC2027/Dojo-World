@@ -1,0 +1,65 @@
+{
+ "perFrame": {
+  "fill": 844,
+  "stroke": 803,
+  "ellipse": 112,
+  "arc": 122,
+  "drawImage": 0
+ },
+ "frameMsAvg": 43.1,
+ "frameMsP95": 66.7,
+ "treesInView": 10,
+ "moduleErrors": {},
+ "topFillSites": [
+  [
+   461,
+   "SC.poly:2021 < SC.poly:4151"
+  ],
+  [
+   52,
+   "SC.poly:4164 < SC.rz:2022"
+  ],
+  [
+   48,
+   "SC.poly:4164 < SC.slab:2026"
+  ],
+  [
+   42,
+   "draw:971 < draw:1732"
+  ],
+  [
+   19,
+   "Object.sh:2783 < file:///home/claude/dojo-world/dw2/builds/Dojo_World_v2.7.html:8734"
+  ],
+  [
+   17,
+   "shd:994 < draw:999"
+  ],
+  [
+   17,
+   "jt:876 < Object.ol:885"
+  ],
+  [
+   16,
+   "draw:1021 < draw:1732"
+  ],
+  [
+   16,
+   "draw:1019 < draw:1732"
+  ],
+  [
+   13,
+   "draw:1014 < draw:1732"
+  ],
+  [
+   13,
+   "jt:876 < Object.draw:885"
+  ],
+  [
+   13,
+   "coinAt:7690 < drawBag:7760"
+  ]
+ ],
+ "pageErrors": [],
+ "file": "Dojo_World_v2.7.html"
+}

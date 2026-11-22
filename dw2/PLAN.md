@@ -63,7 +63,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
   joystick packs up; species differ by water body; zero page/module errors; fills/frame and frame time within 15% of v2.6 at the
   default view and at the pier while reeling; real-time video of cast -> bite -> reel -> catch.
 
-### Step 6 — Paying with real coins in town shops  — STATUS: NOT STARTED (next)
+### Step 6 — Paying with real coins in town shops  — STATUS: PASSED (v2.8, Nov 22: general store, bakery, smithy, farm-stand honesty box and ramen stall sell 10 gift items through a validated 'shop' ledger debit (prices from DC_CONFIG.shop); coins fly from the pouch to the counter; gift bag + giving with reactions (line of sight only). shop.py x2 seeds: 10/10 buys agree (balance, ledger, pouch, coins flown), insufficient/wrong counter/rate limit/coliseum refused, 9/9 gifts react, none through a wall, bag survives reload, audit clean, 0 errors; fills +0.03% default / +0.7% bakery, ms level. Report: `dw2/reports/step6_2.8.md`)
 - Wire up spending (today: "free sample: spending is not set up yet", "Coins are not wired up yet"): the Northfield general store,
   bakery and smithy counters, the farm stand honesty box and the ramen stall take real coins from Red's pouch through the existing
   DC ledger (a new validated 'shop' debit, prices from DC_CONFIG), with the coins flying from the pouch to the counter.
@@ -72,7 +72,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted purchase test (balance, pouch coins and ledger agree; insufficient funds refused; coliseum refuses); gifts
   given to townsfolk show a reaction; no ledger errors; fills/frame and frame time within 15% of Step 5.
 
-### Step 7 — Police response (line of sight only)  — STATUS: NOT STARTED (needs Step 6 PASSED)
+### Step 7 — Police response (line of sight only)  — STATUS: NOT STARTED (next)
 - Officers patrol the civic square and Northfield. If an officer SEES Red (wallBetween line of sight, never through walls) attack a
   townsperson who did not provoke him, the officer calls out, then walks over; repeat offences within a short window get Red escorted
   to the holding cell for a short timed wait (the door unlocks by itself). The police desk explains the rules.
@@ -123,3 +123,4 @@ Rules for choosing them:
 - 2026-11-22T00:58Z STARTED step 5 (Claude, scheduled run; writing new batch Steps 5–8)
 - 2026-11-22T01:34Z FINISHED step 5: PASSED — v2.7 fishing at four rod rests (480/480 casts in water, 0 early hooks, perf level) + pier deck/height fix; new batch Steps 5–8 written
 - 2026-11-22T04:59Z STARTED step 6 (Claude, scheduled run)
+- 2026-11-22T05:25Z FINISHED step 6: PASSED — v2.8 town shops take real coins (5 counters, 10 gift items, validated 'shop' debit) + gift bag and townsfolk reactions; perf level

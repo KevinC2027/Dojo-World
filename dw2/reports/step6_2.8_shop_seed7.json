@@ -1,0 +1,837 @@
+{
+ "seed": 7,
+ "buys": [
+  {
+   "item": "flowers",
+   "shop": "general",
+   "price": 30,
+   "prompt": "Cashier: buy a gift",
+   "reachTicks": 17,
+   "panel": "shop:general",
+   "before": {
+    "bal": 500,
+    "avail": 500,
+    "n": 1,
+    "pouch": 500,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 0,
+    "bag": 0,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 500,
+     "entries": 1
+    }
+   },
+   "btn": true,
+   "flown": 30,
+   "flownTo": [
+    -23.41,
+    89.09
+   ],
+   "after": {
+    "bal": 470,
+    "avail": 470,
+    "n": 2,
+    "pouch": 470,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 1,
+    "bag": 1,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 470,
+     "entries": 2
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 30,
+    "item": "flowers",
+    "shop": "general",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  },
+  {
+   "item": "honey",
+   "shop": "general",
+   "price": 45,
+   "prompt": "Cashier: buy a gift",
+   "reachTicks": 17,
+   "panel": "shop:general",
+   "before": {
+    "bal": 470,
+    "avail": 470,
+    "n": 2,
+    "pouch": 470,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 1,
+    "bag": 1,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 470,
+     "entries": 2
+    }
+   },
+   "btn": true,
+   "flown": 45,
+   "flownTo": [
+    -23.41,
+    89.09
+   ],
+   "after": {
+    "bal": 425,
+    "avail": 425,
+    "n": 3,
+    "pouch": 425,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 2,
+    "bag": 2,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 425,
+     "entries": 3
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 45,
+    "item": "honey",
+    "shop": "general",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  },
+  {
+   "item": "notebook",
+   "shop": "general",
+   "price": 15,
+   "prompt": "Cashier: buy a gift",
+   "reachTicks": 17,
+   "panel": "shop:general",
+   "before": {
+    "bal": 425,
+    "avail": 425,
+    "n": 3,
+    "pouch": 425,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 2,
+    "bag": 2,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 425,
+     "entries": 3
+    }
+   },
+   "btn": true,
+   "flown": 15,
+   "flownTo": [
+    -23.41,
+    89.09
+   ],
+   "after": {
+    "bal": 410,
+    "avail": 410,
+    "n": 4,
+    "pouch": 410,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 3,
+    "bag": 3,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 410,
+     "entries": 4
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 15,
+    "item": "notebook",
+    "shop": "general",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  },
+  {
+   "item": "melonpan",
+   "shop": "bakery",
+   "price": 12,
+   "prompt": "Bakery counter: buy",
+   "reachTicks": 17,
+   "panel": "shop:bakery",
+   "before": {
+    "bal": 410,
+    "avail": 410,
+    "n": 4,
+    "pouch": 410,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 3,
+    "bag": 3,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 410,
+     "entries": 4
+    }
+   },
+   "btn": true,
+   "flown": 12,
+   "flownTo": [
+    12,
+    89.2
+   ],
+   "after": {
+    "bal": 398,
+    "avail": 398,
+    "n": 5,
+    "pouch": 398,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 4,
+    "bag": 4,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 398,
+     "entries": 5
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 12,
+    "item": "melonpan",
+    "shop": "bakery",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  },
+  {
+   "item": "knots",
+   "shop": "bakery",
+   "price": 28,
+   "prompt": "Bakery counter: buy",
+   "reachTicks": 17,
+   "panel": "shop:bakery",
+   "before": {
+    "bal": 398,
+    "avail": 398,
+    "n": 5,
+    "pouch": 398,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 4,
+    "bag": 4,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 398,
+     "entries": 5
+    }
+   },
+   "btn": true,
+   "flown": 28,
+   "flownTo": [
+    12,
+    89.2
+   ],
+   "after": {
+    "bal": 370,
+    "avail": 370,
+    "n": 6,
+    "pouch": 370,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 5,
+    "bag": 5,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 370,
+     "entries": 6
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 28,
+    "item": "knots",
+    "shop": "bakery",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  },
+  {
+   "item": "cake",
+   "shop": "bakery",
+   "price": 90,
+   "prompt": "Bakery counter: buy",
+   "reachTicks": 17,
+   "panel": "shop:bakery",
+   "before": {
+    "bal": 370,
+    "avail": 370,
+    "n": 6,
+    "pouch": 370,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 5,
+    "bag": 5,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 370,
+     "entries": 6
+    }
+   },
+   "btn": true,
+   "flown": 90,
+   "flownTo": [
+    12,
+    89.2
+   ],
+   "after": {
+    "bal": 280,
+    "avail": 280,
+    "n": 7,
+    "pouch": 280,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 6,
+    "bag": 6,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 280,
+     "entries": 7
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 90,
+    "item": "cake",
+    "shop": "bakery",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  },
+  {
+   "item": "lantern",
+   "shop": "smithy",
+   "price": 70,
+   "prompt": "Smithy counter: buy",
+   "reachTicks": 17,
+   "panel": "shop:smithy",
+   "before": {
+    "bal": 280,
+    "avail": 280,
+    "n": 7,
+    "pouch": 280,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 6,
+    "bag": 6,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 280,
+     "entries": 7
+    }
+   },
+   "btn": true,
+   "flown": 70,
+   "flownTo": [
+    37.04,
+    88.21
+   ],
+   "after": {
+    "bal": 210,
+    "avail": 210,
+    "n": 8,
+    "pouch": 210,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 7,
+    "bag": 7,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 210,
+     "entries": 8
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 70,
+    "item": "lantern",
+    "shop": "smithy",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  },
+  {
+   "item": "charm",
+   "shop": "smithy",
+   "price": 40,
+   "prompt": "Smithy counter: buy",
+   "reachTicks": 17,
+   "panel": "shop:smithy",
+   "before": {
+    "bal": 210,
+    "avail": 210,
+    "n": 8,
+    "pouch": 210,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 7,
+    "bag": 7,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 210,
+     "entries": 8
+    }
+   },
+   "btn": true,
+   "flown": 40,
+   "flownTo": [
+    37.04,
+    88.21
+   ],
+   "after": {
+    "bal": 170,
+    "avail": 170,
+    "n": 9,
+    "pouch": 170,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 8,
+    "bag": 8,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 170,
+     "entries": 9
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 40,
+    "item": "charm",
+    "shop": "smithy",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  },
+  {
+   "item": "eggs",
+   "shop": "stand",
+   "price": 10,
+   "prompt": "Honesty box: pay for eggs",
+   "reachTicks": 17,
+   "panel": "shop:stand",
+   "before": {
+    "bal": 170,
+    "avail": 170,
+    "n": 9,
+    "pouch": 170,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 8,
+    "bag": 8,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 170,
+     "entries": 9
+    }
+   },
+   "btn": true,
+   "flown": 10,
+   "flownTo": [
+    6.84,
+    -65.44
+   ],
+   "after": {
+    "bal": 160,
+    "avail": 160,
+    "n": 10,
+    "pouch": 160,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 9,
+    "bag": 9,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 160,
+     "entries": 10
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 10,
+    "item": "eggs",
+    "shop": "stand",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  },
+  {
+   "item": "ramen",
+   "shop": "ramen",
+   "price": 18,
+   "prompt": "Counter",
+   "reachTicks": 0,
+   "panel": "shop:ramen",
+   "before": {
+    "bal": 160,
+    "avail": 160,
+    "n": 10,
+    "pouch": 160,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 9,
+    "bag": 9,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 160,
+     "entries": 10
+    }
+   },
+   "btn": true,
+   "flown": 18,
+   "flownTo": [
+    -26,
+    6
+   ],
+   "after": {
+    "bal": 142,
+    "avail": 142,
+    "n": 11,
+    "pouch": 142,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 10,
+    "bag": 10,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 142,
+     "entries": 11
+    }
+   },
+   "entry": {
+    "src": "shop",
+    "amt": 18,
+    "item": "ramen",
+    "shop": "ramen",
+    "t": "d"
+   },
+   "landed": true,
+   "ok": true
+  }
+ ],
+ "refusals": {
+  "rateLimit": {
+   "codes": [
+    "ok",
+    "ok",
+    "ok",
+    "ok",
+    "ok",
+    "ok",
+    "ok",
+    "ok",
+    "shop_rate"
+   ],
+   "ok": true
+  },
+  "insufficient": {
+   "before": {
+    "bal": 62,
+    "avail": 62,
+    "n": 19,
+    "pouch": 62,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 18,
+    "bag": 18,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 62,
+     "entries": 19
+    }
+   },
+   "btnDisabled": true,
+   "code": "insufficient",
+   "after": {
+    "bal": 62,
+    "avail": 62,
+    "n": 19,
+    "pouch": 62,
+    "inRed": 0,
+    "pouchOk": true,
+    "shopDebits": 18,
+    "bag": 18,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 62,
+     "entries": 19
+    }
+   },
+   "ok": true
+  },
+  "wrongShop": {
+   "code": "wrong_shop",
+   "ok": true
+  },
+  "unknownItem": {
+   "code": "unknown_item",
+   "ok": true
+  },
+  "coliseum": {
+   "sky": true,
+   "panel": null,
+   "codes": [
+    "area",
+    "area"
+   ],
+   "unchanged": true,
+   "back": true,
+   "ok": true
+  }
+ },
+ "gifts": [
+  {
+   "id": "farmer",
+   "tag": "Farmer",
+   "prompt": "Give a gift to Farmer",
+   "bag0": 18,
+   "panel": "bag",
+   "btn": true,
+   "item": "flowers",
+   "bag1": 17,
+   "react": true,
+   "love": false,
+   "msg": "Farmer: \"How thoughtful. Thank you.\"",
+   "facing": 1,
+   "moved": 0,
+   "ok": true
+  },
+  {
+   "id": "v2",
+   "tag": "Traveler",
+   "prompt": "Give a gift to Traveler",
+   "bag0": 17,
+   "panel": "bag",
+   "btn": true,
+   "item": "honey",
+   "bag1": 16,
+   "react": true,
+   "love": false,
+   "msg": "Traveler: \"How thoughtful. Thank you.\"",
+   "facing": 1,
+   "moved": 0,
+   "ok": true
+  },
+  {
+   "id": "b1",
+   "tag": "Businessman",
+   "prompt": "Give a gift to Businessman",
+   "bag0": 16,
+   "panel": "bag",
+   "btn": true,
+   "item": "notebook",
+   "bag1": 15,
+   "react": true,
+   "love": true,
+   "msg": "Businessman: \"For me? Oh, this is exactly what I wanted!\"",
+   "facing": 1,
+   "moved": 0,
+   "ok": true
+  },
+  {
+   "id": "baker_in",
+   "tag": "Baker",
+   "prompt": "Give a gift to Baker",
+   "bag0": 15,
+   "panel": "bag",
+   "btn": true,
+   "item": "melonpan",
+   "bag1": 14,
+   "react": true,
+   "love": false,
+   "msg": "Baker: \"How thoughtful. Thank you.\"",
+   "facing": 1,
+   "moved": 0,
+   "ok": true
+  },
+  {
+   "id": "smith",
+   "tag": "Blacksmith",
+   "prompt": "Give a gift to Blacksmith",
+   "bag0": 14,
+   "panel": "bag",
+   "btn": true,
+   "item": "knots",
+   "bag1": 13,
+   "react": true,
+   "love": false,
+   "msg": "Blacksmith: \"How thoughtful. Thank you.\"",
+   "facing": 1,
+   "moved": 0,
+   "ok": true
+  },
+  {
+   "id": "clk_gs",
+   "tag": "Clerk",
+   "prompt": "Give a gift to Clerk",
+   "bag0": 13,
+   "panel": "bag",
+   "btn": true,
+   "item": "cake",
+   "bag1": 12,
+   "react": true,
+   "love": false,
+   "msg": "Clerk: \"How thoughtful. Thank you.\"",
+   "facing": 1,
+   "moved": 0,
+   "ok": true
+  },
+  {
+   "id": "inn_in",
+   "tag": "Innkeeper",
+   "prompt": "Give a gift to Innkeeper",
+   "bag0": 12,
+   "panel": "bag",
+   "btn": true,
+   "item": "lantern",
+   "bag1": 11,
+   "react": true,
+   "love": false,
+   "msg": "Innkeeper: \"How thoughtful. Thank you.\"",
+   "facing": 1,
+   "moved": 0,
+   "ok": true
+  },
+  {
+   "id": "dep",
+   "tag": "Deputy Mayor Ines",
+   "prompt": "Give a gift to Deputy Mayor Ines",
+   "bag0": 11,
+   "panel": "bag",
+   "btn": true,
+   "item": "charm",
+   "bag1": 10,
+   "react": true,
+   "love": false,
+   "msg": "Deputy Mayor Ines: \"How thoughtful. Thank you.\"",
+   "facing": 1,
+   "moved": 0,
+   "ok": true
+  },
+  {
+   "id": "mayor",
+   "tag": "Mayor Hale",
+   "prompt": "Give a gift to Mayor Hale",
+   "bag0": 10,
+   "panel": "bag",
+   "btn": true,
+   "item": "eggs",
+   "bag1": 9,
+   "react": true,
+   "love": false,
+   "msg": "Mayor Hale: \"How thoughtful. Thank you.\"",
+   "facing": 1,
+   "moved": 0,
+   "ok": true
+  }
+ ],
+ "wall": {
+  "npc": "Farmer",
+  "wall": [
+   28,
+   -4.4,
+   0.6
+  ],
+  "dist": 1.7,
+  "wallBetween": true,
+  "prompt": null,
+  "code": "far",
+  "bagSame": true,
+  "react": false,
+  "ok": true
+ },
+ "reload": {
+  "bagBefore": 9,
+  "bagAfter": 9,
+  "balBefore": 62,
+  "balAfter": 62,
+  "audit": {
+   "ok": true,
+   "issues": [],
+   "balance": 62,
+   "entries": 19
+  },
+  "ok": true
+ },
+ "errors": [],
+ "moduleErrors": {},
+ "final": {
+  "bal": 62,
+  "avail": 62,
+  "n": 19,
+  "pouch": 62,
+  "inRed": 0,
+  "pouchOk": true,
+  "shopDebits": 18,
+  "bag": 9,
+  "audit": {
+   "ok": true,
+   "issues": [],
+   "balance": 62,
+   "entries": 19
+  }
+ },
+ "summary": {
+  "buysOk": 10,
+  "buys": 10,
+  "refusalsOk": {
+   "rateLimit": true,
+   "insufficient": true,
+   "wrongShop": true,
+   "unknownItem": true,
+   "coliseum": true
+  },
+  "giftsOk": 9,
+  "gifts": 9,
+  "wallOk": true,
+  "reloadOk": true,
+  "pageErrors": 0,
+  "moduleErrors": {},
+  "PASS": true
+ }
+}
