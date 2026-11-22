@@ -136,7 +136,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
   missing-ingredient recipes refused; dish in the bag, giftable, perfect = love; book survives reload; empty bag keeps the old stove;
   ledger untouched, audit clean; zero errors; fills/frame and frame time within 15% of v2.15; real-time video.
 
-### Step 14 — Riding the town bus (fares)  — STATUS: NOT STARTED
+### Step 14 — Riding the town bus (fares)  — STATUS: PASSED (v2.17, Nov 22: the karts had replaced the old bus, so one yellow town bus (old v3.201 body, 4.2 m minibus) was brought back as a CARS member on a fixed 719 m loop; 4 shelters + timetables (Northfield avenue, Airfield, Southbank Farms, Civic Square); 'fare' ledger debit 10 DC (DC_CONFIG.fare, stop validated, audited), BELL / GET OFF button, Red hidden aboard (at a window), camera rides along. bus.py x2 seeds: 16/16 rides one fare each, set down on the pavement 0.00 m from the spot, never in road/solid; ~130k ticks 0 bus-pedestrian overlaps, 0 contacts while moving; yield, get-off-now, attacks off, coliseum set-down, free run in order, drain ends 'insufficient' with nothing charged; 0 errors; regressions shop/boat/cross PASS; fills +0.0% default / +3.9% at a stop / +9.5% riding vs walking the same road, ms level/−17%. Report: `dw2/reports/step14_2.17.md`)
 - Bus stops with shelters and timetables at the civic square, Northfield, the Southbank farms and the airport. The yellow bus that
   already drives the roads runs a fixed loop and stops at each one; INTERACT at a stop while it waits = "Board (fare)": a validated
   'fare' ledger debit (price in DC_CONFIG, ~10 DC, Kev's PRICES rule), Red rides inside (camera follows the bus), the chip shows the
@@ -222,3 +222,4 @@ Rules for choosing them:
 - 2026-11-22T15:59Z STARTED step 13 (Claude, scheduled run; writing new batch Steps 13–16)
 - 2026-11-22T16:21Z FINISHED step 13: PASSED — v2.16 home cooking (10 stoves, 6 recipes, SEAR/SERVE pan game; cook.py 2 seeds all checks, ingredients used only on serve, 0 coins, perf in budget); new batch Steps 13–16 written
 - 2026-11-22T16:59Z STARTED step 14 (Claude, scheduled run)
+- 2026-11-22T17:39Z FINISHED step 14: PASSED — v2.17 town bus + fares (4 stops with shelters/timetables, 10 DC validated 'fare' debit, bell to get off; bus.py 2 seeds 16/16 rides, 0 overlaps, 0 moving contacts; perf in budget)
