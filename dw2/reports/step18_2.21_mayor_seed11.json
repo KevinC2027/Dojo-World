@@ -1,0 +1,658 @@
+{
+ "seed": 11,
+ "checks": {
+  "prompts": {
+   "hale": {
+    "label": "Mayor Hale: town request",
+    "act": "townreq"
+   },
+   "ines": {
+    "label": "Deputy Mayor Ines: town request",
+    "act": "townreq"
+   },
+   "outsideDoor": null,
+   "behindWall": null,
+   "acrossRoom": null,
+   "nfOutside": null,
+   "nfBehind": null,
+   "ok": true
+  },
+  "courier": {
+   "ok": true
+  },
+  "fish": {
+   "casts": 1,
+   "caught": [
+    "crucian"
+   ],
+   "ok": true
+  },
+  "swim": {
+   "time": {
+    "ok": true,
+    "s": 39.23
+   },
+   "ok": true
+  },
+  "kite": {
+   "ok": true,
+   "height": {
+    "done": true,
+    "how": "15.1 m",
+    "best": 15.1,
+    "prog": 0
+   }
+  },
+  "dish": {
+   "ok": true
+  },
+  "crop": {
+   "ok": true
+  },
+  "slow": {
+   "ok": true
+  },
+  "area": {
+   "ok": true,
+   "r": {
+    "sky": true,
+    "take": "area",
+    "hand": "area",
+    "chip": "none",
+    "back": true
+   }
+  },
+  "expiry": {
+   "ok": true
+  },
+  "kinds": {
+   "counts": {
+    "dish": 1,
+    "crop": 1,
+    "fish": 1,
+    "swim": 1,
+    "courier": 1,
+    "kite": 1
+   },
+   "ok": true
+  },
+  "reload": {
+   "ok": true,
+   "pre": {
+    "counts": {
+     "dish": 1,
+     "crop": 1,
+     "fish": 1,
+     "swim": 1,
+     "courier": 1,
+     "kite": 1
+    },
+    "ribbons": 6,
+    "act": [
+     "hale"
+    ],
+    "e1": null,
+    "d1": 1,
+    "e2": null,
+    "d2": 1,
+    "boardShown": true
+   },
+   "post": {
+    "counts": {
+     "dish": 1,
+     "crop": 1,
+     "fish": 1,
+     "swim": 1,
+     "courier": 1,
+     "kite": 1
+    },
+    "ribbons": 6,
+    "act": [
+     "hale"
+    ],
+    "kind": "kite",
+    "today": "2026-11-26",
+    "e": null,
+    "d": 1,
+    "chip": "<b>HALE</b> Kite &gt; 18 m"
+   }
+  },
+  "ledger": {
+   "start": {
+    "avail": 500,
+    "n": 1,
+    "debits": 0,
+    "shopDebits": 0,
+    "debitSum": 0,
+    "credits": 1,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 500,
+     "entries": 1
+    }
+   },
+   "end": {
+    "avail": 421,
+    "n": 7,
+    "debits": 6,
+    "shopDebits": 6,
+    "debitSum": 79,
+    "credits": 1,
+    "audit": {
+     "ok": true,
+     "issues": [],
+     "balance": 421,
+     "entries": 7
+    }
+   },
+   "ok": true
+  },
+  "errors": {
+   "ok": true,
+   "page": [],
+   "module": {}
+  }
+ },
+ "errors": [],
+ "trace": {
+  "courier": {
+   "take": {
+    "prompt": "Mayor Hale: town request",
+    "act": "townreq",
+    "panel": "hale",
+    "btns": [
+     "take",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "kind": "courier",
+    "refused": null
+   },
+   "takeTwice": "active",
+   "notDone": {
+    "prompt": "Mayor Hale: your request",
+    "act": "townreq",
+    "panel": "hale",
+    "btns": [
+     "hand",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "ribbons": 0,
+    "refused": "not_done",
+    "board": false
+   },
+   "inesPanelNoHand": [
+    "take",
+    "board",
+    "talk",
+    "close"
+   ],
+   "wrong": "wrong",
+   "deliver": {
+    "walk": {
+     "reached": true,
+     "ticks": 274,
+     "cross": 0,
+     "inside": 0,
+     "stuck": 0
+    },
+    "last": {
+     "dest": "nf_s4",
+     "ticks": 405,
+     "late": false,
+     "to": "res_nf_s4"
+    },
+    "state": {
+     "done": true,
+     "how": "nf_s4",
+     "best": null,
+     "prog": 0
+    }
+   },
+   "handIn": {
+    "prompt": "Mayor Hale: hand in the request",
+    "act": "townreq",
+    "panel": "hale",
+    "btns": [
+     "hand",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "ribbons": 1,
+    "refused": null,
+    "board": true
+   },
+   "handedAgain": "handed"
+  },
+  "fish": {
+   "before": {
+    "casts": 1,
+    "caught": [
+     "crucian"
+    ],
+    "got": true
+   },
+   "take": {
+    "prompt": "Deputy Mayor Ines: town request",
+    "act": "townreq",
+    "panel": "ines",
+    "btns": [
+     "take",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "kind": "fish",
+    "refused": null
+   },
+   "afterTake": {
+    "done": false,
+    "how": null,
+    "best": null,
+    "prog": 0
+   },
+   "fish": {
+    "casts": 1,
+    "caught": [
+     "crucian"
+    ],
+    "got": true,
+    "state": {
+     "done": true,
+     "how": "22 cm",
+     "best": null,
+     "prog": 0
+    }
+   },
+   "handIn": {
+    "prompt": "Deputy Mayor Ines: hand in the request",
+    "act": "townreq",
+    "panel": "ines",
+    "btns": [
+     "hand",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "ribbons": 1,
+    "refused": null,
+    "board": true
+   }
+  },
+  "swim": {
+   "postedNew": [
+    "take",
+    "board",
+    "talk",
+    "close"
+   ],
+   "take": {
+    "prompt": "Mayor Hale: town request",
+    "act": "townreq",
+    "panel": "hale",
+    "btns": [
+     "take",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "kind": "swim",
+    "refused": null
+   },
+   "swim": {
+    "label": "Swim course: start",
+    "res": {
+     "ok": true,
+     "s": 39.23
+    },
+    "state": {
+     "done": true,
+     "how": "39.2 s",
+     "best": 39.233333333333334,
+     "prog": 0
+    }
+   },
+   "handIn": {
+    "prompt": "Mayor Hale: hand in the request",
+    "act": "townreq",
+    "panel": "hale",
+    "btns": [
+     "hand",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "ribbons": 1,
+    "refused": null,
+    "board": true
+   }
+  },
+  "kite": {
+   "buy": {
+    "ok": true,
+    "code": null,
+    "owned": true
+   },
+   "take": {
+    "prompt": "Deputy Mayor Ines: town request",
+    "act": "townreq",
+    "panel": "ines",
+    "btns": [
+     "take",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "kind": "kite",
+    "refused": null
+   },
+   "fly": {
+    "label": "Fly the kite",
+    "st": "fly",
+    "mx": 15.1,
+    "state": {
+     "done": true,
+     "how": "15.1 m",
+     "best": 15.1,
+     "prog": 0
+    },
+    "y": 5.1
+   },
+   "handIn": {
+    "prompt": "Deputy Mayor Ines: hand in the request",
+    "act": "townreq",
+    "panel": "ines",
+    "btns": [
+     "hand",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "ribbons": 1,
+    "refused": null,
+    "board": true
+   }
+  },
+  "dish_crop": {
+   "takeI": {
+    "prompt": "Deputy Mayor Ines: town request",
+    "act": "townreq",
+    "panel": "ines",
+    "btns": [
+     "take",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "kind": "crop",
+    "refused": null
+   },
+   "takeH": {
+    "prompt": "Mayor Hale: town request",
+    "act": "townreq",
+    "panel": "hale",
+    "btns": [
+     "take",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "kind": "dish",
+    "refused": null
+   },
+   "bothChip": "<b>HALE</b> Perfect dish \u2192 Farmer<br><b>INES</b> tomatoes \u2192 Farmer",
+   "buys": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "grow": {
+    "sow0": true,
+    "sow1": true,
+    "sow2": true,
+    "stages": [
+     4,
+     4,
+     4
+    ],
+    "h0": "Harvest the tomatoes",
+    "h1": "Harvest the tomatoes",
+    "h2": "Harvest the tomatoes",
+    "toms": [
+     "garden:0:1795555356346:shop:mwsc72yxdtbc-2",
+     "garden:1:1795555356347:shop:mwsc72yxdtbc-3",
+     "garden:2:1795555356347:shop:mwsc72yxdtbc-4"
+    ]
+   },
+   "goodDish": {
+    "prompt": "Stove: recipe book (1 you can cook)",
+    "panel": true,
+    "btn": true,
+    "q": "good",
+    "pid": "cook:omelette:mwv7euou:1"
+   },
+   "perfectDish": {
+    "prompt": "Stove: recipe book (1 you can cook)",
+    "panel": true,
+    "btn": true,
+    "q": "perfect",
+    "pid": "cook:omelette:mwv7eurf:2"
+   },
+   "giveGood": {
+    "prompt": "Give a gift to Farmer",
+    "panel": "bag",
+    "btn": true,
+    "line": "Farmer: \"How thoughtful. Thank you.\"",
+    "item": "dish_omelette",
+    "state": {
+     "done": false,
+     "how": null,
+     "best": null,
+     "prog": 1
+    }
+   },
+   "givePerfect": {
+    "prompt": "Give a gift to Farmer",
+    "panel": "bag",
+    "btn": true,
+    "line": "Farmer: \"You remembered! Thank you, really.\"",
+    "item": "dish_omelette",
+    "state": {
+     "done": true,
+     "how": "dish_omelette",
+     "best": null,
+     "prog": 1
+    }
+   },
+   "giveCrop": {
+    "prompt": "Give a gift to Farmer",
+    "panel": "bag",
+    "btn": true,
+    "line": "Farmer: \"For me? Well, thank you kindly.\"",
+    "item": "tomatoes",
+    "state": {
+     "done": true,
+     "how": "tomatoes",
+     "best": null,
+     "prog": 0
+    }
+   },
+   "handH": {
+    "prompt": "Mayor Hale: hand in the request",
+    "act": "townreq",
+    "panel": "hale",
+    "btns": [
+     "hand",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "ribbons": 1,
+    "refused": null,
+    "board": true
+   },
+   "handI": {
+    "prompt": "Deputy Mayor Ines: hand in the request",
+    "act": "townreq",
+    "panel": "ines",
+    "btns": [
+     "hand",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "ribbons": 1,
+    "refused": null,
+    "board": true
+   }
+  },
+  "expiry": {
+   "take": [
+    {
+     "prompt": "Mayor Hale: town request",
+     "act": "townreq",
+     "panel": "hale",
+     "btns": [
+      "take",
+      "board",
+      "talk",
+      "close"
+     ],
+     "click": true,
+     "kind": "swim",
+     "refused": null
+    },
+    {
+     "prompt": "Deputy Mayor Ines: town request",
+     "act": "townreq",
+     "panel": "ines",
+     "btns": [
+      "take",
+      "board",
+      "talk",
+      "close"
+     ],
+     "click": true,
+     "kind": "fish",
+     "refused": null
+    }
+   ],
+   "slow": {
+    "label": "Swim course: start (best 0:39.2)",
+    "res": {
+     "ok": true,
+     "s": 39.23
+    },
+    "state": {
+     "done": false,
+     "how": null,
+     "best": 39.233333333333334,
+     "prog": 0
+    }
+   },
+   "area": {
+    "sky": true,
+    "take": "area",
+    "hand": "area",
+    "chip": "none",
+    "back": true
+   },
+   "lateFish": {
+    "casts": 1,
+    "caught": [
+     "crucian"
+    ],
+    "got": true,
+    "state": {
+     "done": false,
+     "how": null,
+     "best": null,
+     "prog": 0
+    }
+   },
+   "chipExpired": "<b>HALE</b> Swim course &lt; 20 s (best 39.2) <span class=\"x\">expired</span><br><b>INES</b> Crucian carp \u00b7 Farm pond <span class=\"x\">expired</span>",
+   "expH": {
+    "prompt": "Mayor Hale: request expired",
+    "act": "townreq",
+    "panel": "hale",
+    "btns": [
+     "hand",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "ribbons": 0,
+    "refused": "expired",
+    "board": false,
+    "after": false
+   },
+   "expI": {
+    "prompt": "Deputy Mayor Ines: request expired",
+    "act": "townreq",
+    "panel": "ines",
+    "btns": [
+     "hand",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "ribbons": 0,
+    "refused": "expired",
+    "board": false,
+    "after": false
+   },
+   "takeNew": {
+    "prompt": "Mayor Hale: town request",
+    "act": "townreq",
+    "panel": "hale",
+    "btns": [
+     "take",
+     "board",
+     "talk",
+     "close"
+    ],
+    "click": true,
+    "kind": "kite",
+    "refused": null
+   }
+  }
+ },
+ "days": [
+  "2026-11-22",
+  "2026-11-23",
+  "2026-11-24",
+  "2026-11-25",
+  "2026-11-26"
+ ],
+ "moduleErrors": {},
+ "stats": {
+  "taken": 0,
+  "done": 0,
+  "handed": 0,
+  "refused": 0,
+  "expired": 0
+ },
+ "pass": true
+}

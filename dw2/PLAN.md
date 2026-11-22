@@ -176,7 +176,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
   keep → book, carry → tie → knot on the rack, all kept after a reload; a fight mid-draw keeps the paid stick; audit clean; zero errors;
   fills/frame and frame time within 15% of v2.19 at the default view and at the shrine; real-time video.
 
-### Step 18 — The mayors' town requests  — STATUS: NOT STARTED (Step 17 PASSED: next)
+### Step 18 — The mayors' town requests  — STATUS: PASSED (v2.21, Nov 22: Mayor Hale + Deputy Mayor Ines each post one request a day (date hash, never the same kind): perfect dish to a named person, grown crop to a named person, species at a water, swim course under a time, baker parcel on time, kite above a height; INTERACT at the mayor -> TAKE IT, chip tracks it, HAND IN -> civic ribbon on a per-viewer TOWN FRIEND board (room prop on both halls' back walls + panel view), no coins. mayor.py x2 seeds all PASS: all 6 kinds done through the real activity paths and handed in, before-taking / wrong species / rushed dish / slow swim don't count, not_done / wrong / handed / active / expired / area refused, board + held request survive reload, no credits, audit clean, 0 errors; regressions courier/shop/cook/swim PASS; fills +0.0% default / +0.5% Town Hall, ms median +8–9%. Report: `dw2/reports/step18_2.21.md`)
 - Mayor Hale (Town Hall) and Deputy Mayor Ines (Northfield Hall) each post a small daily request built on activities that already exist
   (e.g. bring a perfect dish to someone named, catch a fish species from a given water, give a harvested crop, swim the course under a
   time, deliver for the baker on time, fly the kite above a height). INTERACT the mayor to take it, the chip tracks it, hand in at the
@@ -184,7 +184,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test completes every request type through the real activity paths, wrong/expired requests are refused, the
   board survives reload; zero errors; perf within 15% of the previous PASSED build; real-time video.
 
-### Step 19 — Darts at the inn  — STATUS: NOT STARTED (needs Step 18 PASSED)
+### Step 19 — Darts at the inn  — STATUS: NOT STARTED (Step 18 PASSED: next)
 - A dartboard on the inn's side wall: INTERACT opens a touch throw panel (the board seen face-on, an aiming reticle that drifts with a
   steadiness wobble, tap to throw; Red keeps his pose). Games: Round the Clock solo and 301 against a regular; per-viewer records.
   Free (house board). Closing, a fight or leaving the inn ends it cleanly.
@@ -265,3 +265,4 @@ Rules for choosing them:
 - 2026-11-22T19:58Z STARTED step 17 (Claude, scheduled run; writing new batch Steps 17–20)
 - 2026-11-22T20:28Z FINISHED step 17: PASSED — v2.20 omikuji at Shrine Hill (10 DC 'hire' draw, shake/stick/slip panel, 32-slip book, tie bad slips on the musubi rack; omikuji.py 2 seeds all checks, audit clean; perf in budget); new batch Steps 17–20 written
 - 2026-11-22T20:59Z STARTED step 18 (Claude, scheduled run)
+- 2026-11-22T21:27Z FINISHED step 18: PASSED — v2.21 mayors' town requests (Hale + Ines, 6 request kinds on existing activities, TOWN FRIEND ribbon board, expiry/wrong-hall refusals; mayor.py 2 seeds all checks; perf in budget)

@@ -1,0 +1,599 @@
+{
+ "file": "Dojo_World_v2.21.html",
+ "seed": 7,
+ "checks": {
+  "prompt": {
+   "away": null,
+   "awayNotSwim": true,
+   "at": {
+    "label": "Swim course: start",
+    "act": "swimstart"
+   },
+   "st": "count",
+   "cancelLabel": {
+    "label": "Swim course: cancel the run",
+    "act": "swimstart"
+   },
+   "after": "done",
+   "ok": true
+  },
+  "false": {
+   "st": "done",
+   "why": "false",
+   "ticks": 56,
+   "best": null,
+   "ok": true
+  },
+  "courses": {
+   "runs": [
+    {
+     "label": "Swim course: start",
+     "st0": "count",
+     "countTicks": 180,
+     "events": [
+      "start",
+      "go",
+      "buoy1",
+      "buoy2",
+      "buoy3",
+      "buoy4",
+      "buoy5",
+      "finish"
+     ],
+     "ran": 2415,
+     "reach": [
+      {
+       "n": 1,
+       "wd": 3.78,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 2,
+       "wd": 5.5,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 3,
+       "wd": 4.19,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 4,
+       "wd": 4.76,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 5,
+       "wd": 5.5,
+       "swim": true,
+       "dive": 0
+      }
+     ],
+     "go": 1349,
+     "fin": 2415,
+     "finTk": 2415,
+     "end": null,
+     "dived": false,
+     "rec": {
+      "v": 1,
+      "best": 2415,
+      "runs": 3,
+      "fins": 1,
+      "last": [
+       2415
+      ]
+     },
+     "st": "done",
+     "drawErr": null,
+     "red": [
+      42.05,
+      43.59,
+      2.45
+     ]
+    },
+    {
+     "label": "Swim course: start (best 0:40.3)",
+     "st0": "count",
+     "countTicks": 180,
+     "events": [
+      "start",
+      "go",
+      "buoy1",
+      "buoy2",
+      "buoy3",
+      "buoy4",
+      "buoy5",
+      "finish"
+     ],
+     "ran": 2392,
+     "reach": [
+      {
+       "n": 1,
+       "wd": 3.9,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 2,
+       "wd": 5.5,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 3,
+       "wd": 4.37,
+       "swim": true,
+       "dive": 3.19
+      },
+      {
+       "n": 4,
+       "wd": 4.7,
+       "swim": true,
+       "dive": 4.2
+      },
+      {
+       "n": 5,
+       "wd": 5.41,
+       "swim": true,
+       "dive": 4.91
+      }
+     ],
+     "go": 4412,
+     "fin": 2392,
+     "finTk": 2392,
+     "end": null,
+     "dived": true,
+     "rec": {
+      "v": 1,
+      "best": 2392,
+      "runs": 4,
+      "fins": 2,
+      "last": [
+       2392,
+       2415
+      ]
+     },
+     "st": "done",
+     "drawErr": null,
+     "red": [
+      42.03,
+      43.58,
+      2.44
+     ]
+    },
+    {
+     "label": "Swim course: start (best 0:39.9)",
+     "st0": "count",
+     "countTicks": 180,
+     "events": [
+      "start",
+      "go",
+      "buoy1",
+      "buoy2",
+      "buoy3",
+      "buoy4",
+      "buoy5",
+      "finish"
+     ],
+     "ran": 2415,
+     "reach": [
+      {
+       "n": 1,
+       "wd": 4.18,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 2,
+       "wd": 5.5,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 3,
+       "wd": 3.65,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 4,
+       "wd": 4.27,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 5,
+       "wd": 5.45,
+       "swim": true,
+       "dive": 0
+      }
+     ],
+     "go": 7452,
+     "fin": 2415,
+     "finTk": 2415,
+     "end": null,
+     "dived": false,
+     "rec": {
+      "v": 1,
+      "best": 2392,
+      "runs": 5,
+      "fins": 3,
+      "last": [
+       2415,
+       2392,
+       2415
+      ]
+     },
+     "st": "done",
+     "drawErr": null,
+     "red": [
+      42.28,
+      43.59,
+      2.45
+     ]
+    },
+    {
+     "label": "Swim course: start (best 0:39.9)",
+     "st0": "count",
+     "countTicks": 180,
+     "events": [
+      "start",
+      "go",
+      "buoy1",
+      "buoy2",
+      "buoy3",
+      "buoy4",
+      "buoy5",
+      "finish"
+     ],
+     "ran": 2399,
+     "reach": [
+      {
+       "n": 1,
+       "wd": 3.77,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 2,
+       "wd": 5.5,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 3,
+       "wd": 4.37,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 4,
+       "wd": 4.84,
+       "swim": true,
+       "dive": 0
+      },
+      {
+       "n": 5,
+       "wd": 5.49,
+       "swim": true,
+       "dive": 0
+      }
+     ],
+     "go": 10515,
+     "fin": 2399,
+     "finTk": 2399,
+     "end": null,
+     "dived": false,
+     "rec": {
+      "v": 1,
+      "best": 2392,
+      "runs": 6,
+      "fins": 4,
+      "last": [
+       2399,
+       2415,
+       2392,
+       2415
+      ]
+     },
+     "st": "done",
+     "drawErr": null,
+     "red": [
+      41.97,
+      43.6,
+      2.46
+     ]
+    }
+   ],
+   "times_s": [
+    40.25,
+    39.87,
+    40.25,
+    39.98
+   ],
+   "ok": true,
+   "perRun": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  "missed": {
+   "skip2": {
+    "label": "Swim course: start (best 0:39.9)",
+    "st0": "count",
+    "countTicks": 180,
+    "events": [
+     "start",
+     "go",
+     "buoy1",
+     "missed(2@3)",
+     "missed(2@finish)",
+     "buoy2",
+     "buoy3",
+     "buoy4",
+     "buoy5",
+     "finish"
+    ],
+    "ran": 4030,
+    "reach": [
+     {
+      "n": 1,
+      "wd": 3.82,
+      "swim": true,
+      "dive": 0
+     },
+     {
+      "n": 2,
+      "wd": 5.5,
+      "swim": true,
+      "dive": 0
+     },
+     {
+      "n": 3,
+      "wd": 3.52,
+      "swim": true,
+      "dive": 0
+     },
+     {
+      "n": 4,
+      "wd": 4.24,
+      "swim": true,
+      "dive": 0
+     },
+     {
+      "n": 5,
+      "wd": 5.48,
+      "swim": true,
+      "dive": 0
+     }
+    ],
+    "go": 13562,
+    "fin": 4030,
+    "finTk": 4030,
+    "end": null,
+    "dived": false,
+    "rec": {
+     "v": 1,
+     "best": 2392,
+     "runs": 7,
+     "fins": 5,
+     "last": [
+      4030,
+      2399,
+      2415,
+      2392,
+      2415
+     ]
+    },
+    "st": "done",
+    "drawErr": null,
+    "red": [
+     42.35,
+     43.59,
+     2.44
+    ]
+   },
+   "straightToGate": {
+    "label": "Swim course: start (best 0:39.9)",
+    "st0": "count",
+    "countTicks": 180,
+    "events": [
+     "start",
+     "go",
+     "missed(1@finish)",
+     "buoy1",
+     "buoy2",
+     "buoy3",
+     "buoy4",
+     "buoy5",
+     "finish"
+    ],
+    "ran": 2791,
+    "reach": [
+     {
+      "n": 1,
+      "wd": 4.9,
+      "swim": true,
+      "dive": 0
+     },
+     {
+      "n": 2,
+      "wd": 5.5,
+      "swim": true,
+      "dive": 0
+     },
+     {
+      "n": 3,
+      "wd": 4.25,
+      "swim": true,
+      "dive": 0
+     },
+     {
+      "n": 4,
+      "wd": 4.58,
+      "swim": true,
+      "dive": 0
+     },
+     {
+      "n": 5,
+      "wd": 5.4,
+      "swim": true,
+      "dive": 0
+     }
+    ],
+    "go": 18240,
+    "fin": 2791,
+    "finTk": 2791,
+    "end": null,
+    "dived": false,
+    "rec": {
+     "v": 1,
+     "best": 2392,
+     "runs": 8,
+     "fins": 6,
+     "last": [
+      2791,
+      4030,
+      2399,
+      2415,
+      2392
+     ]
+    },
+    "st": "done",
+    "drawErr": null,
+    "red": [
+     42.09,
+     43.58,
+     2.44
+    ]
+   },
+   "ok": true
+  },
+  "out": {
+   "run": {
+    "label": "Swim course: start (best 0:39.9)",
+    "st0": "count",
+    "countTicks": 180,
+    "events": [
+     "start",
+     "go",
+     "buoy1",
+     "end:out"
+    ],
+    "ran": 483,
+    "reach": [
+     {
+      "n": 1,
+      "wd": 4.01,
+      "swim": true,
+      "dive": 0
+     }
+    ],
+    "go": 21679,
+    "fin": null,
+    "finTk": null,
+    "end": "out",
+    "dived": false,
+    "rec": {
+     "v": 1,
+     "best": 2392,
+     "runs": 9,
+     "fins": 6,
+     "last": [
+      2791,
+      4030,
+      2399,
+      2415,
+      2392
+     ]
+    },
+    "st": "done",
+    "drawErr": null,
+    "red": [
+     41.92,
+     40.41,
+     0
+    ]
+   },
+   "ok": true
+  },
+  "dry": {
+   "why": "dry",
+   "ticks": 900,
+   "ok": true
+  },
+  "area": {
+   "boat": "boat",
+   "running": "run",
+   "sky": true,
+   "why": "area",
+   "skyStart": "area",
+   "back": true,
+   "props": 7,
+   "ok": true
+  },
+  "reload": {
+   "before": {
+    "v": 1,
+    "best": 2392,
+    "runs": 11,
+    "fins": 6,
+    "last": [
+     2791,
+     4030,
+     2399,
+     2415,
+     2392
+    ]
+   },
+   "after": {
+    "v": 1,
+    "best": 2392,
+    "runs": 11,
+    "fins": 6,
+    "last": [
+     2791,
+     4030,
+     2399,
+     2415,
+     2392
+    ]
+   },
+   "ok": true
+  }
+ },
+ "stats": {
+  "starts": 0,
+  "finishes": 0,
+  "ended": 0,
+  "missed": 0,
+  "falseStarts": 0
+ },
+ "moduleErrors": {},
+ "errors": [],
+ "summary": {
+  "prompt": true,
+  "false": true,
+  "courses": true,
+  "missed": true,
+  "out": true,
+  "dry": true,
+  "area": true,
+  "reload": true,
+  "times_s": [
+   40.25,
+   39.87,
+   40.25,
+   39.98
+  ],
+  "pageErrors": 0,
+  "moduleErrors": {},
+  "PASS": true
+ }
+}
