@@ -267,3 +267,4 @@ Rules for choosing them:
 - 2026-11-22T20:59Z STARTED step 18 (Claude, scheduled run)
 - 2026-11-22T21:27Z FINISHED step 18: PASSED — v2.21 mayors' town requests (Hale + Ines, 6 request kinds on existing activities, TOWN FRIEND ribbon board, expiry/wrong-hall refusals; mayor.py 2 seeds all checks; perf in budget)
 - 2026-11-22T21:59Z STARTED step 19 (Claude, scheduled run)
+- 2026-11-22T23:59Z STARTED step 19 (Claude, scheduled run; the 21:59Z run left no build or FINISHED line, so this run restarts step 19 from v2.21)
