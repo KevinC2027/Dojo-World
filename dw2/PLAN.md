@@ -163,6 +163,41 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: a shower starts and ends on schedule, wets all four beds, townsfolk under cover by line of route with no
   wall crossings and none stuck after it ends; fills/frame and frame time within 15% of Step 15 while raining (rain drawn cheaply).
 
+### Step 17 — Omikuji fortunes at Shrine Hill  — STATUS: IN PROGRESS
+- An omikuji stand beside the Shrine Hill offering box: INTERACT "Draw a fortune · 10 DC" posts a validated 'hire' debit (DC_CONFIG.hire,
+  place 'shrine', Kev's PRICES rule), the coins fly to the stand, and a touch panel opens: SHAKE the hexagonal box three times, a numbered
+  stick (1–32) slides out, the slip unrolls with its grade (Great blessing … Great curse) and short lines for wish / travel / fishing /
+  garden / weather. KEEP puts it in a per-viewer fortune book (32 slips to collect); a bad slip can be carried (drawn in Red's real hand)
+  to the musubi rack across the forecourt and tied there with INTERACT (knots stay on the rack, saved per viewer). Three draws a day.
+- Rules: flavour only (no hp/stat/combat/coin-earning effects); no change to Red's pose, camera, controls or combat; a paid draw is never
+  lost (closing or a fight keeps the stick for later); coliseum refuses; no seeded R() calls; ?off=omikuji.
+- Release gate: scripted test (`dw2/tools/omikuji.py`, two seeds): draws through INTERACT + the panel's real buttons; exactly one 10 DC
+  debit per draw, refused without charge when short / over the daily cap / in the coliseum; 3,200 sampled sticks match the grade table;
+  keep → book, carry → tie → knot on the rack, all kept after a reload; a fight mid-draw keeps the paid stick; audit clean; zero errors;
+  fills/frame and frame time within 15% of v2.19 at the default view and at the shrine; real-time video.
+
+### Step 18 — The mayors' town requests  — STATUS: NOT STARTED (needs Step 17 PASSED)
+- Mayor Hale (Town Hall) and Deputy Mayor Ines (Northfield Hall) each post a small daily request built on activities that already exist
+  (e.g. bring a perfect dish to someone named, catch a fish species from a given water, give a harvested crop, swim the course under a
+  time, deliver for the baker on time, fly the kite above a height). INTERACT the mayor to take it, the chip tracks it, hand in at the
+  hall. Reward: a civic ribbon on a per-viewer "Town Friend" board in the hall (no coins: new earning still needs Kev's OK).
+- Release gate: scripted test completes every request type through the real activity paths, wrong/expired requests are refused, the
+  board survives reload; zero errors; perf within 15% of the previous PASSED build; real-time video.
+
+### Step 19 — Darts at the inn  — STATUS: NOT STARTED (needs Step 18 PASSED)
+- A dartboard on the inn's side wall: INTERACT opens a touch throw panel (the board seen face-on, an aiming reticle that drifts with a
+  steadiness wobble, tap to throw; Red keeps his pose). Games: Round the Clock solo and 301 against a regular; per-viewer records.
+  Free (house board). Closing, a fight or leaving the inn ends it cleanly.
+- Release gate: scripted test: thrown darts score by the real board geometry (doubles/trebles/bull), 301 bust/finish rules correct over
+  many random games, the regular plays legal throws; zero errors; perf within 15% of the previous PASSED build; real-time video.
+
+### Step 20 — Stargazing on the Highlands overlook  — STATUS: NOT STARTED (needs Step 19 PASSED)
+- A coin-op telescope on the overlook top (10 DC 'hire' debit for a viewing, Kev's PRICES rule). At dusk/night a touch sky panel shows a
+  real star field (bright stars at their true relative positions); drag to pan, find and tap the asked-for constellation to log it
+  (a per-viewer star log of ~12 constellations). In daylight it shows the town and the Sky Tree instead. Rain clouds hide the stars.
+- Release gate: scripted test: one debit per viewing, refused when short; constellation hit-tests correct; rain/daylight handled; log
+  saved; zero errors; perf within 15% of the previous PASSED build; real-time video.
+
 ## After Step 4 — new objectives (Kev, Nov 21: "once you've met all objectives, create new ones")
 When Steps 1–4 are all PASSED, the run that finds them so writes the NEXT batch of 3–4 steps here (Step 5, 6, ...), each in the same
 format (what to build, rules, release gate, STATUS), then starts the first one in that same run. Repeat whenever a batch is all PASSED.
