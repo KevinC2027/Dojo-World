@@ -227,3 +227,4 @@ Rules for choosing them:
 - 2026-11-22T18:44Z FINISHED step 15: PASSED — v2.18 kite flying (general store 35 DC, open-ground launch, hold/release line tension with stalls, wind gusts/lulls, tree + roof snags with TUG, records; kite.py 2 seeds all checks; perf in budget)
 - 2026-11-22T18:59Z STARTED step 16 (Claude, scheduled run)
 - 2026-11-22T19:56Z FINISHED step 16: PASSED — v2.19 rain showers (wall-clock schedule, townsfolk shelter by route or umbrella and walk back, beds watered, fish bite faster, WEATHER on boards; rain.py 2 seeds all checks, 0 wall crossings; perf level while raining). Batch Steps 13–16 all PASSED: next run writes the new batch.
+- 2026-11-22T19:58Z STARTED step 17 (Claude, scheduled run; writing new batch Steps 17–20)
