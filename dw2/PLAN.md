@@ -52,6 +52,41 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test of N crossings with zero NPC–car overlaps; a short real-time video of crossings; no new errors; frame time within 10% of Step 3.
 - Test: `python3 -I dw2/tools/cross.py <build> --ticks 72000 --red x,z --seed n` (seeded, no drawing; counts crossings, overlaps, carriageway ticks, honks).
 
+### Step 5 — Fishing (non-combat activity)  — STATUS: IN PROGRESS
+- A real cast-and-reel game at rod rests on Mirror Lake pier, the Eastwater pools, the river bank and the farm pond, using the
+  existing INTERACT flow to start: hold to swing back (power meter), release to cast; nibbles vs the bite; tap to strike; hold to reel,
+  ease off when the fish runs (tension), slack too long and the hook slips. Species, length and weight depend on the water body and
+  depth; a fishing log (fisher hut rod rack). Catch-and-release: no DC, no hp, no stats. Joystick/attack/hit packs the rod away.
+- Rules: no change to Red's pose/animation, camera, controls or combat; no seeded R() calls; town only.
+- Release gate: scripted test (`dw2/tools/fish.py`, two seeds) at all four spots: 100% of casts land in water; good timing catches
+  fish, early strikes never hook, late strikes lose the bait, holding through runs snaps the line, never reeling slips the hook, the
+  joystick packs up; species differ by water body; zero page/module errors; fills/frame and frame time within 15% of v2.6 at the
+  default view and at the pier while reeling; real-time video of cast -> bite -> reel -> catch.
+
+### Step 6 — Paying with real coins in town shops  — STATUS: NOT STARTED (needs Step 5 PASSED)
+- Wire up spending (today: "free sample: spending is not set up yet", "Coins are not wired up yet"): the Northfield general store,
+  bakery and smithy counters, the farm stand honesty box and the ramen stall take real coins from Red's pouch through the existing
+  DC ledger (a new validated 'shop' debit, prices from DC_CONFIG), with the coins flying from the pouch to the counter.
+- What can be bought stays presentation/gift only (Kev's DC rule): e.g. flowers, pastries or a lantern to give to townsfolk, who react.
+  Nothing that changes fighting ability, nothing in the coliseum, no cash-out.
+- Release gate: scripted purchase test (balance, pouch coins and ledger agree; insufficient funds refused; coliseum refuses); gifts
+  given to townsfolk show a reaction; no ledger errors; fills/frame and frame time within 15% of Step 5.
+
+### Step 7 — Police response (line of sight only)  — STATUS: NOT STARTED (needs Step 6 PASSED)
+- Officers patrol the civic square and Northfield. If an officer SEES Red (wallBetween line of sight, never through walls) attack a
+  townsperson who did not provoke him, the officer calls out, then walks over; repeat offences within a short window get Red escorted
+  to the holding cell for a short timed wait (the door unlocks by itself). The police desk explains the rules.
+- No change to combat rules, Red's moves or the coliseum; fights Red is challenged into (provoked foes, the dojo ring) never count.
+- Release gate: scripted test: an assault in view triggers a response, the same assault behind a wall triggers none, provoked fights
+  trigger none; the cell timer releases Red; no stuck states; fills/frame and frame time within 15% of Step 6.
+
+### Step 8 — Bakery courier errands  — STATUS: NOT STARTED (needs Step 7 PASSED)
+- A simple job: the Northfield bakery hands Red a parcel (drawn in hand) to deliver to a named house, the inn or the town hall; a
+  waypoint marker and a timer; the recipient thanks Red at the door. Rewards: a stamp card and, only if Kev approves, a small
+  daily-capped coin tip through the ledger (a new validated 'job' source).
+- Release gate: scripted test of N deliveries to every destination (all reachable without walking through walls; doors open);
+  dropping the job, fights and the coliseum cancel cleanly; no errors; fills/frame and frame time within 15% of Step 7.
+
 ## After Step 4 — new objectives (Kev, Nov 21: "once you've met all objectives, create new ones")
 When Steps 1–4 are all PASSED, the run that finds them so writes the NEXT batch of 3–4 steps here (Step 5, 6, ...), each in the same
 format (what to build, rules, release gate, STATUS), then starts the first one in that same run. Repeat whenever a batch is all PASSED.
