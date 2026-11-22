@@ -87,6 +87,39 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test of N deliveries to every destination (all reachable without walking through walls; doors open);
   dropping the job, fights and the coliseum cancel cleanly; no errors; fills/frame and frame time within 15% of Step 7.
 
+### Step 9 — Rowing boats on Mirror Lake  — STATUS: IN PROGRESS
+- A boat jetty on the Mirror Lake pier: INTERACT "Take a boat" puts Red in a small wooden wasen moored at the pier. Red stands at the
+  stern and sculls it with a long ro oar (the Japanese standing stroke, so Red keeps his normal stance: no new pose). The joystick sets
+  the heading (camera-relative, like walking); the boat turns toward it with real inertia (builds speed stroke by stroke, glides and
+  slows when the stick is released), leaves a wake and oar swirls, and bobs on the waves. Shallows ground the boat (it scrapes and
+  stops), it never leaves the lake or passes through the pier, and it never runs into a swimmer (it stops short of anyone in the water).
+  INTERACT near the pier: "Moor the boat" puts Red back on the deck.
+- Rules: no change to Red's pose/animation, camera, controls or combat; Red can't attack from the boat; no Dojo Credits; town only;
+  no seeded R() calls; ?off=boat turns it off.
+- Release gate: scripted test (`dw2/tools/boat.py`, two seeds): board/moor from the pier always works; joystick in 8 directions moves
+  the boat in the matching world direction; 2,000+ random-steer ticks keep the boat inside the lake, out of the pier and out of the
+  shallows, never overlapping a swimmer; Red is never swimming while aboard; fills/frame and frame time within 15% of v2.10 at the
+  default view and on the lake; zero page/module errors; real-time video of boarding, rowing and mooring.
+
+### Step 10 — Allotment garden at the farm  — STATUS: NOT STARTED
+- Four allotment beds by the farm stand: buy a seed packet at the honesty box (the existing validated 'shop' debit), INTERACT a bed to
+  plant, fill the watering can at the farm pond and water; crops grow through visible stages over a few real minutes (dry beds pause),
+  then harvest into the gift bag (giftable like the shop items). Growth is saved per viewer. Never changes fighting ability.
+- Release gate: scripted test (plant -> water -> grow -> harvest at all four beds, dry beds pause, no coins without a buy, ledger
+  agrees); zero errors; fills/frame and frame time within 15% of the previous PASSED build.
+
+### Step 11 — Gomoku board at the inn  — STATUS: NOT STARTED
+- A real board game: INTERACT the board table in the inn to play five-in-a-row (9x9 or 13x13) against the innkeeper on a touch overlay
+  (tap to place; the innkeeper answers with a simple threat-aware AI); wins/losses on a per-viewer record. Simple to operate.
+- Release gate: scripted test (legal moves only, the AI blocks open fours, win/draw detection correct over many random games);
+  zero errors; perf within 15% of the previous PASSED build.
+
+### Step 12 — Mirror Lake swim course  — STATUS: NOT STARTED
+- The buoy line becomes a timed swim course: a start board on the beach, numbered buoys drawn on the water, a lap timer and best
+  times, using the existing swimming/diving physics (no new poses). Missing a buoy is shown; leaving the water ends the run.
+- Release gate: scripted swim of the course (all buoys reachable, timer and best time correct, missed buoy detected); zero errors;
+  perf within 15% of the previous PASSED build.
+
 ## After Step 4 — new objectives (Kev, Nov 21: "once you've met all objectives, create new ones")
 When Steps 1–4 are all PASSED, the run that finds them so writes the NEXT batch of 3–4 steps here (Step 5, 6, ...), each in the same
 format (what to build, rules, release gate, STATUS), then starts the first one in that same run. Repeat whenever a batch is all PASSED.
