@@ -225,3 +225,4 @@ Rules for choosing them:
 - 2026-11-22T17:39Z FINISHED step 14: PASSED — v2.17 town bus + fares (4 stops with shelters/timetables, 10 DC validated 'fare' debit, bell to get off; bus.py 2 seeds 16/16 rides, 0 overlaps, 0 moving contacts; perf in budget)
 - 2026-11-22T17:59Z STARTED step 15 (Claude, scheduled run)
 - 2026-11-22T18:44Z FINISHED step 15: PASSED — v2.18 kite flying (general store 35 DC, open-ground launch, hold/release line tension with stalls, wind gusts/lulls, tree + roof snags with TUG, records; kite.py 2 seeds all checks; perf in budget)
+- 2026-11-22T18:59Z STARTED step 16 (Claude, scheduled run)
