@@ -167,3 +167,4 @@ Rules for choosing them:
 - 2026-11-22: Kev approved coins for boats; v2.12 built live in the session from v2.11 (15 DC 'hire' debit + two boat fixes) (Claude).
 - 2026-11-22T12:59Z STARTED step 10 (Claude, scheduled run)
 - 2026-11-22T13:24Z FINISHED step 10: PASSED — v2.13 allotment garden (seeds at the honesty box, sow/fill/water/grow/harvest at 4 beds, dry beds pause, produce giftable; garden.py 2 seeds all checks, 0 coins without a buy, ledger agrees; fills +3.4%, ms level)
+- 2026-11-22T13:59Z STARTED step 11 (Claude, scheduled run)
