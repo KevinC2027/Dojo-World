@@ -80,7 +80,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: an assault in view triggers a response, the same assault behind a wall triggers none, provoked fights
   trigger none; the cell timer releases Red; no stuck states; fills/frame and frame time within 15% of Step 6.
 
-### Step 8 — Bakery courier errands  — STATUS: NOT STARTED (next)
+### Step 8 — Bakery courier errands  — STATUS: PASSED (v2.10, Nov 22: "Baker: courier job" at the bakery counter; 12 destinations (8 houses, farmhouse, inn, Northfield Hall, Town Hall); parcel drawn in Red's hand, door marker (never through walls), chip with distance and timer set from a wall-aware route; the recipient walks round their furniture to meet Red at the door (bar/desk staff hand over across it), thanks him; on-time = stamp on a 10-stamp card. courier.py x2 seeds: 24/24 deliveries walked with the joystick, 0 wall crossings, worst 58% of the time limit; drop / punch / hit taken / coliseum / mid-walk cancels clean; late = no stamp; card fills and survives reload; 0 errors; fills +0.0% to +0.5%, ms level. No coin tip (needs Kev's OK). Report: `dw2/reports/step8_2.10.md`)
 - A simple job: the Northfield bakery hands Red a parcel (drawn in hand) to deliver to a named house, the inn or the town hall; a
   waypoint marker and a timer; the recipient thanks Red at the door. Rewards: a stamp card and, only if Kev approves, a small
   daily-capped coin tip through the ledger (a new validated 'job' source).
@@ -127,3 +127,4 @@ Rules for choosing them:
 - 2026-11-22T08:58Z STARTED step 7 (Claude, scheduled run)
 - 2026-11-22T09:40Z FINISHED step 7: PASSED — v2.9 police (3 patrol officers + station; line-of-sight only: warning, then 20 s holding cell that unlocks itself; wall/shop/provoked/foe/coliseum none; 80 random incidents 0 stuck; perf level) + fixed frozen route walkers
 - 2026-11-22T09:59Z STARTED step 8 (Claude, scheduled run)
+- 2026-11-22T11:12Z FINISHED step 8: PASSED — v2.10 bakery courier (12 destinations, parcel in hand, wall-aware route + timer, door marker never through walls, recipient meets Red at the door, stamp card; 48/48 deliveries walked, 0 wall crossings; drop/fight/coliseum cancels clean; perf level; no coin tip pending Kev). Batch Steps 5–8 all PASSED: next run writes the new batch.
