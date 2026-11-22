@@ -85,3 +85,4 @@ Rules for choosing them:
 - 2026-11-21: Kev asked for the bushes to be revamped; v2.5 built live in the session from v2.4 (Claude). Step 4 starts from v2.5.
 - 2026-11-21T20:58Z STARTED step 4 (Claude, scheduled run)
 - 2026-11-21T22:08Z FINISHED step 4: PASSED — v2.6 (0 pedestrian–kart overlaps in 269 crossings / 864k ticks vs 314 in v2.5; jaywalking −99.6%; honks −98%; perf level). Steps 1–4 all PASSED: next run writes the new batch (Step 5+).
+- 2026-11-22T00:58Z STARTED step 5 (Claude, scheduled run; writing new batch Steps 5–8)
