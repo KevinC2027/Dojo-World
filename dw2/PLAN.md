@@ -313,3 +313,4 @@ Rules for choosing them:
 - 2026-11-23T01:33Z FINISHED step 20: PASSED — v2.23 overlook telescope (10 DC 'hire', real local star sky with 12 constellations to find and log, daytime town view, rain clouds pause; scope.py 2 seeds all checks; perf in budget). Batch Steps 17–20 all PASSED: next run writes the new batch.
 - 2026-11-23T01:59Z STARTED step 21 (Claude, scheduled run; writing new batch Steps 21–24)
 - 2026-11-23T02:25Z FINISHED step 21: PASSED — v2.24 bug catching with a net (10 real species by habitat and local hour, sight-only noticing, catch-and-release bug book; bugs.py 2 seeds all checks; perf in budget); new batch Steps 21–24 written
+- 2026-11-23T02:58Z STARTED step 22 (Claude, scheduled run)
