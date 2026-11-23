@@ -214,7 +214,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
   running does in sight, never through a wall; swing reach matches the hoop geometry; book survives reload; audit clean; zero errors;
   fills/frame and frame time within 15% of v2.23 at the default view and with the net out among insects; real-time video.
 
-### Step 22 — Mini golf in the civic park  — STATUS: NOT STARTED
+### Step 22 — Mini golf in the civic park  — STATUS: PASSED (v2.25, Nov 23: six-hole Japanese-garden course on the lawn south of the civic square (stone lantern, cross-slope, dogleg, drum bridge over a stream, stone gate, torii bowl; par 14); starter's board 10 DC 'hire' (place 'minigolf'); joystick walk to the ball, INTERACT -> top-down drag-back putt panel, putter from Red's real hand; felt friction, slopes, rail restitution, lip-out speed, water penalty, 6-stroke pick-up; scorecard + per-viewer best/last 5; paid round survives close/fight/walk-off/coliseum/reload, QUIT ROUND. minigolf.py x2 seeds all PASS: 6/6 holes holed by real mouse drags, every putt re-computed in Python with identical rest points, rail law exact, stopping distance = v²/2μg within 3 mm, lip/drop at the cup speeds, one debit per round, short/coliseum refused, best saved, audit clean, 0 errors; regressions omikuji/scope/boat/shop/bugs PASS; fills −0.0% default / −17% on the course (the 7 riverbank cherries are drawn at 30% only while Red is on the course), ms level. Report: `dw2/reports/step22_2.25.md`)
 - A 6-hole putting course on the lawns of the civic square block (felt greens, wooden rails, a slope, a bridge,
   a Japanese garden theme); 10 DC round ('hire', place 'minigolf'). A touch putt panel: drag back from the ball to aim and set power,
   release to putt (Red keeps his pose; the putter is drawn from his hand). Real ball physics: rolling friction, rail bounces, slopes,
@@ -314,3 +314,4 @@ Rules for choosing them:
 - 2026-11-23T01:59Z STARTED step 21 (Claude, scheduled run; writing new batch Steps 21–24)
 - 2026-11-23T02:25Z FINISHED step 21: PASSED — v2.24 bug catching with a net (10 real species by habitat and local hour, sight-only noticing, catch-and-release bug book; bugs.py 2 seeds all checks; perf in budget); new batch Steps 21–24 written
 - 2026-11-23T02:58Z STARTED step 22 (Claude, scheduled run)
+- 2026-11-23T03:29Z FINISHED step 22: PASSED — v2.25 mini golf in the civic park (6 Japanese-garden holes, par 14, 10 DC 'hire' round, drag-back putt panel, real ball physics re-computed in Python with identical results; minigolf.py 2 seeds all checks; perf in budget)
