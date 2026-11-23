@@ -317,3 +317,4 @@ Rules for choosing them:
 - 2026-11-23T03:29Z FINISHED step 22: PASSED — v2.25 mini golf in the civic park (6 Japanese-garden holes, par 14, 10 DC 'hire' round, drag-back putt panel, real ball physics re-computed in Python with identical results; minigolf.py 2 seeds all checks; perf in budget)
 - 2026-11-23T04:00Z STARTED step 23 (Claude, scheduled run)
 - 2026-11-23T04:45Z FINISHED step 23: PASSED — v2.26 shodo calligraphy at the dojo (desk + drying rack, 10 kanji traced on a touch panel with speed-sensitive ink, stroke order/direction/shape grading re-computed in Python, good sheets hang as a scroll in House No. 41; shodo.py 2 seeds all checks; perf in budget)
+- 2026-11-23T04:59Z STARTED step 24 (Claude, scheduled run)
