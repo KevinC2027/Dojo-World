@@ -198,6 +198,46 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: one debit per viewing, refused when short; constellation hit-tests correct; rain/daylight handled; log
   saved; zero errors; perf within 15% of the previous PASSED build; real-time video.
 
+### Step 21 — Bug catching with a net (mushi-tori)  — STATUS: IN PROGRESS (started 2026-11-23)
+- An insect net (bamboo pole, white mesh hoop) sold at the Northfield general store (~25 DC 'shop' debit, kept, bought once, never a
+  gift; Kev's PRICES rule). A small NET button takes it out outdoors in town; SWING sweeps the hoop in front of Red (Red keeps his pose,
+  the net is drawn from his real hand). Ten real Japanese insects live in real habitats and keep real hours (the device's local clock,
+  the same sun as the telescope): cabbage whites and swallowtails at flowers, red dragonflies over the grass, shiokara dragonflies at the
+  water's edge, cicadas on tree trunks by day, rhinoceros and stag beetles on oak trunks at night, fireflies over the water after dark,
+  locusts in the grass by day, bell crickets in the grass at dusk and night. Rain sends them all into hiding.
+- They notice Red only by sight (no wallBetween, never through walls): walk up at full speed and they fly/hop off; creep with a light
+  stick and you get close. A miss nearby startles them; beetles drop and play dead. Catch-and-release with a per-viewer BUG BOOK
+  (species, count, biggest). No coins earned, no hp/stat/combat effect; packed by any fight, water, boat, bus, indoors, coliseum;
+  no seeded R() calls; ?off=bugs.
+- Release gate: scripted test (`dw2/tools/bugs.py`, two seeds): one 25 DC debit, owned after reload, short pouch refused; every species
+  caught through the real joystick + SWING at its habitat and hour, and absent outside its hours and during rain; creeping never startles,
+  running does in sight, never through a wall; swing reach matches the hoop geometry; book survives reload; audit clean; zero errors;
+  fills/frame and frame time within 15% of v2.23 at the default view and with the net out among insects; real-time video.
+
+### Step 22 — Mini golf in the civic park  — STATUS: NOT STARTED
+- A 6-hole putting course on the lawns of the civic square block (felt greens, wooden rails, a slope, a bridge,
+  a Japanese garden theme); 10 DC round ('hire', place 'minigolf'). A touch putt panel: drag back from the ball to aim and set power,
+  release to putt (Red keeps his pose; the putter is drawn from his hand). Real ball physics: rolling friction, rail bounces, slopes,
+  cup capture only below a lip-out speed. Scorecard with par, per-viewer best round. Fights/leaving end the round (paid round kept).
+- Release gate: scripted test: every hole holed through the real panel; reflection angles and stopping distances match a Python
+  re-computation; a fast ball lips out, a slow one drops; one debit per round, refused when short; best round saved; zero errors;
+  perf within 15% of the previous PASSED build; real-time video.
+
+### Step 23 — Shodo calligraphy at the dojo  — STATUS: NOT STARTED
+- A low writing desk in the dojo: INTERACT opens a touch panel with paper, a brush and an ink stone; trace 10 kanji (一 二 三 山 川 木
+  人 力 心 道) stroke by stroke, graded on stroke order, direction and shape (distance from the model strokes) with a brush line that
+  thickens with slower strokes. A good sheet can be hung as a scroll in Red's house (per-viewer). Free; flavour only.
+- Release gate: scripted test: correct traces pass for all 10, wrong order / reversed strokes / scribbles fail, grades monotonic in
+  error; scroll persists after reload; zero errors; perf within 15%; real-time video.
+
+### Step 24 — Photo walk with a camera  — STATUS: NOT STARTED
+- A film camera at the general store (~40 DC 'shop', kept). A PHOTO button freezes the current game view into a per-viewer album
+  (thumbnails); 12 town sights to capture (Sky Tree, the dojo, Mirror Lake pier, the shrine gate, the windmill, the castle, ...),
+  each counted only when it is on screen, large enough and not hidden behind a building (real occlusion test, no seeing through walls).
+  The game camera itself is unchanged.
+- Release gate: scripted test: each sight logged from a real viewpoint, refused when off screen / too small / behind a wall; album
+  survives reload (size-capped); one debit; zero errors; perf within 15%; real-time video.
+
 ## After Step 4 — new objectives (Kev, Nov 21: "once you've met all objectives, create new ones")
 When Steps 1–4 are all PASSED, the run that finds them so writes the NEXT batch of 3–4 steps here (Step 5, 6, ...), each in the same
 format (what to build, rules, release gate, STATUS), then starts the first one in that same run. Repeat whenever a batch is all PASSED.
