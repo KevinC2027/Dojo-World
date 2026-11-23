@@ -238,7 +238,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: each sight logged from a real viewpoint, refused when off screen / too small / behind a wall; album
   survives reload (size-capped); one debit; zero errors; perf within 15%; real-time video.
 
-### Step 25 — Taiko rhythm game at the dojo drum  — STATUS: IN PROGRESS
+### Step 25 — Taiko rhythm game at the dojo drum  — STATUS: PASSED (v2.28, Nov 23: INTERACT at the dojo taiko opens a touch panel: note lane + drum face (skin = DON, rim = KA, keys F/J D/K), 3 hand-written songs (Dojo Matsuri 96 BPM / Sakura Run 128 / Thunder Gate 150 with 16th runs), event-timestamp hits, earliest-open-note judging GOOD ±50 / OK ±110 / BAD ±160 ms, combo, clear gauge (60/65/70%), FULL COMBO, per-viewer records; synthesised Web Audio don/ka + shime beat (SOUND toggle); bachi in Red's real hands, drum glow pulses. taiko.py x2 seeds all PASS: real-mouse Matsuri 42/42 GOOD FC, all 3 songs FC on time, ±30/±80/±130/wrong-colour groups judged GOOD/OK/BAD/BAD, no input = all MISS, mash fails, 7 songs / 970 hits re-judged in Python 0 mismatches, sweep monotonic, records survive reload, STOP/hit/walk-off/coliseum uncounted, 0 ledger entries, 0 errors; regressions shodo/photo PASS; fills −0.2% default / +0.4% playing, ms −6% / +5.3%. Report: `dw2/reports/step25_2.28.md`)
 - The dojo's taiko drum (today a one-shot "DON! DON! DON!") becomes a rhythm game: INTERACT opens a touch panel with a note lane and a
   drum face; tap the centre for DON (red notes), the rim for KA (blue notes) as they reach the judgement circle. 3 songs (easy / normal /
   hard, hand-written charts with real BPMs), timing windows GOOD ±50 ms / OK ±110 ms / BAD ±160 ms, combo, score, clear gauge,
@@ -352,3 +352,4 @@ Rules for choosing them:
 - 2026-11-23T04:59Z STARTED step 24 (Claude, scheduled run)
 - 2026-11-23T05:53Z FINISHED step 24: PASSED — v2.27 photo walk (film camera 40 DC 'shop', viewfinder + SNAP into a per-viewer album, 12 sights counted only in frame, big enough and not hidden by 3D rays through building volumes; photo.py 2 seeds all checks, Python re-judge 0 mismatches; perf in budget). Batch Steps 21–24 all PASSED: next run writes the new batch.
 - 2026-11-23T05:59Z STARTED step 25 (Claude, scheduled run; writing new batch Steps 25–28)
+- 2026-11-23T06:30Z FINISHED step 25: PASSED — v2.28 taiko rhythm game at the dojo drum (3 songs, DON/KA drum face, ±50/110/160 ms judging, combo/clear/FC, records, Web Audio drum; taiko.py 2 seeds all checks, 970 hits re-judged in Python 0 mismatches; perf in budget); new batch Steps 25–28 written
