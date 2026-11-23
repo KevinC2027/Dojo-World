@@ -269,3 +269,4 @@ Rules for choosing them:
 - 2026-11-22T21:59Z STARTED step 19 (Claude, scheduled run)
 - 2026-11-22T23:59Z STARTED step 19 (Claude, scheduled run; the 21:59Z run left no build or FINISHED line, so this run restarts step 19 from v2.21)
 - 2026-11-23T00:21Z FINISHED step 19: PASSED — v2.22 darts at the inn (back-wall board + oche, tap-aim/THROW with settle-then-tire wobble, real ring geometry, round the clock + 301 double-out vs the Regular, records; darts.py 2 seeds all checks, 0 rescoring/replay mismatches; perf in budget)
+- 2026-11-23T01:01Z STARTED step 20 (Claude, scheduled run)
