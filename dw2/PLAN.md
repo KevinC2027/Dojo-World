@@ -353,3 +353,4 @@ Rules for choosing them:
 - 2026-11-23T05:53Z FINISHED step 24: PASSED — v2.27 photo walk (film camera 40 DC 'shop', viewfinder + SNAP into a per-viewer album, 12 sights counted only in frame, big enough and not hidden by 3D rays through building volumes; photo.py 2 seeds all checks, Python re-judge 0 mismatches; perf in budget). Batch Steps 21–24 all PASSED: next run writes the new batch.
 - 2026-11-23T05:59Z STARTED step 25 (Claude, scheduled run; writing new batch Steps 25–28)
 - 2026-11-23T06:30Z FINISHED step 25: PASSED — v2.28 taiko rhythm game at the dojo drum (3 songs, DON/KA drum face, ±50/110/160 ms judging, combo/clear/FC, records, Web Audio drum; taiko.py 2 seeds all checks, 970 hits re-judged in Python 0 mismatches; perf in budget); new batch Steps 25–28 written
+- 2026-11-23T07:00Z STARTED step 26 (Claude, scheduled run)
