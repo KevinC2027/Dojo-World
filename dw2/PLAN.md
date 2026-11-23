@@ -238,6 +238,38 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: each sight logged from a real viewpoint, refused when off screen / too small / behind a wall; album
   survives reload (size-capped); one debit; zero errors; perf within 15%; real-time video.
 
+### Step 25 — Taiko rhythm game at the dojo drum  — STATUS: IN PROGRESS
+- The dojo's taiko drum (today a one-shot "DON! DON! DON!") becomes a rhythm game: INTERACT opens a touch panel with a note lane and a
+  drum face; tap the centre for DON (red notes), the rim for KA (blue notes) as they reach the judgement circle. 3 songs (easy / normal /
+  hard, hand-written charts with real BPMs), timing windows GOOD ±50 ms / OK ±110 ms / BAD ±160 ms, combo, score, clear gauge,
+  per-viewer best + full combo. Synthesised drum sounds (WebAudio, SOUND toggle). Bachi drawn from Red's real hands; the drum skin pulses.
+  Free; flavour only; towns only; a hit taken / walking off / coliseum ends the song uncounted.
+- Release gate: scripted test plays songs by real pointer events on the drum: on-time play clears all 3 with full combo; late/early
+  offsets grade monotonically (GOOD -> OK -> miss); wrong colour = BAD; no input fails; every judged song re-judged in Python from the
+  logged hit times with 0 mismatches; records survive reload; zero errors; perf within 15%; real-time video.
+
+### Step 26 — Goldfish scooping (kingyo-sukui) at Shrine Hill  — STATUS: NOT STARTED
+- A festival stall by the shrine forecourt: 10 DC 'hire' (DC_CONFIG) = 3 paper poi. Goldfish swim with simple schooling and flee a poi
+  they can see coming; drag the poi under a fish and lift. The paper weakens with time in the water and tears under a heavy or
+  thrashing fish. Up to 2 caught fish go home to a bowl in House No. 41 (per viewer, drawn there); the rest are released.
+- Release gate: scripted test: careful scoops catch, slow/soaked poi tear, heavy fish tear a wet poi, one debit per game, short pouch /
+  coliseum refused with no charge, bowl survives reload and is drawn in the house; zero errors; perf within 15%; real-time video.
+
+### Step 27 — A shift at the ramen stall (job, stamps not coins)  — STATUS: NOT STARTED
+- INTERACT at the ramen stall starts a 3-minute shift: townsfolk who can see the open stall walk up by route (never through walls) and
+  order; Red builds each bowl on a touch panel (noodles timed in the boiler, broth, 1–3 toppings) and serves it. Correct and quick
+  = happy customer; wrong or slow = they leave. Good shifts earn stamps on a 10-stamp card (no coin pay: new earning needs Kev's OK).
+- Release gate: scripted test: correct bowls served on time = happy, wrong toppings / overcooked / timeout = unhappy, customers route
+  with 0 wall crossings and leave cleanly, stamp card persists; zero errors; perf within 15%; real-time video.
+
+### Step 28 — Summer fireworks over Mirror Lake + sparklers  — STATUS: NOT STARTED
+- A wall-clock evening show (local time, ~3 min, a few times an evening; ?hanabi=1 to force): shells launch from a barge, burst as
+  real shapes (peony, chrysanthemum, willow, ring) with delayed booms by distance; townsfolk walk by route to the lake shore to watch
+  and back after. Senko-hanabi sparklers at the general store (~10 DC 'shop', giftable): hold one still (HOLD button) to keep the bead
+  alive through its four stages; moving or fights drop it.
+- Release gate: scripted test: show starts/ends on schedule, watchers route with 0 wall crossings and return, bursts drawn only in the
+  night sky, sparkler stages run and drop on movement, one debit per sparkler; zero errors; perf within 15% (also mid-show); video.
+
 ## After Step 4 — new objectives (Kev, Nov 21: "once you've met all objectives, create new ones")
 When Steps 1–4 are all PASSED, the run that finds them so writes the NEXT batch of 3–4 steps here (Step 5, 6, ...), each in the same
 format (what to build, rules, release gate, STATUS), then starts the first one in that same run. Repeat whenever a batch is all PASSED.
