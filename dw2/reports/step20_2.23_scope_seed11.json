@@ -1,0 +1,309 @@
+{
+ "file": "Dojo_World_v2.23.html",
+ "seed": 11,
+ "checks": {
+  "climb": {
+   "f1": {
+    "lv": "rock1",
+    "y": 1.7
+   },
+   "f2": {
+    "lv": "rock2",
+    "y": 3.4
+   },
+   "f3": {
+    "lv": "rock3",
+    "y": 5.1
+   },
+   "spot": {
+    "d": 0.15,
+    "ticks": 36
+   },
+   "lv": "rock3",
+   "y": 5.1,
+   "prompt": "Look at the stars \u00b7 10 DC",
+   "solids": 0,
+   "ok": true
+  },
+  "short": {
+   "avail": 0,
+   "label": "Look at the stars \u00b7 10 DC",
+   "code": "insufficient",
+   "after": 0,
+   "entries": 0,
+   "panel": false,
+   "view": null,
+   "ok": true
+  },
+  "night": {
+   "price": 10,
+   "place": "overlook",
+   "prompt": "Look at the stars \u00b7 10 DC",
+   "paid": 10,
+   "debits": [
+    {
+     "amt": 10,
+     "place": "overlook"
+    }
+   ],
+   "panel": true,
+   "phase": "night",
+   "vis": [
+    "ori",
+    "uma",
+    "umi",
+    "cas",
+    "tau",
+    "gem",
+    "cma"
+   ],
+   "target": "ori",
+   "targetVisible": true,
+   "other": {
+    "id": "uma",
+    "tap": {
+     "id": "uma",
+     "logged": false
+    }
+   },
+   "otherNotLogged": true,
+   "emptyAt": [
+    60,
+    140
+   ],
+   "emptyTap": {
+    "id": null
+   },
+   "targetTap": {
+    "id": "ori",
+    "logged": true,
+    "first": true
+   },
+   "found": {
+    "ori": {
+     "first": 1795397411986,
+     "n": 1
+    }
+   },
+   "next": "gem",
+   "nextVisible": true,
+   "stars": 165,
+   "starsDrawn": 165,
+   "ok": true
+  },
+  "hits": {
+   "times": [
+    "ori,uma,umi,cas,leo,tau,gem,cma",
+    "uma,umi,leo,gem",
+    "uma,umi,cas,cyg,lyr,aql,sco",
+    "umi,cas,cyg,lyr,aql,tau"
+   ],
+   "cons": 25,
+   "mid": 25,
+   "starsOk": 179,
+   "starsAll": 179,
+   "far": 18,
+   "farOk": 18,
+   "ok": true
+  },
+  "astro": {
+   "maxErr": 0.0,
+   "polarisAlt": [
+    36.19,
+    35.17,
+    35.19,
+    36.23,
+    36.26,
+    35.51
+   ],
+   "noon": [
+    {
+     "date": "3/20",
+     "alt": 54.34,
+     "expect": 54.34,
+     "dec": 0.04
+    },
+    {
+     "date": "6/21",
+     "alt": 77.73,
+     "expect": 77.73,
+     "dec": 23.43
+    },
+    {
+     "date": "9/22",
+     "alt": 54.42,
+     "expect": 54.42,
+     "dec": 0.12
+    },
+    {
+     "date": "12/21",
+     "alt": 30.86,
+     "expect": 30.86,
+     "dec": -23.44
+    }
+   ],
+   "phases": {
+    "samples": 144,
+    "consistent": true,
+    "kinds": [
+     "day",
+     "dusk",
+     "night"
+    ]
+   },
+   "separations": [
+    {
+     "pair": "Vega-Altair",
+     "cat": 34.19,
+     "published": 34.2
+    },
+    {
+     "pair": "Vega-Deneb",
+     "cat": 23.84,
+     "published": 23.9
+    },
+    {
+     "pair": "Deneb-Altair",
+     "cat": 38.01,
+     "published": 38.0
+    },
+    {
+     "pair": "Betelgeuse-Rigel",
+     "cat": 18.6,
+     "published": 18.6
+    },
+    {
+     "pair": "Castor-Pollux",
+     "cat": 4.5,
+     "published": 4.5
+    },
+    {
+     "pair": "Dubhe-Merak",
+     "cat": 5.37,
+     "published": 5.4
+    },
+    {
+     "pair": "Merak-Dubhe",
+     "cat": 5.37,
+     "published": 5.4
+    },
+    {
+     "pair": "Sirius-Betelgeuse",
+     "cat": 27.1,
+     "published": 27.1
+    },
+    {
+     "pair": "Mintaka-Alnitak",
+     "cat": 2.74,
+     "published": 2.7
+    }
+   ],
+   "solstice_dec": [
+    0.04,
+    23.43,
+    0.12,
+    -23.44
+   ],
+   "ok": true,
+   "nCatalogue": 122
+  },
+  "log12": {
+   "nights": 6,
+   "views": 6,
+   "found": [
+    "aql",
+    "cas",
+    "cma",
+    "cyg",
+    "gem",
+    "leo",
+    "lyr",
+    "ori",
+    "sco",
+    "tau",
+    "uma",
+    "umi"
+   ],
+   "n": 12,
+   "charged": 6,
+   "allDated": true,
+   "logShown": true,
+   "logBack": true,
+   "ok": true
+  },
+  "day": {
+   "prompt": "Telescope \u00b7 10 DC (daytime: the town)",
+   "charged": 1,
+   "phase": "day",
+   "panel": true,
+   "hint": false,
+   "treeTap": {
+    "id": "skytree"
+   },
+   "say": "The Sky Tree, 106 m away to the south.",
+   "anyHit": null,
+   "foundSame": true,
+   "ok": true
+  },
+  "rain": {
+   "clouds": 1,
+   "prompt": "Telescope: clouds hide the stars",
+   "code": "clouds",
+   "noCharge": true,
+   "paidClear": 1,
+   "paused": true,
+   "starsUnderCloud": 0,
+   "tapCloud": {
+    "id": null
+   },
+   "left": [
+    120000,
+    110000,
+    110000,
+    100000
+   ],
+   "dayInRain": 1,
+   "dayPanel": true,
+   "ok": true
+  },
+  "clock": {
+   "first": 1,
+   "closedLeft": 90000,
+   "prompt": "Telescope: keep looking (paid, 1:30 left)",
+   "resumeNoCharge": true,
+   "fightClosed": true,
+   "fightLeft": 90000,
+   "resume2": true,
+   "walkOff": true,
+   "almost": 1,
+   "shut": true,
+   "say": "Click. The shutter closes.",
+   "second": 2,
+   "ok": true
+  },
+  "sky": {
+   "prompt": null,
+   "code": "area",
+   "noCharge": true,
+   "ok": true
+  },
+  "reload": {
+   "found": 12,
+   "left": 78000,
+   "ok": true
+  },
+  "audit": {
+   "audit": true,
+   "issues": [],
+   "debits": 14,
+   "all10": true,
+   "mods": {},
+   "ok": true
+  },
+  "errors": {
+   "page": [],
+   "ok": true
+  }
+ },
+ "pass": true
+}
