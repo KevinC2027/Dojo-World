@@ -198,7 +198,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: one debit per viewing, refused when short; constellation hit-tests correct; rain/daylight handled; log
   saved; zero errors; perf within 15% of the previous PASSED build; real-time video.
 
-### Step 21 — Bug catching with a net (mushi-tori)  — STATUS: IN PROGRESS (started 2026-11-23)
+### Step 21 — Bug catching with a net (mushi-tori)  — STATUS: PASSED (v2.24, Nov 23: tamo net at the general store (25 DC 'shop' debit, kept); NET / SWING / BUG BOOK / PUT AWAY buttons, net drawn from Red's real hand; 295 habitat spots from the world (flowers, grass, every shoreline, non-pine trunks, oaks), 10 real species by habitat and the device's local hour (telescope's sun), rain hides them; sight-only noticing (creep < 1.4 m/s, never through walls), flee/hop/drop-and-play-dead; catch-and-release BUG BOOK. bugs.py x2 seeds all PASS: all 10 caught by joystick creep + SWING with 0 startles, 0 table violations, rain 34 -> 0 -> 34, run startles / creep doesn't / wall blocks, 144 reach targets 0 mismatches vs Python, audit clean, 0 errors; regressions shop/kite/garden PASS; fills −0.1% default / +0.6% meadow with the net out, ms −6% / −7%. Report: `dw2/reports/step21_2.24.md`)
 - An insect net (bamboo pole, white mesh hoop) sold at the Northfield general store (~25 DC 'shop' debit, kept, bought once, never a
   gift; Kev's PRICES rule). A small NET button takes it out outdoors in town; SWING sweeps the hoop in front of Red (Red keeps his pose,
   the net is drawn from his real hand). Ten real Japanese insects live in real habitats and keep real hours (the device's local clock,
@@ -312,3 +312,4 @@ Rules for choosing them:
 - 2026-11-23T01:01Z STARTED step 20 (Claude, scheduled run)
 - 2026-11-23T01:33Z FINISHED step 20: PASSED — v2.23 overlook telescope (10 DC 'hire', real local star sky with 12 constellations to find and log, daytime town view, rain clouds pause; scope.py 2 seeds all checks; perf in budget). Batch Steps 17–20 all PASSED: next run writes the new batch.
 - 2026-11-23T01:59Z STARTED step 21 (Claude, scheduled run; writing new batch Steps 21–24)
+- 2026-11-23T02:25Z FINISHED step 21: PASSED — v2.24 bug catching with a net (10 real species by habitat and local hour, sight-only noticing, catch-and-release bug book; bugs.py 2 seeds all checks; perf in budget); new batch Steps 21–24 written

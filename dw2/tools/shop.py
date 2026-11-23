@@ -5,7 +5,8 @@ and the BUY / GIVE buttons are clicked in the DOM like a player would. A test cl
 the per-minute limit does not interfere, except in the rate-limit check. Checks:
   buy        every item at every counter: balance, ledger entry (src 'shop', price from DC_CONFIG), pouch coins (+ any still flying in)
              and the coins flown to the counter all agree
-  (v2.18: the rate-limit check buys daikon seed packets, the cheapest item, so 8 still fit in the 500 DC start after the 35 DC kite)
+  (v2.18: the rate-limit check buys daikon seed packets, the cheapest item; v2.24: it runs last, on a fresh 500 DC ledger, since the
+   every-item loop now spends 454 DC with the 25 DC insect net)
   refuse     not enough DC (balance and ledger unchanged), wrong counter, unknown item, rate limit, coliseum (eco + HIT_SHOP + panel)
   give       gifts to townsfolk in view: prompt, panel, reaction (they stop and turn to Red), bag shrinks; behind a wall: no prompt, refused
   reload     the bag and balance are rebuilt from the ledger after a page reload
@@ -46,13 +47,11 @@ async def main():
               o.after=__state(); const h=HIT_DC.eco.history(1)[0]; o.entry={src:h.src,amt:h.amt,item:h.meta&&h.meta.item,shop:h.meta&&h.meta.shop,t:h.t};
               __T(90); o.landed=HIT_DC.coins.filter(k=>k.to!=='red').length===0; return o}''', it)
             r['ok'] = (r['panel'] == 'shop:' + it['shop'] and r['btn'] and r['after']['avail'] == r['before']['avail'] - it['price'] and r['after']['pouchOk']
-                       and r['entry'] == {'src': 'shop', 'amt': it['price'], 'item': it['id'], 'shop': it['shop'], 't': 'd'} and r['flown'] == it['price'] and r['after']['bag'] == r['before']['bag'] + (0 if it.get('kind') in ('seed', 'kite') else 1)   # v2.13: seed packets are sown, not gifts; v2.18: the kite is kept, not a gift
+                       and r['entry'] == {'src': 'shop', 'amt': it['price'], 'item': it['id'], 'shop': it['shop'], 't': 'd'} and r['flown'] == it['price'] and r['after']['bag'] == r['before']['bag'] + (0 if it.get('kind') in ('seed', 'kite', 'net') else 1)   # v2.13: seed packets are sown, not gifts; v2.18: the kite is kept, not a gift; v2.24: so is the net
                        and r['after']['audit']['ok'])
             out['buys'].append(r)
         # ---------- refusals ----------
         R = out['refusals']
-        R['rateLimit'] = await pg.evaluate('''async ()=>{window.__dt+=61000; const codes=[]; for(let i=0;i<9;i++){const r=await HIT_DC.eco.buy('stand','seed_daikon','t-rl'+i,'town');codes.push(r.ok?'ok':r.code)}
-            const okN=codes.filter(c=>c==='ok').length; return{codes,ok:okN===8&&codes[8]==='shop_rate'}}''')
         R['insufficient'] = await pg.evaluate('''async ()=>{const o={};window.__dt+=61000; const c=__counter('bakery'); __at(c[0],c[1]);
             while(HIT_DC.eco.summary().available>=90){window.__dt+=61000; const r=await HIT_SHOP.buy('cake','bakery'); if(!r.ok)break}
             window.__dt+=61000; HIT_SHOP.open('bakery',c[0],c[1]); o.before=__state(); const b=document.querySelector('#shop-box button[data-item="cake"]'); o.btnDisabled=!!b&&b.disabled;
@@ -94,6 +93,11 @@ async def main():
         out['reload'] = {'bagBefore': len(before['bag']), 'bagAfter': len(after['bag']), 'balBefore': before['st']['bal'], 'balAfter': after['st']['bal'], 'audit': after['st']['audit'],
                          'ok': before['bag'] == after['bag'] and before['st']['bal'] == after['st']['bal'] and after['st']['audit']['ok']}
         out['final'] = after['st']
+        # v2.24: the every-item loop now spends 454 of the 500 DC start, so the rate-limit check runs last on a fresh ledger (storage cleared, reload)
+        await pg.evaluate("()=>{try{localStorage.clear()}catch(e){}}"); await pg.reload(); await pg.wait_for_function('window.HIT_DC&&HIT_DC.eco&&HIT_DC.eco.summary().count>0&&window.HIT_SHOP', timeout=20000)
+        await pg.wait_for_timeout(1500); await pg.evaluate("requestAnimationFrame=()=>0"); await pg.evaluate(HELP)
+        out['refusals']['rateLimit'] = await pg.evaluate('''async ()=>{window.__dt+=61000; const codes=[]; for(let i=0;i<9;i++){const r=await HIT_DC.eco.buy('stand','seed_daikon','t-rl'+i,'town');codes.push(r.ok?'ok':r.code)}
+            const okN=codes.filter(c=>c==='ok').length; return{codes,ok:okN===8&&codes[8]==='shop_rate'}}''')
         out['moduleErrors'] = await pg.evaluate("()=>{const m={};for(const k of Object.keys(window))if(/^HIT_/.test(k)&&window[k]&&typeof window[k]==='object'&&window[k].error)m[k]=String(window[k].error).slice(0,200);return m}")
         await b.close()
     out['summary'] = {'buysOk': sum(1 for x in out['buys'] if x['ok']), 'buys': len(out['buys']), 'refusalsOk': {k: v['ok'] for k, v in out['refusals'].items()},
