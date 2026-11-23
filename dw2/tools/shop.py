@@ -47,7 +47,7 @@ async def main():
               o.after=__state(); const h=HIT_DC.eco.history(1)[0]; o.entry={src:h.src,amt:h.amt,item:h.meta&&h.meta.item,shop:h.meta&&h.meta.shop,t:h.t};
               __T(90); o.landed=HIT_DC.coins.filter(k=>k.to!=='red').length===0; return o}''', it)
             r['ok'] = (r['panel'] == 'shop:' + it['shop'] and r['btn'] and r['after']['avail'] == r['before']['avail'] - it['price'] and r['after']['pouchOk']
-                       and r['entry'] == {'src': 'shop', 'amt': it['price'], 'item': it['id'], 'shop': it['shop'], 't': 'd'} and r['flown'] == it['price'] and r['after']['bag'] == r['before']['bag'] + (0 if it.get('kind') in ('seed', 'kite', 'net') else 1)   # v2.13: seed packets are sown, not gifts; v2.18: the kite is kept, not a gift; v2.24: so is the net
+                       and r['entry'] == {'src': 'shop', 'amt': it['price'], 'item': it['id'], 'shop': it['shop'], 't': 'd'} and r['flown'] == it['price'] and r['after']['bag'] == r['before']['bag'] + (0 if it.get('kind') in ('seed', 'kite', 'net', 'camera') else 1)   # v2.13: seed packets are sown, not gifts; v2.18: the kite is kept, not a gift; v2.24: so is the net; v2.27: and the camera
                        and r['after']['audit']['ok'])
             out['buys'].append(r)
         # ---------- refusals ----------

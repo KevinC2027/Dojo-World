@@ -1,0 +1,793 @@
+{
+ "file": "Dojo_World_v2.27.html",
+ "seed": 7,
+ "checks": {
+  "nocam": {
+   "why": "none",
+   "st": "off",
+   "ok": true
+  },
+  "short": {
+   "avail": 20,
+   "code": "insufficient",
+   "after": 20,
+   "entries": 0,
+   "owned": false,
+   "ok": true
+  },
+  "buy": {
+   "price": 40,
+   "b0": 500,
+   "btn0": "40 DC",
+   "b1": 460,
+   "debits": [
+    {
+     "amt": 40,
+     "shop": "general"
+    }
+   ],
+   "flown": 40,
+   "btn1": "OWNED",
+   "btn1dis": true,
+   "second": "owned",
+   "b2": 460,
+   "bag": [],
+   "audit": {
+    "ok": true,
+    "issues": [],
+    "balance": 460,
+    "entries": 2
+   },
+   "owned": true,
+   "ok": true,
+   "ownedAfterReload": true
+  },
+  "sights": {
+   "per": {
+    "skytree": {
+     "at": [
+      68,
+      -0.25
+     ],
+     "view": {
+      "x": 68,
+      "z": 0,
+      "j": {
+       "v": "ok",
+       "inFrac": 0.889,
+       "share": 1.5,
+       "visFrac": 1,
+       "dRed": 10
+      }
+     },
+     "walk": {
+      "d": 0.247,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "skytree"
+     ],
+     "count": [
+      0,
+      1
+     ],
+     "photos": [
+      0,
+      1
+     ],
+     "bytes": 12331,
+     "lum": {
+      "mean": 91,
+      "sd": 36.4
+     },
+     "place": "Dojo World",
+     "msg": "Snap! NEW: The Sky Tree  (1/12 sights)",
+     "ok": true
+    },
+    "dojo": {
+     "at": [
+      0,
+      6.75
+     ],
+     "view": {
+      "x": 0,
+      "z": 7,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.658,
+       "visFrac": 1,
+       "dRed": 8
+      }
+     },
+     "walk": {
+      "d": 0.247,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "dojo"
+     ],
+     "count": [
+      1,
+      2
+     ],
+     "photos": [
+      1,
+      2
+     ],
+     "bytes": 10119,
+     "lum": {
+      "mean": 108.9,
+      "sd": 42.6
+     },
+     "place": "DOJO TOWN",
+     "msg": "Snap! NEW: The Dojo  (2/12 sights)",
+     "ok": true
+    },
+    "dojogate": {
+     "at": [
+      0,
+      -21.85
+     ],
+     "view": {
+      "x": 0,
+      "z": -21.6,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.276,
+       "visFrac": 1,
+       "dRed": 8
+      }
+     },
+     "walk": {
+      "d": 0.247,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "dojogate"
+     ],
+     "count": [
+      2,
+      3
+     ],
+     "photos": [
+      2,
+      3
+     ],
+     "bytes": 11255,
+     "lum": {
+      "mean": 101.5,
+      "sd": 40.8
+     },
+     "place": "DOJO TOWN",
+     "msg": "Snap! NEW: The Dojo torii  (3/12 sights)",
+     "ok": true
+    },
+    "shrine": {
+     "at": [
+      48,
+      6.75
+     ],
+     "view": {
+      "x": 48,
+      "z": 7,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.395,
+       "visFrac": 1,
+       "dRed": 8
+      }
+     },
+     "walk": {
+      "d": 0.247,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "shrine"
+     ],
+     "count": [
+      3,
+      4
+     ],
+     "photos": [
+      3,
+      4
+     ],
+     "bytes": 11487,
+     "lum": {
+      "mean": 104.7,
+      "sd": 42.3
+     },
+     "place": "DOJO TOWN",
+     "msg": "Snap! NEW: Shrine Hill  (4/12 sights)",
+     "ok": true
+    },
+    "pier": {
+     "at": [
+      21,
+      42.75
+     ],
+     "view": {
+      "x": 21,
+      "z": 43,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.461,
+       "visFrac": 1,
+       "dRed": 8
+      }
+     },
+     "walk": {
+      "d": 0.247,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "pier"
+     ],
+     "count": [
+      4,
+      5
+     ],
+     "photos": [
+      4,
+      5
+     ],
+     "bytes": 11191,
+     "lum": {
+      "mean": 111.2,
+      "sd": 38.4
+     },
+     "place": "MIRROR LAKE",
+     "msg": "Snap! NEW: Mirror Lake pier  (5/12 sights)",
+     "ok": true
+    },
+    "windmill": {
+     "at": [
+      -6,
+      -68.25
+     ],
+     "view": {
+      "x": -6,
+      "z": -68,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.592,
+       "visFrac": 1,
+       "dRed": 8
+      }
+     },
+     "walk": {
+      "d": 0.246,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "windmill"
+     ],
+     "count": [
+      5,
+      6
+     ],
+     "photos": [
+      5,
+      6
+     ],
+     "bytes": 10015,
+     "lum": {
+      "mean": 120.4,
+      "sd": 42.9
+     },
+     "place": "SOUTHBANK FARMS",
+     "msg": "Snap! NEW: The farm windmill  (6/12 sights)",
+     "ok": true
+    },
+    "silo": {
+     "at": [
+      26,
+      -96.25
+     ],
+     "view": {
+      "x": 26,
+      "z": -96,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.658,
+       "visFrac": 0.778,
+       "dRed": 8.9
+      }
+     },
+     "walk": {
+      "d": 0.246,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "silo"
+     ],
+     "count": [
+      6,
+      7
+     ],
+     "photos": [
+      6,
+      7
+     ],
+     "bytes": 10035,
+     "lum": {
+      "mean": 126.1,
+      "sd": 41.6
+     },
+     "place": "SOUTHBANK FARMS",
+     "msg": "Snap! NEW: Southbank barn and silo  (7/12 sights)",
+     "ok": true
+    },
+    "tower": {
+     "at": [
+      29,
+      -112.85
+     ],
+     "view": {
+      "x": 29,
+      "z": -112.6,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.836,
+       "visFrac": 1,
+       "dRed": 8
+      }
+     },
+     "walk": {
+      "d": 0.246,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "tower"
+     ],
+     "count": [
+      7,
+      8
+     ],
+     "photos": [
+      7,
+      8
+     ],
+     "bytes": 9887,
+     "lum": {
+      "mean": 116.1,
+      "sd": 37.8
+     },
+     "place": "AIRFIELD",
+     "msg": "Snap! NEW: Airfield control tower  (8/12 sights)",
+     "ok": true
+    },
+    "townhall": {
+     "at": [
+      96,
+      3.75
+     ],
+     "view": {
+      "x": 96,
+      "z": 4,
+      "j": {
+       "v": "ok",
+       "inFrac": 0.889,
+       "share": 0.75,
+       "visFrac": 0.5,
+       "dRed": 17.9
+      }
+     },
+     "walk": {
+      "d": 0.246,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "townhall"
+     ],
+     "count": [
+      8,
+      9
+     ],
+     "photos": [
+      8,
+      9
+     ],
+     "bytes": 12599,
+     "lum": {
+      "mean": 130.9,
+      "sd": 46.3
+     },
+     "place": "CIVIC SQUARE",
+     "msg": "Snap! NEW: Town Hall  (9/12 sights)",
+     "ok": true
+    },
+    "nfhall": {
+     "at": [
+      -4,
+      101.75
+     ],
+     "view": {
+      "x": -4,
+      "z": 102,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.526,
+       "visFrac": 1,
+       "dRed": 8.9
+      }
+     },
+     "walk": {
+      "d": 0.246,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "nfhall"
+     ],
+     "count": [
+      9,
+      10
+     ],
+     "photos": [
+      9,
+      10
+     ],
+     "bytes": 12251,
+     "lum": {
+      "mean": 126.2,
+      "sd": 41.3
+     },
+     "place": "NORTHFIELD",
+     "msg": "Snap! NEW: Northfield Hall  (10/12 sights)",
+     "ok": true
+    },
+    "overlook": {
+     "at": [
+      96,
+      101.75
+     ],
+     "view": {
+      "x": 96,
+      "z": 102,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.406,
+       "visFrac": 1,
+       "dRed": 10
+      }
+     },
+     "walk": {
+      "d": 0.246,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "overlook"
+     ],
+     "count": [
+      10,
+      11
+     ],
+     "photos": [
+      10,
+      11
+     ],
+     "bytes": 8315,
+     "lum": {
+      "mean": 125.6,
+      "sd": 33.6
+     },
+     "place": "THE HIGHLANDS",
+     "msg": "Snap! NEW: The Highlands overlook  (11/12 sights)",
+     "ok": true
+    },
+    "ruins": {
+     "at": [
+      -93,
+      5.75
+     ],
+     "view": {
+      "x": -93,
+      "z": 6,
+      "j": {
+       "v": "ok",
+       "inFrac": 1,
+       "share": 0.789,
+       "visFrac": 1,
+       "dRed": 8.9
+      }
+     },
+     "walk": {
+      "d": 0.247,
+      "n": 130
+     },
+     "up": "up",
+     "logged": true,
+     "fresh": [
+      "ruins"
+     ],
+     "count": [
+      11,
+      12
+     ],
+     "photos": [
+      11,
+      12
+     ],
+     "bytes": 9363,
+     "lum": {
+      "mean": 96.7,
+      "sd": 40.4
+     },
+     "place": "THE RUINS",
+     "msg": "Snap! NEW: The Ruins  (12/12 sights)",
+     "ok": true
+    }
+   },
+   "logged": 12,
+   "ok": true
+  },
+  "refused": {
+   "per": {
+    "windmill:off": {
+     "view": {
+      "x": 18,
+      "z": -70,
+      "j": {
+       "v": "off",
+       "inFrac": 0,
+       "share": 0.563,
+       "visFrac": 0,
+       "dRed": 26
+      }
+     },
+     "verdict": "off",
+     "logged": false,
+     "logSame": true,
+     "msg": "Snap! Saved to the album. The Dojo torii: too far away",
+     "shot": "p13",
+     "ok": true
+    },
+    "dojogate:small": {
+     "view": {
+      "x": 2,
+      "z": -43.6,
+      "j": {
+       "v": "small",
+       "inFrac": 1,
+       "share": 0.175,
+       "visFrac": 1,
+       "dRed": 30.1
+      }
+     },
+     "verdict": "small",
+     "logged": false,
+     "logSame": true,
+     "msg": "Snap! Saved to the album. The Dojo torii: too small, get closer (or pinch to zoom)",
+     "shot": "p14",
+     "ok": true
+    },
+    "townhall:hidden": {
+     "view": {
+      "x": 116,
+      "z": 10,
+      "j": {
+       "v": "hidden",
+       "inFrac": 0.778,
+       "share": 0.863,
+       "visFrac": 0.143,
+       "dRed": 15.6
+      }
+     },
+     "verdict": "hidden",
+     "logged": false,
+     "logSame": true,
+     "msg": "Snap! Saved to the album. Town Hall: hidden behind a building",
+     "shot": "p15",
+     "ok": true
+    },
+    "silo:hidden": {
+     "view": {
+      "x": 18,
+      "z": -98,
+      "j": {
+       "v": "hidden",
+       "inFrac": 1,
+       "share": 0.625,
+       "visFrac": 0.222,
+       "dRed": 10.8
+      }
+     },
+     "verdict": "hidden",
+     "logged": false,
+     "logSame": true,
+     "msg": "Snap! Saved to the album. Southbank barn and silo: hidden behind a building",
+     "shot": "p16",
+     "ok": true
+    },
+    "windmill:far": {
+     "view": {
+      "x": -6,
+      "z": -112,
+      "j": {
+       "v": "far",
+       "inFrac": 1,
+       "share": 0.274,
+       "visFrac": 1,
+       "dRed": 52
+      }
+     },
+     "verdict": "far",
+     "logged": false,
+     "logSame": true,
+     "msg": "Snap! Saved to the album. The farm windmill: too far away",
+     "shot": "p17",
+     "ok": true
+    },
+    "dojogate:behind": {
+     "view": {
+      "x": 0,
+      "z": -7.6,
+      "j": {
+       "v": "behind",
+       "inFrac": 1,
+       "share": 0.437,
+       "visFrac": 1,
+       "dRed": 6
+      }
+     },
+     "verdict": "behind",
+     "logged": false,
+     "logSame": true,
+     "msg": "Snap! The Dojo (already in your album)",
+     "shot": "p18",
+     "ok": true
+    },
+    "indoors": {
+     "room": "nf_s0",
+     "up": "up",
+     "verdicts": [
+      "inside"
+     ],
+     "got": [],
+     "ok": true
+    }
+   },
+   "ok": true
+  },
+  "python": {
+   "shots": 19,
+   "judged": 228,
+   "mismatches": 0,
+   "first": [],
+   "maxDiff": 0,
+   "occluders": 186,
+   "ok": true
+  },
+  "camera": {
+   "down": "[-6.000000000000003,-67.99999999999996,29.999999999999986,1,0,2.4]",
+   "up": "[-6.000000000000003,-67.99999999999996,29.999999999999986,1,0,2.4]",
+   "downAgain": "[-6.000000000000003,-67.99999999999996,29.999999999999986,1,0,2.4]",
+   "share": [
+    0.592,
+    0.947
+   ],
+   "ok": true
+  },
+  "album": {
+   "reloadSame": true,
+   "imgSame": true,
+   "photos": 24,
+   "log": 12,
+   "shots": 49,
+   "sightRows": 12,
+   "thumbs": 24,
+   "big": true,
+   "deleted": "p49",
+   "afterDelete": 23,
+   "stillThere": false,
+   "logAfter": 12,
+   "storedChars": 278670,
+   "cap": 900000,
+   "ok": true
+  },
+  "pack": {
+   "ups": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "hit": {
+    "st": "off",
+    "why": "fight"
+   },
+   "punch": {
+    "st": "off",
+    "why": "fight"
+   },
+   "sky": {
+    "st": "off",
+    "why": "area"
+   },
+   "skyUp": "area",
+   "bus": {
+    "st": "off",
+    "why": "bus"
+   },
+   "swim": {
+    "st": "off",
+    "why": "water",
+    "swim": true
+   },
+   "refused": [
+    [
+     "kite",
+     "kite"
+    ],
+    [
+     "net",
+     "net"
+    ]
+   ],
+   "away": {
+    "st": "off",
+    "why": "away"
+   },
+   "ok": true
+  },
+  "walk": {
+   "without": {
+    "d": 11.1,
+    "st": "off"
+   },
+   "with": {
+    "d": 11.1,
+    "st": "up"
+   },
+   "withoutAgain": {
+    "d": 11.1,
+    "st": "off"
+   },
+   "ok": true
+  },
+  "audit": {
+   "ok": true,
+   "cameraEntries": 1,
+   "issues": []
+  },
+  "errors": {
+   "module": {},
+   "page": [],
+   "ok": true
+  }
+ },
+ "pass": true
+}

@@ -230,7 +230,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test: correct traces pass for all 10, wrong order / reversed strokes / scribbles fail, grades monotonic in
   error; scroll persists after reload; zero errors; perf within 15%; real-time video.
 
-### Step 24 — Photo walk with a camera  — STATUS: NOT STARTED
+### Step 24 — Photo walk with a camera  — STATUS: PASSED (v2.27, Nov 23: film camera at the general store (40 DC 'shop' debit, kept, never a gift); CAMERA / SNAP / ALBUM / PUT AWAY buttons, viewfinder overlay, game camera untouched (pinch zoom = lens), camera drawn in Red's real hand; 12 sights judged with the game's own projection: ahead of Red and in range, 60% in frame, big enough, and half the points visible by 3D rays from the game camera's eye through building volumes (never through walls), not indoors; live label names what counts; album = last 24 photos + each sight's thumbnail, capped at 900k chars. photo.py x2 seeds all PASS: 12/12 sights logged after joystick walks, off/small/hidden (Town Hall behind the police station, barn behind the farmhouse)/far/behind/indoors refused, 228 verdicts re-judged in Python 0 mismatches, camera identical up/down, album survives reload, cap + delete, pack/refuse, audit clean, 0 errors; regression bugs PASS, shop/kite flaky identically on v2.26; fills +0.0% default / +0.8% camera up, ms +0.2% / +8.4% / −9% Northfield. Report: `dw2/reports/step24_2.27.md`)
 - A film camera at the general store (~40 DC 'shop', kept). A PHOTO button freezes the current game view into a per-viewer album
   (thumbnails); 12 town sights to capture (Sky Tree, the dojo, Mirror Lake pier, the shrine gate, the windmill, the castle, ...),
   each counted only when it is on screen, large enough and not hidden behind a building (real occlusion test, no seeing through walls).
@@ -318,3 +318,4 @@ Rules for choosing them:
 - 2026-11-23T04:00Z STARTED step 23 (Claude, scheduled run)
 - 2026-11-23T04:45Z FINISHED step 23: PASSED — v2.26 shodo calligraphy at the dojo (desk + drying rack, 10 kanji traced on a touch panel with speed-sensitive ink, stroke order/direction/shape grading re-computed in Python, good sheets hang as a scroll in House No. 41; shodo.py 2 seeds all checks; perf in budget)
 - 2026-11-23T04:59Z STARTED step 24 (Claude, scheduled run)
+- 2026-11-23T05:53Z FINISHED step 24: PASSED — v2.27 photo walk (film camera 40 DC 'shop', viewfinder + SNAP into a per-viewer album, 12 sights counted only in frame, big enough and not hidden by 3D rays through building volumes; photo.py 2 seeds all checks, Python re-judge 0 mismatches; perf in budget). Batch Steps 21–24 all PASSED: next run writes the new batch.

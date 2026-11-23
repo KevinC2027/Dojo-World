@@ -1,0 +1,646 @@
+{
+ "file": "Dojo_World_v2.27.html",
+ "seed": 7,
+ "checks": {
+  "nonet": {
+   "code": "none",
+   "live": 0,
+   "ok": true
+  },
+  "short": {
+   "avail": 20,
+   "code": "insufficient",
+   "after": 20,
+   "entries": 0,
+   "owned": false,
+   "ok": true
+  },
+  "buy": {
+   "price": 25,
+   "b0": 500,
+   "btn0": "25 DC",
+   "b1": 475,
+   "debits": [
+    {
+     "amt": 25,
+     "shop": "general"
+    }
+   ],
+   "flown": 25,
+   "btn1": "OWNED",
+   "btn1dis": true,
+   "second": "owned",
+   "b2": 475,
+   "bag": [],
+   "audit": {
+    "ok": true,
+    "issues": [],
+    "balance": 475,
+    "entries": 2
+   },
+   "owned": true,
+   "ok": true,
+   "ownedAfterReload": true
+  },
+  "out": {
+   "meadow": true,
+   "st": "out",
+   "refused": [
+    [
+     "water",
+     "water"
+    ],
+    [
+     "inside",
+     "inside"
+    ],
+    [
+     "area",
+     "area"
+    ],
+    [
+     "boat",
+     "boat"
+    ],
+    [
+     "kite",
+     "kite"
+    ]
+   ],
+   "room": "nf_s0",
+   "ok": true
+  },
+  "catch": {
+   "sp": {
+    "cabbage": {
+     "tries": [
+      {
+       "slot": 3,
+       "hab": "flower",
+       "ap": {
+        "steps": 212,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.217
+       },
+       "yh": 0.42,
+       "caught": true,
+       "size": 6.4
+      }
+     ],
+     "caught": true,
+     "size": 6.4,
+     "d": 1.217,
+     "y": 0.42,
+     "startled": 0
+    },
+    "swallow": {
+     "tries": [
+      {
+       "slot": 2,
+       "hab": "flower",
+       "ap": {
+        "steps": 574,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.209
+       },
+       "yh": 0.42,
+       "caught": true,
+       "size": 11.9
+      }
+     ],
+     "caught": true,
+     "size": 11.9,
+     "d": 1.209,
+     "y": 0.42,
+     "startled": 0
+    },
+    "akatombo": {
+     "tries": [
+      {
+       "slot": 4,
+       "hab": "grass",
+       "ap": {
+        "steps": 259,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.209
+       },
+       "yh": 0.08,
+       "caught": true,
+       "size": 4.2
+      }
+     ],
+     "caught": true,
+     "size": 4.2,
+     "d": 1.209,
+     "y": 0.04,
+     "startled": 0
+    },
+    "shiokara": {
+     "tries": [
+      {
+       "slot": 241,
+       "hab": "water",
+       "ap": {
+        "steps": 1474,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.208
+       },
+       "yh": 0.08,
+       "caught": false,
+       "size": null
+      },
+      {
+       "slot": 247,
+       "hab": "water",
+       "ap": {
+        "steps": 1293,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.21
+       },
+       "yh": 0.08,
+       "caught": false,
+       "size": null
+      },
+      {
+       "slot": 242,
+       "hab": "water",
+       "ap": {
+        "steps": 214,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.213
+       },
+       "yh": 0.75,
+       "caught": true,
+       "size": 5.5
+      }
+     ],
+     "caught": true,
+     "size": 5.5,
+     "d": 1.213,
+     "y": 0.75,
+     "startled": 0
+    },
+    "cicada": {
+     "tries": [
+      {
+       "slot": 115,
+       "hab": "trunk",
+       "ap": {
+        "steps": 257,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.206
+       },
+       "yh": 1.89,
+       "caught": true,
+       "size": 5.4
+      }
+     ],
+     "caught": true,
+     "size": 5.4,
+     "d": 1.206,
+     "y": 1.888,
+     "startled": 0
+    },
+    "kabuto": {
+     "tries": [
+      {
+       "slot": 232,
+       "hab": "oak",
+       "ap": {
+        "steps": 1800,
+        "startled": 0,
+        "st": "rest",
+        "d": 4.544
+       },
+       "yh": 0.9,
+       "caught": false,
+       "size": null
+      },
+      {
+       "slot": 148,
+       "hab": "oak",
+       "ap": {
+        "steps": 259,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.205
+       },
+       "yh": 1.75,
+       "caught": true,
+       "size": 4.7
+      }
+     ],
+     "caught": true,
+     "size": 4.7,
+     "d": 1.205,
+     "y": 1.75,
+     "startled": 0
+    },
+    "kuwagata": {
+     "tries": [
+      {
+       "slot": 232,
+       "hab": "oak",
+       "ap": {
+        "steps": 1800,
+        "startled": 0,
+        "st": "rest",
+        "d": 4.544
+       },
+       "yh": 0.9,
+       "caught": false,
+       "size": null
+      },
+      {
+       "slot": 123,
+       "hab": "oak",
+       "ap": {
+        "steps": 213,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.205
+       },
+       "yh": 1.45,
+       "caught": true,
+       "size": 5.9
+      }
+     ],
+     "caught": true,
+     "size": 5.9,
+     "d": 1.205,
+     "y": 1.45,
+     "startled": 0
+    },
+    "hotaru": {
+     "tries": [
+      {
+       "slot": 241,
+       "hab": "water",
+       "ap": {
+        "steps": 1132,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.259
+       },
+       "yh": 1.45,
+       "caught": false,
+       "size": null
+      },
+      {
+       "slot": 247,
+       "hab": "water",
+       "ap": {
+        "steps": 1408,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.172
+       },
+       "yh": 1.45,
+       "caught": false,
+       "size": null
+      },
+      {
+       "slot": 242,
+       "hab": "water",
+       "ap": {
+        "steps": 213,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.256
+       },
+       "yh": 0.48,
+       "caught": true,
+       "size": 1.1
+      }
+     ],
+     "caught": true,
+     "size": 1.1,
+     "d": 1.274,
+     "y": 0.473,
+     "startled": 0
+    },
+    "batta": {
+     "tries": [
+      {
+       "slot": 5,
+       "hab": "grass",
+       "ap": {
+        "steps": 259,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.209
+       },
+       "yh": 0.08,
+       "caught": true,
+       "size": 4.9
+      }
+     ],
+     "caught": true,
+     "size": 4.9,
+     "d": 1.209,
+     "y": 0.04,
+     "startled": 0
+    },
+    "suzumushi": {
+     "tries": [
+      {
+       "slot": 4,
+       "hab": "grass",
+       "ap": {
+        "steps": 259,
+        "startled": 0,
+        "st": "rest",
+        "d": 1.209
+       },
+       "yh": 0.08,
+       "caught": true,
+       "size": 1.7
+      }
+     ],
+     "caught": true,
+     "size": 1.7,
+     "d": 1.209,
+     "y": 0.04,
+     "startled": 0
+    }
+   },
+   "book": {
+    "v": 1,
+    "sp": {
+     "cabbage": {
+      "n": 1,
+      "best": 6.4,
+      "first": "2026-11-23"
+     },
+     "swallow": {
+      "n": 1,
+      "best": 11.9,
+      "first": "2026-11-23"
+     },
+     "akatombo": {
+      "n": 1,
+      "best": 4.2,
+      "first": "2026-11-23"
+     },
+     "shiokara": {
+      "n": 1,
+      "best": 5.5,
+      "first": "2026-11-23"
+     },
+     "cicada": {
+      "n": 1,
+      "best": 5.4,
+      "first": "2026-11-23"
+     },
+     "kabuto": {
+      "n": 1,
+      "best": 4.7,
+      "first": "2026-11-23"
+     },
+     "kuwagata": {
+      "n": 1,
+      "best": 5.9,
+      "first": "2026-11-23"
+     },
+     "hotaru": {
+      "n": 1,
+      "best": 1.1,
+      "first": "2026-11-23"
+     },
+     "batta": {
+      "n": 1,
+      "best": 4.9,
+      "first": "2026-11-23"
+     },
+     "suzumushi": {
+      "n": 1,
+      "best": 1.7,
+      "first": "2026-11-23"
+     }
+    },
+    "catches": 10
+   },
+   "ok": true
+  },
+  "hours": {
+   "per": {
+    "day": {
+     "cabbage": 32,
+     "swallow": 15,
+     "akatombo": 37,
+     "batta": 31,
+     "cicada": 121,
+     "shiokara": 59
+    },
+    "dusk": {
+     "suzumushi": 46,
+     "akatombo": 22,
+     "kuwagata": 60,
+     "hotaru": 59
+    },
+    "night": {
+     "suzumushi": 68,
+     "kabuto": 26,
+     "kuwagata": 34,
+     "hotaru": 59
+    }
+   },
+   "bad": [],
+   "live": {
+    "day": {
+     "cabbage": 35,
+     "batta": 34,
+     "akatombo": 27,
+     "cicada": 86,
+     "shiokara": 43,
+     "swallow": 17
+    },
+    "dusk": {
+     "suzumushi": 43,
+     "akatombo": 18,
+     "kuwagata": 31,
+     "hotaru": 43
+    },
+    "night": {
+     "suzumushi": 61,
+     "kuwagata": 17,
+     "kabuto": 14,
+     "hotaru": 43
+    }
+   },
+   "clock": {
+    "noon": "day",
+    "late": "night",
+    "scopeNoon": "day",
+    "scopeLate": "night",
+    "duskMinutes": 60
+   },
+   "ok": true
+  },
+  "rain": {
+   "before": 34,
+   "raining": true,
+   "during": 0,
+   "dry": true,
+   "after": 34,
+   "ok": true
+  },
+  "sight": {
+   "run": {
+    "m": 1,
+    "startled": 1,
+    "d": 2.227,
+    "st": "flee"
+   },
+   "creep": {
+    "m": 0.3,
+    "startled": 0,
+    "d": 1.208,
+    "st": "rest"
+   },
+   "wall": {
+    "wall": {
+     "x0": 43.8,
+     "z0": 15.5,
+     "x1": 52.2,
+     "z1": 16.5,
+     "h": 9
+    },
+    "closest": 2.1,
+    "sense": 3.2,
+    "redV": 3.7,
+    "startled": 0,
+    "blocked": true
+   },
+   "open": {
+    "startled": 1
+   },
+   "ok": true
+  },
+  "reach": {
+   "targets": 144,
+   "caught": 39,
+   "mismatches": [],
+   "nMismatch": 0,
+   "onBoundary": [],
+   "caughtDistRange": [
+    0.9,
+    1.6
+   ],
+   "caughtAngleRange": [
+    -45,
+    45
+   ],
+   "ok": true
+  },
+  "miss": {
+   "missed": 1,
+   "startled": 1,
+   "st": "flee",
+   "why": "miss",
+   "ok": true
+  },
+  "release": {
+   "caught": true,
+   "hold": "hold",
+   "freeSt": "free",
+   "netBack": "out",
+   "gone": true,
+   "backAfterS": 37,
+   "cool": 40,
+   "ok": true
+  },
+  "pack": {
+   "ups": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "punch": {
+    "st": "off",
+    "why": "fight"
+   },
+   "hit": {
+    "st": "off",
+    "why": "fight"
+   },
+   "sky": {
+    "st": "off",
+    "why": "area"
+   },
+   "boat": {
+    "st": "off",
+    "why": "boat"
+   },
+   "water": {
+    "st": "off",
+    "why": "water"
+   },
+   "inside": {
+    "st": "off",
+    "why": "inside",
+    "room": "nf_s0"
+   },
+   "away": {
+    "st": "off",
+    "why": "pack"
+   },
+   "ok": true
+  },
+  "walk": {
+   "without": {
+    "d": 11.1,
+    "st": "off"
+   },
+   "with": {
+    "d": 11.1,
+    "st": "out"
+   },
+   "withoutAgain": {
+    "d": 11.1,
+    "st": "off"
+   },
+   "ok": true
+  },
+  "draw": {
+   "seen": {
+    "out": "out",
+    "swing": "swing",
+    "after": "hold",
+    "book": 10
+   },
+   "err": null,
+   "modErr": null,
+   "ok": true
+  },
+  "book": {
+   "species": 10,
+   "catches": 51,
+   "panel": "10 of 10 species \u00b7 51 caught and let go \u00b7 now: night",
+   "matchesLog": true,
+   "keptAfterReload": true,
+   "ok": true
+  },
+  "audit": {
+   "ok": true,
+   "issues": []
+  },
+  "errors": {
+   "module": {},
+   "page": [],
+   "ok": true
+  }
+ },
+ "pass": true
+}
