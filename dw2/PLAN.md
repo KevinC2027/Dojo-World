@@ -315,3 +315,4 @@ Rules for choosing them:
 - 2026-11-23T02:25Z FINISHED step 21: PASSED — v2.24 bug catching with a net (10 real species by habitat and local hour, sight-only noticing, catch-and-release bug book; bugs.py 2 seeds all checks; perf in budget); new batch Steps 21–24 written
 - 2026-11-23T02:58Z STARTED step 22 (Claude, scheduled run)
 - 2026-11-23T03:29Z FINISHED step 22: PASSED — v2.25 mini golf in the civic park (6 Japanese-garden holes, par 14, 10 DC 'hire' round, drag-back putt panel, real ball physics re-computed in Python with identical results; minigolf.py 2 seeds all checks; perf in budget)
+- 2026-11-23T04:00Z STARTED step 23 (Claude, scheduled run)
