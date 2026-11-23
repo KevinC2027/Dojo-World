@@ -1,0 +1,217 @@
+{
+ "seed": 11,
+ "checks": {
+  "prompt": {
+   "street": null,
+   "inside": "nf_n1",
+   "away": null,
+   "at": "Darts: throw at the board",
+   "panel": "darts",
+   "btns": [
+    "rtc",
+    "x301",
+    "close"
+   ],
+   "ok": true
+  },
+  "geometry": {
+   "points": 20115,
+   "mismatch": 0,
+   "examples": [],
+   "bedCentresScoreRight": true,
+   "ok": true
+  },
+  "ruleTable": {
+   "cases": 18900,
+   "busts": 1314,
+   "wins": 21,
+   "mismatch": 0,
+   "examples": [],
+   "ok": true
+  },
+  "tap": {
+   "aim": {
+    "x": -40.00000000000002,
+    "y": 85.00000000000001
+   },
+   "ok": true
+  },
+  "wobble": {
+   "a0": 24,
+   "a08": 13.262678264428498,
+   "a6": 19.570000430676853,
+   "ok": true
+  },
+  "throws": {
+   "n": 908,
+   "far": 0,
+   "farR": 0,
+   "worstMm": 31.4,
+   "ok": true
+  },
+  "rtc": {
+   "games": 12,
+   "darts": [
+    26,
+    27,
+    28,
+    27,
+    32,
+    23,
+    28,
+    25,
+    24,
+    25,
+    27,
+    30
+   ],
+   "allDone": true,
+   "bestMatches": true,
+   "err": null,
+   "ok": true
+  },
+  "x301": {
+   "games": 40,
+   "red_W": 11,
+   "reg_W": 29,
+   "busts": 10,
+   "darts": 1135,
+   "regAimNotABed": 0,
+   "regOnADouble": 121,
+   "regAimedThatDouble": 121,
+   "finishesAllDoubles": true,
+   "recordMatches": true,
+   "err": null,
+   "ok": true
+  },
+  "replay": {
+   "eventsChecked": 2421,
+   "dartsRescored": 1457,
+   "mismatches": 0,
+   "examples": [],
+   "ok": true
+  },
+  "flow": {
+   "btnsPlaying": "throw,quit,close",
+   "again": "in_play",
+   "after": null,
+   "recSame": true,
+   "closed": null,
+   "recSame2": true,
+   "abandons": [
+    "quit",
+    "button"
+   ],
+   "reopenGame": null,
+   "ok": true
+  },
+  "leave": {
+   "stepOff": null,
+   "g1": null,
+   "walkOut": null,
+   "g2": null,
+   "hit": null,
+   "g3": null,
+   "hitWhy": "fight",
+   "sky": true,
+   "afterSky": null,
+   "g4": null,
+   "skyOpen": "area",
+   "back": true,
+   "downCode": "regular",
+   "downRtc": true,
+   "whys": [
+    "room",
+    "fight",
+    "area",
+    "quit"
+   ],
+   "ok": true
+  },
+  "reload": {
+   "before": {
+    "rtc": {
+     "games": 12,
+     "best": 23,
+     "last": 30
+    },
+    "x": {
+     "w": 11,
+     "l": 29,
+     "bestOut": 107,
+     "hiVisit": 140,
+     "n180": 0,
+     "bestDarts": 9
+    }
+   },
+   "after": {
+    "rtc": {
+     "games": 12,
+     "best": 23,
+     "last": 30
+    },
+    "x": {
+     "w": 11,
+     "l": 29,
+     "bestOut": 107,
+     "hiVisit": 140,
+     "n180": 0,
+     "bestDarts": 9
+    }
+   },
+   "ok": true
+  }
+ },
+ "errors": [],
+ "stats": {
+  "games": 0,
+  "darts": 0,
+  "regDarts": 0,
+  "busts": 0,
+  "refused": 0,
+  "ended": 0
+ },
+ "moduleErrors": {},
+ "summary": {
+  "prompt": true,
+  "geometry": true,
+  "ruleTable": true,
+  "tap": true,
+  "wobble": true,
+  "throws": true,
+  "rtc": true,
+  "x301": true,
+  "replay": true,
+  "flow": true,
+  "leave": true,
+  "reload": true,
+  "rtcDarts": [
+   26,
+   27,
+   28,
+   27,
+   32,
+   23,
+   28,
+   25,
+   24,
+   25,
+   27,
+   30
+  ],
+  "x301_tally": {
+   "games": 40,
+   "red_W": 11,
+   "reg_W": 29,
+   "busts": 10,
+   "darts": 1135,
+   "regOnADouble": 121,
+   "regAimedThatDouble": 121
+  },
+  "dartsRescored": 1457,
+  "geometryPoints": 20115,
+  "pageErrors": 0,
+  "moduleErrors": {},
+  "PASS": true
+ }
+}

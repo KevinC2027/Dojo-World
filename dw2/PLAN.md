@@ -184,14 +184,14 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
 - Release gate: scripted test completes every request type through the real activity paths, wrong/expired requests are refused, the
   board survives reload; zero errors; perf within 15% of the previous PASSED build; real-time video.
 
-### Step 19 — Darts at the inn  — STATUS: NOT STARTED (Step 18 PASSED: next)
+### Step 19 — Darts at the inn  — STATUS: PASSED (v2.22, Nov 22: dartboard cabinet on the inn's back wall (the camera faces it; a side wall would be edge-on) + oche at 2.37 m; INTERACT opens a face-on touch board: tap to aim, THROW, reticle wobble that settles then tires, σ 5 mm release; real ring radii; ROUND THE CLOCK solo and 301 straight-in double-out vs the Regular (the inn guest, moved beside the oche), who aims like a pub player; per-viewer records; quit/close/step off/walk out/hit/coliseum end it uncounted. darts.py x2 seeds all PASS: 20,115 points scored = Python, 18,900-case 301 rule table = Python, 24 RTC + 80 x 301 games (2,300+ darts) replayed in Python with 0 mismatches, regular aims at the double every time he is on one; regressions gomoku/courier PASS; fills +0.0% default / +0.5% inn / +2.5% playing, ms +6.6% playing. Report: `dw2/reports/step19_2.22.md`)
 - A dartboard on the inn's side wall: INTERACT opens a touch throw panel (the board seen face-on, an aiming reticle that drifts with a
   steadiness wobble, tap to throw; Red keeps his pose). Games: Round the Clock solo and 301 against a regular; per-viewer records.
   Free (house board). Closing, a fight or leaving the inn ends it cleanly.
 - Release gate: scripted test: thrown darts score by the real board geometry (doubles/trebles/bull), 301 bust/finish rules correct over
   many random games, the regular plays legal throws; zero errors; perf within 15% of the previous PASSED build; real-time video.
 
-### Step 20 — Stargazing on the Highlands overlook  — STATUS: NOT STARTED (needs Step 19 PASSED)
+### Step 20 — Stargazing on the Highlands overlook  — STATUS: NOT STARTED (Step 19 PASSED: next)
 - A coin-op telescope on the overlook top (10 DC 'hire' debit for a viewing, Kev's PRICES rule). At dusk/night a touch sky panel shows a
   real star field (bright stars at their true relative positions); drag to pan, find and tap the asked-for constellation to log it
   (a per-viewer star log of ~12 constellations). In daylight it shows the town and the Sky Tree instead. Rain clouds hide the stars.
@@ -268,3 +268,4 @@ Rules for choosing them:
 - 2026-11-22T21:27Z FINISHED step 18: PASSED — v2.21 mayors' town requests (Hale + Ines, 6 request kinds on existing activities, TOWN FRIEND ribbon board, expiry/wrong-hall refusals; mayor.py 2 seeds all checks; perf in budget)
 - 2026-11-22T21:59Z STARTED step 19 (Claude, scheduled run)
 - 2026-11-22T23:59Z STARTED step 19 (Claude, scheduled run; the 21:59Z run left no build or FINISHED line, so this run restarts step 19 from v2.21)
+- 2026-11-23T00:21Z FINISHED step 19: PASSED — v2.22 darts at the inn (back-wall board + oche, tap-aim/THROW with settle-then-tire wobble, real ring geometry, round the clock + 301 double-out vs the Regular, records; darts.py 2 seeds all checks, 0 rescoring/replay mismatches; perf in budget)
