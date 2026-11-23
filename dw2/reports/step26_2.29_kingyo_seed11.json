@@ -1,0 +1,294 @@
+{
+ "file": "Dojo_World_v2.29.html",
+ "seed": 11,
+ "checks": {
+  "walk": {
+   "walk": {
+    "d": 0.23,
+    "ticks": 100
+   },
+   "prompt": "Goldfish scooping \u00b7 10 DC",
+   "solids": 0,
+   "climbY": 0,
+   "ok": true
+  },
+  "short": {
+   "avail": 0,
+   "label": "Goldfish scooping \u00b7 10 DC",
+   "code": "insufficient",
+   "after": 0,
+   "entries": 0,
+   "panel": false,
+   "game": null,
+   "ok": true
+  },
+  "play": {
+   "price": 10,
+   "place": "shrine",
+   "label": "Goldfish scooping \u00b7 10 DC",
+   "charged": 10,
+   "debits": [
+    {
+     "amt": 10,
+     "place": "shrine"
+    }
+   ],
+   "poi": 3,
+   "fish": 14,
+   "open": true,
+   "ok": true
+  },
+  "careful": {
+   "rows": [
+    {
+     "k": "wakin",
+     "res": "caught",
+     "wet": 0.147,
+     "v": 6,
+     "w": 3.66,
+     "load": 4.38,
+     "cap": 21.13
+    },
+    {
+     "k": "kohaku",
+     "res": "caught",
+     "wet": 0.205,
+     "v": 6,
+     "w": 3.66,
+     "load": 4.38,
+     "cap": 19.98
+    },
+    {
+     "k": "demekin",
+     "res": "caught",
+     "wet": 0.222,
+     "v": 6,
+     "w": 6.04,
+     "load": 6.76,
+     "cap": 19.63
+    },
+    {
+     "k": "ryukin",
+     "res": "caught",
+     "wet": 0.24,
+     "v": 6,
+     "w": 7.55,
+     "load": 8.27,
+     "cap": 19.26
+    },
+    {
+     "k": "wakin",
+     "res": "caught",
+     "wet": 0.239,
+     "v": 6,
+     "w": 3.66,
+     "load": 4.38,
+     "cap": 19.29
+    },
+    {
+     "k": "kohaku",
+     "res": "caught",
+     "wet": 0.239,
+     "v": 6,
+     "w": 3.66,
+     "load": 4.38,
+     "cap": 19.29
+    }
+   ],
+   "caught": 6,
+   "poiLeft": 3,
+   "ok": true,
+   "mouse": {
+    "res": "caught",
+    "v": 4.0,
+    "d": 0.57
+   }
+  },
+  "sight": {
+   "frontFast": {
+    "fled": true,
+    "minD": 15.1,
+    "torn": false
+   },
+   "behindFast": {
+    "fled": false,
+    "minD": 2.7,
+    "torn": false
+   },
+   "frontSlow": {
+    "fled": false,
+    "minD": 5,
+    "torn": false
+   },
+   "splash": 1,
+   "ok": true
+  },
+  "soak": {
+   "poi0": 3,
+   "wet0": 0.2552,
+   "steps": 350,
+   "want": 351,
+   "why": "soak",
+   "wet": 0.9602,
+   "poi1": 2,
+   "ok": true
+  },
+  "shear": {
+   "fresh25": {
+    "spd": 25,
+    "wet0": 0.008,
+    "torn": false,
+    "why": null,
+    "v": null,
+    "vmax": null
+   },
+   "fresh35": {
+    "spd": 35,
+    "wet0": 0.114,
+    "torn": false,
+    "why": null,
+    "v": null,
+    "vmax": null
+   },
+   "soaked35": {
+    "spd": 35,
+    "wet0": 0.93,
+    "torn": true,
+    "why": "shear",
+    "v": 35,
+    "vmax": 31.3
+   },
+   "poiAfter": 1,
+   "ok": true,
+   "fast": {
+    "torn": true,
+    "why": "shear",
+    "v": 100,
+    "vmax": 87.9,
+    "stage": "result"
+   }
+  },
+  "over": {
+   "stage": "result",
+   "caught": 7,
+   "pick0": [
+    2,
+    3
+   ],
+   "pickNone": 0,
+   "pick2": [
+    0,
+    3
+   ],
+   "pick3": [
+    0,
+    3
+   ],
+   "homeBtn": true,
+   "click": true,
+   "bowl": [
+    "wakin:5.5",
+    "ryukin:7"
+   ],
+   "game": null,
+   "best": 7,
+   "open": false,
+   "ok": true
+  },
+  "heavy": {
+   "debit": 1,
+   "w": 16.04,
+   "fresh": {
+    "res": "caught",
+    "wet": 0.168,
+    "load": 16.76,
+    "cap": 20.71
+   },
+   "wet": {
+    "res": "tear",
+    "wet": 0.573,
+    "load": 16.76,
+    "cap": 12.16
+   },
+   "wetSmall": {
+    "res": "caught",
+    "wet": 0.556,
+    "load": 3.47,
+    "cap": 12.54
+   },
+   "soakedMed": {
+    "res": "tear",
+    "wet": 0.856,
+    "load": 10,
+    "cap": 5.1
+   },
+   "poi": 1,
+   "ok": true
+  },
+  "resume": {
+   "poi0": 1,
+   "c0": 2,
+   "click": true,
+   "closed": true,
+   "kept": true,
+   "prompt": "Goldfish: finish your game (paid)",
+   "reopen": true,
+   "why": "fight",
+   "closedFight": true,
+   "resumed": true,
+   "same": true,
+   "noCharge": true,
+   "walkOff": true,
+   "ok": true
+  },
+  "bowl": {
+   "b0": 4,
+   "b1": 6,
+   "b2": 6,
+   "oldestGone": true,
+   "inside": "house",
+   "prompt": "Goldfish bowl (6)",
+   "drawn": 1,
+   "toast": "Your goldfish: Big wakin 9.0 cm, Wakin 5.0 cm, Wakin 5.0 cm, Wakin 5.3 cm, Wakin 5.0 cm, Wakin 5.3 cm",
+   "notOutside": true,
+   "ok": true
+  },
+  "sky": {
+   "prompt": null,
+   "code": "area",
+   "noCharge": true,
+   "ok": true
+  },
+  "reload": {
+   "bowl": true,
+   "game": true,
+   "prompt": "Goldfish: finish your game (paid)",
+   "ok": true
+  },
+  "python": {
+   "lifts": 16,
+   "tears": 13,
+   "mismatches": 0,
+   "ok": true
+  },
+  "audit": {
+   "audit": {
+    "ok": true,
+    "issues": [],
+    "balance": 450,
+    "entries": 6
+   },
+   "debits": 5,
+   "games": 5,
+   "allTen": true,
+   "mods": {},
+   "drawErr": null,
+   "ok": true
+  },
+  "errors": {
+   "page": [],
+   "ok": true
+  }
+ },
+ "pass": true
+}

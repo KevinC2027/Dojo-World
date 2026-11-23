@@ -1,0 +1,561 @@
+{
+ "file": "Dojo_World_v2.29.html",
+ "seed": 7,
+ "checks": {
+  "walk": {
+   "w": {
+    "d": 0.19,
+    "ticks": 125
+   },
+   "prompt": "Taiko drum \u00b7 play a song (free)",
+   "solidsNear": 1,
+   "ok": true
+  },
+  "open": {
+   "i": {
+    "label": "Taiko drum \u00b7 play a song (free)",
+    "act": "taikogame"
+   },
+   "open": true,
+   "songs": 3,
+   "btns": [
+    "start",
+    "sound",
+    "close"
+   ],
+   "ok": true
+  },
+  "mouse": {
+   "R": {
+    "n": 42,
+    "good": 42,
+    "ok": 0,
+    "bad": 0,
+    "miss": 0,
+    "maxCombo": 42,
+    "score": 5061,
+    "acc": 100,
+    "clear": true,
+    "fc": true
+   },
+   "hits": 42,
+   "dtMeanMs": 20.0,
+   "dtMaxAbsMs": 30.3,
+   "ok": true
+  },
+  "ontime": {
+   "matsuri": {
+    "n": 42,
+    "good": 42,
+    "ok": 0,
+    "bad": 0,
+    "miss": 0,
+    "maxCombo": 42,
+    "score": 5061,
+    "acc": 100,
+    "clear": true,
+    "fc": true,
+    "eventLateMs": 0.2
+   },
+   "sakura": {
+    "n": 103,
+    "good": 103,
+    "ok": 0,
+    "bad": 0,
+    "miss": 0,
+    "maxCombo": 103,
+    "score": 14175,
+    "acc": 100,
+    "clear": true,
+    "fc": true,
+    "eventLateMs": 13.87
+   },
+   "raimon": {
+    "n": 202,
+    "good": 202,
+    "ok": 0,
+    "bad": 0,
+    "miss": 0,
+    "maxCombo": 202,
+    "score": 29025,
+    "acc": 100,
+    "clear": true,
+    "fc": true,
+    "eventLateMs": 12.6
+   },
+   "ok": true
+  },
+  "grades": {
+   "groups": {
+    "0": {
+     "want": "good",
+     "got": {
+      "good": 6
+     },
+     "ok": true
+    },
+    "-30": {
+     "want": "good",
+     "got": {
+      "good": 6
+     },
+     "ok": true
+    },
+    "+30": {
+     "want": "good",
+     "got": {
+      "good": 6
+     },
+     "ok": true
+    },
+    "-80": {
+     "want": "ok",
+     "got": {
+      "ok": 6
+     },
+     "ok": true
+    },
+    "+80": {
+     "want": "ok",
+     "got": {
+      "ok": 6
+     },
+     "ok": true
+    },
+    "-130": {
+     "want": "bad",
+     "got": {
+      "bad": 6
+     },
+     "ok": true
+    },
+    "+130": {
+     "want": "bad",
+     "got": {
+      "bad": 6
+     },
+     "ok": true
+    }
+   },
+   "groupAccuracyByAbsOffset": {
+    "0": [
+     1.0
+    ],
+    "30": [
+     1.0,
+     1.0
+    ],
+    "80": [
+     0.5,
+     0.5
+    ],
+    "130": [
+     0.0,
+     0.0
+    ]
+   },
+   "monotonic": true,
+   "R": {
+    "good": 18,
+    "ok": 12,
+    "bad": 12,
+    "miss": 0,
+    "acc": 57.143,
+    "clear": false
+   },
+   "ok": true
+  },
+  "none": {
+   "n": 42,
+   "miss": 42,
+   "score": 0,
+   "acc": 0,
+   "clear": false,
+   "ok": true
+  },
+  "mash": {
+   "n": 42,
+   "good": 0,
+   "okNotes": 7,
+   "bad": 35,
+   "miss": 0,
+   "acc": 8.333,
+   "clear": false,
+   "taps": 539,
+   "ok": true
+  },
+  "sweep": {
+   "ok": true,
+   "songs": {
+    "matsuri": [
+     [
+      0,
+      100,
+      5061
+     ],
+     [
+      -30,
+      100,
+      5061
+     ],
+     [
+      -50,
+      100,
+      5061
+     ],
+     [
+      -60,
+      50,
+      2961
+     ],
+     [
+      -80,
+      50,
+      2961
+     ],
+     [
+      -110,
+      50,
+      2961
+     ],
+     [
+      -120,
+      0,
+      0
+     ],
+     [
+      -160,
+      0,
+      0
+     ],
+     [
+      -200,
+      0,
+      0
+     ],
+     [
+      -300,
+      0,
+      0
+     ],
+     [
+      0,
+      100,
+      5061
+     ],
+     [
+      30,
+      100,
+      5061
+     ],
+     [
+      50,
+      100,
+      5061
+     ],
+     [
+      60,
+      50,
+      2961
+     ],
+     [
+      80,
+      50,
+      2961
+     ],
+     [
+      110,
+      50,
+      2961
+     ],
+     [
+      120,
+      0,
+      0
+     ],
+     [
+      160,
+      0,
+      0
+     ],
+     [
+      200,
+      0,
+      0
+     ],
+     [
+      300,
+      0,
+      0
+     ]
+    ],
+    "sakura": [
+     [
+      0,
+      100,
+      14175
+     ],
+     [
+      -30,
+      100,
+      14175
+     ],
+     [
+      -50,
+      100,
+      14175
+     ],
+     [
+      -60,
+      50,
+      9025
+     ],
+     [
+      -80,
+      50,
+      9025
+     ],
+     [
+      -110,
+      50,
+      9025
+     ],
+     [
+      -120,
+      0,
+      0
+     ],
+     [
+      -160,
+      0,
+      0
+     ],
+     [
+      -200,
+      15.534,
+      1602
+     ],
+     [
+      -300,
+      7.767,
+      802
+     ],
+     [
+      0,
+      100,
+      14175
+     ],
+     [
+      30,
+      100,
+      14175
+     ],
+     [
+      50,
+      100,
+      14175
+     ],
+     [
+      60,
+      50,
+      9025
+     ],
+     [
+      80,
+      50,
+      9025
+     ],
+     [
+      110,
+      50,
+      9025
+     ],
+     [
+      120,
+      0,
+      0
+     ],
+     [
+      160,
+      7.767,
+      802
+     ],
+     [
+      200,
+      15.534,
+      1602
+     ],
+     [
+      300,
+      7.767,
+      802
+     ]
+    ],
+    "raimon": [
+     [
+      0,
+      100,
+      29025
+     ],
+     [
+      -30,
+      100,
+      29025
+     ],
+     [
+      -50,
+      100,
+      29025
+     ],
+     [
+      -60,
+      50,
+      18925
+     ],
+     [
+      -80,
+      50,
+      18925
+     ],
+     [
+      -110,
+      50,
+      18925
+     ],
+     [
+      -120,
+      0,
+      0
+     ],
+     [
+      -160,
+      0,
+      0
+     ],
+     [
+      -200,
+      19.059,
+      3869
+     ],
+     [
+      -300,
+      23.02,
+      4710
+     ],
+     [
+      0,
+      100,
+      29025
+     ],
+     [
+      30,
+      100,
+      29025
+     ],
+     [
+      50,
+      100,
+      29025
+     ],
+     [
+      60,
+      50,
+      18925
+     ],
+     [
+      80,
+      50,
+      18925
+     ],
+     [
+      110,
+      50,
+      18925
+     ],
+     [
+      120,
+      28.465,
+      5769
+     ],
+     [
+      160,
+      19.059,
+      3869
+     ],
+     [
+      200,
+      19.059,
+      3869
+     ],
+     [
+      300,
+      23.02,
+      4713
+     ]
+    ]
+   }
+  },
+  "python": {
+   "songs": 7,
+   "hits": 970,
+   "mismatches": [],
+   "ok": true
+  },
+  "records": {
+   "plays": 7,
+   "best": {
+    "matsuri": {
+     "score": 5061,
+     "acc": 100,
+     "fc": true,
+     "clears": 2,
+     "plays": 5,
+     "maxCombo": 42
+    },
+    "sakura": {
+     "score": 14175,
+     "acc": 100,
+     "fc": true,
+     "clears": 1,
+     "plays": 1,
+     "maxCombo": 103
+    },
+    "raimon": {
+     "score": 29025,
+     "acc": 100,
+     "fc": true,
+     "clears": 1,
+     "plays": 1,
+     "maxCombo": 202
+    }
+   },
+   "stopCountsNothing": true,
+   "reloadSame": true,
+   "matchesPlayed": true,
+   "ok": true
+  },
+  "closes": {
+   "open0": true,
+   "playing": true,
+   "fightClosed": true,
+   "notCounted": true,
+   "reopen": true,
+   "walkClosed": true,
+   "skyPrompt": null,
+   "skyWhy": "area",
+   "backPrompt": "Taiko drum \u00b7 play a song (free)",
+   "reopen2": true,
+   "skyClosed": true,
+   "ok": true
+  },
+  "audit": {
+   "ledgerEntriesBefore": 1,
+   "ledgerEntriesAfter": 1,
+   "audit": true,
+   "moduleErrors": {},
+   "pageErrors": [],
+   "ok": true
+  }
+ },
+ "pass": true
+}

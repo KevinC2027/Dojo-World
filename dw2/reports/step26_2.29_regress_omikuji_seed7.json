@@ -1,0 +1,199 @@
+{
+ "file": "Dojo_World_v2.29.html",
+ "seed": 7,
+ "checks": {
+  "walk": {
+   "stand": {
+    "d": 0.19,
+    "ticks": 106
+   },
+   "standPrompt": "Draw a fortune \u00b7 10 DC",
+   "rack": {
+    "d": 0.21,
+    "ticks": 114
+   },
+   "rackPrompt": "Musubi rack (11 slips tied)",
+   "solids": 0,
+   "nSolids": 1041,
+   "climbY": {
+    "offeringBox": 0,
+    "stand": 0,
+    "rack": 0
+   },
+   "ok": true
+  },
+  "short": {
+   "avail": 0,
+   "label": "Draw a fortune \u00b7 10 DC",
+   "code": "insufficient",
+   "after": 0,
+   "entries": 0,
+   "panel": false,
+   "pending": null,
+   "ok": true
+  },
+  "draw": {
+   "price": 10,
+   "label": "Draw a fortune \u00b7 10 DC",
+   "b0": 500,
+   "b1": 490,
+   "debits": [
+    {
+     "amt": 10,
+     "place": "shrine"
+    }
+   ],
+   "stage0": "shake",
+   "n": 17,
+   "panel": true,
+   "shakeBtn": true,
+   "steps": [
+    "shake",
+    "shake",
+    "stick"
+   ],
+   "take": true,
+   "grade": "Curse",
+   "slipShown": true,
+   "keep": true,
+   "book": {
+    "17": 1
+   },
+   "pendingAfter": null,
+   "panelAfter": false,
+   "ok": true
+  },
+  "carry": {
+   "n": 28,
+   "carry": true,
+   "hand": {
+    "n": 28,
+    "ts": 1795419238552
+   },
+   "again": {
+    "label": "Omikuji: tie your slip at the rack first",
+    "act": "omikuji"
+   },
+   "againCode": "holding",
+   "noCharge": true,
+   "walk": {
+    "d": 0.23,
+    "ticks": 125
+   },
+   "handDrawn": true,
+   "handDist": 0.16,
+   "prompt": "Tie your slip on the rack",
+   "k1": 1,
+   "handAfter": null,
+   "knots": 1,
+   "ok": true
+  },
+  "resume": {
+   "why": "fight",
+   "closed": true,
+   "pend": {
+    "n": 24,
+    "shakes": 1,
+    "stage": "shake",
+    "paid": true,
+    "ts": 1795419361084
+   },
+   "prompt": "Omikuji: finish your draw (paid)",
+   "resumed": true,
+   "sameStick": true,
+   "shakesKept": 1,
+   "noSecondCharge": true,
+   "closeKeeps": "slip",
+   "reopen": "slip",
+   "ok": true
+  },
+  "daily": {
+   "draws": 3,
+   "prompt": "Omikuji: back tomorrow (3 a day)",
+   "code": "daily",
+   "noCharge": true,
+   "prompt2": "Draw a fortune \u00b7 10 DC",
+   "nextDay": "shake",
+   "charged": 1,
+   "ok": true
+  },
+  "sky": {
+   "prompt": null,
+   "code": "area",
+   "noCharge": true,
+   "ok": true
+  },
+  "table": {
+   "rows": [
+    {
+     "g": "Great blessing",
+     "want": 15.6,
+     "got": 15.8
+    },
+    {
+     "g": "Middle blessing",
+     "want": 12.5,
+     "got": 12.9
+    },
+    {
+     "g": "Small blessing",
+     "want": 15.6,
+     "got": 15
+    },
+    {
+     "g": "Blessing",
+     "want": 18.8,
+     "got": 19.2
+    },
+    {
+     "g": "Future blessing",
+     "want": 15.6,
+     "got": 15.6
+    },
+    {
+     "g": "Curse",
+     "want": 15.6,
+     "got": 16
+    },
+    {
+     "g": "Great curse",
+     "want": 6.3,
+     "got": 5.5
+    }
+   ],
+   "fixed": true,
+   "badKinds": [
+    "Curse",
+    "Great curse"
+   ],
+   "range": true,
+   "ok": true
+  },
+  "reload": {
+   "book": true,
+   "knots": true,
+   "pending": true,
+   "ok": true
+  },
+  "audit": {
+   "audit": {
+    "ok": true,
+    "issues": [],
+    "balance": 450,
+    "entries": 6
+   },
+   "debits": 5,
+   "paidDraws": 5,
+   "allTen": true,
+   "book": true,
+   "mods": {},
+   "drawErr": null,
+   "ok": true
+  },
+  "errors": {
+   "page": [],
+   "ok": true
+  }
+ },
+ "pass": true
+}
