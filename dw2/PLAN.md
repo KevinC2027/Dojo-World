@@ -271,3 +271,4 @@ Rules for choosing them:
 - 2026-11-23T00:21Z FINISHED step 19: PASSED — v2.22 darts at the inn (back-wall board + oche, tap-aim/THROW with settle-then-tire wobble, real ring geometry, round the clock + 301 double-out vs the Regular, records; darts.py 2 seeds all checks, 0 rescoring/replay mismatches; perf in budget)
 - 2026-11-23T01:01Z STARTED step 20 (Claude, scheduled run)
 - 2026-11-23T01:33Z FINISHED step 20: PASSED — v2.23 overlook telescope (10 DC 'hire', real local star sky with 12 constellations to find and log, daytime town view, rain clouds pause; scope.py 2 seeds all checks; perf in budget). Batch Steps 17–20 all PASSED: next run writes the new batch.
+- 2026-11-23T01:59Z STARTED step 21 (Claude, scheduled run; writing new batch Steps 21–24)
