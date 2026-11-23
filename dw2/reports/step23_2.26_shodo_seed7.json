@@ -1,0 +1,326 @@
+{
+ "file": "Dojo_World_v2.26.html",
+ "seed": 7,
+ "checks": {
+  "walk": {
+   "w": {
+    "d": 0.19,
+    "ticks": 77
+   },
+   "prompt": "Shodo desk · write kanji (free)",
+   "solids": 0,
+   "props": 2,
+   "ok": true
+  },
+  "open": {
+   "r": {
+    "label": "Shodo desk · write kanji (free)",
+    "act": "shodo"
+   },
+   "open": true,
+   "kanji": "一二三山川木人力心道",
+   "buttons": [
+    "guide",
+    "new",
+    "close"
+   ],
+   "ok": true
+  },
+  "correct": {
+   "sheets": [
+    {
+     "c": "一",
+     "n": 1,
+     "score": 93.31,
+     "grade": "Excellent",
+     "flag": null
+    },
+    {
+     "c": "二",
+     "n": 2,
+     "score": 94.16,
+     "grade": "Excellent",
+     "flag": null
+    },
+    {
+     "c": "三",
+     "n": 3,
+     "score": 93.22,
+     "grade": "Excellent",
+     "flag": null
+    },
+    {
+     "c": "山",
+     "n": 3,
+     "score": 94.51,
+     "grade": "Excellent",
+     "flag": null
+    },
+    {
+     "c": "川",
+     "n": 3,
+     "score": 93.69,
+     "grade": "Excellent",
+     "flag": null
+    },
+    {
+     "c": "木",
+     "n": 4,
+     "score": 94.19,
+     "grade": "Excellent",
+     "flag": null
+    },
+    {
+     "c": "人",
+     "n": 2,
+     "score": 93.82,
+     "grade": "Excellent",
+     "flag": null
+    },
+    {
+     "c": "力",
+     "n": 2,
+     "score": 93.4,
+     "grade": "Excellent",
+     "flag": null
+    },
+    {
+     "c": "心",
+     "n": 4,
+     "score": 93.99,
+     "grade": "Excellent",
+     "flag": null
+    },
+    {
+     "c": "道",
+     "n": 12,
+     "score": 94.01,
+     "grade": "Excellent",
+     "flag": null
+    }
+   ],
+   "ok": true
+  },
+  "order": {
+   "cases": [
+    [
+     "木 vertical first",
+     "order",
+     1,
+     "Try again"
+    ],
+    [
+     "三 bottom first",
+     "order",
+     1,
+     "Try again"
+    ],
+    [
+     "道 stroke 8 before 7",
+     "order",
+     7,
+     "Try again"
+    ]
+   ],
+   "hangHidden": true,
+   "ok": true
+  },
+  "reversed": {
+   "cases": [
+    [
+     "一 right to left",
+     "reversed",
+     "Try again"
+    ],
+    [
+     "川 stroke 3 upward",
+     "reversed",
+     "Try again"
+    ],
+    [
+     "力 stroke 2 upward",
+     "reversed",
+     "Try again"
+    ]
+   ],
+   "ok": true
+  },
+  "scribble": {
+   "dab": {
+    "n": 0,
+    "say": "The brush only touched the paper. Draw the stroke."
+   },
+   "flag": "scribble",
+   "grade": "Try again",
+   "ok": true
+  },
+  "monotonic": {
+   "shift人": [
+    [
+     0,
+     100.0,
+     "Excellent",
+     null
+    ],
+    [
+     0.02,
+     88.82,
+     "Excellent",
+     null
+    ],
+    [
+     0.04,
+     77.639,
+     "Very good",
+     null
+    ],
+    [
+     0.06,
+     66.459,
+     "Good",
+     null
+    ],
+    [
+     0.08,
+     55.279,
+     "Good",
+     null
+    ],
+    [
+     0.1,
+     44.098,
+     "Pass",
+     null
+    ]
+   ],
+   "scale木": [
+    [
+     1.0,
+     100.0,
+     "Excellent",
+     null
+    ],
+    [
+     1.1,
+     87.707,
+     "Excellent",
+     null
+    ],
+    [
+     1.2,
+     75.413,
+     "Very good",
+     null
+    ],
+    [
+     1.3,
+     0,
+     "Try again",
+     "order"
+    ],
+    [
+     1.4,
+     0,
+     "Try again",
+     "off"
+    ]
+   ],
+   "sweepRows": 10,
+   "sweepMonotonic": true,
+   "sweepPyMaxDiff": 4.263256414560601e-14,
+   "sweepEnds": [
+    [
+     100,
+     0,
+     "Try again"
+    ],
+    [
+     100,
+     0,
+     "Try again"
+    ],
+    [
+     100,
+     0,
+     "Try again"
+    ]
+   ],
+   "ok": true
+  },
+  "brush": {
+   "slowMean": 0.0431,
+   "fastMean": 0.0249,
+   "min": 0.0161,
+   "max": 0.05,
+   "ok": true
+  },
+  "python": {
+   "sheets": 30,
+   "mismatches": 0,
+   "maxScoreDiff": 2.842170943040401e-14,
+   "ok": true
+  },
+  "closes": {
+   "open0": true,
+   "fightClosed": true,
+   "reopen": true,
+   "walkClosed": true,
+   "skyPrompt": null,
+   "skyWhy": "area",
+   "backPrompt": "Shodo desk · write kanji (free)",
+   "reopen2": true,
+   "skyClosed": true,
+   "ok": true
+  },
+  "hang": {
+   "click": {
+    "shown": true,
+    "scroll": {
+     "c": "道",
+     "score": 94,
+     "strokes": 12
+    },
+    "ok": true
+   },
+   "reloadScroll": true,
+   "reloadBest": true,
+   "best": {
+    "一": 96.6,
+    "二": 94.2,
+    "三": 93.2,
+    "山": 94.5,
+    "川": 93.7,
+    "木": 100,
+    "人": 100,
+    "力": 93.4,
+    "心": 94,
+    "道": 94
+   },
+   "sheets": 30,
+   "house": {
+    "w1": {
+     "d": 0.23,
+     "ticks": 37
+    },
+    "w2": {
+     "d": 0.22,
+     "ticks": 68
+    },
+    "room": "house",
+    "drawn": 4,
+    "sprite": true,
+    "ok": true
+   },
+   "ok": true
+  },
+  "audit": {
+   "ledgerEntriesBefore": 1,
+   "ledgerEntriesAfter": 1,
+   "audit": true,
+   "moduleErrors": {},
+   "pageErrors": [],
+   "ok": true
+  }
+ },
+ "pass": true
+}

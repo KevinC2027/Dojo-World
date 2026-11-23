@@ -1,0 +1,581 @@
+{
+ "file": "Dojo_World_v2.26.html",
+ "seed": 7,
+ "checks": {
+  "walk": {
+   "w": {
+    "d": 0.2,
+    "ticks": 182
+   },
+   "prompt": "Mini golf \u00b7 10 DC (6 holes)",
+   "mgSolids": 0,
+   "props": 15,
+   "ok": true
+  },
+  "short": {
+   "avail": 0,
+   "label": "Mini golf \u00b7 10 DC (6 holes)",
+   "code": "insufficient",
+   "after": 0,
+   "entries": 0,
+   "round": null,
+   "ok": true
+  },
+  "start": {
+   "price": 10,
+   "place": "minigolf",
+   "prompt": "Mini golf \u00b7 10 DC (6 holes)",
+   "paid": 10,
+   "debits": [
+    {
+     "amt": 10,
+     "place": "minigolf"
+    }
+   ],
+   "round": {
+    "paid": true,
+    "hole": 0,
+    "strokes": 0,
+    "scores": [],
+    "bx": 79,
+    "bz": -24.3,
+    "lx": 79,
+    "lz": -24.3,
+    "ts": 1795408920892
+   },
+   "ball": {
+    "x": 79,
+    "z": -24.3,
+    "vx": 0,
+    "vz": 0,
+    "moving": false,
+    "hole": 0,
+    "holed": false
+   },
+   "coins": true,
+   "prompt2": "Mini golf: scorecard (hole 1 of 6)",
+   "card": "card",
+   "paid2": 10,
+   "ok": true
+  },
+  "round": {
+   "holes": [],
+   "putts": 8,
+   "water": {
+    "res_water": true,
+    "strokes_after": 2,
+    "ball": {
+     "x": 104.7,
+     "z": -24.3,
+     "vx": 0,
+     "vz": 0,
+     "moving": false,
+     "hole": 3,
+     "holed": false
+    },
+    "from": [
+     104.7,
+     -24.3
+    ]
+   },
+   "scores": [
+    1,
+    1,
+    2,
+    3,
+    1,
+    1
+   ],
+   "total": 9,
+   "best": 9,
+   "holedPutts": 6,
+   "strokesCounted": [
+    1,
+    1,
+    2,
+    3,
+    1,
+    1
+   ],
+   "ok": true
+  },
+  "python": {
+   "putts": 8,
+   "maxPosErr": 0.0,
+   "outcomeMismatch": 0,
+   "railHits": 7,
+   "railMismatch": 0,
+   "maxLawErr": 0.0,
+   "ok": true
+  },
+  "stopdist": {
+   "rows": [
+    {
+     "v": 0.5,
+     "game_m": 0.1955,
+     "python_m": 0.1955,
+     "v2_2mug": 0.196
+    },
+    {
+     "v": 1,
+     "game_m": 0.7831,
+     "python_m": 0.7831,
+     "v2_2mug": 0.7841
+    },
+    {
+     "v": 1.5,
+     "game_m": 1.7627,
+     "python_m": 1.7627,
+     "v2_2mug": 1.7643
+    },
+    {
+     "v": 2,
+     "game_m": 3.1344,
+     "python_m": 3.1344,
+     "v2_2mug": 3.1365
+    },
+    {
+     "v": 2.5,
+     "game_m": 4.8982,
+     "python_m": 4.8982,
+     "v2_2mug": 4.9008
+    },
+    {
+     "v": 3,
+     "game_m": 7.054,
+     "python_m": 7.054,
+     "v2_2mug": 7.0572
+    }
+   ],
+   "maxPy": 0.0,
+   "maxAnalytic": 0.0031,
+   "ok": true
+  },
+  "angles": {
+   "rows": [
+    {
+     "aim_deg_from_north": 15,
+     "in_from_normal": 75.0,
+     "out_from_normal": 78.23,
+     "law": 78.23,
+     "python_out": 78.23,
+     "speed_kept": 0.888
+    },
+    {
+     "aim_deg_from_north": 30,
+     "in_from_normal": 60.0,
+     "out_from_normal": 65.82,
+     "law": 65.82,
+     "python_out": 65.82,
+     "speed_kept": 0.854
+    },
+    {
+     "aim_deg_from_north": 45,
+     "in_from_normal": 45.0,
+     "out_from_normal": 52.13,
+     "law": 52.13,
+     "python_out": 52.13,
+     "speed_kept": 0.806
+    },
+    {
+     "aim_deg_from_north": 60,
+     "in_from_normal": 30.0,
+     "out_from_normal": 36.59,
+     "law": 36.59,
+     "python_out": 36.59,
+     "speed_kept": 0.755
+    },
+    {
+     "aim_deg_from_north": 75,
+     "in_from_normal": 15.0,
+     "out_from_normal": 19.01,
+     "law": 19.01,
+     "python_out": 19.01,
+     "speed_kept": 0.715
+    }
+   ],
+   "ok": true
+  },
+  "lip": {
+   "fast": {
+    "holed": false,
+    "ev": [
+     {
+      "k": "lip",
+      "v": 1.919,
+      "bp": 0,
+      "vcap": 1.3
+     }
+    ],
+    "python_holed": false
+   },
+   "slow": {
+    "holed": true,
+    "ev": [
+     {
+      "k": "holed",
+      "v": 0.703,
+      "bp": 0,
+      "vcap": 1.3
+     }
+    ],
+    "python_holed": true
+   },
+   "offSlow": {
+    "holed": true,
+    "ev": [
+     {
+      "k": "holed",
+      "v": 0.828,
+      "bp": 0.04,
+      "vcap": 0.873
+     }
+    ],
+    "python_holed": true
+   },
+   "offFast": {
+    "holed": false,
+    "ev": [
+     {
+      "k": "lip",
+      "v": 0.973,
+      "bp": 0.04,
+      "vcap": 0.873
+     }
+    ],
+    "python_holed": false
+   },
+   "ok": true
+  },
+  "slopes": {
+   "restOnCross": {
+    "x": 83.2,
+    "z": -19,
+    "t": 1,
+    "a": [
+     -0.49050000000000005,
+     -0.2943
+    ]
+   },
+   "rampRest": {
+    "z": -20.068916230468776,
+    "water": false
+   },
+   "weak": {
+    "z": -20.038701494140685,
+    "water": false
+   },
+   "firm": {
+    "z": -16.201151458333328,
+    "water": false,
+    "holed": false
+   },
+   "bowl": [
+    {
+     "v": 1.2,
+     "holed": false,
+     "z": -12.064,
+     "python_holed": false,
+     "flat_green_holed": false,
+     "flat_green_rest_z": -12.372
+    },
+    {
+     "v": 1.4,
+     "holed": false,
+     "z": -11.525,
+     "python_holed": false,
+     "flat_green_holed": false,
+     "flat_green_rest_z": -11.965
+    },
+    {
+     "v": 1.6,
+     "holed": true,
+     "z": -11.2,
+     "python_holed": true,
+     "flat_green_holed": false,
+     "flat_green_rest_z": -11.494
+    },
+    {
+     "v": 1.8,
+     "holed": true,
+     "z": -11.2,
+     "python_holed": true,
+     "flat_green_holed": true,
+     "flat_green_rest_z": -11.2
+    }
+   ],
+   "bowlFeeds": [
+    1.52,
+    1.54,
+    1.56,
+    1.58,
+    1.6,
+    1.62,
+    1.64,
+    1.66,
+    1.68
+   ],
+   "bowlHoledSpeeds": [
+    1.52,
+    1.54,
+    1.56,
+    1.58,
+    1.6,
+    1.62,
+    1.64,
+    1.66,
+    1.68,
+    1.7,
+    1.72,
+    1.74,
+    1.76,
+    1.78,
+    1.8,
+    1.82,
+    1.84,
+    1.86,
+    1.88,
+    1.9
+   ],
+   "flatHoledSpeeds": [
+    1.7,
+    1.72,
+    1.74,
+    1.76,
+    1.78,
+    1.8,
+    1.82,
+    1.84,
+    1.86,
+    1.88,
+    1.9
+   ],
+   "bowlPython": true,
+   "ok": true
+  },
+  "pickup": {
+   "charged": 1,
+   "round": true,
+   "hole": 1,
+   "scores": [
+    7
+   ],
+   "ball": {
+    "x": 83.6,
+    "z": -24.3,
+    "vx": 0,
+    "vz": 0,
+    "moving": false,
+    "hole": 1,
+    "holed": false
+   },
+   "ok": true
+  },
+  "keep": {
+   "before": {
+    "hole": 1,
+    "strokes": 1,
+    "scores": [
+     7
+    ],
+    "bx": 83.6,
+    "bz": -24.080942309209195
+   },
+   "after": {
+    "hole": 1,
+    "strokes": 1,
+    "scores": [
+     7
+    ],
+    "bx": 83.6,
+    "bz": -24.080942309209195
+   },
+   "reloadOk": true,
+   "walk": {
+    "d": 0.18,
+    "ticks": 242
+   },
+   "open": true,
+   "fightClosed": true,
+   "kept": true,
+   "reopen": true,
+   "walkClosed": true,
+   "skyPrompt": null,
+   "skyCode": "area",
+   "card": "card",
+   "armed": true,
+   "quit": true,
+   "noCharge": true,
+   "prompt": "Mini golf \u00b7 10 DC (6 holes)",
+   "ok": true
+  },
+  "audit": {
+   "audit": true,
+   "issues": [],
+   "debits": 2,
+   "best": 9,
+   "rounds": 1,
+   "mods": {},
+   "ok": true
+  },
+  "errors": {
+   "page": [],
+   "ok": true
+  }
+ },
+ "pass": true,
+ "putts": [
+  {
+   "hole": 1,
+   "from": [
+    79,
+    -24.3
+   ],
+   "v": [
+    0.907,
+    3.704
+   ],
+   "rest": [
+    79,
+    -15
+   ],
+   "holed": true,
+   "water": false,
+   "rails": 1,
+   "ticks": 258
+  },
+  {
+   "hole": 2,
+   "from": [
+    83.6,
+    -24.3
+   ],
+   "v": [
+    -0.428,
+    4.158
+   ],
+   "rest": [
+    83,
+    -13.4
+   ],
+   "holed": true,
+   "water": false,
+   "rails": 1,
+   "ticks": 304
+  },
+  {
+   "hole": 3,
+   "from": [
+    87.3,
+    -24.8
+   ],
+   "v": [
+    -1.915,
+    3.679
+   ],
+   "rest": [
+    89.323,
+    -15.06
+   ],
+   "holed": false,
+   "water": false,
+   "rails": 1,
+   "ticks": 342
+  },
+  {
+   "hole": 3,
+   "from": [
+    89.323,
+    -15.06
+   ],
+   "v": [
+    2.621,
+    -2.041
+   ],
+   "rest": [
+    92.2,
+    -16.1
+   ],
+   "holed": true,
+   "water": false,
+   "rails": 2,
+   "ticks": 190
+  },
+  {
+   "hole": 4,
+   "from": [
+    104.7,
+    -24.3
+   ],
+   "v": [
+    0.58,
+    2.369
+   ],
+   "rest": [
+    105.761,
+    -19.8
+   ],
+   "holed": false,
+   "water": true,
+   "rails": 1,
+   "ticks": 218
+  },
+  {
+   "hole": 4,
+   "from": [
+    104.7,
+    -24.3
+   ],
+   "v": [
+    0.328,
+    4.133
+   ],
+   "rest": [
+    104.7,
+    -12.6
+   ],
+   "holed": true,
+   "water": false,
+   "rails": 1,
+   "ticks": 318
+  },
+  {
+   "hole": 5,
+   "from": [
+    108.1,
+    -24.3
+   ],
+   "v": [
+    -0.0,
+    3.931
+   ],
+   "rest": [
+    108.1,
+    -12.4
+   ],
+   "holed": true,
+   "water": false,
+   "rails": 0,
+   "ticks": 314
+  },
+  {
+   "hole": 6,
+   "from": [
+    111.6,
+    -24.3
+   ],
+   "v": [
+    -0.0,
+    4.133
+   ],
+   "rest": [
+    111.6,
+    -11.2
+   ],
+   "holed": true,
+   "water": false,
+   "rails": 0,
+   "ticks": 313
+  }
+ ]
+}

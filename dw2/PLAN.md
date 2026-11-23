@@ -223,7 +223,7 @@ Branch: `dojo-world-v2-perf`. Do NOT touch `main` or `add-hit-1v1` (the live Git
   re-computation; a fast ball lips out, a slow one drops; one debit per round, refused when short; best round saved; zero errors;
   perf within 15% of the previous PASSED build; real-time video.
 
-### Step 23 — Shodo calligraphy at the dojo  — STATUS: NOT STARTED
+### Step 23 — Shodo calligraphy at the dojo  — STATUS: PASSED (v2.26, Nov 23: low bundai desk + drying rack at the back of the dojo floor (x -3.4, z 18.4; the west wall spot was hidden by the DOJO banner); INTERACT -> touch panel with 10 kanji (一 二 三 山 川 木 人 力 心 道), pale model + next-stroke dot/arrow (GUIDE), ink width from real pointer speed; each stroke resampled (24 pts) vs its model: scribble / order / reversed / off flags spoil the sheet, else score 100 x (1 − d/0.2); 秀/優/良/可 bands, teacher's red circles/cross/seal; 70+ hangs as a kakejiku on the back wall of House No. 41 (Red's home), saved per viewer with best per kanji. shodo.py x2 seeds all PASS: 10/10 traced kanji Excellent, 3/3 wrong order + 3/3 reversed + scribble fail, real-trace and pure-sweep scores monotonic in error, 30 sheets re-graded in Python 0 mismatches, slow ink 0.043 vs fast 0.025, scroll survives reload and is drawn in the house, closes on hit/walk-off/coliseum, 0 ledger entries, 0 errors; regressions cook/minigolf/courier PASS (police.py flaky in both builds); fills −0.2% to −2%, ms +7% default / −15% desk / −17% house. Report: `dw2/reports/step23_2.26.md`)
 - A low writing desk in the dojo: INTERACT opens a touch panel with paper, a brush and an ink stone; trace 10 kanji (一 二 三 山 川 木
   人 力 心 道) stroke by stroke, graded on stroke order, direction and shape (distance from the model strokes) with a brush line that
   thickens with slower strokes. A good sheet can be hung as a scroll in Red's house (per-viewer). Free; flavour only.
@@ -316,3 +316,4 @@ Rules for choosing them:
 - 2026-11-23T02:58Z STARTED step 22 (Claude, scheduled run)
 - 2026-11-23T03:29Z FINISHED step 22: PASSED — v2.25 mini golf in the civic park (6 Japanese-garden holes, par 14, 10 DC 'hire' round, drag-back putt panel, real ball physics re-computed in Python with identical results; minigolf.py 2 seeds all checks; perf in budget)
 - 2026-11-23T04:00Z STARTED step 23 (Claude, scheduled run)
+- 2026-11-23T04:45Z FINISHED step 23: PASSED — v2.26 shodo calligraphy at the dojo (desk + drying rack, 10 kanji traced on a touch panel with speed-sensitive ink, stroke order/direction/shape grading re-computed in Python, good sheets hang as a scroll in House No. 41; shodo.py 2 seeds all checks; perf in budget)
