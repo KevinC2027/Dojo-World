@@ -319,3 +319,4 @@ Rules for choosing them:
 - 2026-11-23T04:45Z FINISHED step 23: PASSED — v2.26 shodo calligraphy at the dojo (desk + drying rack, 10 kanji traced on a touch panel with speed-sensitive ink, stroke order/direction/shape grading re-computed in Python, good sheets hang as a scroll in House No. 41; shodo.py 2 seeds all checks; perf in budget)
 - 2026-11-23T04:59Z STARTED step 24 (Claude, scheduled run)
 - 2026-11-23T05:53Z FINISHED step 24: PASSED — v2.27 photo walk (film camera 40 DC 'shop', viewfinder + SNAP into a per-viewer album, 12 sights counted only in frame, big enough and not hidden by 3D rays through building volumes; photo.py 2 seeds all checks, Python re-judge 0 mismatches; perf in budget). Batch Steps 21–24 all PASSED: next run writes the new batch.
+- 2026-11-23T05:59Z STARTED step 25 (Claude, scheduled run; writing new batch Steps 25–28)
